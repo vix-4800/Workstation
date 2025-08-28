@@ -7,7 +7,10 @@ LOCAL_BIN="${HOME}/.local/bin"
 TARGET_BIN="${LOCAL_BIN}/dotfiles"
 
 mkdir -p "${LOCAL_BIN}"
-install -m 0755 "${BIN_SRC}" "${TARGET_BIN}"
+
+# Создаем модифицированную версию скрипта с жестко заданным REPO_ROOT
+sed "s|^REPO_ROOT=.*|REPO_ROOT=\"${REPO_ROOT}\"|" "${BIN_SRC}" > "${TARGET_BIN}"
+chmod 0755 "${TARGET_BIN}"
 
 ensure_alias() {
   local rcfile="$1"
