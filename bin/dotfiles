@@ -2,8 +2,14 @@
 set -euo pipefail
 
 # -------- Конфиг по умолчанию --------
-REPO_ROOT="$(pwd)"
-CONF_MAP="linux.confmap"
+# Корень репозитория — по расположению скрипта (надёжно, даже если вызван из другого каталога)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Карта соответствий: env DOTFILES_MAP или --map или по умолчанию linux.confmap в корне репо
+CONF_MAP_DEFAULT="${REPO_ROOT}/linux.confmap"
+CONF_MAP="${DOTFILES_MAP:-${CONF_MAP_DEFAULT}}"
+
 BACKUP_DIR="${HOME}/.local/share/dotfiles/backups"
 LOG_PREFIX="[dotfiles]"
 
@@ -21,17 +27,16 @@ usage() {
 ${BOLD}dotfiles${OFF} — управляет символическими ссылками из репозитория.
 
 ${BOLD}Использование:${OFF}
-  dotfiles init            Инициализация (создаст алиас/скрипт уже сделал install.sh)
-  dotfiles link [-n]       Создать/обновить ссылки (dry-run с -n)
-  dotfiles unlink [-n]     Удалить ссылки (dry-run с -n)
-  dotfiles update          git pull в репозитории + relink
-  dotfiles status          Показать статус ссылок
-  dotfiles doctor          Проверки окружения
-  dotfiles which           Показать путь к репо и используемую карту
-  dotfiles edit            Открыть карту соответствий в \$EDITOR
+  dotfiles link [-n] [--map PATH]     Создать/обновить ссылки (dry-run с -n)
+  dotfiles unlink [-n] [--map PATH]   Удалить ссылки (dry-run с -n)
+  dotfiles update [--map PATH]        git pull в репозитории + relink
+  dotfiles status [--map PATH]        Показать статус ссылок
+  dotfiles doctor [--map PATH]        Проверки окружения
+  dotfiles which [--map PATH]         Показать путь к репо и карту
+  dotfiles edit  [--map PATH]         Открыть карту в \$EDITOR
+  dotfiles help                       Помощь
 
 ${BOLD}Карта соответствий:${OFF}
-  ${CONF_MAP}
   Формат строк: <source_relpath>\t<target_absolute_path>
   Пустые строки и #комментарии игнорируются.
 EOF
@@ -42,25 +47,55 @@ ok()  { echo -e "${GRN}${LOG_PREFIX}${OFF} $*"; }
 warn(){ echo -e "${YLW}${LOG_PREFIX}${OFF} $*"; }
 err() { echo -e "${RED}${LOG_PREFIX}${OFF} $*" >&2; }
 
+# --- парсинг --map (минимальный) ---
+maybe_pick_map() {
+  local next_is_map=0
+  for arg in "$@"; do
+    if [ "${next_is_map}" -eq 1 ]; then
+      CONF_MAP="$arg"
+      next_is_map=0
+      continue
+    fi
+    case "$arg" in
+      --map)
+        next_is_map=1
+        ;;
+      --map=*)
+        CONF_MAP="${arg#--map=}"
+        ;;
+    esac
+  done
+}
+
 require_map() {
   [ -f "${CONF_MAP}" ] || { err "Не найдена карта: ${CONF_MAP}"; exit 1; }
 }
 
 timestamp() { date +"%Y%m%d-%H%M%S"; }
 
-# Читает карту, отдаёт строки "SRC ABS_PATH<TAB>TGT ABS_PATH"
+resolve_variables() {
+  local path="$1"
+  # Раскрываем $HOME
+  path="${path//\$HOME/$HOME}"
+  # Раскрываем ~
+  path="${path/#\~/$HOME}"
+  echo "$path"
+}
+
+# Читает карту, отдаёт строки "SRC_ABS<TAB>TGT_ABS"
 read_map() {
   require_map
   awk -v repo="${REPO_ROOT}" '
     BEGIN{ FS="\t" }
     /^[[:space:]]*$/ {next}
     /^[[:space:]]*#/ {next}
-    NF>=2 {
+    {
       src = $1
       tgt = $2
-      # Нормализуем путь источника относительно репозитория
-      if (src ~ /^\//) { print src "\t" tgt }
-      else { print repo "/" src "\t" tgt }
+      for (i=3; i<=NF; i++) { tgt = tgt "\t" $i } # на случай табов внутри пути
+
+      if (src ~ /^\//) print src "\t" tgt;
+      else print repo "/" src "\t" tgt;
     }' "${CONF_MAP}"
 }
 
@@ -75,22 +110,37 @@ backup_if_exists() {
   local target="$1"
   if [ -e "${target}" ] && [ ! -L "${target}" ]; then
     mkdir -p "${BACKUP_DIR}"
-    local ts; ts="$(timestamp)"
-    local base; base="$(basename "${target}")"
-    local dest="${BACKUP_DIR}/${base}.${ts}.bak"
+    local ts base dest
+    ts="$(timestamp)"
+    base="$(basename "${target}")"
+    dest="${BACKUP_DIR}/${base}.${ts}.bak"
     mv "${target}" "${dest}"
     ok "Бэкап ${target} -> ${dest}"
   fi
 }
 
+canonical() {
+  # Пытаемся получить канонический путь (если realpath есть)
+  if command -v realpath >/dev/null 2>&1; then
+    realpath "$1"
+  else
+    # fallback: просто возвращаем как есть
+    printf '%s' "$1"
+  fi
+}
+
 do_link() {
   local dryrun="${1:-0}"
-  read_map | while IFS=$'\t' read -r SRC TGT; do
+  read_map | while IFS=$'\t' read -r SRC TGT_RAW; do
+    # раскрываем переменные и ~ в цели
+    TGT="$(resolve_variables "$TGT_RAW")"
+
     if [ ! -e "${SRC}" ]; then
       warn "Источник отсутствует: ${SRC} — пропуск"
       continue
     fi
     ensure_parent_dir "${TGT}"
+
     if [ "${dryrun}" -eq 1 ]; then
       msg "DRY-RUN: ln -sfn ${SRC} ${TGT}"
     else
@@ -103,7 +153,8 @@ do_link() {
 
 do_unlink() {
   local dryrun="${1:-0}"
-  read_map | while IFS=$'\t' read -r _ TGT; do
+  read_map | while IFS=$'\t' read -r _ TGT_RAW; do
+    TGT="$(resolve_variables "$TGT_RAW")"
     if [ -L "${TGT}" ]; then
       if [ "${dryrun}" -eq 1 ]; then
         msg "DRY-RUN: rm ${TGT}"
@@ -118,23 +169,30 @@ do_unlink() {
 }
 
 do_status() {
-  local okc=0 badc=0
-  read_map | while IFS=$'\t' read -r SRC TGT; do
+  read_map | while IFS=$'\t' read -r SRC TGT_RAW; do
+    TGT="$(resolve_variables "$TGT_RAW")"
     if [ -L "${TGT}" ]; then
-      local points; points="$(readlink "${TGT}")"
-      if [ "${points}" = "${SRC}" ]; then
+
+      local points expect
+      points="$(readlink "${TGT}")"
+
+      case "$points" in
+        /*) ;;
+        *) points="$(cd "$(dirname "${TGT}")" && pwd)/${points}";;
+      esac
+      expect="${SRC}"
+      local cpoints cexpect
+      cpoints="$(canonical "$points")"
+      cexpect="$(canonical "$expect")"
+      if [ -n "$cexpect" ] && [ -n "$cpoints" ] && [ "$cpoints" = "$cexpect" ]; then
         echo -e "✓ ${TGT} ${DIM}->${OFF} ${SRC}"
-        okc=$((okc+1))
       else
         echo -e "✗ ${TGT} ${DIM}->${OFF} ${points} ${RED}(ожидалось ${SRC})${OFF}"
-        badc=$((badc+1))
       fi
     elif [ -e "${TGT}" ]; then
       echo -e "⚠ ${TGT} — обычный файл/папка, не symlink"
-      badc=$((badc+1))
     else
       echo -e "– ${TGT} — отсутствует"
-      badc=$((badc+1))
     fi
   done
 }
@@ -152,15 +210,20 @@ do_doctor() {
   if [ "${ok_all}" -eq 1 ]; then ok "Проверки пройдены"; else exit 1; fi
 }
 
-case "${1:-}" in
-  help|-h|--help) usage ;;
-  which) echo -e "REPO: ${REPO_ROOT}\nMAP:  ${CONF_MAP}" ;;
-  edit)  ${EDITOR:-vi} "${CONF_MAP}" ;;
+# -------- Точка входа --------
+cmd="${1:-}"
+shift || true
+maybe_pick_map "$@"
+
+case "${cmd}" in
+  help|-h|--help|"") usage ;;
+  which) echo -e "REPO: ${REPO_ROOT}\nMAP:  ${CONF_MAP}";;
+  edit)  ${EDITOR:-vi} "${CONF_MAP}";;
   init)  usage ;;
-  link)    shift; [ "${1:-}" = "-n" ] && do_link 1 || do_link 0 ;;
-  unlink)  shift; [ "${1:-}" = "-n" ] && do_unlink 1 || do_unlink 0 ;;
+  link)    [ "${1:-}" = "-n" ] && do_link 1 || do_link 0 ;;
+  unlink)  [ "${1:-}" = "-n" ] && do_unlink 1 || do_unlink 0 ;;
   update) do_update ;;
   status) do_status ;;
   doctor) do_doctor ;;
-  *) usage; exit 1 ;;
+  *) err "Неизвестная команда: ${cmd}"; usage; exit 1 ;;
 esac

@@ -22,7 +22,6 @@ ensure_alias() {
 }
 
 ensure_alias "${HOME}/.zshrc"
-ensure_alias "${HOME}/.bashrc"
 
 # Убедимся, что ~/.local/bin в PATH (на будущее)
 if ! command -v dotfiles >/dev/null 2>&1; then
