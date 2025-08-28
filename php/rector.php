@@ -34,6 +34,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 
 return RectorConfig::configure()
     ->withRootFiles()
+    ->withParallel()
     ->withSkip([
         'vendor',
     ])
