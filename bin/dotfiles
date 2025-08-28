@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# -------- Конфиг по умолчанию --------
+REPO_ROOT="$(pwd)"
+CONF_MAP="linux.confmap"
+BACKUP_DIR="${HOME}/.local/share/dotfiles/backups"
+LOG_PREFIX="[dotfiles]"
+
+# Цвета (если TTY)
+if [ -t 1 ]; then
+  BOLD="$(printf '\033[1m')"; DIM="$(printf '\033[2m')"; RED="$(printf '\033[31m')"
+  GRN="$(printf '\033[32m')"; YLW="$(printf '\033[33m')"; BLU="$(printf '\033[34m')"
+  OFF="$(printf '\033[0m')"
+else
+  BOLD=""; DIM=""; RED=""; GRN=""; YLW=""; BLU=""; OFF=""
+fi
+
+usage() {
+  cat <<EOF
+${BOLD}dotfiles${OFF} — управляет символическими ссылками из репозитория.
+
+${BOLD}Использование:${OFF}
+  dotfiles init            Инициализация (создаст алиас/скрипт уже сделал install.sh)
+  dotfiles link [-n]       Создать/обновить ссылки (dry-run с -n)
+  dotfiles unlink [-n]     Удалить ссылки (dry-run с -n)
+  dotfiles update          git pull в репозитории + relink
+  dotfiles status          Показать статус ссылок
+  dotfiles doctor          Проверки окружения
+  dotfiles which           Показать путь к репо и используемую карту
+  dotfiles edit            Открыть карту соответствий в \$EDITOR
+
+${BOLD}Карта соответствий:${OFF}
+  ${CONF_MAP}
+  Формат строк: <source_relpath>\t<target_absolute_path>
+  Пустые строки и #комментарии игнорируются.
+EOF
+}
+
+msg() { echo -e "${LOG_PREFIX} $*"; }
+ok()  { echo -e "${GRN}${LOG_PREFIX}${OFF} $*"; }
+warn(){ echo -e "${YLW}${LOG_PREFIX}${OFF} $*"; }
+err() { echo -e "${RED}${LOG_PREFIX}${OFF} $*" >&2; }
+
+require_map() {
+  [ -f "${CONF_MAP}" ] || { err "Не найдена карта: ${CONF_MAP}"; exit 1; }
+}
+
+timestamp() { date +"%Y%m%d-%H%M%S"; }
+
+# Читает карту, отдаёт строки "SRC ABS_PATH<TAB>TGT ABS_PATH"
+read_map() {
+  require_map
+  awk -v repo="${REPO_ROOT}" '
+    BEGIN{ FS="\t" }
+    /^[[:space:]]*$/ {next}
+    /^[[:space:]]*#/ {next}
+    NF>=2 {
+      src = $1
+      tgt = $2
+      # Нормализуем путь источника относительно репозитория
+      if (src ~ /^\//) { print src "\t" tgt }
+      else { print repo "/" src "\t" tgt }
+    }' "${CONF_MAP}"
+}
+
+ensure_parent_dir() {
+  local path="$1"
+  local dir
+  dir="$(dirname "$path")"
+  mkdir -p "$dir"
+}
+
+backup_if_exists() {
+  local target="$1"
+  if [ -e "${target}" ] && [ ! -L "${target}" ]; then
+    mkdir -p "${BACKUP_DIR}"
+    local ts; ts="$(timestamp)"
+    local base; base="$(basename "${target}")"
+    local dest="${BACKUP_DIR}/${base}.${ts}.bak"
+    mv "${target}" "${dest}"
+    ok "Бэкап ${target} -> ${dest}"
+  fi
+}
+
+do_link() {
+  local dryrun="${1:-0}"
+  read_map | while IFS=$'\t' read -r SRC TGT; do
+    if [ ! -e "${SRC}" ]; then
+      warn "Источник отсутствует: ${SRC} — пропуск"
+      continue
+    fi
+    ensure_parent_dir "${TGT}"
+    if [ "${dryrun}" -eq 1 ]; then
+      msg "DRY-RUN: ln -sfn ${SRC} ${TGT}"
+    else
+      backup_if_exists "${TGT}"
+      ln -sfn "${SRC}" "${TGT}"
+      ok "Связано: ${TGT} -> ${SRC}"
+    fi
+  done
+}
+
+do_unlink() {
+  local dryrun="${1:-0}"
+  read_map | while IFS=$'\t' read -r _ TGT; do
+    if [ -L "${TGT}" ]; then
+      if [ "${dryrun}" -eq 1 ]; then
+        msg "DRY-RUN: rm ${TGT}"
+      else
+        rm "${TGT}"
+        ok "Удалён symlink: ${TGT}"
+      fi
+    else
+      warn "Нет symlink: ${TGT}"
+    fi
+  done
+}
+
+do_status() {
+  local okc=0 badc=0
+  read_map | while IFS=$'\t' read -r SRC TGT; do
+    if [ -L "${TGT}" ]; then
+      local points; points="$(readlink "${TGT}")"
+      if [ "${points}" = "${SRC}" ]; then
+        echo -e "✓ ${TGT} ${DIM}->${OFF} ${SRC}"
+        okc=$((okc+1))
+      else
+        echo -e "✗ ${TGT} ${DIM}->${OFF} ${points} ${RED}(ожидалось ${SRC})${OFF}"
+        badc=$((badc+1))
+      fi
+    elif [ -e "${TGT}" ]; then
+      echo -e "⚠ ${TGT} — обычный файл/папка, не symlink"
+      badc=$((badc+1))
+    else
+      echo -e "– ${TGT} — отсутствует"
+      badc=$((badc+1))
+    fi
+  done
+}
+
+do_update() {
+  (cd "${REPO_ROOT}" && git pull --ff-only)
+  do_link 0
+}
+
+do_doctor() {
+  local ok_all=1
+  command -v git >/dev/null || { err "git не найден в PATH"; ok_all=0; }
+  [ -d "${REPO_ROOT}/.git" ] || { err "Похоже, это не git-репозиторий: ${REPO_ROOT}"; ok_all=0; }
+  require_map || ok_all=0
+  if [ "${ok_all}" -eq 1 ]; then ok "Проверки пройдены"; else exit 1; fi
+}
+
+case "${1:-}" in
+  help|-h|--help) usage ;;
+  which) echo -e "REPO: ${REPO_ROOT}\nMAP:  ${CONF_MAP}" ;;
+  edit)  ${EDITOR:-vi} "${CONF_MAP}" ;;
+  init)  usage ;;
+  link)    shift; [ "${1:-}" = "-n" ] && do_link 1 || do_link 0 ;;
+  unlink)  shift; [ "${1:-}" = "-n" ] && do_unlink 1 || do_unlink 0 ;;
+  update) do_update ;;
+  status) do_status ;;
+  doctor) do_doctor ;;
+  *) usage; exit 1 ;;
+esac
