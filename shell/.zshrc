@@ -1,5 +1,5 @@
 # Variables
-export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH:/usr/local/go/bin:/opt/nvim-linux-x86_64/bin
+export PATH=$PATH:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/go/bin:$HOME/go/bin:/opt/nvim-linux-x86_64/bin
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="eastwood"
