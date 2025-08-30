@@ -36,3 +36,23 @@ indent_style = tab
 # ————————————————
 [*.sh]
 end_of_line = lf
+
+# ————————————————
+# PHP
+# ————————————————
+[*.php]
+end_of_line = lf
+max_line_length = 120
+
+# ————————————————
+# HTML / CSS / JS
+# ————————————————
+[*.{html,css,js}]
+indent_style = space
+indent_size = 2
+
+# ————————————————
+# GO
+# ————————————————
+[*.go]
+indent_style = tab
