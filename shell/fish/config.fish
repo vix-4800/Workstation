@@ -1,3 +1,9 @@
 if status is-interactive
-    # Commands to run in interactive sessions can go here
+    if type -q starship
+        starship init fish | source
+    else
+        fish_prompt
+    end
 end
+
+set -x EDITOR 'code --wait'
