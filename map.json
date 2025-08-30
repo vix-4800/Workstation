@@ -1,0 +1,18 @@
+{
+  "php": {
+    "php-cs-fixer.php": "~/.config/php-cs-fixer.php",
+    "phpstan.neon": "~/.config/phpstan.neon",
+    "rector.php": "~/.config/rector.php"
+  },
+  "python": {
+    ".flake8": "~/.config/flake8",
+    "mypy.ini": "~/.config/mypy.ini"
+  },
+  "shell": {
+    "bashrc": "~/.bashrc",
+    "bash_profile": "~/.bash_profile",
+    "zshrc": "~/.zshrc",
+    "fish": "~/.config/fish",
+    "tmux.conf": "~/.config/tmux.conf"
+  }
+}
