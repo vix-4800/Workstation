@@ -1,0 +1,3 @@
+{
+  "apt": ["git", "curl", "fish", "nvim", "firefox", "code"]
+}

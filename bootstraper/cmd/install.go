@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -15,7 +16,11 @@ var installCmd = &cobra.Command{
 	Short: "",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("install called")
+		packagesFile, err := os.Open("../packages.json")
+		if err != nil {
+			fmt.Printf("There was an error: %s", err)
+		}
+		defer packagesFile.Close()
 	},
 }
 
