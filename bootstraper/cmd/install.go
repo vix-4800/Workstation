@@ -1,26 +1,46 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
 
-// installCmd represents the install command
+type PackagesConfig map[string][]string
+
 var installCmd = &cobra.Command{
 	Use:   "install",
 	Short: "",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		packagesFile, err := os.Open("../packages.json")
+		file, err := os.ReadFile("../packages.json")
 		if err != nil {
 			fmt.Printf("There was an error: %s", err)
+			return
 		}
-		defer packagesFile.Close()
+
+		var config PackagesConfig
+		jsonErr := json.Unmarshal(file, &config)
+		if jsonErr != nil {
+			return
+		}
+
+		for group, packages := range config {
+			if group == "apt" {
+				for _, packageName := range packages {
+					output, cmdErr := exec.Command("sudo", "apt", "install", packageName, "-y").Output()
+					if cmdErr != nil {
+						fmt.Println("There was an error installing:", packageName)
+						continue
+					}
+
+					fmt.Println(string(output))
+				}
+			}
+		}
 	},
 }
 
