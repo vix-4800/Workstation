@@ -13,6 +13,7 @@
     "bash_profile": "~/.bash_profile",
     "zshrc": "~/.zshrc",
     "fish": "~/.config/fish",
-    "tmux.conf": "~/.config/tmux.conf"
+    "tmux.conf": "~/.config/tmux.conf",
+    "polybar.ini": "~/.config/polybar/config.ini"
   }
 }
