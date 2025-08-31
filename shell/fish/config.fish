@@ -1,3 +1,9 @@
+# ======= Core =======
+set -g fish_greeting
+set -x EDITOR 'code --wait'
+set -x VISUAL $EDITOR
+
+
 if status is-interactive
     if type -q starship
         starship init fish | source
@@ -6,6 +12,5 @@ if status is-interactive
     end
 end
 
-set -x EDITOR 'code --wait'
 
 set -x PATH $PATH $HOME/bin $HOME/.local/bin /usr/local/bin /usr/local/go/bin $HOME/go/bin /opt/nvim-linux-x86_64/bin
