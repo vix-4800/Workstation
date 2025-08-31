@@ -5,7 +5,7 @@
     "rector.php": "~/.config/rector.php"
   },
   "python": {
-    ".flake8": "~/.config/flake8",
+    "flake8": "~/.config/flake8",
     "mypy.ini": "~/.config/mypy.ini"
   },
   "shell": {
