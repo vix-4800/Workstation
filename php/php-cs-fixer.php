@@ -39,6 +39,8 @@ return (new Config())
         'single_line_comment_spacing' => true, // Ensures single line spacing for comments
         'comment_to_phpdoc' => true, // Converts single-line comments to PHPDoc
         'no_empty_comment' => true, // Removes empty comments
+        'no_empty_phpdoc' => true, // Removes empty PHPDoc blocks
+        // 'header_comment' => ['header' => ''], // Removes header comments
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
@@ -149,10 +151,13 @@ return (new Config())
         'method_argument_space' => [
             'on_multiline' => 'ensure_fully_multiline',
             'after_heredoc' => true,
+            'attribute_placement' => 'ignore',
+            'keep_multiple_spaces_after_comma' => false,
         ], // Ensures fully multiline arguments
         'return_type_declaration' => ['space_before' => 'none'],
         'nullable_type_declaration_for_default_null_value' => true,
         'new_with_braces' => true,
+        'function_declaration' => ['closure_function_spacing' => 'one'], // Ensures one space after the function keyword
 
         // ─────────────────────────────────────────────────────────────────────────
         // Chaining, ternaries and comparisons
