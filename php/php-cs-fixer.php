@@ -23,14 +23,14 @@ return (new Config())
         'phpdoc_separation' => true, // Ensures separation between different types of tags
         'phpdoc_trim' => true, // Trims PHPDoc comments
         'phpdoc_trim_consecutive_blank_line_separation' => true, // Trims blank line separation in PHPDoc comments
-        'no_superfluous_phpdoc_tags' => true, // Removes unnecessary PHPDoc tags
+        // 'no_superfluous_phpdoc_tags' => true, // Removes unnecessary PHPDoc tags
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'alpha',
         ],
         'phpdoc_indent' => true, // Indents PHPDoc comments
         'phpdoc_no_alias_tag' => true, // Removes PHPDoc alias tags
-        'phpdoc_no_package' => true, // Removes PHPDoc package tags
+        // 'phpdoc_no_package' => true, // Removes PHPDoc package tags
         'phpdoc_no_useless_inheritdoc' => true, // Removes useless PHPDoc inheritdoc tags
         'phpdoc_single_line_var_spacing' => true, // Ensures single line spacing for var tags
         'phpdoc_types' => true, // Normalizes PHPDoc types
@@ -41,6 +41,7 @@ return (new Config())
         'no_empty_comment' => true, // Removes empty comments
         'no_empty_phpdoc' => true, // Removes empty PHPDoc blocks
         // 'header_comment' => ['header' => ''], // Removes header comments
+        'no_blank_lines_after_phpdoc' => true, // Removes blank lines after PHPDoc
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
@@ -67,7 +68,7 @@ return (new Config())
         'array_syntax' => ['syntax' => 'short'], // Uses [] instead of array()
         'list_syntax' => ['syntax' => 'short'], // Uses [] instead of list()
         'trim_array_spaces' => true, // Trims spaces inside array brackets
-        // 'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters', 'match']], // Trailing comma in multiline arrays
+        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters', 'match']], // Trailing comma in multiline arrays
         'no_trailing_comma_in_singleline' => true, // No trailing comma in single-line arrays
         'whitespace_after_comma_in_array' => true, // Ensures whitespace after commas in arrays
         'no_whitespace_before_comma_in_array' => true, // No whitespace before commas in arrays
@@ -94,7 +95,7 @@ return (new Config())
             'statements' => ['return', 'throw', 'continue', 'break', 'try'],
         ], // Requires a blank line before statements (return, throw, continue)
         'single_space_around_construct' => true, // Ensures single space around constructs
-        'single_line_throw' => true, // Ensures single line throw statements
+        // 'single_line_throw' => true, // Ensures single line throw statements
         'simplified_if_return' => true, // Simplifies if return statements
         'simplified_null_return' => true, // Simplifies null return statements
         'return_assignment' => true, // Simplifies return assignments
@@ -103,7 +104,7 @@ return (new Config())
             'stick_comment_to_next_continuous_control_statement' => true,
         ], // Ensures consistent indentation for statements
         'no_alternative_syntax' => ['fix_non_monolithic_code' => true],
-        'is_null' => true, // Replaces is_null($var) expression with null === $var
+        // 'is_null' => true, // Replaces is_null($var) expression with null === $var
         'types_spaces' => ['space' => 'none'], // Consistent spacing in types
         'short_scalar_cast' => true,
         'single_line_empty_body' => true, // Ensures single line empty body
@@ -111,6 +112,9 @@ return (new Config())
         'no_unneeded_control_parentheses' => [
             'statements' => ['break', 'clone', 'continue', 'echo_print', 'return', 'switch_case', 'yield'],
         ], // Removes unneeded control parentheses
+        'clean_namespace' => true, // Removes unused use statements
+        'no_unneeded_braces' => true, // Removes unneeded braces
+        'no_unneeded_final_method' => true, // Removes unneeded final methods
 
         // ─────────────────────────────────────────────────────────────────────────
         // File / opening tags / namespaces
@@ -133,15 +137,15 @@ return (new Config())
             'method' => 'one',
             'trait_import' => 'none',
         ]], // Enforces separation between class attributes
-        'ordered_class_elements' => [
-            'order' => [
-                'use_trait',
-                'constant_public', 'constant_protected', 'constant_private',
-                'property_public', 'property_protected', 'property_private',
-                'construct',
-                'method_public', 'method_protected', 'method_private',
-            ],
-        ], // Enforces order of class elements
+        // 'ordered_class_elements' => [
+        //     'order' => [
+        //         'use_trait',
+        //         'constant_public', 'constant_protected', 'constant_private',
+        //         'property_public', 'property_protected', 'property_private',
+        //         'construct',
+        //         'method_public', 'method_protected', 'method_private',
+        //     ],
+        // ], // Enforces order of class elements
         'single_class_element_per_statement' => ['elements' => ['const', 'property']], // Enforces single class element per statement
         'single_trait_insert_per_statement' => true,
 
@@ -166,7 +170,7 @@ return (new Config())
         'elseif' => true,
         'control_structure_continuation_position' => true,
         'no_useless_else' => true, // Removes useless else statements
-        'no_useless_return' => true, // Removes useless return statements in void functions
+        // 'no_useless_return' => true, // Removes useless return statements in void functions
         'ternary_to_null_coalescing' => true, // Converts ternary to null coalescing (?: → ??)
         'assign_null_coalescing_to_coalesce_equal' => true, // $a = $a ?? $b becomes $a ??= $b
         'no_superfluous_elseif' => true,
@@ -174,12 +178,12 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────────────────
         // Type-related
         // ─────────────────────────────────────────────────────────────────────────
-        'phpdoc_to_param_type' => true, // Converts PHPDoc @param to type hints
-        'phpdoc_to_return_type' => true, // Converts PHPDoc @return to return type declarations
-        'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
-        'declare_strict_types' => true, // Force strict types declaration in all files.
-        'strict_comparison' => true, // Uses === and !== instead of == and !=
-        'strict_param' => true, // Enforces strict parameter types
+        // 'phpdoc_to_param_type' => true, // Converts PHPDoc @param to type hints
+        // 'phpdoc_to_return_type' => true, // Converts PHPDoc @return to return type declarations
+        // 'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
+        // 'declare_strict_types' => true, // Force strict types declaration in all files.
+        // 'strict_comparison' => true, // Uses === and !== instead of == and !=
+        // 'strict_param' => true, // Enforces strict parameter types
         'void_return' => true, // Enforces void return type for functions that do not return a value
 
         // ─────────────────────────────────────────────────────────────────────────
@@ -204,5 +208,6 @@ return (new Config())
         'heredoc_to_nowdoc' => true,
         'modernize_strpos' => true, // Replace strpos() and stripos() calls with str_starts_with() or str_contains() if possible.
         'no_alias_language_construct_call' => true,
+        'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
     ])
     ->setUsingCache(false);
