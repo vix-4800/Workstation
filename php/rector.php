@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
@@ -14,12 +15,16 @@ use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
 use Rector\CodeQuality\Rector\If_\CombineIfRector;
+use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector;
 use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
+use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
+use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
+use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\Config\RectorConfig;
@@ -27,10 +32,21 @@ use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
+use Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector;
 use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
+use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php80\Rector\Identical\StrStartsWithRector;
+use Rector\Php80\Rector\NotIdentical\StrContainsRector;
+use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
+use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
+use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 
 return RectorConfig::configure()
     ->withRootFiles()
@@ -60,12 +76,17 @@ return RectorConfig::configure()
         ArrayKeyExistsTernaryThenValueToCoalescingRector::class,
         SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
         UnnecessaryTernaryExpressionRector::class, // Removes redundant ternary expressions
+        ReadOnlyPropertyRector::class,
 
         // Safety and strong typing
         AddReturnTypeDeclarationRector::class,
         UseIdenticalOverEqualWithSameTypeRector::class,
         CompleteDynamicPropertiesRector::class,
         IssetOnPropertyObjectToPropertyExistsRector::class,
+        AddVoidReturnTypeWhereNoReturnRector::class, // Adds void return type where no return is present
+        AddParamTypeDeclarationRector::class, // Adds parameter type declaration where missing
+        AddPropertyTypeDeclarationRector::class, // Adds property type declaration where missing
+        AddMethodCallBasedStrictParamTypeRector::class, // Adds strict parameter type based on method calls
 
         // Remove dead code
         RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
@@ -75,6 +96,16 @@ return RectorConfig::configure()
 
         // Modern PHP constructs
         StringClassNameToClassConstantRector::class,
+        ClassPropertyAssignToConstructorPromotionRector::class, // Promotes class property assignments to constructor parameters
+        ChangeSwitchToMatchRector::class, // Replaces switch statements with match expressions
+        CombinedAssignRector::class, // Combines multiple assignments into one
+        SingularSwitchToIfRector::class, // Replaces singular switch statements with if-statements
+        ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class, // Replaces consecutive null compares with null coalesce
+        StrContainsRector::class, // Replaces strpos calls with str_contains,
+        StrStartsWithRector::class, // Replaces str_starts_with calls with str_starts_with
+        TernaryEmptyArrayArrayDimFetchToCoalesceRector::class, // Replaces empty array checks in ternary conditions with null coalescing
+        ArrayKeyExistsTernaryThenValueToCoalescingRector::class, // Replaces array_key_exists checks in ternary conditions with null coalescing
+        SimplifyTautologyTernaryRector::class, // Simplifies tautological ternary expressions
 
         // Arrays
         ChangeArrayPushToArrayAssignRector::class,
@@ -87,4 +118,6 @@ return RectorConfig::configure()
         NewlineBeforeNewAssignSetRector::class, // Enforces newline style before `new` assignments
         InlineIfToExplicitIfRector::class,
         LogicalToBooleanRector::class,
+        RemoveAlwaysElseRector::class, // Removes else branches that are always executed
+        ChangeNestedForeachIfsToEarlyContinueRector::class,
     ]);
