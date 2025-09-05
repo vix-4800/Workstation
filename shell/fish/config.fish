@@ -13,8 +13,9 @@ if status is-interactive
 end
 
 
-set -x PATH $PATH $HOME/bin $HOME/.local/bin /usr/local/bin /usr/local/go/bin $HOME/go/bin /opt/nvim-linux-x86_64/bin
+set -x PATH $PATH $HOME/.local/share/nvm/v24.7.0/bin
 
 # ======= Aliases =======
 alias vim 'nvim'
 alias vi 'nvim'
+alias neovim 'nvim'
