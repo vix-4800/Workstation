@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
@@ -38,10 +37,6 @@ use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php80\Rector\Identical\StrStartsWithRector;
-use Rector\Php80\Rector\NotIdentical\StrContainsRector;
-use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
-use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -73,10 +68,8 @@ return RectorConfig::configure()
         PreparedValueToEarlyReturnRector::class,
         SimplifyUselessVariableRector::class,
         UnusedForeachValueToArrayKeysRector::class,
-        ArrayKeyExistsTernaryThenValueToCoalescingRector::class,
         SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
         UnnecessaryTernaryExpressionRector::class, // Removes redundant ternary expressions
-        ReadOnlyPropertyRector::class,
 
         // Safety and strong typing
         AddReturnTypeDeclarationRector::class,
@@ -97,12 +90,8 @@ return RectorConfig::configure()
         // Modern PHP constructs
         StringClassNameToClassConstantRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class, // Promotes class property assignments to constructor parameters
-        ChangeSwitchToMatchRector::class, // Replaces switch statements with match expressions
-        CombinedAssignRector::class, // Combines multiple assignments into one
         SingularSwitchToIfRector::class, // Replaces singular switch statements with if-statements
         ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class, // Replaces consecutive null compares with null coalesce
-        StrContainsRector::class, // Replaces strpos calls with str_contains,
-        StrStartsWithRector::class, // Replaces str_starts_with calls with str_starts_with
         TernaryEmptyArrayArrayDimFetchToCoalesceRector::class, // Replaces empty array checks in ternary conditions with null coalescing
         ArrayKeyExistsTernaryThenValueToCoalescingRector::class, // Replaces array_key_exists checks in ternary conditions with null coalescing
         SimplifyTautologyTernaryRector::class, // Simplifies tautological ternary expressions
