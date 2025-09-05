@@ -1,0 +1,9 @@
+# Neovim runtime/state
+nvim/lua/local.lua
+**/.netrwhist
+**/*.swp
+**/*.swo
+**/undo/*
+**/swap/*
+**/backup/*
+**/shada/*

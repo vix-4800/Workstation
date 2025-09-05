@@ -15,5 +15,8 @@
     "fish": "~/.config/fish",
     "tmux.conf": "~/.config/tmux.conf",
     "polybar.ini": "~/.config/polybar/config.ini"
+  },
+  "nvim": {
+    "init.vim": "~/.config/nvim"
   }
 }
