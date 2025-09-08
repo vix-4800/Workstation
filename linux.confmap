@@ -12,3 +12,4 @@ i3								$HOME/.config/i3
 sway							$HOME/.config/sway
 waybar							$HOME/.config/waybar
 .prettierrc						$HOME/.prettierrc
+rofi							$HOME/.config/rofi
