@@ -1,22 +1,49 @@
 {
-  "php": {
-    "php-cs-fixer.php": "~/.config/php-cs-fixer.php",
-    "phpstan.neon": "~/.config/phpstan.neon",
-    "rector.php": "~/.config/rector.php"
+  "php-cs-fixer": {
+    "php-cs-fixer.php": "~/.config/php-cs-fixer/php-cs-fixer.php"
   },
-  "python": {
-    "flake8": "~/.config/flake8",
-    "mypy.ini": "~/.config/mypy.ini"
+  "phpstan": {
+    "phpstan.neon": "~/.config/phpstan/phpstan.neon"
   },
-  "shell": {
-    "bashrc": "~/.bashrc",
-    "bash_profile": "~/.bash_profile",
-    "zshrc": "~/.zshrc",
-    "fish": "~/.config/fish",
-    "tmux.conf": "~/.config/tmux.conf",
-    "polybar.ini": "~/.config/polybar/config.ini"
+  "rector": {
+    "rector.php": "~/.config/rector/rector.php"
+  },
+  "phpcs": {
+    "phpcs.xml": "~/.config/phpcs/phpcs.xml"
+  },
+  "flake8": {
+    "flake8": "~/.config/flake8"
+  },
+  "mypy": {
+    "mypy.ini": "~/.config/mypy/mypy.ini"
+  },
+  "zsh": {
+    "zshrc": "~/.zshrc"
+  },
+  "fish": {
+    "config.fish": "~/.config/fish",
+    "fish_plugins": "~/.config/fish/fish_plugins",
+    "fish_variables": "~/.config/fish/fish_variables",
+    "completions": "~/.config/fish/completions",
+    "conf.d": "~/.config/fish/conf.d",
+    "functions": "~/.config/fish/functions",
+    "themes": "~/.config/fish/themes"
+  },
+  "polybar": {
+    "config.ini": "~/.config/polybar/config.ini",
+    "launch.sh": "~/.config/polybar/launch.sh"
   },
   "nvim": {
-    "init.vim": "~/.config/nvim"
+    ".": "~/.config/nvim"
+  },
+  "i3": {
+    "config": "~/.config/i3/config"
+  },
+  "sway": {
+    "config": "~/.config/sway/config"
+  },
+  "waybar": {
+    "config.jsonc": "~/.config/waybar/config.jsonc",
+    "style.css": "~/.config/waybar/style.css"
   }
 }
