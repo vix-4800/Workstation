@@ -9,3 +9,5 @@ shell/tmux.conf	$HOME/.config/tmux/tmux.conf
 nvim	$HOME/.config/nvim
 i3	$HOME/.config/i3
 polybar	$HOME/.config/polybar
+sway	$HOME/.config/sway
+waybar	$HOME/.config/waybar
