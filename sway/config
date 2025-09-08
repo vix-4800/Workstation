@@ -14,7 +14,7 @@ set $down j
 set $up k
 set $right l
 set $term alacritty # Your preferred terminal emulator
-set $menu rofi -show drun # Your preferred application launcher
+set $menu wofi --show run # Your preferred application launcher
 
 ### Output configuration
 #
