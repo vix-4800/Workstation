@@ -13,3 +13,4 @@ sway							$HOME/.config/sway
 waybar							$HOME/.config/waybar
 .prettierrc						$HOME/.prettierrc
 rofi							$HOME/.config/rofi
+alacritty						$HOME/.config/alacritty

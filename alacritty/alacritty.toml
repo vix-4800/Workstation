@@ -1,0 +1,29 @@
+[cursor]
+blink_interval = 300
+blink_timeout = 30
+unfocused_hollow = false
+
+[cursor.style]
+blinking = "Always"
+shape = "Beam"
+
+[font]
+size = 14
+
+[font.offset]
+x = 0
+y = 0
+
+[window]
+decorations = "none"
+decorations_theme_variant = "Dark"
+dynamic_padding = true
+dynamic_title = true
+opacity = 0.75
+
+[window.padding]
+x = 9
+y = 9
+
+[mouse]
+hide_when_typing = true
