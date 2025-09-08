@@ -16,6 +16,17 @@ set $right l
 set $term alacritty --config-file "$HOME/.config/alacritty/sway.toml" # Your preferred terminal emulator
 set $menu wofi --show run # Your preferred application launcher
 
+# blur enable
+# blur_passes 1
+# blur_radius 2
+
+smart_gaps on
+smart_borders on
+gaps inner 4
+gaps outer 3
+
+default_border pixel 1
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -48,9 +59,11 @@ exec_always --no-startup-id swayidle -w \
 #       middle_emulation enabled
 #   }
 #
-#   input type:keyboard {
-#       xkb_layout "eu"
-#   }
+input type:keyboard {
+    xkb_layout "us,ru"
+    xkb_variant ","
+    xkb_options "grp:alt_shift_toggle"
+}
 #
 # You can also configure each device individually.
 # Read `man 5 sway-input` for more information about this section.
@@ -63,7 +76,7 @@ exec_always --no-startup-id swayidle -w \
 bindsym $mod+Return exec $term
 
 # Kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 
 # Start your launcher
 bindsym $mod+d exec $menu
@@ -79,7 +92,7 @@ floating_modifier $mod normal
 bindsym $mod+Shift+c reload
 
 # Exit sway (logs you out of your Wayland session)
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 #
 # Moving around:
 #
@@ -219,3 +232,5 @@ include /etc/sway/config.d/*
 
 exec_always --no-startup-id swaymsg 'workspace number 1; exec alacritty'
 exec_always --no-startup-id swaymsg 'workspace number 2; exec firefox'
+
+exec_always setxkbmap -layout us,ru -option 'grp:alt_shift_toggle'
