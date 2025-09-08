@@ -1,3 +1,6 @@
+[general]
+live_config_reload = true
+
 [cursor]
 blink_interval = 300
 blink_timeout = 30
@@ -22,8 +25,8 @@ dynamic_title = true
 opacity = 0.75
 
 [window.padding]
-x = 9
-y = 9
+x = 10
+y = 10
 
 [mouse]
 hide_when_typing = true
