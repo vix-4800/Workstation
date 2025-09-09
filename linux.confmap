@@ -16,3 +16,4 @@ rofi							$HOME/.config/rofi
 alacritty						$HOME/.config/alacritty
 tmux/.tmux.conf					$HOME/.tmux.conf
 wofi							$HOME/.config/wofi
+mako							$HOME/.config/mako
