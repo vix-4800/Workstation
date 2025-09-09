@@ -1,14 +1,31 @@
 live_config_reload = true
 
+[env]
+TERM = "xterm-256color"
+
+# ——— WINDOW ———————————————————————————————————————
+[window]
+decorations = "none"
+decorations_theme_variant = "Dark"
+dynamic_padding = true
+dynamic_title = true
+opacity = 0.9
+
+[window.padding]
+x = 12
+y = 12
+
+# ——— CURSOR ———————————————————————————————————————
 [cursor]
 blink_interval = 300
 blink_timeout = 30
 unfocused_hollow = false
 
 [cursor.style]
-blinking = "Always"
 shape = "Beam"
+blinking = "Always"
 
+# ——— FONT ———————————————————————————————————————
 [font]
 size = 14
 
@@ -16,16 +33,43 @@ size = 14
 x = 0
 y = 0
 
-[window]
-decorations = "none"
-decorations_theme_variant = "Dark"
-dynamic_padding = true
-dynamic_title = true
-opacity = 0.75
+# ——— COLORS ———————————————————————————————————————
+[colors.primary]
+background = "#0f111a"
+foreground = "#d7dce2"
 
-[window.padding]
-x = 10
-y = 10
+[colors.normal]
+black   = "#1e222a"
+red     = "#e06c75"
+green   = "#98c379"
+yellow  = "#e5c07b"
+blue    = "#61afef"
+magenta = "#c678dd"
+cyan    = "#56b6c2"
+white   = "#abb2bf"
 
+[colors.bright]
+black   = "#3e4452"
+red     = "#ff7a86"
+green   = "#b6e094"
+yellow  = "#ffd787"
+blue    = "#79b8ff"
+magenta = "#de98ff"
+cyan    = "#7cd6cf"
+white   = "#e6e6e6"
+
+# ——— SCROLLING ———————————————————————————————————
+[scrolling]
+history = 10000
+multiplier = 3
+
+# ——— MOUSE ———————————————————————————————————————
 [mouse]
 hide_when_typing = true
+
+# ——— BELL ———————————————————————————————————————
+[bell]
+animation = "EaseOut"
+duration = 0
+color = "#000000"
+command = "None"
