@@ -1,3 +1,36 @@
 {
-  "debian": ["git", "curl", "fish", "nvim", "firefox", "code", "polybar"]
+  "debian": ["git", "curl", "fish", "nvim", "firefox", "code", "alacritty"],
+  "arch": [
+    "nvim",
+    "code",
+    "firefox",
+    "curl",
+    "alacritty",
+    "fish",
+    "zsh",
+    "git",
+    "jq",
+    "ripgrep",
+    "fd",
+    "bottom",
+    "sway",
+    "waybar",
+    "wl-clipboard",
+    "grim",
+    "slurp",
+    "mako",
+    "brightnessctl",
+    "pipewire",
+    "wireplumber",
+    "bluez",
+    "bluez-utils",
+    "sddm",
+    "xorg-xauth",
+    "ttf-jetbrains-mono-nerd",
+    "wofi"
+  ],
+  "aur": [],
+  "pipx": ["pre-commit", "ansible-lint"],
+  "npm": [],
+  "composer": ["phpstan/phpstan", "friendsofphp/php-cs-fixer"]
 }
