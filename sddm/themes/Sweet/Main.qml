@@ -16,7 +16,7 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+
 import QtQuick 2.8
 
 import QtQuick.Layouts 1.1
@@ -164,7 +164,7 @@ PlasmaCore.ColorScope {
                 actionItems: [
                     ActionButton {
                         iconSource: Qt.resolvedUrl("assets/suspend.svgz")
-                        text: i18ndc("plasma_lookandfeel_org.kde.lookandfeel","Suspend to RAM","Sleep")                        
+                        text: i18ndc("plasma_lookandfeel_org.kde.lookandfeel","Suspend to RAM","Sleep")
                         onClicked: sddm.suspend()
                         enabled: sddm.canSuspend
                         visible: !inputPanel.keyboardActive
@@ -344,7 +344,7 @@ PlasmaCore.ColorScope {
                 actionItems: [
                     ActionButton {
                         iconSource: Qt.resolvedUrl("assets/suspend.svgz")
-                        text: i18ndc("plasma_lookandfeel_org.kde.lookandfeel","Suspend to RAM","Sleep")                        
+                        text: i18ndc("plasma_lookandfeel_org.kde.lookandfeel","Suspend to RAM","Sleep")
                         onClicked: sddm.suspend()
                         enabled: sddm.canSuspend
                         visible: !inputPanel.keyboardActive

@@ -34,8 +34,9 @@ indent_style = tab
 # ————————————————
 # Shell-scripts
 # ————————————————
-[*.sh]
+[*.{sh,bash}]
 end_of_line = lf
+indent_size = 2
 
 # ————————————————
 # PHP
@@ -43,6 +44,7 @@ end_of_line = lf
 [*.php]
 end_of_line = lf
 max_line_length = 120
+indent_size = 4
 
 # ————————————————
 # HTML / CSS / JS
@@ -56,3 +58,9 @@ indent_size = 2
 # ————————————————
 [*.go]
 indent_style = tab
+
+# ————————————————
+# Lua
+# ————————————————
+[*.lua]
+indent_size = 2

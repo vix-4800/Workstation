@@ -16,7 +16,7 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+
 import QtQuick 2.2
 
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -24,7 +24,7 @@ import org.kde.plasma.components 3.0 as PlasmaComponents
 
 PlasmaComponents.ToolButton {
     id: root
-    
+
     property int currentIndex: -1
 
     visible: menu.count > 1

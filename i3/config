@@ -126,4 +126,3 @@ for_window [class="Alacritty"] move to workspace 1
 # Firefox
 exec --no-startup-id i3-msg "workspace 2; exec firefox"
 for_window [class="Firefox"] move to workspace 2
-

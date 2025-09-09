@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
- 
+
 import QtQuick 2.8
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -59,7 +59,7 @@ Item {
         radius: width / 2
         color: "#0C0E15"
     }
-    
+
     Rectangle {
         anchors.centerIn: imageSource
         width: imageSource.width + 10 // Subtract to prevent fringing
@@ -84,7 +84,7 @@ Item {
             bottomMargin: units.largeSpacing
             horizontalCenter: parent.horizontalCenter
         }
-        Behavior on width { 
+        Behavior on width {
             PropertyAnimation {
                 from: faceSize
                 duration: units.longDuration * 2;

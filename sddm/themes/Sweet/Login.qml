@@ -106,7 +106,7 @@ SessionManagementScreen {
 
         Layout.topMargin: 20
         Layout.fillWidth: true
-        
+
         font.pointSize: config.fontSize
         font.family: config.font
             opacity: enabled ? 1.0 : 0.7
