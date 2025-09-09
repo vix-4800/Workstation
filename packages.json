@@ -1,7 +1,7 @@
 {
   "debian": ["git", "curl", "fish", "nvim", "firefox", "code", "alacritty"],
   "arch": [
-    "nvim",
+    "neovim",
     "code",
     "firefox",
     "curl",
@@ -27,7 +27,19 @@
     "sddm",
     "xorg-xauth",
     "ttf-jetbrains-mono-nerd",
-    "wofi"
+    "wofi",
+    "php",
+    "composer",
+    "docker",
+    "docker-compose",
+    "wireguard-tools",
+    "otf-font-awesome",
+    "base-devel",
+    "swaylock",
+    "swayidle",
+    "swaybg",
+    "make",
+    "less"
   ],
   "aur": [],
   "pipx": ["pre-commit", "ansible-lint"],
