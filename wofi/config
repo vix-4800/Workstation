@@ -1,0 +1,14 @@
+mode=drun
+show=drun
+allow-images=true
+columns=1
+lines=10
+prompt=
+term=alacritty
+hide-scroll=true
+no-actions=true
+
+matching=fuzzy
+insensitive=true
+location=center
+width=40%
