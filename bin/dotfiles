@@ -9,11 +9,19 @@ BACKUP_DIR="${HOME}/.local/share/dotfiles/backups"
 LOG_PREFIX="[dotfiles]"
 
 if [ -t 1 ]; then
-    BOLD="$(printf '\033[1m')"; DIM="$(printf '\033[2m')"; RED="$(printf '\033[31m')"
-    GRN="$(printf '\033[32m')"; YLW="$(printf '\033[33m')"; BLU="$(printf '\033[34m')"
+    BOLD="$(printf '\033[1m')";
+    DIM="$(printf '\033[2m')";
+    RED="$(printf '\033[31m')"
+    GRN="$(printf '\033[32m')";
+    YLW="$(printf '\033[33m')";
     OFF="$(printf '\033[0m')"
 else
-    BOLD=""; DIM=""; RED=""; GRN=""; YLW=""; BLU=""; OFF=""
+    BOLD="";
+    DIM="";
+    RED="";
+    GRN="";
+    YLW="";
+    OFF=""
 fi
 
 usage() {
@@ -206,8 +214,8 @@ case "${cmd}" in
     which) echo -e "REPO: ${REPO_ROOT}\nMAP:  ${CONF_MAP}";;
     edit)  ${EDITOR:-vi} "${CONF_MAP}";;
     init)  usage ;;
-    link)    [ "${1:-}" = "-n" ] && do_link 1 || do_link 0 ;;
-    unlink)  [ "${1:-}" = "-n" ] && do_unlink 1 || do_unlink 0 ;;
+    link)    if [ "${1:-}" = "-n" ]; then do_link 1; else do_link 0; fi ;;
+    unlink)  if [ "${1:-}" = "-n" ]; then do_unlink 1; else do_unlink 0; fi ;;
     update) do_update ;;
     status) do_status ;;
     doctor) do_doctor ;;
