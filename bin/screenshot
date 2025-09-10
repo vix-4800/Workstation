@@ -1,0 +1,26 @@
+#!/bin/bash
+# Screenshot script with notifications
+
+SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
+mkdir -p "$SCREENSHOT_DIR"
+
+case "$1" in
+    "full")
+        FILE="$SCREENSHOT_DIR/$(date +'%Y-%m-%d_%H-%M-%S').png"
+        grim "$FILE"
+        wl-copy < "$FILE"
+        notify-send "Screenshot" "Full screen captured and copied to clipboard" -i "$FILE"
+        ;;
+    "area")
+        FILE="$SCREENSHOT_DIR/$(date +'%Y-%m-%d_%H-%M-%S').png"
+        grim -g "$(slurp)" "$FILE"
+        wl-copy < "$FILE"
+        notify-send "Screenshot" "Area captured and copied to clipboard" -i "$FILE"
+        ;;
+    "window")
+        FILE="$SCREENSHOT_DIR/$(date +'%Y-%m-%d_%H-%M-%S').png"
+        grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" "$FILE"
+        wl-copy < "$FILE"
+        notify-send "Screenshot" "Window captured and copied to clipboard" -i "$FILE"
+        ;;
+esac
