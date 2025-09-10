@@ -1,6 +1,27 @@
 mode=drun
 show=drun
 allow-images=true
+allow-markup=true
+columns=1
+lines=12
+prompt=  Search...
+term=alacritty
+hide-scroll=true
+no-actions=true
+print-command=true
+exec-search=true
+
+matching=fuzzy
+insensitive=true
+location=center
+width=45%
+height=50%
+
+# Performance
+cache-file=/home/vix/.cache/wofi-drun
+parse-search=true
+sort-order=alphabetical=drun
+allow-images=true
 columns=1
 lines=10
 prompt=
