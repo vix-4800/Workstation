@@ -9,9 +9,9 @@
   "border-radius": 8,
   "mode": "dock",
   "reload_style_on_change": true,
-  "modules-left": ["sway/workspaces", "sway/window"],
-  "modules-center": [],
-  "modules-right": ["pulseaudio", "network", "battery", "clock", "tray"],
+  "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
+  "modules-center": ["clock"],
+  "modules-right": ["idle_inhibitor", "cpu", "memory", "temperature", "pulseaudio", "network", "battery", "custom/power", "tray"],
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
