@@ -30,6 +30,11 @@ size = 14
 
 [font.offset]
 x = 0
+y = 1
+
+# Better font rendering
+[font.glyph_offset]
+x = 0
 y = 0
 
 # ——— COLORS ———————————————————————————————————————
@@ -56,6 +61,35 @@ blue    = "#79b8ff"
 magenta = "#de98ff"
 cyan    = "#7cd6cf"
 white   = "#e6e6e6"
+
+# Cursor colors
+[colors.cursor]
+text = "#0f111a"
+cursor = "#61afef"
+
+# # Selection colors
+[colors.selection]
+text = "#0f111a"
+background = "#61afef"
+
+# # Search colors
+[colors.search.matches]
+foreground = "#0f111a"
+background = "#e5c07b"
+
+[colors.search.focused_match]
+foreground = "#0f111a"
+background = "#61afef"
+
+# # Line indicator
+[colors.line_indicator]
+foreground = "None"
+background = "None"
+
+# # Footer bar
+[colors.footer_bar]
+foreground = "#d7dce2"
+background = "#1e222a"
 
 # ——— SCROLLING ———————————————————————————————————
 [scrolling]
