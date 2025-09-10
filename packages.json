@@ -1,48 +1,84 @@
 {
-  "debian": ["git", "curl", "fish", "nvim", "firefox", "code", "alacritty"],
-  "arch": [
-    "neovim",
-    "code",
-    "firefox",
-    "curl",
-    "alacritty",
-    "fish",
-    "zsh",
-    "git",
-    "jq",
-    "ripgrep",
-    "fd",
-    "bottom",
-    "sway",
-    "waybar",
-    "wl-clipboard",
-    "grim",
-    "slurp",
-    "mako",
-    "brightnessctl",
-    "pipewire",
-    "wireplumber",
-    "bluez",
-    "bluez-utils",
-    "sddm",
-    "xorg-xauth",
-    "ttf-jetbrains-mono-nerd",
-    "wofi",
-    "php",
-    "composer",
-    "docker",
-    "docker-compose",
-    "wireguard-tools",
-    "otf-font-awesome",
-    "base-devel",
-    "swaylock",
-    "swayidle",
-    "swaybg",
-    "make",
-    "less"
-  ],
-  "aur": [],
-  "pipx": ["pre-commit", "ansible-lint"],
-  "npm": [],
-  "composer": ["phpstan/phpstan", "friendsofphp/php-cs-fixer"]
+  "debian": {
+    "description": "Debian/Ubuntu packages",
+    "packages": [
+      "git",
+      "curl",
+      "fish",
+      "neovim",
+      "firefox",
+      "alacritty",
+      "i3",
+      "polybar",
+      "rofi",
+      "feh",
+      "jq",
+      "ripgrep",
+      "fd-find",
+      "tmux",
+      "python3-pip",
+      "python3-pipx",
+      "php",
+      "composer"
+    ]
+  },
+  "arch": {
+    "description": "Arch Linux packages",
+    "essential": ["base-devel", "git", "curl", "jq", "make", "less"],
+    "shell": ["fish", "zsh", "starship"],
+    "editors": ["neovim", "code"],
+    "terminal": ["alacritty", "tmux"],
+    "wayland": [
+      "sway",
+      "waybar",
+      "wofi",
+      "mako",
+      "swaylock",
+      "swayidle",
+      "swaybg",
+      "wl-clipboard",
+      "grim",
+      "slurp",
+      "brightnessctl"
+    ],
+    "x11": ["i3", "polybar", "rofi", "feh", "xorg-xauth"],
+    "audio": ["pipewire", "wireplumber"],
+    "bluetooth": ["bluez", "bluez-utils"],
+    "fonts": ["ttf-jetbrains-mono-nerd", "otf-font-awesome"],
+    "development": ["php", "composer", "docker", "docker-compose", "python-pip", "python-pipx"],
+    "utilities": ["ripgrep", "fd", "bottom", "firefox", "wireguard-tools"],
+    "display": ["sddm"]
+  },
+  "aur": {
+    "description": "AUR packages for Arch Linux",
+    "packages": ["visual-studio-code-bin"]
+  },
+  "pipx": {
+    "description": "Python tools installed via pipx",
+    "packages": ["pre-commit", "ansible-lint", "black", "flake8", "mypy"]
+  },
+  "npm": {
+    "description": "Node.js packages installed globally",
+    "packages": ["prettier", "@commitlint/cli", "@commitlint/config-conventional"]
+  },
+  "composer": {
+    "description": "PHP packages installed globally",
+    "packages": ["phpstan/phpstan", "friendsofphp/php-cs-fixer"]
+  },
+  "manual_installs": {
+    "description": "Software that needs manual installation",
+    "items": [
+      {
+        "name": "Nerd Fonts",
+        "url": "https://github.com/ryanoasis/nerd-fonts",
+        "description": "Additional programming fonts"
+      },
+      {
+        "name": "Fisher",
+        "url": "https://github.com/jorgebucaran/fisher",
+        "description": "Fish shell plugin manager",
+        "install_cmd": "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
+      }
+    ]
+  }
 }
