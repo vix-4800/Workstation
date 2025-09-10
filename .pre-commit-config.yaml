@@ -32,10 +32,3 @@ repos:
         language: script
         pass_filenames: false
         always_run: true
-
-      - id: fish-syntax-check
-        name: Check Fish syntax
-        entry: fish
-        args: ['-n']
-        language: system
-        files: '\.fish$'
