@@ -1,141 +1,46 @@
 * {
   font-family: 'JetBrainsMono Nerd Font', monospace;
   font-size: 13px;
-  font-weight: 500;
-  border: none;
-  border-radius: 0px;
-  padding: 0;
-  margin: 0;
-  min-height: 0;
 }
 
 window#waybar {
-  background-color: rgba(15, 17, 26, 0.95);
-  border: 2px solid rgba(97, 175, 239, 0.3);
-  border-radius: 12px;
+  background-color: rgba(15, 17, 26, 0.9);
+  border-bottom: 2px solid #61afef;
   color: #d7dce2;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 #workspaces button {
-  padding: 0 8px;
-  margin: 0 3px;
-  border-radius: 8px;
+  padding: 0 6px;
+  margin: 0 2px;
+  border-radius: 6px;
   background: transparent;
   color: #abb2bf;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
-}
-
-#workspaces button:hover {
-  background: rgba(97, 175, 239, 0.2);
-  color: #61afef;
-  transform: scale(1.05);
 }
 
 #workspaces button.focused {
-  background: linear-gradient(45deg, #61afef, #7c8df2);
+  background: #61afef;
   color: #0f111a;
-  font-weight: bold;
-  box-shadow: 0 2px 10px rgba(97, 175, 239, 0.4);
 }
 
 #workspaces button.urgent {
-  background: linear-gradient(45deg, #e06c75, #ff7a86);
+  background: #e06c75;
   color: #fff;
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
 }
 
 #clock,
 #battery,
 #network,
 #pulseaudio,
-#tray,
-#cpu,
-#memory,
-#temperature,
-#idle_inhibitor,
-#custom-power {
-  padding: 4px 12px;
-  margin: 0 2px;
-  border-radius: 8px;
-  background: rgba(30, 34, 42, 0.6);
-  transition: all 0.3s ease;
-}
-
-#clock {
-  background: linear-gradient(45deg, #61afef, #7c8df2);
-  color: #0f111a;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-#battery {
-  background: rgba(152, 195, 121, 0.2);
+#tray {
+  padding: 0 10px;
 }
 
 #battery.charging {
   color: #98c379;
-  background: rgba(152, 195, 121, 0.3);
 }
-
 #battery.warning {
   color: #e5c07b;
-  background: rgba(229, 192, 123, 0.2);
 }
-
 #battery.critical {
   color: #e06c75;
-  background: rgba(224, 108, 117, 0.2);
-  animation: pulse 1s infinite;
-}
-
-#cpu {
-  color: #c678dd;
-}
-
-#memory {
-  color: #56b6c2;
-}
-
-#temperature {
-  color: #e5c07b;
-}
-
-#network {
-  color: #98c379;
-}
-
-#pulseaudio {
-  color: #61afef;
-}
-
-#pulseaudio.muted {
-  color: #e06c75;
-}
-
-#idle_inhibitor {
-  color: #e5c07b;
-}
-
-#custom-power {
-  background: rgba(224, 108, 117, 0.2);
-  color: #e06c75;
-}
-
-#custom-power:hover {
-  background: rgba(224, 108, 117, 0.4);
-  transform: scale(1.05);
 }

@@ -11,7 +11,7 @@
   "reload_style_on_change": true,
   "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
   "modules-center": ["clock"],
-  "modules-right": ["idle_inhibitor", "cpu", "memory", "temperature", "pulseaudio", "network", "battery", "custom/power", "tray"],
+  "modules-right": ["pulseaudo", "network", "battery"],
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
