@@ -85,10 +85,13 @@ P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
 -- Load configuration modules in proper order
-require 'config.options'    -- Basic Vim options and settings (must be first)
-require 'config.keymaps'    -- Key mappings
-require 'config.autocmds'   -- Autocommands
-require 'config.lazy'       -- Plugin manager and all plugins (must be last)
+require 'config.options' -- Basic Vim options and settings (must be first)
+
+require 'config.keymaps' -- Key mappings
+require 'config.autocmds' -- Autocommands
+require 'config.php' -- PHP linters and refactoring tools
+
+require 'config.lazy' -- Plugin manager and all plugins (must be last)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
