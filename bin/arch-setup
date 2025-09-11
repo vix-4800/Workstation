@@ -176,9 +176,7 @@ fi
 # Install PHP development tools via composer
 if command -v composer &> /dev/null; then
     log_info "Installing PHP development tools globally..."
-    composer global require phpstan/phpstan --no-interaction
     composer global require friendsofphp/php-cs-fixer --no-interaction
-    composer global require squizlabs/php_codesniffer --no-interaction
     composer global require rector/rector --no-interaction
 fi
 
