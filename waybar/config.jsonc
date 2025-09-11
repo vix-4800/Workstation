@@ -1,17 +1,28 @@
 {
+  /* === Appearance === */
   "layer": "top",
   "position": "top",
-  "height": 35,
-  "spacing": 8,
-  "margin-top": 8,
-  "margin-left": 8,
-  "margin-right": 8,
-  "border-radius": 8,
-  "mode": "dock",
+  "passthrough": false,
   "reload_style_on_change": true,
-  "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
-  "modules-center": ["clock"],
-  "modules-right": ["keyboard-state", "pulseaudio", "network", "battery"],
+
+  /* === Modules Position === */
+  "modules-left": ["custom/archicon", "clock"],
+  "modules-center": ["sway/mode", "sway/workspaces"],
+  "modules-right": [
+    "idle_inhibitor",
+    "pulseaudio_slider",
+    "pulseaudio",
+    "network",
+    "battery",
+    "keyboard-state"
+  ],
+
+  /* === Modules === */
+  "custom/archicon": {
+    "format": "",
+    "on-click": "wofi --show drun",
+    "tooltip": false
+  },
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
