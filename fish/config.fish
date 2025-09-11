@@ -13,7 +13,7 @@ if status is-interactive
 end
 
 
-set -x PATH $PATH $HOME/.local/share/nvm/v24.7.0/bin /usr/local/go/bin
+set -x PATH $PATH $HOME/.local/share/nvm/v24.7.0/bin /usr/local/go/bin $HOME/.config/composer/vendor/bin
 
 # ======= Aliases =======
 alias vim 'nvim'
