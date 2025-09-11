@@ -16,16 +16,39 @@ end
 vim.keymap.set('n', '<leader>pf', function()
   vim.cmd 'write'
   local file = vim.fn.expand '%:p'
-  local cfg = vim.fn.expand '~/.config/php-cs-fixer/php-cs-fixer.php'
+  local cfg = vim.fn.expand('~/.config/php-cs-fixer/php-cs-fixer.php')
   vim.notify('php-cs-fixer: ' .. file)
-  vim.system({ 'php-cs-fixer', 'fix', file, '--config=' .. cfg }, { text = true, cwd = project_root() }, function(res)
-    vim.schedule(function()
-      if res.code == 0 then
-        vim.cmd 'checktime'
-        vim.notify 'php-cs-fixer: done'
-      else
-        vim.notify((res.stderr or 'php-cs-fixer error'), vim.log.levels.ERROR)
-      end
+  vim.system(
+    { 'php-cs-fixer', 'fix', file, '--config=' .. cfg },
+    { text = true, cwd = project_root() },
+    function(res)
+      vim.schedule(function()
+        if res.code == 0 then
+          vim.cmd 'checktime'
+          vim.notify 'php-cs-fixer: done'
+        else
+          vim.notify((res.stderr or 'php-cs-fixer error'), vim.log.levels.ERROR)
+        end
     end)
   end)
 end, { desc = 'PHP CS Fixer: current file' })
+
+vim.keymap.set('n', '<leader>pr', function()
+  vim.cmd 'write'
+  local file = vim.fn.expand '%:p'
+  local cfg = vim.fn.expand('~/.config/rector/rector.php')
+  vim.notify('rector: ' .. file)
+  vim.system(
+    { 'rector', 'process', file, '--ansi', '--no-progress-bar', '--config=' .. cfg },
+    { text = true, cwd = project_root() },
+    function(res)
+      vim.schedule(function()
+        if res.code == 0 then
+          vim.cmd 'checktime'
+          vim.notify 'rector: done'
+        else
+          vim.notify((res.stderr or 'rector error'), vim.log.levels.ERROR)
+        end
+    end)
+  end)
+end, { desc = 'Rector: current file' })
