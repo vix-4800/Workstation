@@ -6,17 +6,17 @@ return {
       theme = 'auto',
       globalstatus = true,
       disabled_filetypes = { statusline = { 'dashboard', 'alpha' } },
-      sections = {
-        lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff'},
-        lualine_c = {'filename'},
-        lualine_x = {'filetype'},
-        lualine_y = {'progress'},
-        lualine_z = {'location'}
-      },
+    },
+    sections = {
+      lualine_a = {'mode'},
+      lualine_b = {'branch', 'diff'},
+      lualine_c = {'filename'},
+      lualine_x = {'filetype'},
+      lualine_y = {'progress'},
+      lualine_z = {'location'}
     },
   },
-  config = function()
-    require('lualine').setup()
+  config = function(_, opts)
+    require('lualine').setup(opts)
   end,
 }
