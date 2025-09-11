@@ -11,10 +11,13 @@
   "modules-right": [
     "idle_inhibitor",
     "pulseaudio_slider",
-    "pulseaudio",
     "network",
+    "pulseaudio",
+    "memory",
+    "temperature",
     "battery",
-    "keyboard-state"
+    "keyboard-state",
+    "cpu",
   ],
 
   /* === Modules === */
