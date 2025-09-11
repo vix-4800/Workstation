@@ -1,12 +1,17 @@
 * {
   font-family: 'JetBrainsMono Nerd Font', monospace;
-  font-size: 13px;
+  font-size: 15px;
+  min-height: 10px;
 }
 
 window#waybar {
   background-color: rgba(15, 17, 26, 0.9);
   border-bottom: 2px solid #61afef;
   color: #d7dce2;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #workspaces button {
