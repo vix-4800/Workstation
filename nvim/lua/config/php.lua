@@ -29,8 +29,8 @@ vim.keymap.set('n', '<leader>pf', function()
         else
           vim.notify((res.stderr or 'php-cs-fixer error'), vim.log.levels.ERROR)
         end
+      end)
     end)
-  end)
 end, { desc = 'PHP CS Fixer: current file' })
 
 vim.keymap.set('n', '<leader>pr', function()
@@ -49,6 +49,6 @@ vim.keymap.set('n', '<leader>pr', function()
         else
           vim.notify((res.stderr or 'rector error'), vim.log.levels.ERROR)
         end
+      end)
     end)
-  end)
 end, { desc = 'Rector: current file' })
