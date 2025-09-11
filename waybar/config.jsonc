@@ -4,8 +4,12 @@
   "position": "top",
   "passthrough": false,
   "reload_style_on_change": true,
-
+  "margin-left": 8,
+  "margin-right": 10,
+  "margin-top": 10,
+  "margin-bottom": 10,
   /* === Modules Position === */
+
   "modules-left": ["custom/archicon", "clock"],
   "modules-center": ["sway/mode", "sway/workspaces"],
   "modules-right": [
@@ -15,10 +19,10 @@
     "pulseaudio",
     "pulseaudio_slider",
     "memory",
+    "cpu",
     "temperature",
     "battery",
     "keyboard-state",
-    "cpu"
   ],
 
   /* === Modules === */

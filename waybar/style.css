@@ -1,59 +1,176 @@
+/* -- Global rules -- */
 * {
-  font-family: 'JetBrainsMono Nerd Font', monospace;
+  border: none;
+  font-family: "JetbrainsMono Nerd Font";
   font-size: 15px;
-  min-height: 40px;
+  min-height: 10px;
 }
 
 window#waybar {
-  background: transparent;
-  border-bottom: 2px solid #61afef;
-  color: #d7dce2;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  padding-left: 15px;
-  padding-right: 10px;
+  background: rgba(34, 36, 54, 0.6);
 }
 
+window#waybar.hidden {
+  opacity: 0.2;
+}
+
+/* - Genera rules for visible modules -- */
+#custom-archicon,
+#clock,
+#cpu,
+#battery,
+#memory,
+#disk,
+#temperature,
+#idle_inhibitor,
+#bluetooth,
+#pulseaudio,
+#pulseaudio_slider,
+#network,
+#language {
+  color: #161320;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+  transition: none;
+}
+
+/* Separation to the left */
+#custom-archicon,
+#bluetooth,
+#cpu,
+#idle_inhibitor {
+  margin-left: 5px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+/* Separation to the rigth */
+#clock,
+#temperature,
+#language {
+  margin-right: 5px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* -- Specific styles -- */
+
+/* Modules left */
+#custom-archicon {
+  font-size: 20px;
+  color: #89B4FA;
+  background: #161320;
+  padding-right: 17px;
+}
+
+#clock {
+  background: #ABE9B3;
+}
+
+#cpu {
+  background: #96CDFB;
+}
+
+#memory {
+  background: #DDB6F2;
+}
+
+#disk {
+  background: #F5C2E7;
+}
+
+#temperature {
+  background: #F8BD96;
+}
+
+/* Modules center */
 #workspaces {
-  background-color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  margin: 6px 5px;
+  padding: 0px 6px;
 }
 
 #workspaces button {
-  padding: 0 6px;
-  margin: 0 2px;
-  border-radius: 6px;
+  color: #B5E8E0;
   background: transparent;
-  color: #abb2bf;
+  padding: 4px 4px;
+  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
 }
 
-#workspaces button.focused {
-  background: #61afef;
-  color: #0f111a;
+#workspaces button.occupied {
+  color: #A6E3A1;
 }
 
-#workspaces button.urgent {
-  background: #e06c75;
-  color: #fff;
+#workspaces button.active {
+  color: #89B4FA;
+  text-shadow: 0 0 4px #ABE9B3;
 }
 
-#custom-archicon {
-  font-size: 20px;
+#workspaces button:hover {
+  color: #89B4FA;
 }
 
-#clock,
-#battery,
-#network,
-#pulseaudio,
-#tray {
-  padding: 10px 15px;
+#workspaces button.active:hover {}
+
+/* Modules right */
+#taskbar {
+  background: transparent;
+  border-radius: 10px;
+  padding: 0px 5px;
+  margin: 6px 5px;
 }
 
-#battery.charging {
-  color: #98c379;
+#taskbar button {
+  padding: 0px 5px;
+  margin: 0px 3px;
+  border-radius: 6px;
+  transition: background 0.3s ease;
 }
-#battery.warning {
-  color: #e5c07b;
+
+#taskbar button.active {
+  background: rgba(34, 36, 54, 0.5);
 }
-#battery.critical {
-  color: #e06c75;
+
+#taskbar button:hover {
+  background: rgba(34, 36, 54, 0.5);
+}
+
+#idle_inhibitor {
+  background: #B5E8E0;
+  padding-right: 15px;
+}
+
+#bluetooth {
+  background: #B5E8E0;
+}
+
+#pulseaudio {
+  color: #1A1826;
+  background: #F5E0DC;
+}
+
+#pulseaudio_slider {
+  color: #1A1826;
+  background: #E8A2AF;
+}
+
+#network {
+  background: #CBA6F7;
+  padding-right: 13px;
+}
+
+#language {
+  background: #A6E3A1;
+  padding-right: 15px;
+}
+
+/* === Optional animation === */
+@keyframes blink {
+  to {
+    background-color: #BF616A;
+    color: #B5E8E0;
+  }
 }
