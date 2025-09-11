@@ -11,7 +11,7 @@
   "reload_style_on_change": true,
   "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
   "modules-center": ["clock"],
-  "modules-right": ["pulseaudo", "network", "battery"],
+  "modules-right": ["keyboard-state", "pulseaudio", "network", "battery"],
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
@@ -28,12 +28,15 @@
     }
   },
   "keyboard-state": {
-    "numlock": true,
+    "numlock": false,
     "capslock": true,
-    "format": "{name} {icon}",
+    "format": {
+      "numlock": "N {icon}",
+      "capslock": "⇪ {icon}"
+    },
     "format-icons": {
-      "locked": "",
-      "unlocked": ""
+      "locked": "",
+      "unlocked": ""
     }
   },
   "sway/mode": {
