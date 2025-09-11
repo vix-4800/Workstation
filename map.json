@@ -45,5 +45,48 @@
   "waybar": {
     "config.jsonc": "~/.config/waybar/config.jsonc",
     "style.css": "~/.config/waybar/style.css"
+  },
+  "wofi": {
+    "config": "~/.config/wofi/config",
+    "style.css": "~/.config/wofi/style.css"
+  },
+  "mako": {
+    "config": "~/.config/mako/config"
+  },
+  "wlogout": {
+    "layout": "~/.config/wlogout/layout",
+    "style.css": "~/.config/wlogout/style.css",
+    "icons": "~/.config/wlogout/icons"
+  },
+  "rofi": {
+    "config.rasi": "~/.config/rofi/config.rasi"
+  },
+  "alacritty": {
+    "alacritty.toml": "~/.config/alacritty/alacritty.toml"
+  },
+  "tmux": {
+    ".": "~/.config/tmux"
+  },
+  "git": {
+    "gitconfig": "~/.gitconfig"
+  },
+  "grub": {
+    "themes": "/usr/share/grub/themes"
+  },
+  "sddm": {
+    "sddm.conf": "/etc/sddm.conf",
+    "themes": "/usr/share/sddm/themes"
+  },
+  "feh": {
+    "theme": "~/.config/feh/theme"
+  },
+  "black": {
+    ".": "~/.config/black"
+  },
+  "bin": {
+    "dotfiles": "~/bin/dotfiles",
+    "screenshot": "~/bin/screenshot",
+    "arch-setup": "~/bin/arch-setup",
+    "system-update": "~/bin/system-update"
   }
 }

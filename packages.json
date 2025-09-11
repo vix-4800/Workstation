@@ -24,9 +24,9 @@
   },
   "arch": {
     "description": "Arch Linux packages",
-    "essential": ["base-devel", "git", "curl", "jq", "make", "less"],
-    "shell": ["fish", "zsh", "starship"],
-    "editors": ["neovim", "code"],
+    "essential": ["base-devel", "git", "curl", "jq", "make", "less", "unzip", "gcc"],
+    "shell": ["fish", "zsh"],
+    "editors": ["neovim"],
     "terminal": ["alacritty", "tmux"],
     "wayland": [
       "sway",
@@ -42,11 +42,21 @@
       "brightnessctl"
     ],
     "x11": ["i3", "polybar", "rofi", "feh", "xorg-xauth"],
-    "audio": ["pipewire", "wireplumber"],
+    "audio": ["pipewire", "pipewire-alsa", "pipewire-pulse", "wireplumber", "pavucontrol"],
     "bluetooth": ["bluez", "bluez-utils"],
     "fonts": ["ttf-jetbrains-mono-nerd", "otf-font-awesome"],
     "development": ["php", "composer", "docker", "docker-compose", "python-pip", "python-pipx"],
-    "utilities": ["ripgrep", "fd", "bottom", "firefox", "wireguard-tools"],
+    "utilities": [
+      "ripgrep",
+      "fd",
+      "bottom",
+      "firefox",
+      "wireguard-tools",
+      "github-cli",
+      "mesa",
+      "networkmanager-wireguard",
+      "flatpak"
+    ],
     "display": ["sddm"]
   },
   "aur": {
@@ -63,7 +73,12 @@
   },
   "composer": {
     "description": "PHP packages installed globally",
-    "packages": ["phpstan/phpstan", "friendsofphp/php-cs-fixer"]
+    "packages": [
+      "phpstan/phpstan",
+      "friendsofphp/php-cs-fixer",
+      "squizlabs/php_codesniffer",
+      "rector/rector"
+    ]
   },
   "manual_installs": {
     "description": "Software that needs manual installation",
