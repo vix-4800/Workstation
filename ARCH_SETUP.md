@@ -14,20 +14,21 @@
 - **Terminal**: Alacritty
 - **Shell**: Fish (с возможностью использования Zsh)
 - **Editor**: Neovim
-- **Display Manager**: SDDM
+- **Display Manager**: SDDM / greetd с ReGreet / KDE Plasma
 
 ### Системные пакеты:
 
-- Базовые инструменты разработки (base-devel, git, curl, etc.)
-- Аудиосистема PipeWire с полным стеком
-- Шрифты (JetBrains Mono Nerd Font, Font Awesome)
-- Инструменты для скриншотов (grim, slurp)
-- Управление яркостью (brightnessctl)
-- VPN (WireGuard)
+- **Базовые**: base-devel, git, curl, openssh, udiskie, ffmpeg, reflector
+- **Аудиосистема**: PipeWire с полным стеком
+- **Шрифты**: JetBrains Mono Nerd Font, Font Awesome
+- **Инструменты**: grim/slurp (скриншоты), brightnessctl (яркость)
+- **Безопасность**: ufw (firewall), bluez (bluetooth)
+- **VPN**: WireGuard + NetworkManager integration
+- **Микрокод**: AMD-ucode или Intel-ucode (по выбору)
 
 ### Инструменты разработки:
 
-- **PHP**: php, composer + глобальные пакеты (PHPStan, PHP-CS-Fixer, PHPCS, Rector)
+- **PHP**: php, php-gd, php-intl, composer + глобальные пакеты (PHPStan, PHP-CS-Fixer, PHPCS, Rector)
 - **Python**: python-pip, pipx + инструменты (black, flake8, mypy, pre-commit)
 - **JavaScript**: Node.js через NVM (устанавливается отдельно)
 - **Docker**: docker, docker-compose
@@ -49,14 +50,21 @@ cd ~/Code/Dotfiles
 
 ### Что делает скрипт:
 
-1. **Обновление системы** - `pacman -Syu`
-2. **Установка пакетов** - все необходимые пакеты из pacman
-3. **Установка AUR helper** - yay для доступа к AUR
-4. **Установка AUR пакетов** - VS Code и другие
-5. **Системные сервисы** - настройка и включение служб
-6. **Dotfiles** - клонирование и связывание конфигураций
-7. **Shell настройка** - установка Fish как основной оболочки
-8. **Инструменты разработки** - установка через pipx, composer
+1. **Интерактивный выбор компонентов**:
+   - CPU микрокод (AMD/Intel/Skip)
+   - Display manager (SDDM/greetd с ReGreet/KDE Plasma/None)
+   - Дополнительные dev-инструменты (Python/PHP пакеты)
+   - Автоматическая настройка firewall (ufw)
+
+2. **Обновление системы** - `pacman -Syu` + reflector для зеркал
+3. **Установка пакетов** - все необходимые пакеты из pacman
+4. **Установка AUR helper** - yay для доступа к AUR
+5. **Установка AUR пакетов** - VS Code и опционально SwayFX
+6. **Системные сервисы** - безопасная настройка и включение служб
+7. **Dotfiles** - клонирование и связывание конфигураций
+8. **Shell настройка** - установка Fish как основной оболочки
+9. **Инструменты разработки** - установка через pipx, composer
+10. **Настройка Wayland окружения** - исправление проблем запуска Sway
 
 ## После установки
 
@@ -170,6 +178,50 @@ sudo pacman -S pipewire-jack
 # Альтернативно, можно использовать jack2 с pipewire через pw-jack:
 # sudo pacman -S jack2
 # export JACK_SERVER="/usr/bin/pw-jack"
+```
+
+### Проблемы с запуском Sway:
+
+```bash
+# Если Sway не запускается после логина
+# 1. Проверьте переменные окружения
+echo $XDG_SESSION_TYPE
+echo $XDG_CURRENT_DESKTOP
+
+# 2. Переменные окружения настраиваются автоматически в /etc/environment
+
+# 3. Для ручного запуска (если выбран display manager "None")
+if [[ -z $DISPLAY && $(tty) == /dev/tty1 ]]; then
+  exec sway
+fi
+
+# 4. Проверьте конфигурацию Sway
+sway --validate
+
+# 5. Проверьте логи
+journalctl --user -u sway
+```
+
+### Настройка ReGreet (greetd):
+
+```bash
+# ReGreet конфигурируется автоматически в /etc/greetd/regreet.toml
+# Для кастомизации отредактируйте:
+sudo nano /etc/greetd/regreet.toml
+
+# Изменение фона:
+[background]
+path = "/путь/к/изображению.jpg"
+fit = "Cover"
+
+# Проверка статуса greetd:
+sudo systemctl status greetd
+
+# Логи ReGreet:
+sudo journalctl -u greetd
+
+# Перезапуск после изменений:
+sudo systemctl restart greetd
 ```
 
 ### Для обновления dotfiles:

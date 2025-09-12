@@ -24,7 +24,20 @@
   },
   "arch": {
     "description": "Arch Linux packages",
-    "essential": ["base-devel", "git", "curl", "jq", "make", "less", "unzip", "gcc"],
+    "essential": [
+      "base-devel",
+      "git",
+      "curl",
+      "jq",
+      "make",
+      "less",
+      "unzip",
+      "gcc",
+      "openssh",
+      "udiskie",
+      "ffmpeg",
+      "reflector"
+    ],
     "shell": ["fish", "zsh"],
     "editors": ["neovim"],
     "terminal": ["alacritty", "tmux"],
@@ -44,8 +57,19 @@
     "x11": ["i3", "polybar", "rofi", "feh", "xorg-xauth"],
     "audio": ["pipewire", "pipewire-alsa", "pipewire-pulse", "wireplumber", "pavucontrol"],
     "bluetooth": ["bluez", "bluez-utils"],
+    "security": ["ufw"],
+    "microcode": ["amd-ucode", "intel-ucode"],
     "fonts": ["ttf-jetbrains-mono-nerd", "otf-font-awesome"],
-    "development": ["php", "composer", "docker", "docker-compose", "python-pip", "python-pipx"],
+    "development": [
+      "php",
+      "php-gd",
+      "php-intl",
+      "composer",
+      "docker",
+      "docker-compose",
+      "python-pip",
+      "python-pipx"
+    ],
     "utilities": [
       "ripgrep",
       "fd",
@@ -57,11 +81,13 @@
       "networkmanager-wireguard",
       "flatpak"
     ],
-    "display": ["sddm"]
+    "display": ["sddm", "greetd", "greetd-regreet"],
+    "desktop_environments": ["plasma", "plasma-wayland-session", "kde-applications"]
   },
   "aur": {
     "description": "AUR packages for Arch Linux",
-    "packages": ["visual-studio-code-bin"]
+    "essential": ["visual-studio-code-bin"],
+    "optional": ["swayfx", "sddm-theme-corners-git", "ttf-cascadia-code"]
   },
   "pipx": {
     "description": "Python tools installed via pipx",
