@@ -18,3 +18,4 @@ tmux/.tmux.conf					$HOME/.tmux.conf
 wofi							$HOME/.config/wofi
 mako							$HOME/.config/mako
 git/gitconfig					$HOME/.gitconfig
+wlogout							$HOME/.config/wlogout
