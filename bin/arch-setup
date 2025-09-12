@@ -95,6 +95,12 @@ log_prompt "Install custom GRUB theme? (y/n): "
 read -r grub_theme_choice
 echo
 
+log_prompt "Select GPU drivers:"
+echo "1) NVIDIA (proprietary)"
+echo "2) AMD/Intel (open source)"
+echo "3) Skip"
+read -r -p "Choice (1-3): " gpu_choice
+
 # Update system
 log_info "Updating system packages..."
 sudo pacman -Syu --noconfirm
@@ -171,6 +177,21 @@ case $dm_choice in
         ;;
 esac
 
+# Install GPU drivers based on user choice
+case $gpu_choice in
+    1)
+        log_info "Installing NVIDIA drivers..."
+        install_packages "NVIDIA drivers" nvidia nvidia-utils
+        ;;
+    2)
+        log_info "Installing AMD/Intel drivers..."
+        install_packages "AMD/Intel drivers" xf86-video-amdgpu xf86-video-intel vulkan-radeon vulkan-intel
+        ;;
+    3)
+        log_info "Skipping GPU drivers installation..."
+        ;;
+esac
+
 # Install audio system
 install_packages "audio system" \
     pipewire \
@@ -208,7 +229,8 @@ install_packages "utilities" \
     bluez \
     bluez-utils \
     ufw \
-    go
+    go \
+    networkmanager
 
 # Install AUR helper (yay)
 if ! command -v yay &> /dev/null; then
@@ -226,7 +248,7 @@ log_info "Configuring system services..."
 
 # Enable and start essential services
 enable_service "docker.service" "docker"
-enable_service "systemd-resolved.service" "systemd-resolvconf"
+enable_service "NetworkManager.service" "networkmanager"
 enable_service "bluetooth.service" "bluez"
 enable_service "ssh.service" "openssh"
 
@@ -336,20 +358,63 @@ if ! grep -q "en_US.UTF-8" /etc/locale.gen; then
     localectl set-locale LANG=en_US.UTF-8
 fi
 
-# Setup Wayland environment variables for all users
-log_info "Setting up Wayland environment..."
-sudo tee /etc/environment > /dev/null <<EOF
-# Wayland environment variables
-XDG_SESSION_TYPE=wayland
-XDG_CURRENT_DESKTOP=sway
-XDG_SESSION_DESKTOP=sway
-QT_QPA_PLATFORM=wayland
-GDK_BACKEND=wayland
+# Setup environment variables for all users
+log_info "Setting up environment variables..."
+
+# Create base environment variables
+cat > /tmp/environment_base <<EOF
+# Base environment variables
 MOZ_ENABLE_WAYLAND=1
 # Disable portal issues that can cause startup delays
 GTK_USE_PORTAL=0
 GDK_DEBUG=no-portals
 EOF
+
+# Add display-specific variables based on choice
+case $dm_choice in
+    1)  # SDDM
+        cat >> /tmp/environment_base <<EOF
+
+# SDDM environment
+XDG_SESSION_TYPE=x11
+EOF
+        ;;
+    2)  # greetd with Sway
+        cat >> /tmp/environment_base <<EOF
+
+# Wayland/Sway environment variables
+XDG_SESSION_TYPE=wayland
+XDG_CURRENT_DESKTOP=sway
+XDG_SESSION_DESKTOP=sway
+QT_QPA_PLATFORM=wayland
+GDK_BACKEND=wayland
+EOF
+        ;;
+    3)  # KDE Plasma
+        cat >> /tmp/environment_base <<EOF
+
+# KDE Plasma environment
+XDG_SESSION_TYPE=x11
+XDG_CURRENT_DESKTOP=KDE
+XDG_SESSION_DESKTOP=KDE
+EOF
+        ;;
+    4)  # None - assume Sway will be used
+        cat >> /tmp/environment_base <<EOF
+
+# Wayland/Sway environment variables (no display manager)
+XDG_SESSION_TYPE=wayland
+XDG_CURRENT_DESKTOP=sway
+XDG_SESSION_DESKTOP=sway
+QT_QPA_PLATFORM=wayland
+GDK_BACKEND=wayland
+EOF
+        ;;
+esac
+
+# Apply the environment configuration
+sudo cp /tmp/environment_base /etc/environment
+rm /tmp/environment_base
 
 # Enable audio services for user
 log_info "Enabling audio services..."

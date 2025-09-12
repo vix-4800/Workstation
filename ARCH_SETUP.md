@@ -53,19 +53,20 @@ cd ~/Code/Dotfiles
 1. **Интерактивный выбор компонентов**:
    - CPU микрокод (AMD/Intel/Skip)
    - Display manager (SDDM/greetd с ReGreet/KDE Plasma/None)
+   - GPU драйверы (NVIDIA/AMD-Intel/Skip)
    - Дополнительные dev-инструменты (Python/PHP пакеты)
    - Кастомная тема GRUB (Xenlism theme + grub-customizer)
    - Автоматическая настройка firewall (ufw)
 
 2. **Обновление системы** - `pacman -Syu` + reflector для зеркал
 3. **Установка пакетов** - все необходимые пакеты из pacman
-4. **Установка AUR helper** - yay для доступа к AUR
-5. **Установка AUR пакетов** - VS Code и опционально SwayFX
-6. **Системные сервисы** - безопасная настройка и включение служб
-7. **Dotfiles** - клонирование и связывание конфигураций
+4. **Установка GPU драйверов** - NVIDIA или AMD/Intel драйверы
+5. **Установка AUR helper** - yay для доступа к AUR
+6. **Установка AUR пакетов** - grub-customizer и опционально SwayFX
+7. **Системные сервисы** - NetworkManager, Docker, Bluetooth, Firewall
 8. **Shell настройка** - установка Fish как основной оболочки
 9. **Инструменты разработки** - установка через pipx, composer
-10. **Настройка Wayland окружения** - исправление проблем запуска Sway
+10. **Настройка окружения** - адаптивные переменные среды под выбранный DM
 
 ## После установки
 
@@ -141,8 +142,27 @@ nvm use node
 ```bash
 # Проверьте драйверы GPU
 lspci | grep VGA
-sudo pacman -S mesa  # Для AMD/Intel
-# Для NVIDIA может потребоваться nvidia-utils
+
+# Для AMD/Intel (установятся автоматически если выбрано в скрипте):
+sudo pacman -S mesa xf86-video-amdgpu xf86-video-intel vulkan-radeon vulkan-intel
+
+# Для NVIDIA (установятся автоматически если выбрано в скрипте):
+sudo pacman -S nvidia nvidia-utils
+# После установки NVIDIA перезагрузите систему
+```
+
+### Управление NetworkManager:
+
+```bash
+# Статус сети
+nmcli general status
+
+# Подключение к Wi-Fi
+nmcli device wifi list
+nmcli device wifi connect "SSID" password "password"
+
+# Управление через GUI
+nm-connection-editor
 ```
 
 ### Если нет звука:
