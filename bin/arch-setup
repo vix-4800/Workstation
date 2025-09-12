@@ -81,6 +81,10 @@ log_prompt "Install additional development tools? (y/n): "
 read -r dev_tools_choice
 echo
 
+log_prompt "Install custom GRUB theme? (y/n): "
+read -r grub_theme_choice
+echo
+
 # Update system
 log_info "Updating system packages..."
 sudo pacman -Syu --noconfirm
@@ -207,7 +211,8 @@ sudo pacman -S --noconfirm --needed \
     flatpak \
     bluez \
     bluez-utils \
-    ufw
+    ufw \
+    go
 
 # Install AUR helper (yay)
 if ! command -v yay &> /dev/null; then
@@ -393,6 +398,7 @@ fi
 if command -v yay &> /dev/null; then
     log_info "Installing AUR packages..."
     # yay -S --noconfirm visual-studio-code-bin
+    yay -S --noconfirm grub-customizer
 
     # Optional AUR packages
     log_prompt "Install SwayFX (enhanced Sway with effects)? (y/n): "
@@ -401,6 +407,82 @@ if command -v yay &> /dev/null; then
     if [[ $swayfx_choice =~ ^[Yy]$ ]]; then
         yay -S --noconfirm swayfx
     fi
+fi
+
+# Configure GRUB theme if requested
+if [[ $grub_theme_choice =~ ^[Yy]$ ]]; then
+    log_info "Installing and configuring custom GRUB theme..."
+
+    # Check if Xenlism Arch theme exists locally
+    DOTFILES_THEME_PATH="$HOME/Code/Dotfiles/grub/themes/Xenlism Arch"
+
+    if [ -d "$DOTFILES_THEME_PATH" ] && [ -f "$DOTFILES_THEME_PATH/install.sh" ]; then
+        log_info "Found local Xenlism Arch theme, using local installer..."
+
+        # Copy theme to temporary location for installation
+        cp -r "$DOTFILES_THEME_PATH" /tmp/xenlism-theme
+        cd /tmp/xenlism-theme
+
+        # Make install script executable and run it
+        chmod +x install.sh
+        log_info "Running Xenlism theme installer..."
+        sudo ./install.sh
+
+        # Cleanup
+        cd ~
+        rm -rf /tmp/xenlism-theme
+
+    else
+        log_info "Local theme not found, downloading from repository..."
+
+        # Download Xenlism GRUB theme
+        cd /tmp
+        log_info "Downloading Xenlism GRUB theme..."
+        curl -L -o xenlism-grub-arch.tar.gz "https://github.com/xenlism/Grub-themes/archive/refs/heads/main.tar.gz"
+
+        # Extract theme
+        log_info "Extracting GRUB theme archive..."
+        tar -xzf xenlism-grub-arch.tar.gz
+
+        # Find the Xenlism Arch theme directory
+        if [ -d "Grub-themes-main/xenlism-grub-arch-2k" ]; then
+            THEME_SRC="Grub-themes-main/xenlism-grub-arch-2k"
+        elif [ -d "Grub-themes-main/Xenlism-Arch" ]; then
+            THEME_SRC="Grub-themes-main/Xenlism-Arch"
+        else
+            log_error "Could not find Xenlism Arch theme in downloaded archive"
+            cd ~
+            rm -rf /tmp/Grub-themes-main /tmp/xenlism-grub-arch.tar.gz
+            exit 1
+        fi
+
+        # Manual installation if no installer script found
+        log_info "Installing theme manually..."
+
+        # Create themes directory and install theme
+        sudo mkdir -p /usr/share/grub/themes/Xenlism-Arch
+        sudo cp -r "$THEME_SRC"/* /usr/share/grub/themes/Xenlism-Arch/
+
+        # Backup original GRUB config
+        if [ -f /etc/default/grub ]; then
+            sudo cp /etc/default/grub /etc/default/grub.backup
+            log_info "Backed up original GRUB config to /etc/default/grub.backup"
+        fi
+
+        # Remove existing GRUB_THEME lines and add new one
+        sudo sed -i '/GRUB_THEME=/d' /etc/default/grub
+        echo 'GRUB_THEME="/usr/share/grub/themes/Xenlism-Arch/theme.txt"' | sudo tee -a /etc/default/grub
+
+        # Update GRUB configuration
+        log_info "Updating GRUB configuration..."
+        sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+        # Cleanup
+        rm -rf /tmp/Grub-themes-main /tmp/xenlism-grub-arch.tar.gz
+        cd ~
+    fi
+
+    log_info "GRUB theme installation completed!"
 fi
 
 # GitHub CLI authentication prompt
@@ -451,6 +533,10 @@ esac
 echo "  4. Configure your WireGuard VPN in ~/.config/wireguard/ if needed"
 echo "  5. Run 'gh auth login' to authenticate with GitHub"
 echo "  6. Firewall (ufw) is enabled and configured"
+if [[ $grub_theme_choice =~ ^[Yy]$ ]]; then
+    echo "  7. Custom GRUB theme is installed and configured"
+    echo "     Use 'sudo grub-customizer' to further customize GRUB appearance"
+fi
 echo ""
 
 log_info "Your Arch Linux system is now ready!"

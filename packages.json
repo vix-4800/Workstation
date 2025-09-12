@@ -87,7 +87,7 @@
   "aur": {
     "description": "AUR packages for Arch Linux",
     "essential": ["visual-studio-code-bin"],
-    "optional": ["swayfx", "sddm-theme-corners-git", "ttf-cascadia-code"]
+    "optional": ["swayfx", "sddm-theme-corners-git", "ttf-cascadia-code", "grub-customizer"]
   },
   "pipx": {
     "description": "Python tools installed via pipx",

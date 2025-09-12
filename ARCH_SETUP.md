@@ -54,6 +54,7 @@ cd ~/Code/Dotfiles
    - CPU микрокод (AMD/Intel/Skip)
    - Display manager (SDDM/greetd с ReGreet/KDE Plasma/None)
    - Дополнительные dev-инструменты (Python/PHP пакеты)
+   - Кастомная тема GRUB (Xenlism theme + grub-customizer)
    - Автоматическая настройка firewall (ufw)
 
 2. **Обновление системы** - `pacman -Syu` + reflector для зеркал
@@ -222,6 +223,35 @@ sudo journalctl -u greetd
 
 # Перезапуск после изменений:
 sudo systemctl restart greetd
+```
+
+### Настройка GRUB темы:
+
+```bash
+# Если установлена кастомная тема GRUB (Xenlism):
+# Скрипт автоматически использует локальную тему из ~/Code/Dotfiles/grub/themes/Xenlism Arch/
+# или скачивает её из репозитория GitHub
+
+# Тема устанавливается в стандартное системное расположение:
+# /usr/share/grub/themes/Xenlism-Arch/
+
+# Установка использует оригинальный installer.sh из темы для максимальной совместимости
+
+# Для дальнейшей кастомизации используйте grub-customizer:
+sudo grub-customizer
+
+# Ручная настройка GRUB (если нужно):
+sudo nano /etc/default/grub
+
+# После изменений обновите конфигурацию:
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# Проверка установленной темы:
+grep GRUB_THEME /etc/default/grub
+# Должно показать: GRUB_THEME="/usr/share/grub/themes/Xenlism-Arch/theme.txt"
+
+# Если тема не отображается, проверьте файлы темы:
+ls -la /usr/share/grub/themes/Xenlism-Arch/
 ```
 
 ### Для обновления dotfiles:
