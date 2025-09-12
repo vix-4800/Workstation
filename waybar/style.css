@@ -27,14 +27,12 @@ window#waybar {
 .modules-right>* {
   background: transparent;
   color: #d7dce2;
-  padding: 0 8px;
 }
 
 .modules-left>*+*,
 .modules-center>*+*,
 .modules-right>*+* {
   border-left: 1px solid rgba(255, 255, 255, 0.06);
-  margin: 0 5px;
 }
 
 /* ========== Workspaces ========== */
@@ -46,7 +44,7 @@ window#waybar {
   color: #abb2bf;
   background: transparent;
   padding: 2px 6px;
-  margin: 0 1px;
+  margin: 0 3px;
   border-radius: 6px;
   transition: background 0.2s ease, color 0.2s ease;
 }
@@ -67,6 +65,20 @@ window#waybar {
 }
 
 /* ========== Modules ========== */
+
+#memory,
+#cpu,
+#temperature,
+#network,
+#bluetooth,
+#battery,
+#idle_inhibitor,
+#pulseaudio,
+#pulseaudio_slider,
+#clock {
+  margin: 0 10px;
+}
+
 #clock {
   color: #d7dce2;
 }
