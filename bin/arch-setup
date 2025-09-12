@@ -31,6 +31,16 @@ log_prompt() {
     echo -e "${BLUE}[PROMPT]${NC} $1"
 }
 
+# Helper function to install packages
+install_packages() {
+    local description="$1"
+    shift
+    local packages=("$@")
+
+    log_info "Installing $description..."
+    sudo pacman -S --noconfirm --needed "${packages[@]}"
+}
+
 # Helper function to enable service only if package exists
 enable_service() {
     local service=$1
@@ -97,12 +107,10 @@ sudo pacman -Syu --noconfirm
 # Install CPU microcode
 case $cpu_choice in
     1)
-        log_info "Installing AMD microcode..."
-        sudo pacman -S --noconfirm --needed amd-ucode
+        install_packages "AMD microcode" amd-ucode
         ;;
     2)
-        log_info "Installing Intel microcode..."
-        sudo pacman -S --noconfirm --needed intel-ucode
+        install_packages "Intel microcode" intel-ucode
         ;;
     3)
         log_info "Skipping CPU microcode installation..."
@@ -110,8 +118,7 @@ case $cpu_choice in
 esac
 
 # Install essential packages
-log_info "Installing essential packages..."
-sudo pacman -S --noconfirm --needed \
+install_packages "essential packages" \
     base-devel \
     git \
     curl \
@@ -125,20 +132,17 @@ sudo pacman -S --noconfirm --needed \
     ffmpeg
 
 # Install shell and terminal
-log_info "Installing shell and terminal..."
-sudo pacman -S --noconfirm --needed \
+install_packages "shell and terminal" \
     fish \
     zsh \
     alacritty \
     tmux
 
 # Install editors
-log_info "Installing editors..."
-sudo pacman -S --noconfirm --needed neovim
+install_packages "editors" neovim
 
 # Install Wayland desktop environment
-log_info "Installing Wayland desktop environment..."
-sudo pacman -S --noconfirm --needed \
+install_packages "Wayland desktop environment" \
     sway \
     waybar \
     wofi \
@@ -154,16 +158,13 @@ sudo pacman -S --noconfirm --needed \
 # Install display manager based on user choice
 case $dm_choice in
     1)
-        log_info "Installing SDDM..."
-        sudo pacman -S --noconfirm --needed sddm
+        install_packages "SDDM" sddm
         ;;
     2)
-        log_info "Installing greetd with ReGreet..."
-        sudo pacman -S --noconfirm --needed greetd greetd-regreet
+        install_packages "greetd with ReGreet" greetd greetd-regreet
         ;;
     3)
-        log_info "Installing KDE Plasma..."
-        sudo pacman -S --noconfirm --needed plasma plasma-wayland-session kde-applications sddm
+        install_packages "KDE Plasma" plasma kde-applications sddm xorg
         ;;
     4)
         log_info "Skipping display manager installation..."
@@ -171,24 +172,20 @@ case $dm_choice in
 esac
 
 # Install audio system
-log_info "Installing audio system..."
-sudo pacman -S --noconfirm --needed \
+install_packages "audio system" \
     pipewire \
     pipewire-alsa \
     pavucontrol \
     pipewire-pulse \
     wireplumber
-    # pipewire-jack
 
 # Install fonts
-log_info "Installing fonts..."
-sudo pacman -S --noconfirm --needed \
+install_packages "fonts" \
     ttf-jetbrains-mono-nerd \
     otf-font-awesome
 
 # Install development tools
-log_info "Installing development tools..."
-sudo pacman -S --noconfirm --needed \
+install_packages "development tools" \
     php \
     php-gd \
     php-intl \
@@ -199,8 +196,7 @@ sudo pacman -S --noconfirm --needed \
     python-pipx
 
 # Install utilities
-log_info "Installing utilities..."
-sudo pacman -S --noconfirm --needed \
+install_packages "utilities" \
     ripgrep \
     fd \
     bottom \
