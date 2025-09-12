@@ -1,50 +1,145 @@
+/* ===== base ===== */
 * {
-	background-image: none;
-	box-shadow: none;
+  background-image: none;
+  box-shadow: none;
 }
 
 window {
-	background-color: rgba(12, 12, 12, 0.9);
+  background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.4)),
+    url('background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(12, 12, 12, 0.9);
 }
 
+/* ===== tiles ===== */
 button {
-    border-radius: 0;
-    border-color: black;
-	text-decoration-color: #FFFFFF;
-    color: #FFFFFF;
-	background-color: #1E1E1E;
-	border-style: solid;
-	border-width: 1px;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 25%;
+  border-radius: 22px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(255, 255, 255, 0.1);
+
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+  font-family: 'JetBrainsMono Nerd Font', monospace;
+  font-weight: 600;
+  font-size: 16px;
+
+  background-color: rgba(30, 34, 42, 0.78);
+  background-repeat: no-repeat;
+  background-position: center 42%;
+  background-size: 25%;
+
+  min-width: 200px;
+  min-height: 140px;
+  margin: 14px;
+  padding-top: 80px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
-button:focus, button:active, button:hover {
-	background-color: #3700B3;
-	outline-style: none;
+button:hover,
+button:focus,
+button:active {
+  background-color: rgba(97, 175, 239, 0.18);
+  border-color: #61afef;
+  color: #eaf2ff;
+  transform: translateY(-2px);
+}
+
+button label {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #e6e6e6;
+}
+
+button:nth-child(1) {
+  border-top-left-radius: 28px;
+}
+button:nth-child(2) {
+  border-top-right-radius: 28px;
+}
+button:nth-child(3) {
+  border-bottom-left-radius: 28px;
+}
+button:nth-child(4) {
+  border-bottom-right-radius: 28px;
 }
 
 #lock {
-    background-image: image(url("/usr/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+  background-image: image(
+    url('/usr/share/wlogout/icons/lock.png'),
+    url('/usr/local/share/wlogout/icons/lock.png')
+  );
 }
-
 #logout {
-    background-image: image(url("/usr/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+  background-image: image(
+    url('/usr/share/wlogout/icons/logout.png'),
+    url('/usr/local/share/wlogout/icons/logout.png')
+  );
 }
-
 #suspend {
-    background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+  background-image: image(
+    url('/usr/share/wlogout/icons/suspend.png'),
+    url('/usr/local/share/wlogout/icons/suspend.png')
+  );
 }
-
 #hibernate {
-    background-image: image(url("/usr/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
+  background-image: image(
+    url('/usr/share/wlogout/icons/hibernate.png'),
+    url('/usr/local/share/wlogout/icons/hibernate.png')
+  );
 }
-
 #shutdown {
-    background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+  background-image: image(
+    url('/usr/share/wlogout/icons/shutdown.png'),
+    url('/usr/local/share/wlogout/icons/shutdown.png')
+  );
+}
+#reboot {
+  background-image: image(
+    url('/usr/share/wlogout/icons/reboot.png'),
+    url('/usr/local/share/wlogout/icons/reboot.png')
+  );
 }
 
-#reboot {
-    background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+#lock:hover {
+  border-color: #e5c07b;
+}
+#logout:hover {
+  border-color: #c678dd;
+}
+#suspend:hover {
+  border-color: #56b6c2;
+}
+#hibernate:hover {
+  border-color: #98c379;
+}
+#shutdown:hover {
+  border-color: #e06c75;
+}
+#reboot:hover {
+  border-color: #ff7a86;
+}
+
+/* ===== responsive ===== */
+@media (max-width: 1200px) {
+  button {
+    min-width: 180px;
+    min-height: 130px;
+    background-size: 24%;
+    padding-top: 74px;
+  }
+}
+@media (max-width: 900px) {
+  button {
+    min-width: 150px;
+    min-height: 110px;
+    background-size: 22%;
+    padding-top: 64px;
+    margin: 10px;
+  }
+  button label {
+    font-size: 12px;
+  }
 }
