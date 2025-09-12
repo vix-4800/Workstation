@@ -1,176 +1,138 @@
-/* -- Global rules -- */
+/* ========== Base ========== */
 * {
   border: none;
-  font-family: "JetbrainsMono Nerd Font";
-  font-size: 15px;
+  font-family: 'JetBrainsMono Nerd Font', monospace;
+  font-size: 14px;
   min-height: 10px;
 }
 
 window#waybar {
-  background: rgba(34, 36, 54, 0.6);
+  background: transparent;
 }
 
-window#waybar.hidden {
-  opacity: 0.2;
+/* ========== Colors ========== */
+:root {
+  --bg: rgba(15, 17, 26, 0.88);
+  --fg: #d7dce2;
+  --acc: #61afef;
+  --mut: #abb2bf;
+  --bad: #e06c75;
+  --warn: #e5c07b;
+  --good: #98c379;
 }
 
-/* - Genera rules for visible modules -- */
-#custom-archicon,
-#clock,
-#cpu,
-#battery,
-#memory,
-#disk,
-#temperature,
-#idle_inhibitor,
-#bluetooth,
-#pulseaudio,
-#pulseaudio_slider,
-#network,
-#language {
-  color: #161320;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  padding-left: 10px;
-  padding-right: 10px;
-  transition: none;
-}
-
-/* Separation to the left */
-#custom-archicon,
-#bluetooth,
-#cpu,
-#idle_inhibitor {
-  margin-left: 5px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-
-/* Separation to the rigth */
-#clock,
-#temperature,
-#language {
-  margin-right: 5px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-/* -- Specific styles -- */
-
-/* Modules left */
-#custom-archicon {
-  font-size: 20px;
-  color: #89B4FA;
-  background: #161320;
-  padding-right: 17px;
-}
-
-#clock {
-  background: #ABE9B3;
-}
-
-#cpu {
-  background: #96CDFB;
-}
-
-#memory {
-  background: #DDB6F2;
-}
-
-#disk {
-  background: #F5C2E7;
-}
-
-#temperature {
-  background: #F8BD96;
-}
-
-/* Modules center */
-#workspaces {
-  background: rgba(0, 0, 0, 0.5);
+.modules-left,
+.modules-center,
+.modules-right {
+  background: var(--bg);
+  color: var(--fg);
+  border: 2px solid var(--acc);
   border-radius: 10px;
-  margin: 6px 5px;
-  padding: 0px 6px;
+  padding: 4px 8px;
+  margin: 8px 8px;
+}
+
+.modules-left > *,
+.modules-center > *,
+.modules-right > * {
+  background: transparent;
+  color: var(--fg);
+  padding: 0 8px;
+}
+
+.modules-left > * + *,
+.modules-center > * + *,
+.modules-right > * + * {
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ========== Workspaces ========== */
+#workspaces {
+  padding: 0 4px;
 }
 
 #workspaces button {
-  color: #B5E8E0;
+  color: var(--mut);
   background: transparent;
-  padding: 4px 4px;
-  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
-}
-
-#workspaces button.occupied {
-  color: #A6E3A1;
-}
-
-#workspaces button.active {
-  color: #89B4FA;
-  text-shadow: 0 0 4px #ABE9B3;
+  padding: 2px 6px;
+  margin: 0 1px;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 #workspaces button:hover {
-  color: #89B4FA;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--fg);
 }
 
-#workspaces button.active:hover {}
-
-/* Modules right */
-#taskbar {
-  background: transparent;
-  border-radius: 10px;
-  padding: 0px 5px;
-  margin: 6px 5px;
+#workspaces button.active {
+  background: var(--acc);
+  color: #0f111a;
 }
 
-#taskbar button {
-  padding: 0px 5px;
-  margin: 0px 3px;
-  border-radius: 6px;
-  transition: background 0.3s ease;
+#workspaces button.urgent {
+  background: var(--bad);
+  color: white;
 }
 
-#taskbar button.active {
-  background: rgba(34, 36, 54, 0.5);
+/* ========== Modules ========== */
+#clock {
+  color: var(--fg);
 }
-
-#taskbar button:hover {
-  background: rgba(34, 36, 54, 0.5);
+#cpu {
+  color: var(--fg);
 }
-
-#idle_inhibitor {
-  background: #B5E8E0;
-  padding-right: 15px;
+#memory {
+  color: var(--fg);
 }
-
-#bluetooth {
-  background: #B5E8E0;
+#temperature {
+  color: var(--fg);
 }
-
-#pulseaudio {
-  color: #1A1826;
-  background: #F5E0DC;
-}
-
-#pulseaudio_slider {
-  color: #1A1826;
-  background: #E8A2AF;
-}
-
 #network {
-  background: #CBA6F7;
-  padding-right: 13px;
+  color: var(--fg);
+}
+#pulseaudio,
+#pulseaudio_slider {
+  color: var(--fg);
+}
+#bluetooth {
+  color: var(--fg);
+}
+#idle_inhibitor {
+  color: var(--fg);
+}
+#keyboard-state {
+  color: var(--fg);
+}
+#battery {
+  color: var(--fg);
 }
 
-#language {
-  background: #A6E3A1;
-  padding-right: 15px;
+#battery.charging {
+  color: var(--good);
+}
+#battery.warning {
+  color: var(--warn);
+}
+#battery.critical {
+  color: var(--bad);
 }
 
-/* === Optional animation === */
-@keyframes blink {
-  to {
-    background-color: #BF616A;
-    color: #B5E8E0;
-  }
+#custom-archicon {
+  font-size: 18px;
+  color: var(--acc);
+  padding-right: 10px;
+}
+
+#mode {
+  color: var(--acc);
+  font-style: italic;
+}
+
+#tray {
+  padding: 0 6px;
+}
+
+window#waybar.hidden {
+  opacity: 0.15;
 }
