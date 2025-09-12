@@ -1,154 +1,138 @@
-/* ====== Global ====== */
 * {
-  box-shadow: none;
   background-image: none;
-}
-
-:root {
-  --glass: rgba(22, 24, 38, 0.45);
-  --glass-hover: rgba(22, 24, 38, 0.6);
-  --border: rgba(255, 255, 255, 0.1);
-  --border-hover: rgba(255, 255, 255, 0.22);
-  --accent: #ffffff;
-  --text: #eceff4;
-  --shadow-overlay-1: rgba(0, 0, 0, 0.25);
-  --shadow-overlay-2: rgba(0, 0, 0, 0.35);
-  --shadow-button: rgba(0, 0, 0, 0.25);
-  --accent-lock: rgba(229, 192, 123, 0.45);
-  --accent-logout: rgba(198, 120, 221, 0.45);
-  --accent-suspend: rgba(86, 182, 194, 0.45);
-  --accent-hibernate: rgba(152, 195, 121, 0.45);
-  --accent-reboot: rgba(255, 122, 134, 0.45);
-  --accent-shutdown: rgba(224, 108, 117, 0.45);
+  box-shadow: none;
 }
 
 window {
-  background-image: linear-gradient(
-      to bottom right,
-      var(--shadow-overlay-1),
-      var(--shadow-overlay-2)
-    ),
-    url('background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  backdrop-filter: blur(6px);
+  background-color: rgba(15, 17, 26, 0.95);
+  backdrop-filter: blur(15px);
 }
 
 button {
-  color: var(--text);
+  border-radius: 16px;
+  border: 2px solid rgba(97, 175, 239, 0.3);
+  background-color: rgba(30, 34, 42, 0.8);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 25%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  color: #d7dce2;
+  font-size: 16px;
   font-family: 'JetBrainsMono Nerd Font', monospace;
   font-weight: 600;
-  font-size: 16px;
-
-  background-color: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-
-  min-width: 220px;
-  min-height: 160px;
-  margin: 16px;
-
-  background-repeat: no-repeat;
-  background-position: center 42%;
-  background-size: 28%;
-  padding-top: 86px;
-
-  transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease;
+  margin: 12px;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  min-height: 120px;
 }
 
-button:hover,
-button:focus {
-  background-color: var(--glass-hover);
-  border-color: var(--border-hover);
-  transform: translateY(-2px);
-}
-
+button:focus,
+button:active,
 button:hover {
-  box-shadow: 0 12px 28px var(--shadow-button);
+  background-color: rgba(97, 175, 239, 0.2);
+  border: 2px solid #61afef;
+  color: #61afef;
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(97, 175, 239, 0.4);
 }
 
-button label {
-  margin-top: 6px;
-  color: var(--text);
-  font-size: 14px;
-  opacity: 0.95;
+button:focus label,
+button:active label,
+button:hover label {
+  color: #61afef;
+  font-weight: bold;
 }
 
 #lock {
   background-image: image(url('icons/lock.svg'), url('/usr/share/wlogout/icons/lock.png'));
 }
+
+#lock:focus,
+#lock:active,
+#lock:hover {
+  background-color: rgba(229, 192, 123, 0.2);
+  border: 2px solid #e5c07b;
+  color: #e5c07b;
+}
+
 #logout {
   background-image: image(url('icons/logout.svg'), url('/usr/share/wlogout/icons/logout.png'));
 }
+
+#logout:focus,
+#logout:active,
+#logout:hover {
+  background-color: rgba(198, 120, 221, 0.2);
+  border: 2px solid #c678dd;
+  color: #c678dd;
+}
+
 #suspend {
   background-image: image(url('icons/suspend.svg'), url('/usr/share/wlogout/icons/suspend.png'));
 }
+
+#suspend:focus,
+#suspend:active,
+#suspend:hover {
+  background-color: rgba(86, 182, 194, 0.2);
+  border: 2px solid #56b6c2;
+  color: #56b6c2;
+}
+
 #hibernate {
   background-image: image(
     url('icons/hibernate.svg'),
     url('/usr/share/wlogout/icons/hibernate.png')
   );
 }
-#reboot {
-  background-image: image(url('icons/reboot.svg'), url('/usr/share/wlogout/icons/reboot.png'));
+
+#hibernate:focus,
+#hibernate:active,
+#hibernate:hover {
+  background-color: rgba(152, 195, 121, 0.2);
+  border: 2px solid #98c379;
+  color: #98c379;
 }
+
 #shutdown {
   background-image: image(url('icons/shutdown.svg'), url('/usr/share/wlogout/icons/shutdown.png'));
 }
 
-#lock:hover {
-  border-color: var(--accent-lock);
-}
-#logout:hover {
-  border-color: var(--accent-logout);
-}
-#suspend:hover {
-  border-color: var(--accent-suspend);
-}
-#hibernate:hover {
-  border-color: var(--accent-hibernate);
-}
-#reboot:hover {
-  border-color: var(--accent-reboot);
-}
+#shutdown:focus,
+#shutdown:active,
 #shutdown:hover {
-  border-color: var(--accent-shutdown);
+  background-color: rgba(224, 108, 117, 0.2);
+  border: 2px solid #e06c75;
+  color: #e06c75;
 }
 
-button:nth-child(1) {
-  border-top-left-radius: 36px;
-}
-button:nth-child(2) {
-  border-top-right-radius: 36px;
-}
-button:nth-child(3) {
-  border-bottom-left-radius: 36px;
-}
-button:nth-child(4) {
-  border-bottom-right-radius: 36px;
+#reboot {
+  background-image: image(url('icons/reboot.svg'), url('/usr/share/wlogout/icons/reboot.png'));
 }
 
-@media (max-width: 1200px) {
+#reboot:focus,
+#reboot:active,
+#reboot:hover {
+  background-color: rgba(255, 122, 134, 0.2);
+  border: 2px solid #ff7a86;
+  color: #ff7a86;
+}
+
+/* Responsive design for different screen sizes */
+@media (max-width: 1024px) {
   button {
-    min-width: 180px;
-    min-height: 140px;
-    background-size: 26%;
-    padding-top: 78px;
-  }
-  button label {
-    font-size: 13px;
+    min-width: 100px;
+    min-height: 100px;
+    margin: 8px;
+    font-size: 14px;
   }
 }
-@media (max-width: 900px) {
+
+@media (max-width: 768px) {
   button {
-    min-width: 150px;
-    min-height: 120px;
-    background-size: 24%;
-    padding-top: 68px;
-    margin: 12px;
-  }
-  button label {
+    min-width: 80px;
+    min-height: 80px;
+    margin: 6px;
     font-size: 12px;
   }
 }
