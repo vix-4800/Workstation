@@ -11,22 +11,12 @@ window#waybar {
 }
 
 /* ========== Colors ========== */
-:root {
-  --bg: rgba(15, 17, 26, 0.88);
-  --fg: #d7dce2;
-  --acc: #61afef;
-  --mut: #abb2bf;
-  --bad: #e06c75;
-  --warn: #e5c07b;
-  --good: #98c379;
-}
-
 .modules-left,
 .modules-center,
 .modules-right {
-  background: var(--bg);
-  color: var(--fg);
-  border: 2px solid var(--acc);
+  background: rgba(15, 17, 26, 0.88);
+  color: #d7dce2;
+  border: 2px solid #61afef;
   border-radius: 10px;
   padding: 4px 8px;
   margin: 8px 8px;
@@ -36,7 +26,7 @@ window#waybar {
 .modules-center > *,
 .modules-right > * {
   background: transparent;
-  color: var(--fg);
+  color: #d7dce2;
   padding: 0 8px;
 }
 
@@ -52,7 +42,7 @@ window#waybar {
 }
 
 #workspaces button {
-  color: var(--mut);
+  color: #abb2bf;
   background: transparent;
   padding: 2px 6px;
   margin: 0 1px;
@@ -62,70 +52,70 @@ window#waybar {
 
 #workspaces button:hover {
   background: rgba(255, 255, 255, 0.06);
-  color: var(--fg);
+  color: #d7dce2;
 }
 
 #workspaces button.active {
-  background: var(--acc);
+  background: #61afef;
   color: #0f111a;
 }
 
 #workspaces button.urgent {
-  background: var(--bad);
+  background: #e06c75;
   color: white;
 }
 
 /* ========== Modules ========== */
 #clock {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #cpu {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #memory {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #temperature {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #network {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #pulseaudio,
 #pulseaudio_slider {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #bluetooth {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #idle_inhibitor {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #keyboard-state {
-  color: var(--fg);
+  color: #d7dce2;
 }
 #battery {
-  color: var(--fg);
+  color: #d7dce2;
 }
 
 #battery.charging {
-  color: var(--good);
+  color: #98c379;
 }
 #battery.warning {
-  color: var(--warn);
+  color: #e5c07b;
 }
 #battery.critical {
-  color: var(--bad);
+  color: #e06c75;
 }
 
 #custom-archicon {
   font-size: 18px;
-  color: var(--acc);
+  color: #61afef;
   padding-right: 10px;
 }
 
 #mode {
-  color: var(--acc);
+  color: #61afef;
   font-style: italic;
 }
 
