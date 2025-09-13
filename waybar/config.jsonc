@@ -18,7 +18,7 @@
     "cpu",
     "temperature",
     "battery",
-    "keyboard-state",
+    "keyboard-state"
   ],
 
   /* === Modules === */
@@ -87,7 +87,23 @@
   },
 
   "clock": {
-    "format": "{:%H:%M  %d.%m.%Y}"
+    "format": "{:%H:%M  %d.%m.%Y}",
+    "tooltip": true,
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "on-click-right": "mode",
+      "format": {
+        "months": "<span color='#d3c6aa'><b>{}</b></span>",
+        "days": "<span color='#e67e80'>{}</span>",
+        "weeks": "<span color='#a7c080'><b>W{}</b></span>",
+        "weekdays": "<span color='#7fbbb3'><b>{}</b></span>",
+        "today": "<span color='#dbbc7f'><b><u>{}</u></b></span>"
+      }
+    }
   },
 
   "cpu": {
@@ -139,13 +155,15 @@
   "network": {
     "format-wifi": "{essid} ",
     "format-ethernet": "{ipaddr} ",
-    "format-disconnected": "⚠"
+    "format-disconnected": "⚠",
+    "on-click": "nmgui"
   },
 
   "pulseaudio": {
     "format": "{volume}% {icon}",
     "format-muted": "",
-    "format-icons": ["", "", ""]
+    "format-icons": ["", "", ""],
+    "on-click": "pavucontrol"
   },
 
   "custom/media": {
