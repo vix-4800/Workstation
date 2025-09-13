@@ -12,14 +12,18 @@ if status is-interactive
     end
 end
 
-
 set -x PATH $PATH $HOME/.local/share/nvm/v24.7.0/bin /usr/local/go/bin $HOME/.config/composer/vendor/bin
 
 # ======= Aliases =======
 alias vim 'nvim'
 alias vi 'nvim'
 alias neovim 'nvim'
-alias spotify "spotify --ozone-platform=wayland"
+
+# only for wayland
+if test "$XDG_SESSION_TYPE" = "wayland"
+    alias code "code --ozone-platform=wayland"
+    alias spotify "spotify --ozone-platform=wayland"
+end
 
 function fan
     if test (count $argv) -eq 0
