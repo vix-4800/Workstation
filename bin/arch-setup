@@ -574,7 +574,6 @@ fi
 # Install AUR packages if yay is available
 if command -v yay &> /dev/null; then
     log_info "Installing essential AUR packages..."
-    yay -S --noconfirm grub-customizer
 
     # Optional AUR packages
     log_prompt "Install Visual Studio Code? (y/n): "
@@ -588,6 +587,7 @@ if command -v yay &> /dev/null; then
     read -n 1 -r swayfx_choice
     echo
     if [[ $swayfx_choice =~ ^[Yy]$ ]]; then
+        sudo pacman -R sway --noconfirm
         yay -S --noconfirm swayfx
     fi
 
@@ -604,6 +604,7 @@ fi
 # Configure GRUB theme if requested
 if [[ $grub_theme_choice =~ ^[Yy]$ ]]; then
     log_info "Installing and configuring custom GRUB theme..."
+    yay -S --noconfirm grub-customizer
 
     # Check if Xenlism Arch theme exists locally
     DOTFILES_THEME_PATH="$HOME/Code/Dotfiles/grub/themes/Xenlism Arch"
