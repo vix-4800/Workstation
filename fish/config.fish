@@ -19,6 +19,7 @@ set -x PATH $PATH $HOME/.local/share/nvm/v24.7.0/bin /usr/local/go/bin $HOME/.co
 alias vim 'nvim'
 alias vi 'nvim'
 alias neovim 'nvim'
+alias spotify "spotify --ozone-platform=wayland"
 
 function fan
     if test (count $argv) -eq 0
