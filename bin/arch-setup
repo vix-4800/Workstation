@@ -160,6 +160,7 @@ install_packages "Wayland desktop environment" \
     swayidle \
     swaybg \
     wl-clipboard \
+    cliphist \
     grim \
     slurp \
     brightnessctl \
