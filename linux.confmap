@@ -20,3 +20,4 @@ wofi							$HOME/.config/wofi
 mako							$HOME/.config/mako
 git/gitconfig					$HOME/.gitconfig
 wlogout							$HOME/.config/wlogout
+vscode/code-flags.conf			$HOME/.config/code-flags.conf
