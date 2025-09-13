@@ -99,7 +99,7 @@ echo "2) AMD/Intel (open source)"
 echo "3) Skip"
 read -r -p "Choice (1-3): " gpu_choice
 
-log_prompt "Install multimedia codecs and additional software? (y/n): "
+log_prompt "Install multimedia codecs? (y/n): "
 read -r -p "Choice (y/n): " multimedia_choice
 
 log_prompt "Configure timezone and locale? (y/n): "
@@ -162,7 +162,8 @@ install_packages "Wayland desktop environment" \
     wl-clipboard \
     grim \
     slurp \
-    brightnessctl
+    brightnessctl \
+    xorg-xwayland
 
 # Install display manager based on user choice
 case $dm_choice in
@@ -184,7 +185,7 @@ esac
 case $gpu_choice in
     1)
         log_info "Installing NVIDIA drivers..."
-        install_packages "NVIDIA drivers" nvidia nvidia-utils
+        install_packages "NVIDIA drivers" nvidia nvidia-utils nvidia-settings
         ;;
     2)
         log_info "Installing AMD/Intel drivers..."
@@ -233,7 +234,9 @@ install_packages "utilities" \
     bluez-utils \
     ufw \
     go \
-    networkmanager
+    networkmanager \
+    openssh \
+    openssl
 
 # Install AUR helper (yay)
 if ! command -v yay &> /dev/null; then
@@ -512,7 +515,7 @@ if command -v fish &> /dev/null; then
     fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
 fi
 
-# Install multimedia codecs and additional software if requested
+# Install multimedia codecs if requested
 if [[ $multimedia_choice =~ ^[Yy]$ ]]; then
     log_info "Installing multimedia codecs..."
     install_packages "multimedia codecs" \
@@ -539,18 +542,6 @@ if [[ $multimedia_choice =~ ^[Yy]$ ]]; then
         libdvdcss \
         libdvdread \
         exfat-utils
-
-    log_info "Installing additional applications..."
-    install_packages "additional applications" \
-        vlc \
-        gedit \
-        aspell \
-        hunspell \
-        nuspell \
-        hspell \
-        libvoikko \
-        openssh \
-        openssl
 fi
 
 if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
@@ -591,13 +582,61 @@ if command -v yay &> /dev/null; then
         yay -S --noconfirm swayfx
     fi
 
-    if [[ $multimedia_choice =~ ^[Yy]$ ]]; then
-        log_prompt "Install Spotify? (y/n): "
-        read -n 1 -r spotify_choice
-        echo
-        if [[ $spotify_choice =~ ^[Yy]$ ]]; then
-            yay -S --noconfirm spotify
-        fi
+fi
+
+# Optional applications installation
+log_info "=== Optional Applications ==="
+log_info "The following applications can be installed optionally:"
+
+# Communication apps
+log_prompt "Install Discord? (y/n): "
+read -n 1 -r discord_choice
+echo
+if [[ $discord_choice =~ ^[Yy]$ ]]; then
+    install_packages "Discord" discord
+fi
+
+log_prompt "Install Telegram? (y/n): "
+read -n 1 -r telegram_choice
+echo
+if [[ $telegram_choice =~ ^[Yy]$ ]]; then
+    install_packages "Telegram" telegram-desktop
+fi
+
+# Media and entertainment
+log_prompt "Install Spotify? (y/n): "
+read -n 1 -r spotify_choice
+echo
+if [[ $spotify_choice =~ ^[Yy]$ ]]; then
+    if command -v yay &> /dev/null; then
+        yay -S --noconfirm spotify
+    else
+        install_packages "Spotify Launcher" spotify-launcher
+    fi
+fi
+
+log_prompt "Install VLC media player? (y/n): "
+read -n 1 -r vlc_choice
+echo
+if [[ $vlc_choice =~ ^[Yy]$ ]]; then
+    install_packages "VLC media player" vlc
+fi
+
+# Productivity apps
+log_prompt "Install Obsidian (note-taking app)? (y/n): "
+read -n 1 -r obsidian_choice
+echo
+if [[ $obsidian_choice =~ ^[Yy]$ ]]; then
+    install_packages "Obsidian" obsidian
+fi
+
+# Logout manager
+log_prompt "Install wlogout (Wayland logout manager)? (y/n): "
+read -n 1 -r wlogout_choice
+echo
+if [[ $wlogout_choice =~ ^[Yy]$ ]]; then
+    if command -v yay &> /dev/null; then
+        yay -S --noconfirm wlogout
     fi
 fi
 
@@ -734,9 +773,10 @@ if [[ $locale_choice =~ ^[Yy]$ ]]; then
     echo "  8. Timezone, locale, and hostname have been configured"
 fi
 if [[ $multimedia_choice =~ ^[Yy]$ ]]; then
-    echo "  9. Multimedia codecs and additional applications are installed"
+    echo "  9. Multimedia codecs are installed"
 fi
-echo "  10. Your user has been added to wheel and docker groups"
+echo "  10. Optional applications have been installed based on your choices"
+echo "  11. Your user has been added to wheel and docker groups"
 echo ""
 
 log_info "Your Arch Linux system is now ready!"
