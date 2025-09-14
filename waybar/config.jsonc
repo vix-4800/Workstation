@@ -21,16 +21,10 @@
     "cpu",
     "temperature",
     "battery",
-    "keyboard-state"
+    "sway/language"
   ],
 
   /* === Modules === */
-  "custom/archicon": {
-    "format": "",
-    "on-click": "wofi --show drun",
-    "tooltip": false
-  },
-
   "sway/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
@@ -47,18 +41,13 @@
     }
   },
 
-  "keyboard-state": {
-    "numlock": true,
-    "capslock": true,
-    "format": "{name} {icon}",
-    "format-icons": {
-      "locked": "🔒",
-      "unlocked": "🔓"
-    }
-  },
-
   "sway/mode": {
     "format": "<span style=\"italic\">{}</span>"
+  },
+
+  "sway/language": {
+    "format": "{short} {variant}",
+    "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
   },
 
   "idle_inhibitor": {
@@ -172,6 +161,12 @@
     "tooltip-format-connected": "Connected: {device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
     "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t({device_battery_percentage}%)"
+  },
+
+  "custom/archicon": {
+    "format": "",
+    "on-click": "wofi --show drun",
+    "tooltip": false
   },
 
   "custom/weather": {
