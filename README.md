@@ -38,7 +38,6 @@ cd ~/Code/Dotfiles
 
 - `bin/arch-setup` - Complete Arch Linux system setup
 - `bin/dotfiles` - Dotfiles management (link/unlink)
-- `bin/screenshot` - Screenshot utility
 
 ## Package Management
 
@@ -56,10 +55,4 @@ Package lists are defined in `packages.json`:
 
 ```bash
 ./bin/dotfiles link
-```
-
-### Take screenshot
-
-```bash
-./bin/screenshot
 ```
