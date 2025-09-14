@@ -136,7 +136,8 @@ install_wayland_desktop() {
         grim \
         slurp \
         brightnessctl \
-        xorg-xwayland
+        xorg-xwayland \
+        nm-connection-editor
 }
 
 # Install display managers
