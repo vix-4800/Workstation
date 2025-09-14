@@ -567,8 +567,6 @@ fi
 if command -v yay &> /dev/null; then
     log_info "Installing essential AUR packages..."
 
-    yay -S --noconfirm wttrbar
-
     # Optional AUR packages
     log_prompt "Install Visual Studio Code? (y/n): "
     read -n 1 -r vscode_choice
