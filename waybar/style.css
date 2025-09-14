@@ -147,6 +147,10 @@ window#waybar {
   padding: 0 6px;
 }
 
+#custom-weather {
+  padding: 0 10px;
+}
+
 window#waybar.hidden {
   opacity: 0.15;
 }

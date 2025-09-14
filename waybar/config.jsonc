@@ -6,7 +6,7 @@
   "reload_style_on_change": true,
 
   /* === Modules Position === */
-  "modules-left": ["custom/archicon", "clock"],
+  "modules-left": ["custom/archicon", "clock", "custom/weather"],
   "modules-center": ["sway/mode", "sway/workspaces"],
   "modules-right": [
     "idle_inhibitor",
@@ -59,14 +59,6 @@
 
   "sway/mode": {
     "format": "<span style=\"italic\">{}</span>"
-  },
-
-  "sway/scratchpad": {
-    "format": "{icon} {count}",
-    "show-empty": false,
-    "format-icons": ["", ""],
-    "tooltip": true,
-    "tooltip-format": "{app}: {title}"
   },
 
   "idle_inhibitor": {
@@ -124,12 +116,6 @@
     "format-icons": ["", "", ""]
   },
 
-  "backlight": {
-    // "device": "acpi_video1",
-    "format": "{percent}% {icon}",
-    "format-icons": ["", "", "", "", "", "", "", "", ""]
-  },
-
   "battery": {
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% ",
@@ -156,7 +142,7 @@
     "format-wifi": "{essid} ",
     "format-ethernet": "{ipaddr} ",
     "format-disconnected": "⚠",
-    "on-click": "nmgui"
+    "on-click": "nmtui"
   },
 
   "pulseaudio": {
@@ -164,19 +150,6 @@
     "format-muted": "",
     "format-icons": ["", "", ""],
     "on-click": "pavucontrol"
-  },
-
-  "custom/media": {
-    "format": "{icon} {text}",
-    "return-type": "json",
-    "max-length": 40,
-    "format-icons": {
-      "spotify": "",
-      "default": "🎜"
-    },
-    "escape": true,
-    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-    // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
   },
 
   "bluetooth": {
@@ -191,5 +164,10 @@
     },
     "on-click": "blueman-manager",
     "tooltip-format-connected": "{device_enumerate}"
-  }
+  },
+
+  "custom/weather": {
+    "exec": "curl -s wttr.in/Saratov?format='%t'",
+    "interval": 600
+  },
 }
