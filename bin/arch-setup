@@ -420,6 +420,16 @@ if command -v fish &> /dev/null; then
     # Install Fisher (Fish plugin manager)
     log_info "Installing Fisher plugin manager..."
     fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
+
+    if [ -f "../fish/fish_plugins" ]; then
+        log_info "Installing Fish plugins from fish_plugins file..."
+        fish -c "fisher update"
+    else
+        log_warn "fish_plugins file not found, installing default plugins..."
+        fish -c "fisher install jorgebucaran/hydro"
+        fish -c "fisher install ilancosman/tide@v6"
+        fish -c "fisher install jorgebucaran/nvm.fish"
+    fi
 fi
 
 # Install multimedia codecs if requested
