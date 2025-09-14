@@ -579,10 +579,17 @@ if command -v yay &> /dev/null; then
     read -n 1 -r swayfx_choice
     echo
     if [[ $swayfx_choice =~ ^[Yy]$ ]]; then
-        sudo pacman -R sway --noconfirm
+        sudo pacman -R --noconfirm sway
         yay -S --noconfirm swayfx
     fi
 
+    log_prompt "Intall Swaylock-effects? (y/n): "
+    read -n 1 -r swaylock_choice
+    echo
+    if [[ $swaylock_choice =~ ^[Yy]$ ]]: then
+        sudo pacman -R --noconfirm swaylock
+        yay -S swaylock-effects
+    fi
 fi
 
 # Optional applications installation

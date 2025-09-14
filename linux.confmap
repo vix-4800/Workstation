@@ -13,10 +13,10 @@ i3								$HOME/.config/i3
 sway							$HOME/.config/sway
 waybar							$HOME/.config/waybar
 .prettierrc						$HOME/.prettierrc
-rofi							$HOME/.config/rofi
 alacritty						$HOME/.config/alacritty
 tmux/.tmux.conf					$HOME/.tmux.conf
 wofi							$HOME/.config/wofi
 mako							$HOME/.config/mako
 git/gitconfig					$HOME/.gitconfig
 wlogout							$HOME/.config/wlogout
+wallpapers						$HOME/Pictures/Wallpapers
