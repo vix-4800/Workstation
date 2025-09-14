@@ -48,15 +48,12 @@
   },
 
   "keyboard-state": {
-    "numlock": false,
+    "numlock": true,
     "capslock": true,
-    "format": {
-      "numlock": "N {icon}",
-      "capslock": "⇪ {icon}"
-    },
+    "format": "{name} {icon}",
     "format-icons": {
-      "locked": "",
-      "unlocked": ""
+      "locked": "🔒",
+      "unlocked": "🔓"
     }
   },
 
