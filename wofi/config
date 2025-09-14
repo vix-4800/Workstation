@@ -20,16 +20,8 @@ height=50%
 # Performance
 cache-file=/home/vix/.cache/wofi-drun
 parse-search=true
-sort-order=alphabetical=drun
-allow-images=true
-columns=1
-lines=10
-prompt=
-term=alacritty
-hide-scroll=true
-no-actions=true
+sort-order=alphabetical
 
-matching=fuzzy
-insensitive=true
-location=center
-width=40%
+# Key bindings
+key_expand=Tab
+key_exit=Escape
