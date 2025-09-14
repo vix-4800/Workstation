@@ -1,6 +1,6 @@
 # ======= Core =======
 set -g fish_greeting
-set -x EDITOR 'code --wait'
+set -x EDITOR nvim
 set -x VISUAL $EDITOR
 
 
@@ -12,7 +12,12 @@ if status is-interactive
     end
 end
 
-set -x PATH $PATH $HOME/.local/share/nvm/v24.7.0/bin /usr/local/go/bin $HOME/.config/composer/vendor/bin
+# ======= PATH Configuration =======
+# Add Go binaries
+set -gx PATH $PATH /usr/local/go/bin
+
+# Add Composer global binaries
+set -gx PATH $PATH $HOME/.config/composer/vendor/bin
 
 # ======= Aliases =======
 alias vim 'nvim'
