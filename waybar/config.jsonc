@@ -7,7 +7,10 @@
   "margin": "5 10 0 10",
 
   /* === Modules Position === */
+  "modules-left": ["custom/archicon", "clock", "custom/weather"],
+  "modules-center": ["sway/mode", "sway/workspaces"],
   "modules-right": [
+    "custom/media",
     "tray",
     "idle_inhibitor",
     "bluetooth",
@@ -20,8 +23,6 @@
     "battery",
     "keyboard-state"
   ],
-  "modules-center": ["sway/mode", "sway/workspaces"],
-  "modules-left": ["custom/archicon", "clock", "custom/weather", "custom/media"],
 
   /* === Modules === */
   "custom/archicon": {
