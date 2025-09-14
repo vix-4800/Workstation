@@ -31,14 +31,18 @@ log_prompt() {
     echo -e "${BLUE}[PROMPT]${NC} $1"
 }
 
-# Helper function to install packages
-install_packages() {
-    local description="$1"
-    shift
-    local packages=("$@")
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_PACKAGES_SCRIPT="$SCRIPT_DIR/install-packages"
 
-    log_info "Installing $description..."
-    sudo pacman -S --noconfirm --needed "${packages[@]}"
+# Helper function to call package installer
+install_packages() {
+    if [ ! -f "$INSTALL_PACKAGES_SCRIPT" ]; then
+        log_error "Package installer script not found: $INSTALL_PACKAGES_SCRIPT"
+        exit 1
+    fi
+
+    "$INSTALL_PACKAGES_SCRIPT" "$@"
 }
 
 # Helper function to enable service only if package exists
@@ -117,65 +121,29 @@ sudo reflector --country 'Russia' --latest 10 --age 24 --sort rate --save /etc/p
 # Install CPU microcode
 case $cpu_choice in
     1)
-        install_packages "AMD microcode" amd-ucode
+        install_packages cpu-microcode amd
         ;;
     2)
-        install_packages "Intel microcode" intel-ucode
+        install_packages cpu-microcode intel
         ;;
     3)
         log_info "Skipping CPU microcode installation..."
         ;;
 esac
 
-# Install essential packages
-install_packages "essential packages" \
-    base-devel \
-    git \
-    curl \
-    jq \
-    make \
-    less \
-    unzip \
-    gcc \
-    udiskie \
-    ffmpeg
-
-# Install shell and terminal
-install_packages "shell and terminal" \
-    fish \
-    zsh \
-    alacritty \
-    tmux
-
-# Install editors
-install_packages "editors" neovim
-
-# Install Wayland desktop environment
-install_packages "Wayland desktop environment" \
-    sway \
-    waybar \
-    wofi \
-    mako \
-    swaylock \
-    swayidle \
-    swaybg \
-    wl-clipboard \
-    cliphist \
-    grim \
-    slurp \
-    brightnessctl \
-    xorg-xwayland
+# Install all basic packages
+install_packages all-basic
 
 # Install display manager based on user choice
 case $dm_choice in
     1)
-        install_packages "SDDM" sddm
+        install_packages display-manager sddm
         ;;
     2)
-        install_packages "greetd with ReGreet" greetd greetd-regreet
+        install_packages display-manager greetd
         ;;
     3)
-        install_packages "KDE Plasma" plasma kde-applications sddm xorg
+        install_packages display-manager kde
         ;;
     4)
         log_info "Skipping display manager installation..."
@@ -185,80 +153,18 @@ esac
 # Install GPU drivers based on user choice
 case $gpu_choice in
     1)
-        log_info "Installing NVIDIA drivers..."
-        install_packages "NVIDIA drivers" nvidia nvidia-utils nvidia-settings
+        install_packages gpu-drivers nvidia
         ;;
     2)
-        log_info "Installing AMD/Intel drivers..."
-        install_packages "AMD/Intel drivers" xf86-video-amdgpu xf86-video-intel vulkan-radeon vulkan-intel
+        install_packages gpu-drivers amd-intel
         ;;
     3)
         log_info "Skipping GPU drivers installation..."
         ;;
 esac
 
-# Install audio system
-install_packages "audio system" \
-    pipewire \
-    pipewire-alsa \
-    pavucontrol \
-    pipewire-pulse \
-    wireplumber
-
-# Install fonts
-install_packages "fonts" \
-    ttf-jetbrains-mono-nerd \
-    otf-font-awesome
-
-# Install development tools
-install_packages "development tools" \
-    php \
-    php-gd \
-    php-intl \
-    composer \
-    docker \
-    docker-compose \
-    python-pip \
-    python-pipx
-
-# Install utilities
-install_packages "utilities" \
-    ripgrep \
-    fd \
-    bottom \
-    firefox \
-    wireguard-tools \
-    github-cli \
-    mesa \
-    flatpak \
-    bluez \
-    bluez-utils \
-    ufw \
-    go \
-    networkmanager \
-    openssh \
-    openssl
-
 # Install AUR helper (yay)
-if ! command -v yay &> /dev/null; then
-    log_info "Installing yay AUR helper..."
-    cd /tmp
-    git clone https://aur.archlinux.org/yay.git
-    cd yay
-
-    # Build and install yay
-    log_info "Building yay from source..."
-    makepkg -si --noconfirm --needed
-
-    cd ~
-    rm -rf /tmp/yay
-
-    if command -v yay &> /dev/null; then
-        log_info "yay AUR helper installed successfully!"
-    else
-        log_warn "Failed to install yay AUR helper"
-    fi
-fi
+install_packages yay
 
 # System configuration
 log_info "Configuring system services..."
@@ -518,31 +424,7 @@ fi
 
 # Install multimedia codecs if requested
 if [[ $multimedia_choice =~ ^[Yy]$ ]]; then
-    log_info "Installing multimedia codecs..."
-    install_packages "multimedia codecs" \
-        a52dec \
-        faac \
-        faad2 \
-        flac \
-        jasper \
-        lame \
-        libdca \
-        libdv \
-        libmad \
-        libmpeg2 \
-        libtheora \
-        libvorbis \
-        libxv \
-        wavpack \
-        x264 \
-        xvidcore \
-        gstreamer \
-        gst-libav \
-        libdvdnav \
-        fuse-exfat \
-        libdvdcss \
-        libdvdread \
-        exfat-utils
+    install_packages multimedia
 fi
 
 if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
@@ -565,30 +447,28 @@ fi
 
 # Install AUR packages if yay is available
 if command -v yay &> /dev/null; then
-    log_info "Installing essential AUR packages..."
+    install_packages aur-essentials
 
     # Optional AUR packages
     log_prompt "Install Visual Studio Code? (y/n): "
     read -n 1 -r vscode_choice
     echo
     if [[ $vscode_choice =~ ^[Yy]$ ]]; then
-        yay -S --noconfirm visual-studio-code-bin
+        install_packages aur-app vscode
     fi
 
     log_prompt "Install SwayFX (enhanced Sway with effects)? (y/n): "
     read -n 1 -r swayfx_choice
     echo
     if [[ $swayfx_choice =~ ^[Yy]$ ]]; then
-        sudo pacman -R --noconfirm sway
-        yay -S --noconfirm swayfx
+        install_packages aur-app swayfx
     fi
 
-    log_prompt "Intall Swaylock-effects? (y/n): "
+    log_prompt "Install Swaylock-effects? (y/n): "
     read -n 1 -r swaylock_choice
     echo
-    if [[ $swaylock_choice =~ ^[Yy]$ ]]: then
-        sudo pacman -R --noconfirm swaylock
-        yay -S swaylock-effects
+    if [[ $swaylock_choice =~ ^[Yy]$ ]]; then
+        install_packages aur-app swaylock-effects
     fi
 fi
 
@@ -601,14 +481,14 @@ log_prompt "Install Discord? (y/n): "
 read -n 1 -r discord_choice
 echo
 if [[ $discord_choice =~ ^[Yy]$ ]]; then
-    install_packages "Discord" discord
+    install_packages optional-app discord
 fi
 
 log_prompt "Install Telegram? (y/n): "
 read -n 1 -r telegram_choice
 echo
 if [[ $telegram_choice =~ ^[Yy]$ ]]; then
-    install_packages "Telegram" telegram-desktop
+    install_packages optional-app telegram
 fi
 
 # Media and entertainment
@@ -616,18 +496,14 @@ log_prompt "Install Spotify? (y/n): "
 read -n 1 -r spotify_choice
 echo
 if [[ $spotify_choice =~ ^[Yy]$ ]]; then
-    if command -v yay &> /dev/null; then
-        yay -S --noconfirm spotify
-    else
-        install_packages "Spotify Launcher" spotify-launcher
-    fi
+    install_packages optional-app spotify
 fi
 
 log_prompt "Install VLC media player? (y/n): "
 read -n 1 -r vlc_choice
 echo
 if [[ $vlc_choice =~ ^[Yy]$ ]]; then
-    install_packages "VLC media player" vlc
+    install_packages optional-app vlc
 fi
 
 # Productivity apps
@@ -635,7 +511,7 @@ log_prompt "Install Obsidian (note-taking app)? (y/n): "
 read -n 1 -r obsidian_choice
 echo
 if [[ $obsidian_choice =~ ^[Yy]$ ]]; then
-    install_packages "Obsidian" obsidian
+    install_packages optional-app obsidian
 fi
 
 # Logout manager
@@ -643,15 +519,13 @@ log_prompt "Install wlogout (Wayland logout manager)? (y/n): "
 read -n 1 -r wlogout_choice
 echo
 if [[ $wlogout_choice =~ ^[Yy]$ ]]; then
-    if command -v yay &> /dev/null; then
-        yay -S --noconfirm wlogout
-    fi
+    install_packages aur-app wlogout
 fi
 
 # Configure GRUB theme if requested
 if [[ $grub_theme_choice =~ ^[Yy]$ ]]; then
     log_info "Installing and configuring custom GRUB theme..."
-    yay -S --noconfirm grub-customizer
+    install_packages aur-app grub-customizer
 
     # Check if Xenlism Arch theme exists locally
     DOTFILES_THEME_PATH="$HOME/Code/Dotfiles/grub/themes/Xenlism Arch"
