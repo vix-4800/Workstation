@@ -40,16 +40,6 @@ cd ~/Code/Dotfiles
 - `bin/arch-setup` - Complete Arch Linux system setup
 - `bin/dotfiles` - Dotfiles management (link/unlink)
 
-## Package Management
-
-Package lists are defined in `packages.json`:
-
-- **pacman** - Arch Linux packages
-- **AUR** - Arch User Repository packages
-- **pipx** - Python tools
-- **composer** - PHP packages
-- **npm** - Node.js packages
-
 ## Usage
 
 ### Link dotfiles
