@@ -112,7 +112,9 @@ install_essential_packages() {
 install_modern_tools() {
     install_packages "modern CLI tools" \
         eza \
-        ripgrep
+        bat \
+        ripgrep \
+        fd
 }
 
 # Install shell and terminal

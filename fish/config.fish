@@ -26,11 +26,15 @@ alias neovim 'nvim'
 alias ls 'eza --color=auto --group-directories-first'
 alias ll 'eza -la --color=auto --group-directories-first'
 alias tree 'eza --tree'
+alias cat 'bat --style=plain'
 alias grep 'rg'
 alias find 'fd'
 
 if command -v pacman >/dev/null 2>&1
-    alias cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
+    alias system-cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
+    alias system-update 'sudo pacman -Syu'
+    alias system-search 'pacman -Ss'
+    alias system-install 'sudo pacman -S'
 end
 
 # only for wayland
