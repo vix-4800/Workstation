@@ -7,21 +7,95 @@
     <!-- ===== GENERAL ===== -->
     <arg name="parallel" value="8" />
     <arg name="extensions" value="php" />
+    <arg name="colors" />
+    <arg value="p" />
+    <arg name="basepath" value="." />
+
     <config name="encoding" value="utf-8" />
     <config name="tabWidth" value="4" />
+
     <file>./</file>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/runtime/*</exclude-pattern>
+    <exclude-pattern>*/tests/*</exclude-pattern>
+    <exclude-pattern>*/files/*</exclude-pattern>
+    <exclude-pattern>*/photos/*</exclude-pattern>
 
     <!-- ===== CORE ===== -->
     <rule ref="PSR12" />
 
-    <!-- ===== IMPORTS ===== -->
-    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses" />
+    <!-- ===== BASE ===== -->
+    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+        <exclude-pattern>*/migrations/m\d{6}_\d{6}_.+\.php$</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <exclude-pattern>*/helpers.php$</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">
+        <exclude-pattern>*/migrations/m\d{6}_\d{6}_.+\.php$</exclude-pattern>
+    </rule>
+
+    <!-- ===== TYPE HINTS ===== -->
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+        <properties>
+            <property name="spacesCountAroundEqualsSign" value="0" />
+            <property name="linesCountBeforeDeclare" value="1" />
+            <property name="linesCountAfterDeclare" value="1" />
+            <property name="declareOnFirstLine" value="false" />
+        </properties>
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/environments/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/yii$</exclude-pattern>
+        <exclude-pattern>*/yii_test$</exclude-pattern>
+        <exclude-pattern>*/init$</exclude-pattern>
+        <exclude-pattern>*/helpers.php$</exclude-pattern>
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility">
+        <type>warning</type>
+    </rule>
+
+    <!-- ===== IMPORTS AND NAMESPACES ===== -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" value="true" />
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine" />
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
         <properties>
             <property name="psr12Compatible" value="true" />
             <property name="caseSensitive" value="false" />
         </properties>
+        <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UseSpacing">
         <properties>
@@ -36,40 +110,15 @@
             <property name="allowFullyQualifiedNameForCollidingClasses" value="true" />
             <property name="searchAnnotations" value="true" />
         </properties>
+        <exclude-pattern>*/views/*</exclude-pattern>
+        <exclude-pattern>*/config/*</exclude-pattern>
     </rule>
+    <rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile" />
+    <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace" />
 
-    <!-- ===== METRICS ===== -->
-    <rule ref="Generic.Metrics.CyclomaticComplexity">
-        <properties>
-            <property name="complexity" value="10" />
-        </properties>
-    </rule>
-    <rule ref="Generic.Metrics.NestingLevel">
-        <properties>
-            <property name="nestingLevel" value="4" />
-        </properties>
-    </rule>
-
-    <!-- ===== TYPE_HINTS ===== -->
-    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
-        <properties>
-            <property name="spacesCountAroundEqualsSign" value="0" />
-            <property name="linesCountBeforeDeclare" value="1" />
-            <property name="linesCountAfterDeclare" value="1" />
-            <property name="declareOnFirstLine" value="false" />
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint" />
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint" />
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint" />
-    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue" />
-    <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators" />
-    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint" />
-
-    <!-- ===== RETURN TYPES ===== -->
+    <!-- ===== FUNCTIONS AND METHODS ===== -->
     <rule ref="PSR12.Functions.ReturnTypeDeclaration" />
     <rule ref="PSR12.Functions.NullableTypeDeclaration" />
-    <rule ref="Squiz.Functions.FunctionDeclaration" />
     <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
         <properties>
             <property name="equalsSpacing" value="1" />
@@ -77,52 +126,255 @@
             <property name="requiredSpacesBeforeClose" value="0" />
         </properties>
     </rule>
-
-    <!-- ===== OPERATORS/WHITESPACES ===== -->
-    <rule ref="Squiz.WhiteSpace.OperatorSpacing" />
-    <rule ref="Squiz.Strings.ConcatenationSpacing">
-        <properties>
-            <property name="spacing" value="1" />
-        </properties>
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/environments/*</exclude-pattern>
     </rule>
-    <rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing" />
-    <rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing" />
-    <rule ref="Generic.Formatting.SpaceAfterCast" />
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
-    <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
-    <rule ref="Generic.Files.EndFileNewline" />
-    <rule ref="Squiz.Strings.DoubleQuoteUsage" />
+    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">
+        <properties>
+            <property name="spacesCountAfterKeyword" value="1" />
+            <property name="spacesCountBeforeArrow" value="1" />
+            <property name="spacesCountAfterArrow" value="1" />
+            <property name="allowMultiLine" value="true" />
+        </properties>
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction" />
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/environments/*</exclude-pattern>
+        <exclude-pattern>*/views/*</exclude-pattern>
+        <type>warning</type>
+    </rule>
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="var_dump" value="null" />
+                <element key="dd" value="null" />
+                <element key="dump" value="null" />
+                <element key="print_r" value="null" />
+                <element key="var_export" value="null" />
+                <element key="print" value="null" />
+                <element key="echo" value="null" />
+            </property>
+        </properties>
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/console/*</exclude-pattern>
+        <exclude-pattern>*/views/*</exclude-pattern>
+    </rule>
 
     <!-- ===== CONTROL STRUCTURES ===== -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator" />
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn" />
+    <rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
+        <properties>
+            <property name="linesCountBefore" value="1" />
+            <property name="linesCountBeforeFirst" value="0" />
+            <property name="linesCountAfter" value="1" />
+            <property name="linesCountAfterLast" value="0" />
+            <property name="controlStructures" type="array">
+                <element value="if" />
+                <element value="do" />
+                <element value="while" />
+                <element value="for" />
+                <element value="foreach" />
+                <element value="switch" />
+                <element value="try" />
+            </property>
+        </properties>
+        <type>warning</type>
+    </rule>
 
-    <!-- ===== ARRAYS/ARGUMENTS ===== -->
-    <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
-    <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma" />
-
-    <!-- ===== CLASSES/MEMBERS ===== -->
+    <!-- ===== CLASSES ===== -->
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing">
         <properties>
             <property name="linesCountBetweenMembers" value="1" />
         </properties>
     </rule>
+    <rule ref="SlevomatCodingStandard.Classes.PropertySpacing">
+        <properties>
+            <property name="minLinesCountBeforeWithComment" value="1" />
+            <property name="maxLinesCountBeforeWithComment" value="1" />
+            <property name="minLinesCountBeforeWithoutComment" value="0" />
+            <property name="maxLinesCountBeforeWithoutComment" value="1" />
+        </properties>
+        <type>warning</type>
+    </rule>
 
-    <!-- ===== DOCUMENTATION ===== -->
-    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment" />
+    <!-- ===== ARRAYS ===== -->
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
+    <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma">
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/environments/*</exclude-pattern>
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+    </rule>
+
+    <!-- ===== OPERATORS AND WHITESPACE ===== -->
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+            <property name="spacing" value="1" />
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing" />
+    <rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing" />
+    <rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator">
+        <type>warning</type>
+    </rule>
+    <rule ref="Generic.Formatting.SpaceAfterCast" />
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
+    <rule ref="Generic.Files.EndFileNewline" />
+
+    <!-- ===== PHP CONTROL STRUCTURES AND SECURITY ===== -->
+    <rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
+    <rule ref="Generic.PHP.NoSilencedErrors" />
+
+    <!-- ===== COMMENTS AND DOCUMENTATION ===== -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment" />
-    <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing" />
+    <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
+        <properties>
+            <property name="linesCountBetweenDescriptionAndAnnotations" value="1" />
+            <property name="linesCountBetweenDifferentAnnotationsTypes" value="1" />
+            <property name="linesCountAfterLastContent" value="0" />
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments" />
+    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
+        <properties>
+            <property name="forbiddenAnnotations" type="array">
+                <element value="@category" />
+                <element value="@package" />
+                <element value="@subpackage" />
+                <element value="@author" />
+                <element value="@created" />
+                <element value="@copyright" />
+                <element value="@license" />
+                <element value="@version" />
+                <element value="@link" />
+                <element value="@since" />
+                <element value="@access" />
+                <element value="@static" />
+                <element value="@final" />
+                <element value="@abstract" />
+                <element value="@global" />
+                <element value="@name" />
+                <element value="@tutorial" />
+                <element value="@filesource" />
+            </property>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation" />
+    <rule ref="Squiz.Commenting.FunctionComment">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/environments/*</exclude-pattern>
+        <type>warning</type>
 
-    <!-- ===== MISC ===== -->
+        <exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName" />
+        <exclude name="Squiz.Commenting.FunctionComment.InvalidReturn" />
+        <exclude name="Squiz.Commenting.FunctionComment.MissingReturn" />
+        <exclude name="Squiz.Commenting.FunctionComment.ExtraThrows" />
+        <exclude name="Squiz.Commenting.FunctionComment.MissingThrows" />
+        <exclude name="Squiz.Commenting.FunctionComment.WrongStyle" />
+        <exclude name="Squiz.Commenting.FunctionComment.ThrowsNotCapital" />
+        <exclude name="Squiz.Commenting.FunctionComment.ThrowsNoFullStop" />
+        <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows" />
+        <exclude name="Squiz.Commenting.FunctionComment.IncorrectThrowsTag" />
+    </rule>
+    <rule ref="Squiz.Commenting.ClassComment">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/environments/*</exclude-pattern>
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration">
+        <exclude-pattern>*/views/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Commenting.DocCommentAlignment" />
+    <rule ref="Squiz.Commenting.VariableComment" />
+    <rule ref="Squiz.Commenting.FunctionComment.ParamCommentNotCapital">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.ParamCommentFullStop">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.ThrowsNotCapital">
+        <severity>0</severity>
+    </rule>
+    <rule ref="Squiz.Commenting.FunctionComment.ThrowsNoFullStop">
+        <severity>0</severity>
+    </rule>
+
+    <!-- ===== METRICS AND COMPLEXITY ===== -->
+    <rule ref="Generic.Metrics.CyclomaticComplexity">
+        <properties>
+            <property name="complexity" value="10" />
+        </properties>
+        <type>warning</type>
+    </rule>
+    <rule ref="Generic.Metrics.NestingLevel">
+        <properties>
+            <property name="nestingLevel" value="4" />
+        </properties>
+        <type>warning</type>
+    </rule>
+
+    <!-- ===== NAMING ===== -->
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName" />
+    <rule ref="Squiz.NamingConventions.ValidVariableName">
+        <exclude name="Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
+        <exclude name="Squiz.NamingConventions.ValidVariableName.ContainsNumbers" />
+        <type>warning</type>
+    </rule>
+
+    <!-- ===== EXCEPTIONS ===== -->
+    <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch" />
+
+    <!-- ===== CODE ANALYSIS ===== -->
+    <rule ref="Generic.CodeAnalysis.AssignmentInCondition">
+        <type>warning</type>
+    </rule>
+    <rule ref="Generic.CodeAnalysis.EmptyStatement" />
+    <rule ref="SlevomatCodingStandard.Variables.UnusedVariable" />
+    <rule ref="SlevomatCodingStandard.Functions.UnusedParameter" />
+    <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure" />
+    <rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
+    <rule ref="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable">
+        <type>warning</type>
+        <exclude-pattern>*/public/index.php</exclude-pattern>
+        <exclude-pattern>config.php</exclude-pattern>
+        <exclude-pattern>index.php</exclude-pattern>
+        <exclude-pattern>**/init*.php</exclude-pattern>
+    </rule>
+
+    <!-- ===== FORMATTING ===== -->
     <rule ref="Generic.Files.LineLength">
         <properties>
             <property name="lineLimit" value="120" />
             <property name="absoluteLineLimit" value="0" />
-            <property name="ignoreComments" value="true" />
         </properties>
     </rule>
-    <rule ref="SlevomatCodingStandard.Functions.StaticClosure" />
-    <rule ref="Generic.CodeAnalysis.AssignmentInCondition" />
-    <rule ref="Generic.CodeAnalysis.EmptyStatement" />
+    <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference" />
 </ruleset>
