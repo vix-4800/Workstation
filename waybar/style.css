@@ -85,10 +85,12 @@ window#waybar {
 
 #cpu {
   color: #d7dce2;
+  min-width: 50px;
 }
 
 #memory {
   color: #d7dce2;
+  min-width: 50px;
 }
 
 #temperature {
@@ -102,6 +104,7 @@ window#waybar {
 #pulseaudio,
 #pulseaudio_slider {
   color: #d7dce2;
+  min-width: 50px;
 }
 
 #bluetooth {
