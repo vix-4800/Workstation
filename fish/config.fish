@@ -24,7 +24,10 @@ alias vim 'nvim'
 alias vi 'nvim'
 alias neovim 'nvim'
 alias ls 'ls --color=auto'
-alias cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
+
+if command -v pacman >/dev/null 2>&1
+    alias cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
+end
 
 # only for wayland
 if test "$XDG_SESSION_TYPE" = "wayland"
