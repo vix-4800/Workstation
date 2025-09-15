@@ -20,6 +20,7 @@
     "memory",
     "cpu",
     "temperature",
+    "custom/gpu-temp",
     "battery",
     "sway/language"
   ],
@@ -210,5 +211,13 @@
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
     "escape": true
+  },
+
+  "custom/gpu-temp": {
+    "format": "{}°C 󰍛",
+    "exec": "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null || sensors | grep -i gpu | awk '{print $2}' | tr -d '+°C' | head -n1 || echo 'N/A'",
+    "interval": 5,
+    "tooltip": true,
+    "tooltip-format": "GPU Temperature: {}°C"
   }
 }
