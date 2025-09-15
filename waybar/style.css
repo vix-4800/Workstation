@@ -113,6 +113,7 @@ window#waybar {
 
 #idle_inhibitor {
   color: #d7dce2;
+  padding-right: 5px;
 }
 
 #keyboard-state {
