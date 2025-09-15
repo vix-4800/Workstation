@@ -3,7 +3,6 @@ set -g fish_greeting
 set -x EDITOR nvim
 set -x VISUAL $EDITOR
 
-
 if status is-interactive
     if type -q starship
         starship init fish | source
@@ -12,12 +11,13 @@ if status is-interactive
     end
 end
 
-# ======= PATH Configuration =======
-# Add Go binaries
-set -gx PATH $PATH /usr/local/go/bin
+# ======= Variables =======
+set -x NODE_VERSION v24.7.0
 
-# Add Composer global binaries
+# ======= PATH Configuration =======
+set -gx PATH $PATH /usr/local/go/bin
 set -gx PATH $PATH $HOME/.config/composer/vendor/bin
+set -gx PATH $PATH $HOME/.local/share/nvm/$NODE_VERSION/bin
 
 # ======= Aliases =======
 alias vim 'nvim'

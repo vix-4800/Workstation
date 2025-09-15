@@ -582,6 +582,11 @@ if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
         composer global require friendsofphp/php-cs-fixer --no-interaction
         composer global require rector/rector --no-interaction
     fi
+
+    if command -v nvm &> /dev/null; then
+        log_info "Installing Node.js development tools..."
+        nvm install $NODE_VERSION
+    fi
 fi
 
 # Install AUR packages if yay is available
