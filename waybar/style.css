@@ -165,3 +165,25 @@ window#waybar {
 window#waybar.hidden {
   opacity: 0.15;
 }
+
+/* ========== System Group ========== */
+#system {
+  padding: 0 8px;
+}
+
+#custom-system-icon {
+  font-size: 16px;
+  color: #61afef;
+  padding: 0 8px;
+}
+
+.system-hidden {
+  opacity: 0;
+  min-width: 0px;
+}
+
+#system:hover .system-hidden,
+#system.open .system-hidden {
+  opacity: 1;
+  transition: all 0.5s ease-in-out;
+}
