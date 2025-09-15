@@ -22,16 +22,16 @@ window#waybar {
   margin: 8px 8px;
 }
 
-.modules-left>*,
-.modules-center>*,
-.modules-right>* {
+.modules-left > *,
+.modules-center > *,
+.modules-right > * {
   background: transparent;
   color: #d7dce2;
 }
 
-.modules-left>*+*,
-.modules-center>*+*,
-.modules-right>*+* {
+.modules-left > * + *,
+.modules-center > * + *,
+.modules-right > * + * {
   border-left: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -149,6 +149,14 @@ window#waybar {
 
 #custom-weather {
   padding: 0 10px;
+}
+
+#language {
+  color: #d7dce2;
+  margin: 0 10px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: transparent;
 }
 
 window#waybar.hidden {
