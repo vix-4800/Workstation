@@ -457,6 +457,7 @@ require('lazy').setup({
         jsonls = {}, -- JSON
         yamlls = {}, -- YAML
         bashls = {}, -- Bash
+        markdownlint = {}, -- Markdown
 
         -- Backend Languages
         intelephense = { -- PHP
@@ -596,7 +597,7 @@ require('lazy').setup({
           command = 'php-cs-fixer',
           args = {
             'fix',
-            '--config=' .. vim.fn.expand('~/.config/php-cs-fixer/php-cs-fixer.php'),
+            '--config=' .. vim.fn.expand '~/.config/php-cs-fixer/php-cs-fixer.php',
             '$FILENAME',
           },
           stdin = false,

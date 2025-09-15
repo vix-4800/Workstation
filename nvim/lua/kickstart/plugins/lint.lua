@@ -6,7 +6,7 @@ return {
     config = function()
       local lint = require 'lint'
       lint.linters_by_ft = {
-        -- markdown = { 'markdownlint' },
+        markdown = { 'markdownlint' },
         php = { 'phpstan', 'phpcs' },
       }
 
@@ -16,16 +16,16 @@ return {
         'analyse',
         '--error-format=json',
         '--no-progress',
-        '--configuration=' .. vim.fn.expand('~/.config/phpstan/phpstan.neon'),
-        '%filepath'
+        '--configuration=' .. vim.fn.expand '~/.config/phpstan/phpstan.neon',
+        '%filepath',
       }
 
       -- Configure phpcs to use custom config
       lint.linters.phpcs = lint.linters.phpcs or {}
       lint.linters.phpcs.args = {
-        '--standard=' .. vim.fn.expand('~/.config/phpcs/phpcs.xml'),
+        '--standard=' .. vim.fn.expand '~/.config/phpcs/phpcs.xml',
         '--report=json',
-        '%filepath'
+        '%filepath',
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
