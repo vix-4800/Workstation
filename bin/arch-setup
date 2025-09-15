@@ -252,7 +252,7 @@ install_packages networkmanager
 enable_service "NetworkManager.service" "networkmanager"
 
 if [[ $docker_choice =~ ^[Yy]$ ]]; then
-    install_packages development
+    install_packages docker
     enable_service "docker.service" "docker"
     sudo usermod -aG docker "$USER" 2>/dev/null || true
 fi
@@ -556,7 +556,10 @@ if command -v fish &> /dev/null; then
         log_warn "fish_plugins file not found, installing default plugins..."
         fish -c "fisher install jorgebucaran/hydro"
         fish -c "fisher install ilancosman/tide@v6"
-        fish -c "fisher install jorgebucaran/nvm.fish"
+
+        if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
+            fish -c "fisher install jorgebucaran/nvm.fish"
+        fi
     fi
 fi
 
@@ -566,27 +569,6 @@ fi
 
 if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
     install_packages development
-
-    # Python development tools
-    if command -v pipx &> /dev/null; then
-        log_info "Installing Python development tools..."
-        pipx install pre-commit
-        pipx install black
-        pipx install flake8
-        pipx install mypy
-    fi
-
-    # Install PHP development tools
-    if command -v composer &> /dev/null; then
-        log_info "Installing PHP development tools globally..."
-        composer global require friendsofphp/php-cs-fixer --no-interaction
-        composer global require rector/rector --no-interaction
-    fi
-
-    if command -v nvm &> /dev/null; then
-        log_info "Installing Node.js development tools..."
-        nvm install $NODE_VERSION
-    fi
 fi
 
 # Install AUR packages if yay is available

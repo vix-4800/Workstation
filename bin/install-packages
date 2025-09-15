@@ -213,6 +213,13 @@ install_fonts() {
         otf-font-awesome
 }
 
+# Install docker and docker compose
+install_docker() {
+    install_packages "Docker and Docker Compose" \
+        docker \
+        docker-compose
+}
+
 # Install development tools
 install_development_tools() {
     install_packages "development tools" \
@@ -220,11 +227,36 @@ install_development_tools() {
         php-gd \
         php-intl \
         composer \
-        docker \
-        docker-compose \
         python-pip \
         python-pipx \
         go
+
+    # Python development tools
+    if command -v pipx &> /dev/null; then
+        log_info "Installing Python development tools..."
+        pipx install pre-commit
+        pipx install black
+        pipx install flake8
+        pipx install mypy
+    fi
+
+    # Install PHP development packages via composer globally
+    if command -v composer &> /dev/null; then
+        log_info "Installing PHP development packages globally via composer"
+        composer global require --no-interaction \
+            squizlabs/php_codesniffer \
+            phpstan/phpstan \
+            friendsofphp/php-cs-fixer \
+            rector/rector \
+            slevomat/coding-standard
+    fi
+
+    # Node.js development tools via nvm
+    if command -v nvm &> /dev/null; then
+        log_info "Installing Node.js development tools..."
+        nvm install "$NODE_VERSION"
+        nvm use "$NODE_VERSION"
+    fi
 }
 
 # Individual utility installers
@@ -407,6 +439,9 @@ main() {
             ;;
         fonts)
             install_fonts
+            ;;
+        docker)
+            install_docker
             ;;
         development)
             install_development_tools
