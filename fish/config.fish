@@ -23,7 +23,11 @@ set -gx PATH $PATH $HOME/.local/share/nvm/$NODE_VERSION/bin
 alias vim 'nvim'
 alias vi 'nvim'
 alias neovim 'nvim'
-alias ls 'ls --color=auto'
+alias ls 'eza --color=auto --group-directories-first'
+alias ll 'eza -la --color=auto --group-directories-first'
+alias tree 'eza --tree'
+alias grep 'rg'
+alias find 'fd'
 
 if command -v pacman >/dev/null 2>&1
     alias cleanup 'sudo pacman -Rns $(pacman -Qtdq)'

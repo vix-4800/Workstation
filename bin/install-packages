@@ -108,6 +108,13 @@ install_essential_packages() {
         ffmpeg
 }
 
+# Install modern CLI tools
+install_modern_tools() {
+    install_packages "modern CLI tools" \
+        eza \
+        ripgrep
+}
+
 # Install shell and terminal
 install_shell_terminal() {
     install_packages "shell and terminal" \
@@ -418,6 +425,10 @@ main() {
     case $action in
         essential)
             install_essential_packages
+            install_modern_tools
+            ;;
+        modern-cli)
+            install_modern_tools
             ;;
         shell)
             install_shell_terminal
