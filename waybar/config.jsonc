@@ -15,6 +15,7 @@
     "bluetooth",
     "network",
     "pulseaudio",
+    "custom/microphone",
     "group/system",
     "battery",
     "sway/language",
@@ -220,5 +221,13 @@
     "format": "",
     "tooltip": true,
     "tooltip-format": "System monitoring (click to expand)"
+  },
+
+  "custom/microphone": {
+    "format": "",
+    "tooltip": true,
+    "tooltip-format": "Microphone (click to mute/unmute)",
+    "interval": 1,
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
   }
 }

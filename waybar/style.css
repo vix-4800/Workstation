@@ -195,6 +195,23 @@ window#waybar.hidden {
   transition: all 0.5s ease-in-out;
 }
 
+/* ========== Microphone ========== */
+#custom-microphone {
+  padding: 0 8px;
+}
+
+#custom-microphone.muted {
+  color: #e06c75;
+}
+
+#custom-microphone.active {
+  color: #98c379;
+}
+
+#custom-microphone.disconnected {
+  color: #666;
+}
+
 /* ========== Notification ========== */
 #custom-notification {
   font-size: 14px;
