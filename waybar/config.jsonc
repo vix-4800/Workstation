@@ -123,7 +123,7 @@
 
   "network": {
     "format-wifi": "{essid} ({signalStrength}%) ",
-    "format-ethernet": "",
+    "format-ethernet": "",
     "format-disconnected": "⚠",
     "tooltip-format": "{ifname} via {gwaddr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
@@ -227,17 +227,11 @@
       "click-to-reveal": true,
       "transition-left-to-right": false
     },
-    "modules": [
-      "custom/system-icon",
-      "memory",
-      "cpu",
-      "temperature",
-      "custom/gpu-temp"
-    ]
+    "modules": ["custom/system-icon", "memory", "cpu", "temperature", "custom/gpu-temp"]
   },
 
   "custom/system-icon": {
-    "format": "󰍛",
+    "format": "",
     "tooltip": true,
     "tooltip-format": "System monitoring (click to expand)"
   }
