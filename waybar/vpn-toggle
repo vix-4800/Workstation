@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+WG_INTERFACE="wg0"
+
+# Check if WireGuard interface is active
+check_vpn_status() {
+    nmcli connection show --active | grep -q "^$WG_INTERFACE"
+}
+
+# Toggle VPN connection
+if check_vpn_status; then
+    echo "Disconnecting VPN..."
+    if nmcli connection down "$WG_INTERFACE" 2>/dev/null; then
+        echo "VPN disconnected"
+        exit 0
+    else
+        echo "Failed to disconnect VPN" >&2
+        exit 1
+    fi
+else
+    echo "Connecting VPN..."
+    if nmcli connection up "$WG_INTERFACE" 2>/dev/null; then
+        echo "VPN connected"
+        exit 0
+    else
+        echo "Failed to connect VPN" >&2
+        exit 1
+    fi
+fi

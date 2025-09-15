@@ -234,10 +234,11 @@
   },
 
   "custom/vpn": {
+    "format": "{}",
+    "tooltip": true,
     "exec": "~/.config/waybar/vpn-status",
     "return-type": "json",
     "interval": 5,
-    "format": "{}",
-    "tooltip": true
+    "on-click": "~/.config/waybar/vpn-toggle"
   }
 }
