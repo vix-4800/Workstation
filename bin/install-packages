@@ -227,24 +227,21 @@ install_development_tools() {
         go
 }
 
-# Install utilities
-install_utilities() {
-    install_packages "utilities" \
-        ripgrep \
-        fd \
-        bottom \
-        firefox \
-        wireguard-tools \
-        github-cli \
-        mesa \
-        flatpak \
-        bluez \
-        bluez-utils \
-        ufw \
-        networkmanager \
-        openssh \
-        openssl
-}
+# Individual utility installers
+install_ripgrep() { install_packages "ripgrep" ripgrep; }
+install_fd() { install_packages "fd" fd; }
+install_bottom() { install_packages "bottom" bottom; }
+install_firefox() { install_packages "firefox" firefox; }
+install_wireguard_tools() { install_packages "wireguard-tools" wireguard-tools; }
+install_github_cli() { install_packages "github-cli" github-cli; }
+install_mesa() { install_packages "mesa" mesa; }
+install_flatpak() { install_packages "flatpak" flatpak; }
+install_bluez() { install_packages "bluez" bluez; }
+install_bluez_utils() { install_packages "bluez-utils" bluez-utils; }
+install_ufw() { install_packages "ufw" ufw; }
+install_networkmanager() { install_packages "networkmanager" networkmanager; }
+install_openssh() { install_packages "openssh" openssh; }
+install_openssl() { install_packages "openssl" openssl; }
 
 # Install multimedia codecs
 install_multimedia_codecs() {
@@ -414,8 +411,47 @@ main() {
         development)
             install_development_tools
             ;;
-        utilities)
-            install_utilities
+        ripgrep)
+            install_ripgrep
+            ;;
+        fd)
+            install_fd
+            ;;
+        bottom)
+            install_bottom
+            ;;
+        firefox)
+            install_firefox
+            ;;
+        wireguard-tools)
+            install_wireguard_tools
+            ;;
+        github-cli)
+            install_github_cli
+            ;;
+        mesa)
+            install_mesa
+            ;;
+        flatpak)
+            install_flatpak
+            ;;
+        bluez)
+            install_bluez
+            ;;
+        bluez-utils)
+            install_bluez_utils
+            ;;
+        ufw)
+            install_ufw
+            ;;
+        networkmanager)
+            install_networkmanager
+            ;;
+        openssh)
+            install_openssh
+            ;;
+        openssl)
+            install_openssl
             ;;
         multimedia)
             install_multimedia_codecs
@@ -439,8 +475,9 @@ main() {
             install_wayland_desktop
             install_audio_system
             install_fonts
-            install_development_tools
-            install_utilities
+            install_networkmanager
+            install_openssh
+            install_openssl
             ;;
         help|--help|-h)
             echo "Usage: $0 <action> [options]"
@@ -456,7 +493,20 @@ main() {
             echo "  audio              - Install audio system"
             echo "  fonts              - Install fonts"
             echo "  development        - Install development tools"
-            echo "  utilities          - Install utilities"
+            echo "  ripgrep            - Install ripgrep"
+            echo "  fd                 - Install fd"
+            echo "  bottom             - Install bottom"
+            echo "  firefox            - Install firefox"
+            echo "  wireguard-tools    - Install wireguard-tools"
+            echo "  github-cli         - Install github-cli"
+            echo "  mesa               - Install mesa"
+            echo "  flatpak            - Install flatpak"
+            echo "  bluez              - Install bluez"
+            echo "  bluez-utils        - Install bluez-utils"
+            echo "  ufw                - Install ufw"
+            echo "  networkmanager     - Install networkmanager"
+            echo "  openssh            - Install openssh"
+            echo "  openssl            - Install openssl"
             echo "  multimedia         - Install multimedia codecs"
             echo "  yay                - Install yay AUR helper"
             echo "  aur-essentials     - Install essential AUR packages"

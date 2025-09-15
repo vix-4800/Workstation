@@ -102,6 +102,51 @@ if ! command -v pacman &> /dev/null; then
 fi
 
 # User choices
+log_prompt "Install ufw (firewall)? (y/n): "
+read -r -p "Choice (y/n): " ufw_choice
+
+log_prompt "Install Docker and docker-compose? (y/n): "
+read -r -p "Choice (y/n): " docker_choice
+
+log_prompt "Install Bluetooth support (bluez)? (y/n): "
+read -r -p "Choice (y/n): " bluez_choice
+
+log_prompt "Install Flatpak? (y/n): "
+read -r -p "Choice (y/n): " flatpak_choice
+
+log_prompt "Install Firefox? (y/n): "
+read -r -p "Choice (y/n): " firefox_choice
+
+log_prompt "Install WireGuard tools? (y/n): "
+read -r -p "Choice (y/n): " wireguard_choice
+
+log_prompt "Install GitHub CLI? (y/n): "
+read -r -p "Choice (y/n): " ghcli_choice
+
+log_prompt "Install openssh? (y/n): "
+read -r -p "Choice (y/n): " openssh_choice
+
+log_prompt "Install openssl? (y/n): "
+read -r -p "Choice (y/n): " openssl_choice
+
+log_prompt "Install mesa? (y/n): "
+read -r -p "Choice (y/n): " mesa_choice
+
+log_prompt "Install ripgrep? (y/n): "
+read -r -p "Choice (y/n): " ripgrep_choice
+
+log_prompt "Install fd? (y/n): "
+read -r -p "Choice (y/n): " fd_choice
+
+log_prompt "Install bottom? (y/n): "
+read -r -p "Choice (y/n): " bottom_choice
+
+log_prompt "Install multimedia codecs? (y/n): "
+read -r -p "Choice (y/n): " multimedia_choice
+
+log_prompt "Install dev tools (php, python, go, etc.)? (y/n): "
+read -r -p "Choice (y/n): " dev_tools_choice
+
 log_prompt "Select CPU microcode updates:"
 echo "1) AMD (amd-ucode)"
 echo "2) Intel (intel-ucode)"
@@ -115,9 +160,6 @@ echo "3) KDE Plasma (full desktop environment)"
 echo "4) None"
 read -r -p "Choice (1-4): " dm_choice
 
-log_prompt "Install additional development tools? (y/n): "
-read -r -p "Choice (y/n): " dev_tools_choice
-
 log_prompt "Install custom GRUB theme? (y/n): "
 read -r -p "Choice (y/n): " grub_theme_choice
 
@@ -126,9 +168,6 @@ echo "1) NVIDIA (proprietary)"
 echo "2) AMD/Intel (open source)"
 echo "3) Skip"
 read -r -p "Choice (1-3): " gpu_choice
-
-log_prompt "Install multimedia codecs? (y/n): "
-read -r -p "Choice (y/n): " multimedia_choice
 
 log_prompt "Configure timezone and locale? (y/n): "
 read -r -p "Choice (y/n): " locale_choice
@@ -167,8 +206,12 @@ case $cpu_choice in
         ;;
 esac
 
-# Install all basic packages
-install_packages all-basic
+install_packages essential
+install_packages shell
+install_packages editors
+install_packages wayland
+install_packages audio
+install_packages fonts
 
 # Install display manager based on user choice
 case $dm_choice in
@@ -205,10 +248,68 @@ install_packages yay
 # System configuration
 log_info "Configuring system services..."
 
-# Enable and start essential services
-enable_service "docker.service" "docker"
+install_packages networkmanager
 enable_service "NetworkManager.service" "networkmanager"
-enable_service "bluetooth.service" "bluez"
+
+if [[ $docker_choice =~ ^[Yy]$ ]]; then
+    install_packages development
+    enable_service "docker.service" "docker"
+    sudo usermod -aG docker "$USER" 2>/dev/null || true
+fi
+
+if [[ $bluez_choice =~ ^[Yy]$ ]]; then
+    install_packages bluez
+    install_packages bluez-utils
+    enable_service "bluetooth.service" "bluez"
+fi
+
+if [[ $ufw_choice =~ ^[Yy]$ ]]; then
+    install_packages ufw
+    enable_service "ufw.service" "ufw"
+    sudo ufw --force enable
+    sudo ufw default deny incoming
+    sudo ufw default allow outgoing
+fi
+
+if [[ $flatpak_choice =~ ^[Yy]$ ]]; then
+    install_packages flatpak
+fi
+
+if [[ $firefox_choice =~ ^[Yy]$ ]]; then
+    install_packages firefox
+fi
+
+if [[ $wireguard_choice =~ ^[Yy]$ ]]; then
+    install_packages wireguard-tools
+fi
+
+if [[ $ghcli_choice =~ ^[Yy]$ ]]; then
+    install_packages github-cli
+fi
+
+if [[ $openssh_choice =~ ^[Yy]$ ]]; then
+    install_packages openssh
+fi
+
+if [[ $openssl_choice =~ ^[Yy]$ ]]; then
+    install_packages openssl
+fi
+
+if [[ $mesa_choice =~ ^[Yy]$ ]]; then
+    install_packages mesa
+fi
+
+if [[ $ripgrep_choice =~ ^[Yy]$ ]]; then
+    install_packages ripgrep
+fi
+
+if [[ $fd_choice =~ ^[Yy]$ ]]; then
+    install_packages fd
+fi
+
+if [[ $bottom_choice =~ ^[Yy]$ ]]; then
+    install_packages bottom
+fi
 
 # Configure display manager based on choice
 case $dm_choice in
@@ -299,23 +400,14 @@ EOF
         ;;
 esac
 
-# Configure firewall
-enable_service "ufw.service" "ufw"
-sudo ufw --force enable
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-
 # Configure sudo access for wheel group
 log_info "Configuring sudo access..."
 if ! sudo grep -q "^%wheel.*NOPASSWD" /etc/sudoers; then
     log_info "Enabling wheel group in sudoers..."
     echo '%wheel ALL=(ALL:ALL) ALL' | sudo tee -a /etc/sudoers.d/wheel-group
     sudo chmod 440 /etc/sudoers.d/wheel-group
+    sudo usermod -aG wheel "$USER" 2>/dev/null || true
 fi
-
-# Add user to necessary groups
-sudo usermod -aG docker "$USER" 2>/dev/null || true
-sudo usermod -aG wheel "$USER" 2>/dev/null || true
 
 # Configure timezone and locale if requested
 if [[ $locale_choice =~ ^[Yy]$ ]]; then
@@ -669,21 +761,21 @@ echo ""
 log_info "=== Setup Complete! ==="
 echo ""
 log_warn "Important notes:"
-echo "  1. Reboot your system to ensure all changes take effect"
-echo "  2. Log out and log back in to use the new shell (Fish)"
+echo "  - Reboot your system to ensure all changes take effect"
+echo "  - Log out and log back in to use the new shell (Fish)"
 case $dm_choice in
     1)
-        echo "  3. SDDM is configured and will start on boot"
+        echo "  - SDDM is configured and will start on boot"
         ;;
     2)
-        echo "  3. greetd with ReGreet is configured and will start on boot"
+        echo "  - greetd with ReGreet is configured and will start on boot"
         echo "     ReGreet will automatically run Sway - just login with your user"
         ;;
     3)
-        echo "  3. KDE Plasma is installed with SDDM"
+        echo "  - KDE Plasma is installed with SDDM"
         ;;
     4)
-        echo "  3. No display manager - Sway auto-start is configured for tty1"
+        echo "  - No display manager - Sway auto-start is configured for tty1"
         echo "     Login on tty1 and Sway will start automatically"
 
         # Setup auto-start for Sway when no display manager
@@ -699,21 +791,31 @@ EOF
         fi
         ;;
 esac
-echo "  4. Configure your WireGuard VPN in ~/.config/wireguard/ if needed"
-echo "  5. Run 'gh auth login' to authenticate with GitHub"
-echo "  6. Firewall (ufw) is enabled and configured"
+if [[ $wireguard_choice =~ ^[Yy]$ ]]; then
+    echo "  - Configure your WireGuard VPN in ~/.config/wireguard/ if needed"
+fi
+if [[ $ghcli_choice =~ ^[Yy]$ ]]; then
+    echo "  - Run 'gh auth login' to authenticate with GitHub"
+fi
+if [[ $ufw_choice =~ ^[Yy]$ ]]; then
+    echo "  - Firewall (ufw) is enabled and configured"
+fi
 if [[ $grub_theme_choice =~ ^[Yy]$ ]]; then
-    echo "  7. Custom GRUB theme is installed and configured"
+    echo "  - Custom GRUB theme is installed and configured"
     echo "     Use 'sudo grub-customizer' to further customize GRUB appearance"
 fi
 if [[ $locale_choice =~ ^[Yy]$ ]]; then
-    echo "  8. Timezone, locale, and hostname have been configured"
+    echo "  - Timezone, locale, and hostname have been configured"
 fi
 if [[ $multimedia_choice =~ ^[Yy]$ ]]; then
-    echo "  9. Multimedia codecs are installed"
+    echo "  - Multimedia codecs are installed"
 fi
-echo "  10. Optional applications have been installed based on your choices"
-echo "  11. Your user has been added to wheel and docker groups"
+echo "  - Optional applications have been installed based on your choices"
+if [[ $docker_choice =~ ^[Yy]$ ]]; then
+    echo "  - Your user has been added to wheel and docker groups"
+else
+    echo "  - Your user has been added to wheel group"
+fi
 echo ""
 
 log_info "Your Arch Linux system is now ready!"
