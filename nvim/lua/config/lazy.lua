@@ -450,18 +450,26 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
-        --
+        -- Web Development
+        -- ts_ls = {}, -- TypeScript/JavaScript
+        html = {}, -- HTML
+        cssls = {}, -- CSS
+        jsonls = {}, -- JSON
+        yamlls = {}, -- YAML
+        bashls = {}, -- Bash
+
+        -- Backend Languages
+        intelephense = { -- PHP
+          settings = {
+            intelephense = {
+              files = {
+                maxSize = 5000000,
+              },
+            },
+          },
+        },
+        pyright = {}, -- Python
+        gopls = {}, -- Go
 
         lua_ls = {
           -- cmd = { ... },
@@ -494,7 +502,22 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        -- Lua
         'stylua', -- Used to format Lua code
+
+        -- Web Development
+        'prettier', -- JavaScript/TypeScript/HTML/CSS formatter
+        -- 'eslint_d', -- JavaScript/TypeScript linter
+
+        -- Python
+        'black', -- Python formatter
+        'isort', -- Python import sorter
+        'flake8', -- Python linter
+        'mypy', -- Python type checker
+
+        -- Other
+        'shfmt', -- Shell script formatter
+        'yamlfmt', -- YAML formatter
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -547,11 +570,20 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        python = { 'isort', 'black' },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        vue = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        scss = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        jsonc = { 'prettierd', 'prettier', stop_after_first = true },
+        yaml = { 'yamlfmt' },
+        markdown = { 'prettierd', 'prettier', stop_after_first = true },
+        sh = { 'shfmt' },
       },
     },
   },

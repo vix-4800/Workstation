@@ -12,7 +12,7 @@ vim.g.maplocalleader = ' '
 vim.o.termguicolors = true
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- Make line numbers default
 vim.o.number = true
@@ -81,3 +81,7 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+-- Additional useful options
+vim.o.fileencoding = 'utf-8' -- File content encoding
+vim.o.smartindent = true -- Smart indenting

@@ -52,3 +52,22 @@ vim.keymap.set('n', '<leader>pr', function()
       end)
     end)
 end, { desc = 'Rector: current file' })
+
+-- PHPStan analysis
+vim.keymap.set('n', '<leader>ps', function()
+  local file = vim.fn.expand '%:p'
+  local cfg = vim.fn.expand('~/.config/phpstan/phpstan.neon')
+  vim.notify('PHPStan: analyzing ' .. file)
+  vim.system(
+    { 'phpstan', 'analyse', file, '--ansi', '--configuration=' .. cfg },
+    { text = true, cwd = project_root() },
+    function(res)
+      vim.schedule(function()
+        if res.code == 0 then
+          vim.notify 'PHPStan: no errors found'
+        else
+          vim.notify((res.stdout or 'PHPStan found issues'), vim.log.levels.WARN)
+        end
+      end)
+    end)
+end, { desc = 'PHPStan: analyze current file' })
