@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-NMCLI_OUTPUT=$(nmcli c show --active 2>/dev/null | grep -v "^NAME" | awk '{print $4}')
+NMCLI_OUTPUT=$(nmcli c show --active 2>/dev/null | grep wg0)
 
-if echo "$NMCLI_OUTPUT" | grep -v "^--$" | grep -q .; then
+if [ -n "$NMCLI_OUTPUT" ]; then
     echo '{"text": "󰦝", "class": "connected", "tooltip": "VPN Connected"}'
 else
     echo '{"text": "󰦞", "class": "disconnected", "tooltip": "VPN Disconnected"}'
