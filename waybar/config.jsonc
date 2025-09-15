@@ -226,11 +226,13 @@
   },
 
   "custom/microphone": {
-    "format": "",
+    "format": "{}",
     "tooltip": true,
     "tooltip-format": "Microphone (click to mute/unmute)",
     "interval": 1,
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "exec": "~/.config/waybar/mic-status",
+    "return-type": "json"
   },
 
   "custom/vpn": {
