@@ -1,5 +1,12 @@
 #!/bin/bash
 
+QUIET=0
+for arg in "$@"; do
+    if [[ "$arg" == "--quiet" || "$arg" == "-q" ]]; then
+        QUIET=1
+    fi
+done
+
 # Arch Linux System Setup Script
 # Sets up a complete Wayland-based desktop environment with Sway
 
@@ -41,8 +48,11 @@ install_packages() {
         log_error "Package installer script not found: $INSTALL_PACKAGES_SCRIPT"
         exit 1
     fi
-
-    "$INSTALL_PACKAGES_SCRIPT" "$@"
+    if [ "$QUIET" -eq 1 ]; then
+        "$INSTALL_PACKAGES_SCRIPT" "$@" > /dev/null 2>&1
+    else
+        "$INSTALL_PACKAGES_SCRIPT" "$@"
+    fi
 }
 
 # Helper function to enable service only if package exists
@@ -51,10 +61,17 @@ enable_service() {
     local package=$2
 
     if pacman -Q "$package" &> /dev/null; then
-        log_info "Enabling $service..."
-        sudo systemctl enable "$service"
+        if [ "$QUIET" -eq 1 ]; then
+            log_info "Enabling $service..." > /dev/null
+            sudo systemctl enable "$service" > /dev/null 2>&1
+        else
+            log_info "Enabling $service..."
+            sudo systemctl enable "$service"
+        fi
     else
-        log_warn "Package $package not found, skipping $service"
+        if [ "$QUIET" -ne 1 ]; then
+            log_warn "Package $package not found, skipping $service"
+        fi
     fi
 }
 
@@ -64,10 +81,17 @@ enable_user_service() {
     local package=$2
 
     if pacman -Q "$package" &> /dev/null; then
-        log_info "Enabling user service $service..."
-        systemctl --user enable "$service"
+        if [ "$QUIET" -eq 1 ]; then
+            log_info "Enabling user service $service..." > /dev/null
+            systemctl --user enable "$service" > /dev/null 2>&1
+        else
+            log_info "Enabling user service $service..."
+            systemctl --user enable "$service"
+        fi
     else
-        log_warn "Package $package not found, skipping user service $service"
+        if [ "$QUIET" -ne 1 ]; then
+            log_warn "Package $package not found, skipping user service $service"
+        fi
     fi
 }
 
@@ -110,13 +134,25 @@ log_prompt "Configure timezone and locale? (y/n): "
 read -r -p "Choice (y/n): " locale_choice
 
 # Update system
-log_info "Updating system packages..."
-sudo pacman -Syu --noconfirm
+if [ "$QUIET" -eq 1 ]; then
+    log_info "Updating system packages..." > /dev/null
+    sudo pacman -Syu --noconfirm > /dev/null 2>&1
+else
+    log_info "Updating system packages..."
+    sudo pacman -Syu --noconfirm
+fi
+
 
 # Update mirror list
-log_info "Updating mirror list with reflector..."
-sudo pacman -S --noconfirm --needed reflector
-sudo reflector --country 'Russia' --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
+if [ "$QUIET" -eq 1 ]; then
+    log_info "Updating mirror list with reflector..." > /dev/null
+    sudo pacman -S --noconfirm --needed reflector > /dev/null 2>&1
+    sudo reflector --country 'Russia' --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist > /dev/null 2>&1
+else
+    log_info "Updating mirror list with reflector..."
+    sudo pacman -S --noconfirm --needed reflector
+    sudo reflector --country 'Russia' --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
+fi
 
 # Install CPU microcode
 case $cpu_choice in
@@ -432,13 +468,14 @@ if command -v fish &> /dev/null; then
     fi
 fi
 
-# Install multimedia codecs if requested
 if [[ $multimedia_choice =~ ^[Yy]$ ]]; then
     install_packages multimedia
 fi
 
 if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
-    # Install Python development tools via pipx
+    install_packages development
+
+    # Python development tools
     if command -v pipx &> /dev/null; then
         log_info "Installing Python development tools..."
         pipx install pre-commit
@@ -447,7 +484,7 @@ if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
         pipx install mypy
     fi
 
-    # Install PHP development tools via composer
+    # Install PHP development tools
     if command -v composer &> /dev/null; then
         log_info "Installing PHP development tools globally..."
         composer global require friendsofphp/php-cs-fixer --no-interaction
@@ -614,10 +651,18 @@ log_info "Setting up GitHub CLI (optional)..."
 log_warn "You can authenticate with GitHub CLI later using: gh auth login"
 
 # Final system cleanup
-log_info "Cleaning up package cache..."
-sudo pacman -Sc --noconfirm
-if command -v yay &> /dev/null; then
-    yay -Sc --noconfirm
+if [ "$QUIET" -eq 1 ]; then
+    log_info "Cleaning up package cache..." > /dev/null
+    sudo pacman -Sc --noconfirm > /dev/null 2>&1
+    if command -v yay &> /dev/null; then
+        yay -Sc --noconfirm > /dev/null 2>&1
+    fi
+else
+    log_info "Cleaning up package cache..."
+    sudo pacman -Sc --noconfirm
+    if command -v yay &> /dev/null; then
+        yay -Sc --noconfirm
+    fi
 fi
 
 echo ""
