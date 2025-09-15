@@ -20,3 +20,4 @@ mako							$HOME/.config/mako
 git/gitconfig					$HOME/.gitconfig
 wlogout							$HOME/.config/wlogout
 wallpapers						$HOME/Pictures/Wallpapers
+swaync							$HOME/.config/swaync
