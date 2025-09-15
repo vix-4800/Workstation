@@ -554,7 +554,6 @@ if command -v fish &> /dev/null; then
         fish -c "fisher update"
     else
         log_warn "fish_plugins file not found, installing default plugins..."
-        fish -c "fisher install jorgebucaran/hydro"
         fish -c "fisher install ilancosman/tide@v6"
 
         if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
