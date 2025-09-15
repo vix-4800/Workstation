@@ -23,6 +23,8 @@ set -gx PATH $PATH $HOME/.config/composer/vendor/bin
 alias vim 'nvim'
 alias vi 'nvim'
 alias neovim 'nvim'
+alias ls 'ls --color=auto'
+alias cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
 
 # only for wayland
 if test "$XDG_SESSION_TYPE" = "wayland"
