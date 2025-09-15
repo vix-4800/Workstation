@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="ruleset">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="description" type="xs:string" />
+                <xs:element name="arg" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" />
+                        <xs:attribute name="value" />
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="config" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" use="required" />
+                        <xs:attribute name="value" use="required" />
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="file" type="xs:string" />
+                <xs:element name="rule" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                            <xs:element name="properties" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="property" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:attribute name="name" type="xs:ID"
+                                                    use="required" />
+                                                <xs:attribute name="value" use="required">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="0" />
+                                                            <xs:enumeration value="1" />
+                                                            <xs:enumeration value="10" />
+                                                            <xs:enumeration value="120" />
+                                                            <xs:enumeration value="4" />
+                                                            <xs:enumeration value="80" />
+                                                            <xs:enumeration value="false" />
+                                                            <xs:enumeration value="true" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="ref" type="xs:ID" use="required" />
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" use="required" />
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

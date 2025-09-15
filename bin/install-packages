@@ -243,6 +243,9 @@ install_development_tools() {
     # Install PHP development packages via composer globally
     if command -v composer &> /dev/null; then
         log_info "Installing PHP development packages globally via composer"
+
+        composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+
         composer global require --no-interaction \
             squizlabs/php_codesniffer \
             phpstan/phpstan \

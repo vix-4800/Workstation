@@ -7,7 +7,7 @@ return {
       local lint = require 'lint'
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
-        php = { 'phpstan' },
+        php = { 'phpstan', 'phpcs' },
       }
 
       -- Configure phpstan to use custom config
@@ -17,6 +17,14 @@ return {
         '--error-format=json',
         '--no-progress',
         '--configuration=' .. vim.fn.expand('~/.config/phpstan/phpstan.neon'),
+        '%filepath'
+      }
+
+      -- Configure phpcs to use custom config
+      lint.linters.phpcs = lint.linters.phpcs or {}
+      lint.linters.phpcs.args = {
+        '--standard=' .. vim.fn.expand('~/.config/phpcs/phpcs.xml'),
+        '--report=json',
         '%filepath'
       }
 
