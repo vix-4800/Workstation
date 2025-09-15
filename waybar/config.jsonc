@@ -14,6 +14,7 @@
     "idle_inhibitor",
     "bluetooth",
     "network",
+    "custom/vpn",
     "pulseaudio",
     "custom/microphone",
     "group/system",
@@ -230,5 +231,13 @@
     "tooltip-format": "Microphone (click to mute/unmute)",
     "interval": 1,
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+  },
+
+  "custom/vpn": {
+    "exec": "~/.config/waybar/vpn-status",
+    "return-type": "json",
+    "interval": 5,
+    "format": "{}",
+    "tooltip": true
   }
 }

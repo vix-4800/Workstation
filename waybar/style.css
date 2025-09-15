@@ -212,6 +212,19 @@ window#waybar.hidden {
   color: #666;
 }
 
+/* ========== VPN ========== */
+#custom-vpn {
+  padding: 0 8px;
+}
+
+#custom-vpn.connected {
+  color: #98c379;
+}
+
+#custom-vpn.disconnected {
+  color: #e06c75;
+}
+
 /* ========== Notification ========== */
 #custom-notification {
   font-size: 14px;
