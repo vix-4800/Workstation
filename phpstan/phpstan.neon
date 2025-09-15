@@ -1,4 +1,13 @@
 parameters:
     level: 5
+
+    # Default paths - can be overridden in project-specific config
+    paths:
+        - .
+
     excludePaths:
         - vendor/*
+        - node_modules/*
+        - storage/*
+        - bootstrap/cache/*
+        - public/build/*
