@@ -7,6 +7,9 @@ nvim/lua/local.lua
 **/swap/*
 **/backup/*
 **/shada/*
+
+# Fish shell runtime/state
+fish/fish_variables
 fish/fishd.tmp.*
 
 # VSCode settings
