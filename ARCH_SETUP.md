@@ -9,7 +9,7 @@
 - **Desktop Environment**: Sway (Wayland compositor)
 - **Status Bar**: Waybar
 - **Application Launcher**: Wofi
-- **Notifications**: Mako
+- **Notifications**: SwaNC
 - **Lock Screen**: Swaylock
 - **Terminal**: Alacritty
 - **Shell**: Fish (с возможностью использования Zsh)

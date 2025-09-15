@@ -28,6 +28,7 @@ cd ~/Code/Dotfiles
 - **Waybar** - Status bar configuration
 - **Wofi** - Application launcher
 - **Mako** - Notification daemon
+- **SwayNC** - Sway notification manager
 - **Alacritty** - Terminal emulator
 - **Neovim** - Editor configuration with plugins
 - **Fish** - Shell configuration and functions

@@ -128,6 +128,7 @@ install_wayland_desktop() {
         waybar \
         wofi \
         mako \
+        swaync \
         swaylock \
         swayidle \
         swaybg \
