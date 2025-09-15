@@ -12,8 +12,20 @@ nvim/lua/local.lua
 fish/fish_variables
 fish/fishd.tmp.*
 
-# Neovim plugin lock file
+# Neovim runtime files
 nvim/lazy-lock.json
+
+# Fish shell auto-generated files
+fish/functions/_tide_*
+fish/functions/tide/
+fish/functions/_nvm_*
+fish/functions/nvm.fish
+fish/functions/fisher.fish
+fish/completions/fisher.fish
+fish/completions/tide.fish
+fish/completions/nvm.fish
+fish/conf.d/_tide_init.fish
+fish/conf.d/nvm.fish
 
 # VSCode settings
 .vscode/
