@@ -7,6 +7,17 @@ return {
       local lint = require 'lint'
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
+        php = { 'phpstan' },
+      }
+
+      -- Configure phpstan to use custom config
+      lint.linters.phpstan = lint.linters.phpstan or {}
+      lint.linters.phpstan.args = {
+        'analyse',
+        '--error-format=json',
+        '--no-progress',
+        '--configuration=' .. vim.fn.expand('~/.config/phpstan/phpstan.neon'),
+        '%filepath'
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,

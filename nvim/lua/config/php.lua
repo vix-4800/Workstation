@@ -13,26 +13,6 @@ local function project_root()
   return vim.fn.getcwd()
 end
 
-vim.keymap.set('n', '<leader>pf', function()
-  vim.cmd 'write'
-  local file = vim.fn.expand '%:p'
-  local cfg = vim.fn.expand('~/.config/php-cs-fixer/php-cs-fixer.php')
-  vim.notify('php-cs-fixer: ' .. file)
-  vim.system(
-    { 'php-cs-fixer', 'fix', file, '--config=' .. cfg },
-    { text = true, cwd = project_root() },
-    function(res)
-      vim.schedule(function()
-        if res.code == 0 then
-          vim.cmd 'checktime'
-          vim.notify 'php-cs-fixer: done'
-        else
-          vim.notify((res.stderr or 'php-cs-fixer error'), vim.log.levels.ERROR)
-        end
-      end)
-    end)
-end, { desc = 'PHP CS Fixer: current file' })
-
 vim.keymap.set('n', '<leader>pr', function()
   vim.cmd 'write'
   local file = vim.fn.expand '%:p'
@@ -71,3 +51,58 @@ vim.keymap.set('n', '<leader>ps', function()
       end)
     end)
 end, { desc = 'PHPStan: analyze current file' })
+
+-- PHPCS check
+vim.keymap.set('n', '<leader>pc', function()
+  local file = vim.fn.expand '%:p'
+  local cfg = vim.fn.expand('~/.config/phpcs/phpcs.xml')
+  vim.notify('PHPCS: checking ' .. file)
+  vim.system(
+    { 'phpcs', '--standard=' .. cfg, file },
+    { text = true, cwd = project_root() },
+    function(res)
+      vim.schedule(function()
+        if res.code == 0 then
+          vim.notify 'PHPCS: no issues found'
+        else
+          vim.notify((res.stdout or 'PHPCS found issues'), vim.log.levels.WARN)
+        end
+      end)
+    end)
+end, { desc = 'PHPCS: check current file' })
+
+-- PHPStan analyze project
+vim.keymap.set('n', '<leader>pS', function()
+  local cfg = vim.fn.expand('~/.config/phpstan/phpstan.neon')
+  vim.notify('PHPStan: analyzing project...')
+  vim.system(
+    { 'phpstan', 'analyse', '--ansi', '--configuration=' .. cfg },
+    { text = true, cwd = project_root() },
+    function(res)
+      vim.schedule(function()
+        if res.code == 0 then
+          vim.notify 'PHPStan: no errors found in project'
+        else
+          vim.notify((res.stdout or 'PHPStan found issues in project'), vim.log.levels.WARN)
+        end
+      end)
+    end)
+end, { desc = 'PHPStan: analyze project' })
+
+-- PHPCS check project
+vim.keymap.set('n', '<leader>pC', function()
+  local cfg = vim.fn.expand('~/.config/phpcs/phpcs.xml')
+  vim.notify('PHPCS: checking project...')
+  vim.system(
+    { 'phpcs', '--standard=' .. cfg, '.' },
+    { text = true, cwd = project_root() },
+    function(res)
+      vim.schedule(function()
+        if res.code == 0 then
+          vim.notify 'PHPCS: no issues found in project'
+        else
+          vim.notify((res.stdout or 'PHPCS found issues in project'), vim.log.levels.WARN)
+        end
+      end)
+    end)
+end, { desc = 'PHPCS: check project' })

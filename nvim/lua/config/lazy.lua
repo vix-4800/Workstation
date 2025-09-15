@@ -509,6 +509,11 @@ require('lazy').setup({
         'prettier', -- JavaScript/TypeScript/HTML/CSS formatter
         -- 'eslint_d', -- JavaScript/TypeScript linter
 
+        -- PHP
+        'phpstan', -- PHP static analysis tool
+        'phpcs', -- PHP Code Sniffer
+        'php-cs-fixer', -- PHP CS Fixer
+
         -- Python
         'black', -- Python formatter
         'isort', -- Python import sorter
@@ -558,7 +563,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, php = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -570,6 +575,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        php = { 'php_cs_fixer' },
         python = { 'isort', 'black' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
@@ -584,6 +590,17 @@ require('lazy').setup({
         yaml = { 'yamlfmt' },
         markdown = { 'prettierd', 'prettier', stop_after_first = true },
         sh = { 'shfmt' },
+      },
+      formatters = {
+        php_cs_fixer = {
+          command = 'php-cs-fixer',
+          args = {
+            'fix',
+            '--config=' .. vim.fn.expand('~/.config/php-cs-fixer/php-cs-fixer.php'),
+            '$FILENAME',
+          },
+          stdin = false,
+        },
       },
     },
   },
