@@ -10,7 +10,6 @@
   "modules-left": ["custom/archicon", "clock", "custom/weather"],
   "modules-center": ["sway/mode", "sway/workspaces"],
   "modules-right": [
-    "custom/media",
     "tray",
     "idle_inhibitor",
     "bluetooth",
@@ -175,19 +174,6 @@
     "format": "{}",
     "tooltip": true,
     "tooltip-format": "Weather in Saratov"
-  },
-
-  "custom/media": {
-    "format": "{icon} {}",
-    "return-type": "json",
-    "max-length": 40,
-    "format-icons": {
-      "spotify": "",
-      "default": "🎵"
-    },
-    "escape": true,
-    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
-    "on-click": "playerctl play-pause"
   },
 
   "custom/notification": {
