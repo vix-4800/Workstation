@@ -13,11 +13,15 @@ local function project_root()
   return vim.fn.getcwd()
 end
 
-vim.keymap.set('n', '<leader>pr', function()
+-- ╭─────────────────────────────────────────────────────────────────────╮
+-- │                           PHP Code Actions                          │
+-- ╰─────────────────────────────────────────────────────────────────────╯
+-- Rector: refactor current file
+vim.keymap.set('n', '<leader>cpr', function()
   vim.cmd 'write'
   local file = vim.fn.expand '%:p'
   local cfg = vim.fn.expand('~/.config/rector/rector.php')
-  vim.notify('rector: ' .. file)
+  vim.notify('🔧 Rector: refactoring ' .. vim.fn.expand '%:t')
   vim.system(
     { 'rector', 'process', file, '--ansi', '--no-progress-bar', '--config=' .. cfg },
     { text = true, cwd = project_root() },
@@ -25,84 +29,84 @@ vim.keymap.set('n', '<leader>pr', function()
       vim.schedule(function()
         if res.code == 0 then
           vim.cmd 'checktime'
-          vim.notify 'rector: done'
+          vim.notify '✅ Rector: refactoring completed'
         else
-          vim.notify((res.stderr or 'rector error'), vim.log.levels.ERROR)
+          vim.notify('❌ Rector: ' .. (res.stderr or 'error'), vim.log.levels.ERROR)
         end
       end)
     end)
-end, { desc = 'Rector: current file' })
+end, { desc = '[R]efactor PHP file (Rector)' })
 
--- PHPStan analysis
-vim.keymap.set('n', '<leader>ps', function()
+-- PHPStan: analyze current file
+vim.keymap.set('n', '<leader>cps', function()
   local file = vim.fn.expand '%:p'
   local cfg = vim.fn.expand('~/.config/phpstan/phpstan.neon')
-  vim.notify('PHPStan: analyzing ' .. file)
+  vim.notify('🔍 PHPStan: analyzing ' .. vim.fn.expand '%:t')
   vim.system(
     { 'phpstan', 'analyse', file, '--ansi', '--configuration=' .. cfg },
     { text = true, cwd = project_root() },
     function(res)
       vim.schedule(function()
         if res.code == 0 then
-          vim.notify 'PHPStan: no errors found'
+          vim.notify '✅ PHPStan: no errors found'
         else
-          vim.notify((res.stdout or 'PHPStan found issues'), vim.log.levels.WARN)
+          vim.notify('⚠️ PHPStan: found issues', vim.log.levels.WARN)
         end
       end)
     end)
-end, { desc = 'PHPStan: analyze current file' })
+end, { desc = '[S]tatic analysis PHP file (PHPStan)' })
 
--- PHPCS check
-vim.keymap.set('n', '<leader>pc', function()
+-- PHPCS: check current file
+vim.keymap.set('n', '<leader>cpc', function()
   local file = vim.fn.expand '%:p'
   local cfg = vim.fn.expand('~/.config/phpcs/phpcs.xml')
-  vim.notify('PHPCS: checking ' .. file)
+  vim.notify('📋 PHPCS: checking ' .. vim.fn.expand '%:t')
   vim.system(
     { 'phpcs', '--standard=' .. cfg, file },
     { text = true, cwd = project_root() },
     function(res)
       vim.schedule(function()
         if res.code == 0 then
-          vim.notify 'PHPCS: no issues found'
+          vim.notify '✅ PHPCS: no issues found'
         else
-          vim.notify((res.stdout or 'PHPCS found issues'), vim.log.levels.WARN)
+          vim.notify('⚠️ PHPCS: found coding standard issues', vim.log.levels.WARN)
         end
       end)
     end)
-end, { desc = 'PHPCS: check current file' })
+end, { desc = '[C]heck PHP coding standards (PHPCS)' })
 
--- PHPStan analyze project
-vim.keymap.set('n', '<leader>pS', function()
+-- PHPStan: analyze entire project
+vim.keymap.set('n', '<leader>cpS', function()
   local cfg = vim.fn.expand('~/.config/phpstan/phpstan.neon')
-  vim.notify('PHPStan: analyzing project...')
+  vim.notify('🔍 PHPStan: analyzing entire project...')
   vim.system(
     { 'phpstan', 'analyse', '--ansi', '--configuration=' .. cfg },
     { text = true, cwd = project_root() },
     function(res)
       vim.schedule(function()
         if res.code == 0 then
-          vim.notify 'PHPStan: no errors found in project'
+          vim.notify '✅ PHPStan: no errors found in project'
         else
-          vim.notify((res.stdout or 'PHPStan found issues in project'), vim.log.levels.WARN)
+          vim.notify('⚠️ PHPStan: found issues in project', vim.log.levels.WARN)
         end
       end)
     end)
-end, { desc = 'PHPStan: analyze project' })
+end, { desc = '[S]tatic analysis entire project (PHPStan)' })
 
--- PHPCS check project
-vim.keymap.set('n', '<leader>pC', function()
+-- PHPCS: check entire project
+vim.keymap.set('n', '<leader>cpC', function()
   local cfg = vim.fn.expand('~/.config/phpcs/phpcs.xml')
-  vim.notify('PHPCS: checking project...')
+  vim.notify('📋 PHPCS: checking entire project...')
   vim.system(
     { 'phpcs', '--standard=' .. cfg, '.' },
     { text = true, cwd = project_root() },
     function(res)
       vim.schedule(function()
         if res.code == 0 then
-          vim.notify 'PHPCS: no issues found in project'
+          vim.notify '✅ PHPCS: no issues found in project'
         else
-          vim.notify((res.stdout or 'PHPCS found issues in project'), vim.log.levels.WARN)
+          vim.notify('⚠️ PHPCS: found coding standard issues in project', vim.log.levels.WARN)
         end
       end)
     end)
-end, { desc = 'PHPCS: check project' })
+end, { desc = '[C]heck project coding standards (PHPCS)' })

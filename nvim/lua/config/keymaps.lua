@@ -38,3 +38,24 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 vim.keymap.set('n', '<leader>e', '<cmd>Oil<CR>', { desc = 'Open [E]xplorer' })
+
+-- Code Actions Menus
+vim.keymap.set('n', '<leader>cp', function()
+  local lines = {
+    '╭─────────────────────────────────────────────────────────────────────╮',
+    '│                       📝 PHP Code Actions Menu                      │',
+    '╞═════════════════════════════════════════════════════════════════════╡',
+    '│                                                                     │',
+    '│  🐘 PHP Actions:                                                     │',
+    '│     [R]efactor file (Rector)                                        │',
+    '│     [s]tatic analysis file (PHPStan)                                │',
+    '│     [c]heck coding standards (PHPCS)                                │',
+    '│                                                                     │',
+    '│  🌐 Project-wide PHP Actions:                                       │',
+    '│     [S]tatic analysis entire project (PHPStan)                      │',
+    '│     [C]heck coding standards entire project (PHPCS)                 │',
+    '│                                                                     │',
+    '╰─────────────────────────────────────────────────────────────────────╯',
+  }
+  vim.api.nvim_echo({ { table.concat(lines, '\n'), 'Normal' } }, false, {})
+end, { desc = 'Show PHP Code Actions Menu' })
