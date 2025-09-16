@@ -39,6 +39,12 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 
 vim.keymap.set('n', '<leader>e', '<cmd>Oil<CR>', { desc = 'Open [E]xplorer' })
 
+-- Find and Replace keymaps
+vim.keymap.set('n', '<leader>rw', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = '[R]eplace [W]ord under cursor' })
+vim.keymap.set('v', '<leader>r', '"hy:%s/<C-r>h//g<left><left>', { desc = '[R]eplace selection' })
+vim.keymap.set('n', '<leader>rl', ':s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = '[R]eplace word in current [L]ine' })
+vim.keymap.set('n', '<leader>rc', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gcI<Left><Left><Left><Left>', { desc = '[R]eplace word with [C]onfirmation' })
+
 -- Code Actions Menus
 vim.keymap.set('n', '<leader>cp', function()
   local lines = {
