@@ -512,7 +512,7 @@ require('lazy').setup({
 
         -- PHP
         'phpstan', -- PHP static analysis tool
-        'phpcs', -- PHP Code Sniffer
+        -- 'phpcs', -- PHP Code Sniffer
         'php-cs-fixer', -- PHP CS Fixer
 
         -- Python
