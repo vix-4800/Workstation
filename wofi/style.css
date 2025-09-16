@@ -1,19 +1,19 @@
 window {
   margin: 0px;
-  border: 2px solid rgba(97, 175, 239, 0.3);
+  border: 1px solid rgba(97, 175, 239, 0.3);
   background-color: rgba(15, 17, 26, 0.95);
-  border-radius: 16px;
+  border-radius: 10px;
   font-family: 'JetBrainsMono Nerd Font', monospace;
-  font-size: 14px;
+  font-size: 12px;
   color: #d7dce2;
   backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
 }
 
 #entry {
-  padding: 8px 12px;
-  margin: 3px 6px;
-  border-radius: 10px;
+  padding: 6px 10px;
+  margin: 2px 4px;
+  border-radius: 6px;
   transition: all 0.2s ease;
   border: 1px solid transparent;
 }
@@ -33,18 +33,18 @@ window {
 }
 
 #entry image {
-  margin-right: 8px;
-  border-radius: 6px;
+  margin-right: 6px;
+  border-radius: 4px;
 }
 
 #input {
-  margin: 12px;
-  border: 2px solid rgba(97, 175, 239, 0.3);
+  margin: 8px;
+  border: 1px solid rgba(97, 175, 239, 0.3);
   background-color: rgba(30, 34, 42, 0.8);
-  padding: 10px 15px;
-  border-radius: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
   color: #d7dce2;
-  font-size: 15px;
+  font-size: 12px;
   transition: all 0.3s ease;
 }
 

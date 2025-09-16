@@ -5,7 +5,7 @@ allow-images=true
 allow-markup=true
 dynamic_lines=true
 columns=1
-lines=8
+lines=10
 prompt=Search Applications...
 term=alacritty
 hide-scroll=true
@@ -21,8 +21,8 @@ scroll_rate=100
 
 # Appearance
 location=center
-width=55%
-height=45%
+width=40%
+height=35%
 layer=overlay
 gtk_dark=true
 
@@ -30,7 +30,7 @@ gtk_dark=true
 cache-file=/home/vix/.cache/wofi-drun
 parse-search=true
 sort-order=alphabetical
-image_size=24
+image_size=20
 icon_theme=Adwaita
 
 # Key bindings

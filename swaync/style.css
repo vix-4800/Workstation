@@ -12,14 +12,14 @@
   --text-color-disabled: rgba(215, 220, 226, 0.6);
   --bg-selected: #61afef;
   --accent-color: #61afef;
-  --notification-icon-size: 64px;
+  --notification-icon-size: 48px;
   --notification-app-icon-size: calc(var(--notification-icon-size) / 3);
-  --notification-group-icon-size: 32px;
-  --border: 2px solid var(--noti-border-color);
-  --border-radius: 12px;
-  --notification-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 4px 15px rgba(97, 175, 239, 0.1);
-  --font-size-body: 14px;
-  --font-size-summary: 15px;
+  --notification-group-icon-size: 24px;
+  --border: 1px solid var(--noti-border-color);
+  --border-radius: 8px;
+  --notification-shadow: 0 6px 24px rgba(0, 0, 0, 0.3), 0 3px 10px rgba(97, 175, 239, 0.1);
+  --font-size-body: 12px;
+  --font-size-summary: 13px;
   --font-family: 'JetBrainsMono Nerd Font', monospace;
   /* Deprecated variables (because of their typos). Keeping them around for backwards compatibility. */
   --hover-tranistion: all 0.2s ease;
