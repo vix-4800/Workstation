@@ -83,7 +83,7 @@ return (new Config())
         'no_extra_blank_lines' => true, // Removes extra blank lines
         'no_trailing_whitespace' => true, // Removes trailing whitespace
         'no_whitespace_in_blank_line' => true, // No spaces on empty lines
-        'single_quote' => true, // Converts double quotes to single quotes
+        /* 'single_quote' => true, // Converts double quotes to single quotes */
         'line_ending' => true, // Unifies line endings
         'single_blank_line_at_eof' => true, // Only one blank line at the end of file
         'cast_spaces' => ['space' => 'single'], // Consistent spacing in casts
@@ -103,7 +103,7 @@ return (new Config())
         'statement_indentation' => [
             'stick_comment_to_next_continuous_control_statement' => true,
         ], // Ensures consistent indentation for statements
-        'no_alternative_syntax' => ['fix_non_monolithic_code' => true],
+        /* 'no_alternative_syntax' => ['fix_non_monolithic_code' => true], */
         'is_null' => true, // Replaces is_null($var) expression with null === $var
         'types_spaces' => ['space' => 'none'], // Consistent spacing in types
         'short_scalar_cast' => true,
@@ -123,7 +123,7 @@ return (new Config())
         'blank_line_after_namespace' => true, // Requires a blank line after the namespace declaration
         'blank_lines_before_namespace' => true, // Requires blank lines before the namespace declaration
         'blank_line_after_opening_tag' => true, // Requires a blank line after the opening <?php tag
-        'semicolon_after_instruction' => true, // Requires a semicolon after each instruction
+        /* 'semicolon_after_instruction' => true, // Requires a semicolon after each instruction */
         'no_closing_tag' => true, // Removes closing PHP tags
         'include' => true, // File path should not be placed within parentheses
         'echo_tag_syntax' => ['format' => 'short'],
