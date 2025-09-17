@@ -17,7 +17,9 @@ return {
         '--error-format=json',
         '--no-progress',
         '--configuration=' .. vim.fn.expand '~/.config/phpstan/phpstan.neon',
-        '%filepath',
+        function()
+          return vim.api.nvim_buf_get_name(0)
+        end,
       }
 
       -- Configure phpcs to use custom config
@@ -25,7 +27,9 @@ return {
       lint.linters.phpcs.args = {
         '--standard=' .. vim.fn.expand '~/.config/phpcs/phpcs.xml',
         '--report=json',
-        '%filepath',
+        function()
+          return vim.api.nvim_buf_get_name(0)
+        end,
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
