@@ -225,6 +225,16 @@ window#waybar.hidden {
   color: #e06c75;
 }
 
+/* ========== Docker ========== */
+#custom-docker.running {
+  padding: 0 8px;
+  color: #61afef;
+}
+
+#custom-docker.stopped {
+  color: #8499aa;
+}
+
 /* ========== Notification ========== */
 #custom-notification {
   font-size: 14px;

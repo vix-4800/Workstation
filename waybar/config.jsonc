@@ -15,6 +15,7 @@
     "bluetooth",
     "network",
     "custom/vpn",
+    "custom/docker",
     "pulseaudio",
     "custom/microphone",
     "group/system",
@@ -242,5 +243,14 @@
     "return-type": "json",
     "interval": 5,
     "on-click": "~/.config/waybar/vpn-toggle"
+  },
+
+  "custom/docker": {
+    "format": " {}",
+    "tooltip": true,
+    "exec": "~/.config/waybar/docker-status",
+    "return-type": "json",
+    "interval": 10,
+    "on-click": "alacritty -e sh -c 'docker ps -a; echo \"\nPress Enter to close...\"; read'"
   }
 }
