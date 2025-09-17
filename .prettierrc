@@ -5,10 +5,24 @@
   "singleQuote": true,
   "printWidth": 100,
   "arrowParens": "always",
-  "trailingComma": "all",
+  "trailingComma": "es5",
   "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "css",
   "proseWrap": "preserve",
   "quoteProps": "as-needed",
-  "endOfLine": "auto"
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": ["*.json", "*.jsonc"],
+      "options": {
+        "trailingComma": "none"
+      }
+    },
+    {
+      "files": "*.md",
+      "options": {
+        "proseWrap": "always"
+      }
+    }
+  ]
 }
