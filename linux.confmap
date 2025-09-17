@@ -4,9 +4,14 @@ rector							$HOME/.config/rector
 phpcs							$HOME/.config/phpcs
 flake8							$HOME/.config/flake8
 mypy							$HOME/.config/mypy
+.profile						$HOME/.profile
+.aliases						$HOME/.aliases
 zsh/zshrc						$HOME/.zshrc
+zsh/.zsh_aliases				$HOME/.zsh_aliases
 fish							$HOME/.config/fish
 bash/bashrc						$HOME/.bashrc
+bash/.bash_profile				$HOME/.bash_profile
+bash/.bash_aliases				$HOME/.bash_aliases
 polybar							$HOME/.config/polybar
 nvim							$HOME/.config/nvim
 i3								$HOME/.config/i3

@@ -34,6 +34,7 @@ cd ~/Code/Dotfiles
 - **Fish** - Shell configuration and functions
 - **Git** - Git configuration and aliases
 - **Development tools** - PHP, Python, JavaScript toolchain configs
+- **Shell Configuration** - Centralized configuration for bash, zsh, and fish (see [SHELL_CONFIG.md](SHELL_CONFIG.md))
 
 ## Scripts
 
