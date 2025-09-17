@@ -601,6 +601,16 @@ require('lazy').setup({
           },
           stdin = false,
         },
+        prettier = {
+          command = 'prettier',
+          args = {
+            '--config',
+            vim.fn.expand '~/.prettierrc',
+            '--stdin-filepath',
+            '$FILENAME',
+          },
+          stdin = true,
+        },
       },
     },
   },
