@@ -1,7 +1,7 @@
 /* ========== Base ========== */
 * {
   border: none;
-  font-family: 'JetBrainsMono Nerd Font', monospace;
+  font-family: Iosevka, FontAwesome, Noto Sans CJK;
   font-size: 16px;
   min-height: 10px;
 }
@@ -165,7 +165,6 @@ window#waybar {
   color: #d7dce2;
   margin: 0 10px;
   padding: 0 5px;
-  border-radius: 4px;
   background: transparent;
 }
 
@@ -228,7 +227,7 @@ window#waybar.hidden {
 
 /* ========== Docker ========== */
 #custom-docker {
-  min-width: 55px;
+  min-width: 40px;
   padding: 0 8px;
 }
 
@@ -243,6 +242,21 @@ window#waybar.hidden {
 /* ========== Notification ========== */
 #custom-notification {
   font-size: 14px;
-  padding: 2px 8px;
+  padding: 0 5px;
   background-color: transparent;
+  min-width: 20px;
+}
+
+#custom-notification.none,
+#custom-notification.dnd-none,
+#custom-notification.inhibited-none,
+#custom-notification.dnd-inhibited-none {
+  color: #b6b6b6;
+}
+
+#custom-notification.notification,
+#custom-notification.dnd-notification,
+#custom-notification.inhibited-notification,
+#custom-notification.dnd-inhibited-notification {
+  color: #e5c07b;
 }
