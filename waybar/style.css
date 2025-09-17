@@ -215,6 +215,7 @@ window#waybar.hidden {
 /* ========== VPN ========== */
 #custom-vpn {
   padding: 0 8px;
+  min-width: 15px;
 }
 
 #custom-vpn.connected {
@@ -226,8 +227,12 @@ window#waybar.hidden {
 }
 
 /* ========== Docker ========== */
-#custom-docker.running {
+#custom-docker {
+  min-width: 55px;
   padding: 0 8px;
+}
+
+#custom-docker.running {
   color: #61afef;
 }
 
