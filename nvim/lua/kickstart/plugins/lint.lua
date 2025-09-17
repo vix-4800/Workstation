@@ -23,15 +23,20 @@ return {
       }
 
       -- Configure phpcs to use custom config
-      lint.linters.phpcs = lint.linters.phpcs or {}
+      lint.linters.phpcs.cmd = vim.fn.expand '~/.config/composer/vendor/bin/phpcs'
       lint.linters.phpcs.args = {
         '--standard=' .. vim.fn.expand '~/.config/phpcs/phpcs.xml',
         '--report=json',
+        '-q',
         function()
           return vim.api.nvim_buf_get_name(0)
         end,
       }
+      lint.linters.phpcs.stdin = false
 
+      lint.linters.phpcs.env = {
+        PHP_CS_FIXER_IGNORE_ENV = '1',
+      }
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
       -- lint.linters_by_ft = lint.linters_by_ft or {}
