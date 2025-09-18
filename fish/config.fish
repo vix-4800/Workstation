@@ -8,7 +8,10 @@ if test -f ~/.profile
     bash -c 'source ~/.profile; env' | while read line
         set item (string split -m 1 '=' $line)
         if test (count $item) -eq 2
-            set -gx $item[1] $item[2]
+            set var_name $item[1]
+            if not contains $var_name PWD SHLVL _ USER HOME SHELL
+                set -gx $var_name $item[2]
+            end
         end
     end
 end
