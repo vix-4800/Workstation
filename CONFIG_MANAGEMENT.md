@@ -20,7 +20,7 @@ development:
   phpstan: ~/.config/phpstan
   nvim: ~/.config/nvim
 
-# Shell configurations  
+# Shell configurations
 shell:
   .profile: ~/.profile
   .aliases: ~/.aliases
@@ -49,7 +49,7 @@ applications:
 ./bin/config edit
 
 # Generate linux.confmap from YAML
-./bin/config generate  
+./bin/config generate
 
 # Validate YAML syntax
 ./bin/config validate
@@ -71,12 +71,12 @@ The `dotfiles` script automatically detects when `dotfiles.yaml` is newer than `
 
 ## Benefits of YAML Format
 
-✅ **Better organization** - Group related configurations  
-✅ **No tab alignment issues** - YAML uses spaces and indentation  
-✅ **Comments support** - Document your configuration choices  
-✅ **Validation** - Catch syntax errors before deployment  
-✅ **Version control friendly** - Clean diffs and merges  
-✅ **Auto-generation** - Legacy format generated automatically  
+✅ **Better organization** - Group related configurations
+✅ **No tab alignment issues** - YAML uses spaces and indentation
+✅ **Comments support** - Document your configuration choices
+✅ **Validation** - Catch syntax errors before deployment
+✅ **Version control friendly** - Clean diffs and merges
+✅ **Auto-generation** - Legacy format generated automatically
 
 ## Migration from Legacy Format
 

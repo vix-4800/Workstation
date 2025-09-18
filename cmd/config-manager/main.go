@@ -32,7 +32,7 @@ func ParseYAMLConfig(configPath string) (map[string]string, error) {
 
 	// Flatten the config into a single map
 	result := make(map[string]string)
-	
+
 	for k, v := range config.Development {
 		result[k] = v
 	}
@@ -59,13 +59,13 @@ func ParseLegacyConfig(configPath string) (map[string]string, error) {
 
 	result := make(map[string]string)
 	scanner := bufio.NewScanner(file)
-	
+
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if line == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
-		
+
 		parts := strings.Split(line, "\t")
 		if len(parts) >= 2 {
 			source := strings.TrimSpace(parts[0])
@@ -100,18 +100,18 @@ func GenerateConfmap(yamlPath, outputPath string) error {
 		source, target string
 	}
 	var mappings []mapping
-	
+
 	for source, target := range config {
 		// Expand $HOME in target path
 		expandedTarget := strings.ReplaceAll(target, "~", "$HOME")
 		mappings = append(mappings, mapping{source, expandedTarget})
 	}
-	
+
 	// Sort by source path for consistent output
 	sort.Slice(mappings, func(i, j int) bool {
 		return mappings[i].source < mappings[j].source
 	})
-	
+
 	// Write mappings
 	for _, m := range mappings {
 		fmt.Fprintf(file, "%s\t%s\n", m.source, m.target)
@@ -127,19 +127,19 @@ func main() {
 	}
 
 	command := os.Args[1]
-	
+
 	switch command {
 	case "generate":
 		repoRoot := "../.."
 		yamlPath := filepath.Join(repoRoot, "dotfiles.yaml")
 		outputPath := filepath.Join(repoRoot, "linux.confmap")
-		
+
 		if err := GenerateConfmap(yamlPath, outputPath); err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
 		fmt.Println("Generated linux.confmap from dotfiles.yaml")
-		
+
 	case "parse":
 		yamlPath := "../../dotfiles.yaml"
 		config, err := ParseYAMLConfig(yamlPath)
@@ -147,12 +147,12 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error parsing YAML: %v\n", err)
 			os.Exit(1)
 		}
-		
+
 		fmt.Println("Parsed configuration:")
 		for source, target := range config {
 			fmt.Printf("  %s -> %s\n", source, target)
 		}
-		
+
 	case "help":
 		fmt.Println("Dotfiles Configuration Manager")
 		fmt.Println()
@@ -160,7 +160,7 @@ func main() {
 		fmt.Println("  generate  Generate linux.confmap from dotfiles.yaml")
 		fmt.Println("  parse     Parse and display dotfiles.yaml content")
 		fmt.Println("  help      Show this help message")
-		
+
 	default:
 		fmt.Printf("Unknown command: %s\n", command)
 		fmt.Println("Run 'go run . help' for available commands")

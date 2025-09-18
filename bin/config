@@ -12,7 +12,7 @@ Dotfiles Configuration Helper
 
 Usage:
     $(basename "$0") edit-config      Edit dotfiles.yaml configuration
-    $(basename "$0") generate         Generate linux.confmap from dotfiles.yaml  
+    $(basename "$0") generate         Generate linux.confmap from dotfiles.yaml
     $(basename "$0") validate         Validate dotfiles.yaml syntax
     $(basename "$0") help            Show this help
 

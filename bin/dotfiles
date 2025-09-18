@@ -41,7 +41,7 @@ ${BOLD}Usage:${OFF}
 ${BOLD}Configuration:${OFF}
     Edit dotfiles.yaml for better readability (auto-generates linux.confmap)
     Or use './bin/config edit' to edit configuration
-    
+
 ${BOLD}Map format (legacy):${OFF}
     Line format: <source_relpath>\t<target_absolute_path>
     Empty lines and #comments are ignored.
@@ -56,7 +56,7 @@ err() { echo -e "${RED}${LOG_PREFIX}${OFF} $*" >&2; }
 auto_generate_confmap() {
     local yaml_config="${REPO_ROOT}/dotfiles.yaml"
     local confmap="${REPO_ROOT}/linux.confmap"
-    
+
     # Check if YAML config exists and is newer than confmap
     if [ -f "$yaml_config" ]; then
         if [ ! -f "$confmap" ] || [ "$yaml_config" -nt "$confmap" ]; then
@@ -98,7 +98,7 @@ maybe_pick_map() {
 require_map() {
     # Try to auto-generate if needed
     auto_generate_confmap
-    
+
     [ -f "${CONF_MAP}" ] || { err "Map not found: ${CONF_MAP}"; exit 1; }
 }
 
