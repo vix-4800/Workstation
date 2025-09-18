@@ -49,7 +49,7 @@ return RectorConfig::configure()
     ->withSkip([
         'vendor',
     ])
-    ->withPhpSets(php84: true)
+    ->withPhpSets(php83: true)
     ->withTypeCoverageLevel(0) // Type coverage level: 0 — no requirement for full type coverage
     ->withDeadCodeLevel(0) // Dead code detection level: 0 — do not analyze dead code
     ->withCodeQualityLevel(0) // Code quality improvement level: 0 — do not apply globally
@@ -75,7 +75,7 @@ return RectorConfig::configure()
         AddReturnTypeDeclarationRector::class,
         UseIdenticalOverEqualWithSameTypeRector::class,
         CompleteDynamicPropertiesRector::class,
-        IssetOnPropertyObjectToPropertyExistsRector::class,
+        // IssetOnPropertyObjectToPropertyExistsRector::class,
         AddVoidReturnTypeWhereNoReturnRector::class, // Adds void return type where no return is present
         AddParamTypeDeclarationRector::class, // Adds parameter type declaration where missing
         AddPropertyTypeDeclarationRector::class, // Adds property type declaration where missing
