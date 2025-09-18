@@ -31,13 +31,13 @@ log_prompt() {
 # Check if package is installed
 is_package_installed() {
     local package="$1"
-    pacman -Q "$package" &> /dev/null
+    pacman -Q "$package" &>/dev/null
 }
 
 # Check if AUR package is installed
 is_aur_package_installed() {
     local package="$1"
-    yay -Q "$package" &> /dev/null 2>&1
+    yay -Q "$package" &>/dev/null 2>&1
 }
 
 # Install packages with pacman
@@ -71,7 +71,7 @@ install_aur_packages() {
     local packages=("$@")
     local packages_to_install=()
 
-    if ! command -v yay &> /dev/null; then
+    if ! command -v yay &>/dev/null; then
         log_warn "yay not found, skipping AUR packages: $description"
         return
     fi
@@ -154,18 +154,18 @@ install_display_manager() {
     local choice="$1"
 
     case $choice in
-        1|sddm)
-            install_packages "SDDM" sddm
-            ;;
-        2|greetd)
-            install_packages "greetd with ReGreet" greetd greetd-regreet
-            ;;
-        3|kde)
-            install_packages "KDE Plasma" plasma kde-applications sddm xorg
-            ;;
-        *)
-            log_info "Skipping display manager installation..."
-            ;;
+    1 | sddm)
+        install_packages "SDDM" sddm
+        ;;
+    2 | greetd)
+        install_packages "greetd with ReGreet" greetd greetd-regreet
+        ;;
+    3 | kde)
+        install_packages "KDE Plasma" plasma kde-applications sddm xorg
+        ;;
+    *)
+        log_info "Skipping display manager installation..."
+        ;;
     esac
 }
 
@@ -174,15 +174,15 @@ install_cpu_microcode() {
     local choice="$1"
 
     case $choice in
-        1|amd)
-            install_packages "AMD microcode" amd-ucode
-            ;;
-        2|intel)
-            install_packages "Intel microcode" intel-ucode
-            ;;
-        *)
-            log_info "Skipping CPU microcode installation..."
-            ;;
+    1 | amd)
+        install_packages "AMD microcode" amd-ucode
+        ;;
+    2 | intel)
+        install_packages "Intel microcode" intel-ucode
+        ;;
+    *)
+        log_info "Skipping CPU microcode installation..."
+        ;;
     esac
 }
 
@@ -191,17 +191,17 @@ install_gpu_drivers() {
     local choice="$1"
 
     case $choice in
-        1|nvidia)
-            log_info "Installing NVIDIA drivers..."
-            install_packages "NVIDIA drivers" nvidia nvidia-utils nvidia-settings
-            ;;
-        2|amd-intel)
-            log_info "Installing AMD/Intel drivers..."
-            install_packages "AMD/Intel drivers" xf86-video-amdgpu xf86-video-intel vulkan-radeon vulkan-intel
-            ;;
-        *)
-            log_info "Skipping GPU drivers installation..."
-            ;;
+    1 | nvidia)
+        log_info "Installing NVIDIA drivers..."
+        install_packages "NVIDIA drivers" nvidia nvidia-utils nvidia-settings
+        ;;
+    2 | amd-intel)
+        log_info "Installing AMD/Intel drivers..."
+        install_packages "AMD/Intel drivers" xf86-video-amdgpu xf86-video-intel vulkan-radeon vulkan-intel
+        ;;
+    *)
+        log_info "Skipping GPU drivers installation..."
+        ;;
     esac
 }
 
@@ -241,7 +241,7 @@ install_development_tools() {
         go
 
     # Python development tools
-    if command -v pipx &> /dev/null; then
+    if command -v pipx &>/dev/null; then
         log_info "Installing Python development tools..."
         pipx install pre-commit
         pipx install black
@@ -250,7 +250,7 @@ install_development_tools() {
     fi
 
     # Install PHP development packages via composer globally
-    if command -v composer &> /dev/null; then
+    if command -v composer &>/dev/null; then
         log_info "Installing PHP development packages globally via composer"
 
         composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
@@ -264,7 +264,7 @@ install_development_tools() {
     fi
 
     # Node.js development tools via nvm
-    if command -v nvm &> /dev/null; then
+    if command -v nvm &>/dev/null; then
         log_info "Installing Node.js development tools..."
         nvm install "$NODE_VERSION"
         nvm use "$NODE_VERSION"
@@ -280,8 +280,6 @@ install_wireguard_tools() { install_packages "wireguard-tools" wireguard-tools; 
 install_github_cli() { install_packages "github-cli" github-cli; }
 install_mesa() { install_packages "mesa" mesa; }
 install_flatpak() { install_packages "flatpak" flatpak; }
-install_bluez() { install_packages "bluez" bluez; }
-install_bluez_utils() { install_packages "bluez-utils" bluez-utils; }
 install_ufw() { install_packages "ufw" ufw; }
 install_networkmanager() { install_packages "networkmanager" networkmanager; }
 install_openssh() { install_packages "openssh" openssh; }
@@ -320,34 +318,34 @@ install_optional_apps() {
     local app="$1"
 
     case $app in
-        discord)
-            install_packages "Discord" discord
-            ;;
-        telegram)
-            install_packages "Telegram" telegram-desktop
-            ;;
-        spotify)
-            if command -v yay &> /dev/null; then
-                install_aur_packages "Spotify" spotify
-            else
-                install_packages "Spotify Launcher" spotify-launcher
-            fi
-            ;;
-        vlc)
-            install_packages "VLC media player" vlc
-            ;;
-        obsidian)
-            install_packages "Obsidian" obsidian
-            ;;
-        *)
-            log_warn "Unknown optional application: $app"
-            ;;
+    discord)
+        install_packages "Discord" discord
+        ;;
+    telegram)
+        install_packages "Telegram" telegram-desktop
+        ;;
+    spotify)
+        if command -v yay &>/dev/null; then
+            install_aur_packages "Spotify" spotify
+        else
+            install_packages "Spotify Launcher" spotify-launcher
+        fi
+        ;;
+    vlc)
+        install_packages "VLC media player" vlc
+        ;;
+    obsidian)
+        install_packages "Obsidian" obsidian
+        ;;
+    *)
+        log_warn "Unknown optional application: $app"
+        ;;
     esac
 }
 
 # Install AUR packages
 install_aur_essentials() {
-    if ! command -v yay &> /dev/null; then
+    if ! command -v yay &>/dev/null; then
         log_warn "yay not found, skipping AUR packages"
         return
     fi
@@ -361,40 +359,40 @@ install_aur_app() {
     local app="$1"
 
     case $app in
-        vscode)
-            install_aur_packages "Visual Studio Code" visual-studio-code-bin
-            ;;
-        swayfx)
-            # Remove sway first if installing swayfx
-            if is_package_installed "sway" && ! is_aur_package_installed "swayfx"; then
-                log_info "Removing sway to install swayfx..."
-                sudo pacman -R --noconfirm sway
-            fi
-            install_aur_packages "SwayFX" swayfx
-            ;;
-        swaylock-effects)
-            # Remove swaylock first if installing swaylock-effects
-            if is_package_installed "swaylock" && ! is_aur_package_installed "swaylock-effects"; then
-                log_info "Removing swaylock to install swaylock-effects..."
-                sudo pacman -R --noconfirm swaylock
-            fi
-            install_aur_packages "Swaylock Effects" swaylock-effects
-            ;;
-        wlogout)
-            install_aur_packages "wlogout" wlogout
-            ;;
-        grub-customizer)
-            install_aur_packages "GRUB Customizer" grub-customizer
-            ;;
-        *)
-            log_warn "Unknown AUR application: $app"
-            ;;
+    vscode)
+        install_aur_packages "Visual Studio Code" visual-studio-code-bin
+        ;;
+    swayfx)
+        # Remove sway first if installing swayfx
+        if is_package_installed "sway" && ! is_aur_package_installed "swayfx"; then
+            log_info "Removing sway to install swayfx..."
+            sudo pacman -R --noconfirm sway
+        fi
+        install_aur_packages "SwayFX" swayfx
+        ;;
+    swaylock-effects)
+        # Remove swaylock first if installing swaylock-effects
+        if is_package_installed "swaylock" && ! is_aur_package_installed "swaylock-effects"; then
+            log_info "Removing swaylock to install swaylock-effects..."
+            sudo pacman -R --noconfirm swaylock
+        fi
+        install_aur_packages "Swaylock Effects" swaylock-effects
+        ;;
+    wlogout)
+        install_aur_packages "wlogout" wlogout
+        ;;
+    grub-customizer)
+        install_aur_packages "GRUB Customizer" grub-customizer
+        ;;
+    *)
+        log_warn "Unknown AUR application: $app"
+        ;;
     esac
 }
 
 # Install yay AUR helper
 install_yay() {
-    if command -v yay &> /dev/null; then
+    if command -v yay &>/dev/null; then
         log_info "yay is already installed"
         return
     fi
@@ -411,7 +409,7 @@ install_yay() {
     cd ~
     rm -rf /tmp/yay
 
-    if command -v yay &> /dev/null; then
+    if command -v yay &>/dev/null; then
         log_info "yay AUR helper installed successfully!"
     else
         log_error "Failed to install yay AUR helper"
@@ -425,163 +423,166 @@ main() {
     shift
 
     case $action in
-        essential)
-            install_essential_packages
-            install_modern_tools
-            ;;
-        modern-cli)
-            install_modern_tools
-            ;;
-        shell)
-            install_shell_terminal
-            ;;
-        editors)
-            install_editors
-            ;;
-        wayland)
-            install_wayland_desktop
-            ;;
-        display-manager)
-            install_display_manager "$1"
-            ;;
-        cpu-microcode)
-            install_cpu_microcode "$1"
-            ;;
-        gpu-drivers)
-            install_gpu_drivers "$1"
-            ;;
-        audio)
-            install_audio_system
-            ;;
-        fonts)
-            install_fonts
-            ;;
-        docker)
-            install_docker
-            ;;
-        development)
-            install_development_tools
-            ;;
-        ripgrep)
-            install_ripgrep
-            ;;
-        fd)
-            install_fd
-            ;;
-        bottom)
-            install_bottom
-            ;;
-        firefox)
-            install_firefox
-            ;;
-        wireguard-tools)
-            install_wireguard_tools
-            ;;
-        github-cli)
-            install_github_cli
-            ;;
-        mesa)
-            install_mesa
-            ;;
-        flatpak)
-            install_flatpak
-            ;;
-        bluez)
-            install_bluez
-            ;;
-        bluez-utils)
-            install_bluez_utils
-            ;;
-        ufw)
-            install_ufw
-            ;;
-        networkmanager)
-            install_networkmanager
-            ;;
-        openssh)
-            install_openssh
-            ;;
-        openssl)
-            install_openssl
-            ;;
-        multimedia)
-            install_multimedia_codecs
-            ;;
-        yay)
-            install_yay
-            ;;
-        aur-essentials)
-            install_aur_essentials
-            ;;
-        optional-app)
-            install_optional_apps "$1"
-            ;;
-        aur-app)
-            install_aur_app "$1"
-            ;;
-        all-basic)
-            install_essential_packages
-            install_shell_terminal
-            install_editors
-            install_wayland_desktop
-            install_audio_system
-            install_fonts
-            install_networkmanager
-            install_openssh
-            install_openssl
-            ;;
-        help|--help|-h)
-            echo "Usage: $0 <action> [options]"
-            echo ""
-            echo "Actions:"
-            echo "  essential           - Install essential packages"
-            echo "  shell              - Install shell and terminal"
-            echo "  editors            - Install editors"
-            echo "  wayland            - Install Wayland desktop environment"
-            echo "  display-manager <type> - Install display manager (1|sddm, 2|greetd, 3|kde)"
-            echo "  cpu-microcode <type>   - Install CPU microcode (1|amd, 2|intel)"
-            echo "  gpu-drivers <type>     - Install GPU drivers (1|nvidia, 2|amd-intel)"
-            echo "  audio              - Install audio system"
-            echo "  fonts              - Install fonts"
-            echo "  development        - Install development tools"
-            echo "  ripgrep            - Install ripgrep"
-            echo "  fd                 - Install fd"
-            echo "  bottom             - Install bottom"
-            echo "  firefox            - Install firefox"
-            echo "  wireguard-tools    - Install wireguard-tools"
-            echo "  github-cli         - Install github-cli"
-            echo "  mesa               - Install mesa"
-            echo "  flatpak            - Install flatpak"
-            echo "  bluez              - Install bluez"
-            echo "  bluez-utils        - Install bluez-utils"
-            echo "  ufw                - Install ufw"
-            echo "  networkmanager     - Install networkmanager"
-            echo "  openssh            - Install openssh"
-            echo "  openssl            - Install openssl"
-            echo "  multimedia         - Install multimedia codecs"
-            echo "  yay                - Install yay AUR helper"
-            echo "  aur-essentials     - Install essential AUR packages"
-            echo "  optional-app <app> - Install optional app (discord|telegram|spotify|vlc|obsidian)"
-            echo "  aur-app <app>      - Install AUR app (vscode|swayfx|swaylock-effects|wlogout|grub-customizer)"
-            echo "  all-basic          - Install all basic packages"
-            echo ""
-            echo "Examples:"
-            echo "  $0 all-basic"
-            echo "  $0 display-manager sddm"
-            echo "  $0 cpu-microcode amd"
-            echo "  $0 optional-app discord"
-            echo "  $0 aur-app vscode"
-            ;;
-        *)
-            log_error "Unknown action: $action"
-            echo "Use '$0 help' for usage information"
-            exit 1
-            ;;
+    essential)
+        install_essential_packages
+        install_modern_tools
+        ;;
+    modern-cli)
+        install_modern_tools
+        ;;
+    shell)
+        install_shell_terminal
+        ;;
+    editors)
+        install_editors
+        ;;
+    wayland)
+        install_wayland_desktop
+        ;;
+    display-manager)
+        install_display_manager "$1"
+        ;;
+    cpu-microcode)
+        install_cpu_microcode "$1"
+        ;;
+    gpu-drivers)
+        install_gpu_drivers "$1"
+        ;;
+    audio)
+        install_audio_system
+        ;;
+    fonts)
+        install_fonts
+        ;;
+    docker)
+        install_docker
+        ;;
+    development)
+        install_development_tools
+        ;;
+    ripgrep)
+        install_ripgrep
+        ;;
+    fd)
+        install_fd
+        ;;
+    bottom)
+        install_bottom
+        ;;
+    firefox)
+        install_firefox
+        ;;
+    wireguard-tools)
+        install_wireguard_tools
+        ;;
+    github-cli)
+        install_github_cli
+        ;;
+    mesa)
+        install_mesa
+        ;;
+    flatpak)
+        install_flatpak
+        ;;
+    bluez)
+        install_packages "bluez" bluez
+        ;;
+    bluez-utils)
+        install_packages "bluez-utils" bluez-utils
+        ;;
+    blueman)
+        install_packages "blueman" blueman
+        ;;
+    ufw)
+        install_ufw
+        ;;
+    networkmanager)
+        install_networkmanager
+        ;;
+    openssh)
+        install_openssh
+        ;;
+    openssl)
+        install_openssl
+        ;;
+    multimedia)
+        install_multimedia_codecs
+        ;;
+    yay)
+        install_yay
+        ;;
+    aur-essentials)
+        install_aur_essentials
+        ;;
+    optional-app)
+        install_optional_apps "$1"
+        ;;
+    aur-app)
+        install_aur_app "$1"
+        ;;
+    all-basic)
+        install_essential_packages
+        install_shell_terminal
+        install_editors
+        install_wayland_desktop
+        install_audio_system
+        install_fonts
+        install_networkmanager
+        install_openssh
+        install_openssl
+        ;;
+    help | --help | -h)
+        echo "Usage: $0 <action> [options]"
+        echo ""
+        echo "Actions:"
+        echo "  essential           - Install essential packages"
+        echo "  shell              - Install shell and terminal"
+        echo "  editors            - Install editors"
+        echo "  wayland            - Install Wayland desktop environment"
+        echo "  display-manager <type> - Install display manager (1|sddm, 2|greetd, 3|kde)"
+        echo "  cpu-microcode <type>   - Install CPU microcode (1|amd, 2|intel)"
+        echo "  gpu-drivers <type>     - Install GPU drivers (1|nvidia, 2|amd-intel)"
+        echo "  audio              - Install audio system"
+        echo "  fonts              - Install fonts"
+        echo "  development        - Install development tools"
+        echo "  ripgrep            - Install ripgrep"
+        echo "  fd                 - Install fd"
+        echo "  bottom             - Install bottom"
+        echo "  firefox            - Install firefox"
+        echo "  wireguard-tools    - Install wireguard-tools"
+        echo "  github-cli         - Install github-cli"
+        echo "  mesa               - Install mesa"
+        echo "  flatpak            - Install flatpak"
+        echo "  bluez              - Install bluez"
+        echo "  bluez-utils        - Install bluez-utils"
+        echo "  ufw                - Install ufw"
+        echo "  networkmanager     - Install networkmanager"
+        echo "  openssh            - Install openssh"
+        echo "  openssl            - Install openssl"
+        echo "  multimedia         - Install multimedia codecs"
+        echo "  yay                - Install yay AUR helper"
+        echo "  aur-essentials     - Install essential AUR packages"
+        echo "  optional-app <app> - Install optional app (discord|telegram|spotify|vlc|obsidian)"
+        echo "  aur-app <app>      - Install AUR app (vscode|swayfx|swaylock-effects|wlogout|grub-customizer)"
+        echo "  all-basic          - Install all basic packages"
+        echo ""
+        echo "Examples:"
+        echo "  $0 all-basic"
+        echo "  $0 display-manager sddm"
+        echo "  $0 cpu-microcode amd"
+        echo "  $0 optional-app discord"
+        echo "  $0 aur-app vscode"
+        ;;
+    *)
+        log_error "Unknown action: $action"
+        echo "Use '$0 help' for usage information"
+        exit 1
+        ;;
     esac
 }
 
 # Check if running on Arch Linux
-if ! command -v pacman &> /dev/null; then
+if ! command -v pacman &>/dev/null; then
     log_error "This script is designed for Arch Linux only!"
     exit 1
 fi

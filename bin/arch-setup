@@ -49,7 +49,7 @@ install_packages() {
         exit 1
     fi
     if [ "$QUIET" -eq 1 ]; then
-        "$INSTALL_PACKAGES_SCRIPT" "$@" > /dev/null 2>&1
+        "$INSTALL_PACKAGES_SCRIPT" "$@" >/dev/null 2>&1
     else
         "$INSTALL_PACKAGES_SCRIPT" "$@"
     fi
@@ -60,10 +60,10 @@ enable_service() {
     local service=$1
     local package=$2
 
-    if pacman -Q "$package" &> /dev/null; then
+    if pacman -Q "$package" &>/dev/null; then
         if [ "$QUIET" -eq 1 ]; then
-            log_info "Enabling $service..." > /dev/null
-            sudo systemctl enable "$service" > /dev/null 2>&1
+            log_info "Enabling $service..." >/dev/null
+            sudo systemctl enable "$service" >/dev/null 2>&1
         else
             log_info "Enabling $service..."
             sudo systemctl enable "$service"
@@ -80,10 +80,10 @@ enable_user_service() {
     local service=$1
     local package=$2
 
-    if pacman -Q "$package" &> /dev/null; then
+    if pacman -Q "$package" &>/dev/null; then
         if [ "$QUIET" -eq 1 ]; then
-            log_info "Enabling user service $service..." > /dev/null
-            systemctl --user enable "$service" > /dev/null 2>&1
+            log_info "Enabling user service $service..." >/dev/null
+            systemctl --user enable "$service" >/dev/null 2>&1
         else
             log_info "Enabling user service $service..."
             systemctl --user enable "$service"
@@ -96,7 +96,7 @@ enable_user_service() {
 }
 
 # Check if running on Arch Linux
-if ! command -v pacman &> /dev/null; then
+if ! command -v pacman &>/dev/null; then
     log_error "This script is designed for Arch Linux only!"
     exit 1
 fi
@@ -174,19 +174,18 @@ read -r -p "Choice (y/n): " locale_choice
 
 # Update system
 if [ "$QUIET" -eq 1 ]; then
-    log_info "Updating system packages..." > /dev/null
-    sudo pacman -Syu --noconfirm > /dev/null 2>&1
+    log_info "Updating system packages..." >/dev/null
+    sudo pacman -Syu --noconfirm >/dev/null 2>&1
 else
     log_info "Updating system packages..."
     sudo pacman -Syu --noconfirm
 fi
 
-
 # Update mirror list
 if [ "$QUIET" -eq 1 ]; then
-    log_info "Updating mirror list with reflector..." > /dev/null
-    sudo pacman -S --noconfirm --needed reflector > /dev/null 2>&1
-    sudo reflector --country 'Russia' --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist > /dev/null 2>&1
+    log_info "Updating mirror list with reflector..." >/dev/null
+    sudo pacman -S --noconfirm --needed reflector >/dev/null 2>&1
+    sudo reflector --country 'Russia' --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist >/dev/null 2>&1
 else
     log_info "Updating mirror list with reflector..."
     sudo pacman -S --noconfirm --needed reflector
@@ -195,15 +194,15 @@ fi
 
 # Install CPU microcode
 case $cpu_choice in
-    1)
-        install_packages cpu-microcode amd
-        ;;
-    2)
-        install_packages cpu-microcode intel
-        ;;
-    3)
-        log_info "Skipping CPU microcode installation..."
-        ;;
+1)
+    install_packages cpu-microcode amd
+    ;;
+2)
+    install_packages cpu-microcode intel
+    ;;
+3)
+    log_info "Skipping CPU microcode installation..."
+    ;;
 esac
 
 install_packages essential
@@ -215,31 +214,31 @@ install_packages fonts
 
 # Install display manager based on user choice
 case $dm_choice in
-    1)
-        install_packages display-manager sddm
-        ;;
-    2)
-        install_packages display-manager greetd
-        ;;
-    3)
-        install_packages display-manager kde
-        ;;
-    4)
-        log_info "Skipping display manager installation..."
-        ;;
+1)
+    install_packages display-manager sddm
+    ;;
+2)
+    install_packages display-manager greetd
+    ;;
+3)
+    install_packages display-manager kde
+    ;;
+4)
+    log_info "Skipping display manager installation..."
+    ;;
 esac
 
 # Install GPU drivers based on user choice
 case $gpu_choice in
-    1)
-        install_packages gpu-drivers nvidia
-        ;;
-    2)
-        install_packages gpu-drivers amd-intel
-        ;;
-    3)
-        log_info "Skipping GPU drivers installation..."
-        ;;
+1)
+    install_packages gpu-drivers nvidia
+    ;;
+2)
+    install_packages gpu-drivers amd-intel
+    ;;
+3)
+    log_info "Skipping GPU drivers installation..."
+    ;;
 esac
 
 # Install AUR helper (yay)
@@ -260,6 +259,7 @@ fi
 if [[ $bluez_choice =~ ^[Yy]$ ]]; then
     install_packages bluez
     install_packages bluez-utils
+    install_packages blueman
     enable_service "bluetooth.service" "bluez"
 fi
 
@@ -313,19 +313,19 @@ fi
 
 # Configure display manager based on choice
 case $dm_choice in
-    1|3)
-        enable_service "sddm.service" "sddm"
-        ;;
-    2)
-        enable_service "greetd.service" "greetd"
-        # Configure greetd for Sway with ReGreet
-        log_info "Configuring greetd for Sway with ReGreet..."
+1 | 3)
+    enable_service "sddm.service" "sddm"
+    ;;
+2)
+    enable_service "greetd.service" "greetd"
+    # Configure greetd for Sway with ReGreet
+    log_info "Configuring greetd for Sway with ReGreet..."
 
-        # Create greetd configuration directory
-        sudo mkdir -p /etc/greetd
+    # Create greetd configuration directory
+    sudo mkdir -p /etc/greetd
 
-        # Create Sway configuration for greetd
-        sudo tee /etc/greetd/sway-config > /dev/null <<EOF
+    # Create Sway configuration for greetd
+    sudo tee /etc/greetd/sway-config >/dev/null <<EOF
 # Sway configuration for greetd with ReGreet
 # Do not modify this file unless you know what you're doing
 
@@ -350,8 +350,8 @@ exec "regreet; swaymsg exit"
 include /etc/sway/config.d/*
 EOF
 
-        # Create greetd main configuration
-        sudo tee /etc/greetd/config.toml > /dev/null <<EOF
+    # Create greetd main configuration
+    sudo tee /etc/greetd/config.toml >/dev/null <<EOF
 [terminal]
 vt = 1
 
@@ -360,9 +360,9 @@ command = "sway --config /etc/greetd/sway-config"
 user = "greeter"
 EOF
 
-        # Create ReGreet configuration directory and sample config
-        sudo mkdir -p /etc/greetd
-        sudo tee /etc/greetd/regreet.toml > /dev/null <<EOF
+    # Create ReGreet configuration directory and sample config
+    sudo mkdir -p /etc/greetd
+    sudo tee /etc/greetd/regreet.toml >/dev/null <<EOF
 [background]
 # Path to background image (optional)
 # path = "/usr/share/backgrounds/default.jpg"
@@ -386,18 +386,18 @@ greeting_msg = "Welcome to Arch Linux!"
 format = "%a, %B %d  %H:%M"
 EOF
 
-        # Setup state and log directories
-        sudo systemd-tmpfiles --create - <<EOF
+    # Setup state and log directories
+    sudo systemd-tmpfiles --create - <<EOF
 d /var/lib/regreet 0755 greeter greeter - -
 d /var/log/regreet 0755 greeter greeter - -
 EOF
 
-        # Create greeter user if it doesn't exist
-        if ! id greeter &>/dev/null; then
-            sudo useradd -r -s /bin/false -d /var/lib/greeter -c "Greeter user" greeter
-        fi
+    # Create greeter user if it doesn't exist
+    if ! id greeter &>/dev/null; then
+        sudo useradd -r -s /bin/false -d /var/lib/greeter -c "Greeter user" greeter
+    fi
 
-        ;;
+    ;;
 esac
 
 # Configure sudo access for wheel group
@@ -475,7 +475,7 @@ fi
 log_info "Setting up environment variables..."
 
 # Create base environment variables
-cat > /tmp/environment_base <<EOF
+cat >/tmp/environment_base <<EOF
 # Base environment variables
 MOZ_ENABLE_WAYLAND=1
 # Disable portal issues that can cause startup delays
@@ -485,15 +485,15 @@ EOF
 
 # Add display-specific variables based on choice
 case $dm_choice in
-    1)  # SDDM
-        cat >> /tmp/environment_base <<EOF
+1) # SDDM
+    cat >>/tmp/environment_base <<EOF
 
 # SDDM environment
 XDG_SESSION_TYPE=x11
 EOF
-        ;;
-    2)  # greetd with Sway
-        cat >> /tmp/environment_base <<EOF
+    ;;
+2) # greetd with Sway
+    cat >>/tmp/environment_base <<EOF
 
 # Wayland/Sway environment variables
 XDG_SESSION_TYPE=wayland
@@ -502,18 +502,18 @@ XDG_SESSION_DESKTOP=sway
 QT_QPA_PLATFORM=wayland
 GDK_BACKEND=wayland
 EOF
-        ;;
-    3)  # KDE Plasma
-        cat >> /tmp/environment_base <<EOF
+    ;;
+3) # KDE Plasma
+    cat >>/tmp/environment_base <<EOF
 
 # KDE Plasma environment
 XDG_SESSION_TYPE=x11
 XDG_CURRENT_DESKTOP=KDE
 XDG_SESSION_DESKTOP=KDE
 EOF
-        ;;
-    4)  # None - assume Sway will be used
-        cat >> /tmp/environment_base <<EOF
+    ;;
+4) # None - assume Sway will be used
+    cat >>/tmp/environment_base <<EOF
 
 # Wayland/Sway environment variables (no display manager)
 XDG_SESSION_TYPE=wayland
@@ -522,7 +522,7 @@ XDG_SESSION_DESKTOP=sway
 QT_QPA_PLATFORM=wayland
 GDK_BACKEND=wayland
 EOF
-        ;;
+    ;;
 esac
 
 # Apply the environment configuration
@@ -536,7 +536,7 @@ enable_user_service "pipewire-pulse.service" "pipewire-pulse"
 enable_user_service "wireplumber.service" "wireplumber"
 
 # Setup Fish shell
-if command -v fish &> /dev/null; then
+if command -v fish &>/dev/null; then
     log_info "Configuring Fish shell..."
 
     # Change default shell to fish
@@ -571,7 +571,7 @@ if [[ $dev_tools_choice =~ ^[Yy]$ ]]; then
 fi
 
 # Install AUR packages if yay is available
-if command -v yay &> /dev/null; then
+if command -v yay &>/dev/null; then
     install_packages aur-essentials
 
     # Optional AUR packages
@@ -659,15 +659,15 @@ log_warn "You can authenticate with GitHub CLI later using: gh auth login"
 
 # Final system cleanup
 if [ "$QUIET" -eq 1 ]; then
-    log_info "Cleaning up package cache..." > /dev/null
-    sudo pacman -Sc --noconfirm > /dev/null 2>&1
-    if command -v yay &> /dev/null; then
-        yay -Sc --noconfirm > /dev/null 2>&1
+    log_info "Cleaning up package cache..." >/dev/null
+    sudo pacman -Sc --noconfirm >/dev/null 2>&1
+    if command -v yay &>/dev/null; then
+        yay -Sc --noconfirm >/dev/null 2>&1
     fi
 else
     log_info "Cleaning up package cache..."
     sudo pacman -Sc --noconfirm
-    if command -v yay &> /dev/null; then
+    if command -v yay &>/dev/null; then
         yay -Sc --noconfirm
     fi
 fi
@@ -679,32 +679,32 @@ log_warn "Important notes:"
 echo "  - Reboot your system to ensure all changes take effect"
 echo "  - Log out and log back in to use the new shell (Fish)"
 case $dm_choice in
-    1)
-        echo "  - SDDM is configured and will start on boot"
-        ;;
-    2)
-        echo "  - greetd with ReGreet is configured and will start on boot"
-        echo "     ReGreet will automatically run Sway - just login with your user"
-        ;;
-    3)
-        echo "  - KDE Plasma is installed with SDDM"
-        ;;
-    4)
-        echo "  - No display manager - Sway auto-start is configured for tty1"
-        echo "     Login on tty1 and Sway will start automatically"
+1)
+    echo "  - SDDM is configured and will start on boot"
+    ;;
+2)
+    echo "  - greetd with ReGreet is configured and will start on boot"
+    echo "     ReGreet will automatically run Sway - just login with your user"
+    ;;
+3)
+    echo "  - KDE Plasma is installed with SDDM"
+    ;;
+4)
+    echo "  - No display manager - Sway auto-start is configured for tty1"
+    echo "     Login on tty1 and Sway will start automatically"
 
-        # Setup auto-start for Sway when no display manager
-        if [ ! -f "$HOME/.profile" ] || ! grep -q "exec sway" "$HOME/.profile"; then
-            log_info "Setting up Sway auto-start for tty1..."
-            cat >> "$HOME/.profile" <<EOF
+    # Setup auto-start for Sway when no display manager
+    if [ ! -f "$HOME/.profile" ] || ! grep -q "exec sway" "$HOME/.profile"; then
+        log_info "Setting up Sway auto-start for tty1..."
+        cat >>"$HOME/.profile" <<EOF
 
 # Auto-start Sway on tty1
 if [[ -z \$DISPLAY && \$(tty) == /dev/tty1 ]]; then
   exec sway
 fi
 EOF
-        fi
-        ;;
+    fi
+    ;;
 esac
 if [[ $wireguard_choice =~ ^[Yy]$ ]]; then
     echo "  - Configure your WireGuard VPN in ~/.config/wireguard/ if needed"
