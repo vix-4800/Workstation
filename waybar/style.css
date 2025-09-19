@@ -110,6 +110,7 @@ window#waybar {
 
 #network {
   color: #d7dce2;
+  min-width: 25px;
 }
 
 #pulseaudio,
@@ -133,6 +134,7 @@ window#waybar {
 
 #battery {
   color: #d7dce2;
+  min-width: 60px;
 }
 
 #battery.charging {

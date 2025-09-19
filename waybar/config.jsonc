@@ -124,7 +124,7 @@
   },
 
   "network": {
-    "format-wifi": "{essid} ({signalStrength}%) ",
+    "format-wifi": "",
     "format-ethernet": "",
     "format-disconnected": "⚠",
     "tooltip-format": "{ifname} via {gwaddr}",
