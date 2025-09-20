@@ -497,7 +497,8 @@ main() {
         install_ufw
         ;;
     networkmanager)
-        install_networkmanager
+        install_packages "network-manager" networkmanager
+        install_aur_packages "networkmanager-dmenu" networkmanager-dmenu-git
         ;;
     openssh)
         install_openssh
