@@ -75,7 +75,7 @@
     "calendar": {
       "mode": "month",
       "mode-mon-col": 3,
-      "weeks-pos": "right",
+      "weeks-pos": "left",
       "on-scroll": 1,
       "on-click-right": "mode",
       "format": {
