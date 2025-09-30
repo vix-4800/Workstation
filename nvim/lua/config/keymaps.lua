@@ -1,6 +1,10 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Remap up and down to center the cursor after moving
+vim.api.nvim_set_keymap('', "<C-u>", '<C-u>zz', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', "<C-d>", '<C-d>zz', { noremap = true, silent = true })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
