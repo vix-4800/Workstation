@@ -34,8 +34,10 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
--- Enable break indent
+-- Better indentation
 vim.o.breakindent = true
+vim.o.smartindent = true -- Smart indenting
+vim.o.autoindent = true -- Copy indent from current line when starting a new line
 
 -- Save undo history
 vim.o.undofile = true
@@ -84,7 +86,6 @@ vim.o.confirm = true
 
 -- Additional useful options
 vim.o.fileencoding = 'utf-8' -- File content encoding
-vim.o.smartindent = true -- Smart indenting
 
 -- Better completion experience
 vim.o.completeopt = 'menuone,noselect' -- Better autocompletion
@@ -94,3 +95,10 @@ vim.o.pumheight = 10 -- Pop up menu height
 vim.o.wrap = false -- Display lines as one long line
 vim.o.scrolloff = 10 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.sidescrolloff = 8 -- Minimal number of columns to keep to the left and right of the cursor
+
+vim.o.backup = false -- Don't create backup files
+vim.o.writebackup = false -- Don't create backup files
+vim.o.swapfile = false -- Don't use swapfiles
+
+vim.o.spell = true -- Enable spell checking
+vim.o.spelllang = 'en' -- Set spellcheck language to English
