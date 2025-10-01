@@ -13,6 +13,33 @@ return (new Config())
         '@PSR12' => true, // General PSR-12 formatting (indentation, braces, naming, etc.)
 
         // ─────────────────────────────────────────────────────────────
+        // Modern PHP & Performance optimizations
+        // ─────────────────────────────────────────────────────────────
+        'date_time_immutable' => true, // Prefers DateTimeImmutable over DateTime for safety
+        'dir_constant' => true, // Replaces dirname(__FILE__) with __DIR__ (faster)
+        'function_to_constant' => true, // Replaces functions with constants where possible (phpversion() → PHP_VERSION)
+        'no_php4_constructor' => true, // Forbids PHP4-style constructors
+        'pow_to_exponentiation' => true, // Replaces pow($a, $b) with $a ** $b
+        'set_type_to_cast' => true, // Replaces settype() with type casting ((int) instead of settype())
+        'ereg_to_preg' => true, // Replaces deprecated ereg functions with preg
+        'fopen_flag_order' => true, // Orders fopen flags for readability
+        'fopen_flags' => true, // Normalizes fopen flags
+        'implode_call' => true, // Normalizes implode calls (correct parameter order)
+        'magic_constant_casing' => true, // Normalizes magic constant casing (__FILE__, __DIR__)
+        'magic_method_casing' => true, // Normalizes magic method casing (__construct, __toString)
+        'no_binary_string' => true, // Removes b prefix from strings (for compatibility)
+        'no_homoglyph_names' => true, // Forbids using homoglyphs in names
+        'no_short_bool_cast' => true, // Forbids short boolean casting (!!)
+        'no_unset_cast' => true, // Forbids unset casting (deprecated)
+        'no_unset_on_property' => true, // Forbids unset on object properties
+        'standardize_not_equals' => true, // Standardizes inequality operators (!= → !==)
+        'escape_implicit_backslashes' => true, // Escapes implicit backslashes in strings
+        'explicit_indirect_variable' => true, // Uses braces for variable variables
+        'logical_operators' => true, // Uses && and || instead of and and or for logical operations
+        'non_printable_character' => true, // Removes non-printable characters from code
+        'no_null_property_initialization' => true, // Removes explicit property initialization to null
+
+        // ─────────────────────────────────────────────────────────────
         // PHPDOC and comments
         // ─────────────────────────────────────────────────────────────
         'phpdoc_align' => ['align' => 'vertical'], // Aligns tags like @param, @return, etc.
@@ -73,6 +100,7 @@ return (new Config())
         'whitespace_after_comma_in_array' => true, // Ensures whitespace after commas in arrays
         'no_whitespace_before_comma_in_array' => true, // No whitespace before commas in arrays
         'no_multiline_whitespace_around_double_arrow' => true, // No multiline whitespace around double arrow
+        'normalize_index_brace' => true, // Normalizes index braces in arrays
 
         // ─────────────────────────────────────────────────────────────────────────
         // Spacing, operators, and general style
@@ -113,6 +141,9 @@ return (new Config())
         'clean_namespace' => true, // Removes unused use statements
         'no_unneeded_braces' => true, // Removes unneeded braces
         'no_unneeded_final_method' => true, // Removes unneeded final methods
+        'simple_to_complex_string_variable' => true, // Uses complex variable interpolation {$var} instead of simple $var in strings
+        'string_length_to_empty' => true, // Replaces strlen($str) === 0 with $str === ''
+        'no_unreachable_default_argument_value' => true, // Removes unreachable default argument values
 
         // ─────────────────────────────────────────────────────────────────────────
         // File / opening tags / namespaces
@@ -187,9 +218,9 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────────────────
         // Security & Best Practices
         // ─────────────────────────────────────────────────────────────────────────
-        'modernize_types_casting' => true,
+        'modernize_types_casting' => true, // Uses (int), (float), (string), (bool) for type casting
         'no_alias_functions' => true, // Disallow the use of alias functions
-        'random_api_migration' => true,
+        'random_api_migration' => true, // Replaces deprecated random number generation functions with modern ones
         'visibility_required' => ['elements' => ['property', 'method', 'const']], // Enforces visibility for all class properties and methods
         'self_accessor' => true, // Enforces the use of self:: for accessing static properties and methods
         'mb_str_functions' => true, // Enforces the use of mb_str_* functions for multibyte string operations
@@ -203,9 +234,9 @@ return (new Config())
         'static_lambda' => true,
         'final_public_method_for_abstract_class' => true,
         'no_mixed_echo_print' => ['use' => 'echo'],
-        'heredoc_to_nowdoc' => true,
-        'modernize_strpos' => true, // Replace strpos() and stripos() calls with str_starts_with() or str_contains() if possible.
-        'no_alias_language_construct_call' => true,
+        'heredoc_to_nowdoc' => true, // Replaces heredoc on nowdoc where possible
+        'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
+        'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
     ])
     ->setUsingCache(false);
