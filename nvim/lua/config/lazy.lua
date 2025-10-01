@@ -809,7 +809,8 @@ require('lazy').setup({
 
   -- Themes are managed in custom/themes/
   -- You can switch themes by editing custom/themes/init.lua
-  { import = 'custom.themes' },
+  -- { import = 'custom.themes' },
+  require 'custom.themes.init',
 
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
