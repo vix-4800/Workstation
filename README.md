@@ -1,6 +1,7 @@
 # Dotfiles
 
-Personal configuration files for Linux desktop environment with Sway (Wayland) and development tools.
+Personal configuration files for Linux desktop environment with Sway (Wayland) and development
+tools.
 
 ## Quick Start
 
@@ -34,8 +35,10 @@ cd ~/Code/Dotfiles
 - **Fish** - Shell configuration and functions
 - **Git** - Git configuration and aliases
 - **Development tools** - PHP, Python, JavaScript toolchain configs
-- **Shell Configuration** - Centralized configuration for bash, zsh, and fish (see [SHELL_CONFIG.md](SHELL_CONFIG.md))
-- **Modern Config Management** - YAML-based configuration system (see [CONFIG_MANAGEMENT.md](CONFIG_MANAGEMENT.md))
+- **Shell Configuration** - Centralized configuration for bash, zsh, and fish (see
+  [SHELL_CONFIG.md](SHELL_CONFIG.md))
+- **Modern Config Management** - YAML-based configuration system (see
+  [CONFIG_MANAGEMENT.md](CONFIG_MANAGEMENT.md))
 
 ## Scripts
 
