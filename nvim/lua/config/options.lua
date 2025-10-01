@@ -40,9 +40,12 @@ vim.o.breakindent = true
 -- Save undo history
 vim.o.undofile = true
 
+-- Better search experience
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.o.hlsearch = true -- Highlight search results
+vim.o.incsearch = true -- Incremental search
 
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
@@ -74,9 +77,6 @@ vim.o.inccommand = 'split'
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
--- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
-
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
@@ -85,3 +85,12 @@ vim.o.confirm = true
 -- Additional useful options
 vim.o.fileencoding = 'utf-8' -- File content encoding
 vim.o.smartindent = true -- Smart indenting
+
+-- Better completion experience
+vim.o.completeopt = 'menuone,noselect' -- Better autocompletion
+vim.o.pumheight = 10 -- Pop up menu height
+
+-- Better editing experience
+vim.o.wrap = false -- Display lines as one long line
+vim.o.scrolloff = 10 -- Minimal number of screen lines to keep above and below the cursor.
+vim.o.sidescrolloff = 8 -- Minimal number of columns to keep to the left and right of the cursor
