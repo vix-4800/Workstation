@@ -15,9 +15,9 @@ end
 set -x NODE_VERSION v24.7.0
 
 # ======= PATH Configuration =======
-set -gx PATH $PATH /usr/local/go/bin
-set -gx PATH $PATH $HOME/.config/composer/vendor/bin
-set -gx PATH $PATH $HOME/.local/share/nvm/$NODE_VERSION/bin
+fish_add_path /usr/local/go/bin
+fish_add_path $HOME/.config/composer/vendor/bin
+fish_add_path $HOME/.local/share/nvm/$NODE_VERSION/bin
 
 # ======= Aliases =======
 alias vim 'nvim'
