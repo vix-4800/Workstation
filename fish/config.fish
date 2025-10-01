@@ -6,8 +6,6 @@ set -x VISUAL $EDITOR
 if status is-interactive
     if type -q starship
         starship init fish | source
-    else
-        fish_prompt
     end
 end
 
@@ -23,8 +21,8 @@ fish_add_path $HOME/.local/share/nvm/$NODE_VERSION/bin
 alias vim 'nvim'
 alias vi 'nvim'
 alias neovim 'nvim'
-alias ls 'eza --color=auto --group-directories-first'
-alias ll 'eza -la --color=auto --group-directories-first'
+alias ls 'eza --color=auto --group-directories-first --icons=always'
+alias ll 'eza -la --color=auto --group-directories-first --icons=always'
 alias tree 'eza --tree'
 alias cat 'bat --style=plain'
 alias grep 'rg'
@@ -32,9 +30,6 @@ alias find 'fd'
 
 if command -v pacman >/dev/null 2>&1
     alias system-cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
-    alias system-update 'sudo pacman -Syu'
-    alias system-search 'pacman -Ss'
-    alias system-install 'sudo pacman -S'
 end
 
 # only for wayland
