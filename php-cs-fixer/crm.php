@@ -23,15 +23,15 @@ return (new Config())
         'phpdoc_separation' => true, // Ensures separation between different types of tags
         'phpdoc_trim' => true, // Trims PHPDoc comments
         'phpdoc_trim_consecutive_blank_line_separation' => true, // Trims blank line separation in PHPDoc comments
-        'no_superfluous_phpdoc_tags' => true, // Removes unnecessary PHPDoc tags
+        'no_superfluous_phpdoc_tags' => false, // Removes unnecessary PHPDoc tags
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'alpha',
         ],
         'phpdoc_indent' => true, // Indents PHPDoc comments
-        'phpdoc_no_alias_tag' => true, // Removes PHPDoc alias tags
-        'phpdoc_no_package' => true, // Removes PHPDoc package tags
-        'phpdoc_no_useless_inheritdoc' => true, // Removes useless PHPDoc inheritdoc tags
+        'phpdoc_no_alias_tag' => false, // Removes PHPDoc alias tags
+        'phpdoc_no_package' => false, // Removes PHPDoc package tags
+        'phpdoc_no_useless_inheritdoc' => false, // Removes useless PHPDoc inheritdoc tags
         'phpdoc_single_line_var_spacing' => true, // Ensures single line spacing for var tags
         'phpdoc_types' => true, // Normalizes PHPDoc types
         'phpdoc_var_annotation_correct_order' => true, // Ensures correct order of var annotations
@@ -40,16 +40,11 @@ return (new Config())
         'comment_to_phpdoc' => true, // Converts single-line comments to PHPDoc
         'no_empty_comment' => true, // Removes empty comments
         'no_empty_phpdoc' => true, // Removes empty PHPDoc blocks
-        'header_comment' => ['header' => ''], // Removes header comments
         'no_blank_lines_after_phpdoc' => true, // Removes blank lines after PHPDoc
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
         // ─────────────────────────────────────────────────────────────────────────
-        'ordered_imports' => [
-            'imports_order' => ['class', 'function', 'const'],
-            'sort_algorithm' => 'alpha',
-        ], // Orders imports: class, function, const
         'single_import_per_statement' => true, // Each import must be on a separate line
         'global_namespace_import' => [
             'import_classes' => true,
@@ -68,7 +63,6 @@ return (new Config())
         'array_syntax' => ['syntax' => 'short'], // Uses [] instead of array()
         'list_syntax' => ['syntax' => 'short'], // Uses [] instead of list()
         'trim_array_spaces' => true, // Trims spaces inside array brackets
-        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters', 'match']], // Trailing comma in multiline arrays
         'no_trailing_comma_in_singleline' => true, // No trailing comma in single-line arrays
         'whitespace_after_comma_in_array' => true, // Ensures whitespace after commas in arrays
         'no_whitespace_before_comma_in_array' => true, // No whitespace before commas in arrays
@@ -83,7 +77,6 @@ return (new Config())
         'no_extra_blank_lines' => true, // Removes extra blank lines
         'no_trailing_whitespace' => true, // Removes trailing whitespace
         'no_whitespace_in_blank_line' => true, // No spaces on empty lines
-        'single_quote' => true, // Converts double quotes to single quotes
         'line_ending' => true, // Unifies line endings
         'single_blank_line_at_eof' => true, // Only one blank line at the end of file
         'cast_spaces' => ['space' => 'single'], // Consistent spacing in casts
@@ -121,7 +114,7 @@ return (new Config())
         'blank_line_after_namespace' => true, // Requires a blank line after the namespace declaration
         'blank_lines_before_namespace' => true, // Requires blank lines before the namespace declaration
         'blank_line_after_opening_tag' => true, // Requires a blank line after the opening <?php tag
-        'semicolon_after_instruction' => true, // Requires a semicolon after each instruction
+        'semicolon_after_instruction' => false, // Requires a semicolon after each instruction
         'no_closing_tag' => true, // Removes closing PHP tags
         'include' => true, // File path should not be placed within parentheses
         'echo_tag_syntax' => ['format' => 'short'],
@@ -135,15 +128,15 @@ return (new Config())
             'method' => 'one',
             'trait_import' => 'none',
         ]], // Enforces separation between class attributes
-        'ordered_class_elements' => [
-            'order' => [
-                'use_trait',
-                'constant_public', 'constant_protected', 'constant_private',
-                'property_public', 'property_protected', 'property_private',
-                'construct',
-                'method_public', 'method_protected', 'method_private',
-            ],
-        ], // Enforces order of class elements
+        // 'ordered_class_elements' => [
+        //     'order' => [
+        //         'use_trait',
+        //         'constant_public', 'constant_protected', 'constant_private',
+        //         'property_public', 'property_protected', 'property_private',
+        //         'construct',
+        //         'method_public', 'method_protected', 'method_private',
+        //     ],
+        // ], // Enforces order of class elements
         'single_class_element_per_statement' => ['elements' => ['const', 'property']], // Enforces single class element per statement
         'single_trait_insert_per_statement' => true,
 
@@ -176,12 +169,12 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────────────────
         // Type-related
         // ─────────────────────────────────────────────────────────────────────────
-        'phpdoc_to_param_type' => true, // Converts PHPDoc @param to type hints
-        'phpdoc_to_return_type' => true, // Converts PHPDoc @return to return type declarations
-        'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
-        'declare_strict_types' => true, // Force strict types declaration in all files.
-        'strict_comparison' => true, // Uses === and !== instead of == and !=
-        'strict_param' => true, // Enforces strict parameter types
+        // 'phpdoc_to_param_type' => true, // Converts PHPDoc @param to type hints
+        // 'phpdoc_to_return_type' => true, // Converts PHPDoc @return to return type declarations
+        // 'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
+        // 'declare_strict_types' => true, // Force strict types declaration in all files.
+        // 'strict_comparison' => true, // Uses === and !== instead of == and !=
+        // 'strict_param' => true, // Enforces strict parameter types
         'void_return' => true, // Enforces void return type for functions that do not return a value
 
         // ─────────────────────────────────────────────────────────────────────────
