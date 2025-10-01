@@ -62,6 +62,13 @@ vim.keymap.set('n', '<leader>w', '<cmd>w<CR>', { desc = '[W]rite file' })
 vim.keymap.set('n', '<leader>q', '<cmd>q<CR>', { desc = '[Q]uit' })
 vim.keymap.set('n', '<leader>x', '<cmd>x<CR>', { desc = 'Save and quit' })
 
+-- Insert new line below and above and exit insert mode
+vim.keymap.set('n', 'o', 'o<Esc>', { desc = 'Insert new line below and exit insert mode' })
+vim.keymap.set('n', 'O', 'O<Esc>', { desc = 'Insert new line above and exit insert mode' })
+
+-- Delete without copying into register
+vim.keymap.set({'n','v'}, 'x', '"_x', { desc = 'Delete without yanking' })
+
 -- Code Actions Menus
 vim.keymap.set('n', '<leader>cp', function()
   local lines = {
