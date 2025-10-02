@@ -48,6 +48,7 @@ use Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRect
 use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
+use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
@@ -80,6 +81,7 @@ return RectorConfig::configure()
         // Code optimization
         ChangeIfElseValueAssignToEarlyReturnRector::class,
         PreparedValueToEarlyReturnRector::class,
+        ReturnEarlyIfVariableRector::class, // Return early if variable is set
         SimplifyUselessVariableRector::class,
         UnusedForeachValueToArrayKeysRector::class,
         SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
