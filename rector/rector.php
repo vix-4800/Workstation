@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+$rulesDir = __DIR__ . '/rules';
+$ruleFiles = glob("{$rulesDir}/*.php");
+foreach ($ruleFiles as $ruleFile) {
+    require_once $ruleFile;
+}
+
 use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
@@ -26,6 +32,13 @@ use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRe
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\Config\RectorConfig;
+use Rector\Custom\Rules\Yii2DeleteAllShortcutRector;
+use Rector\Custom\Rules\Yii2FindAllIdShortcutRector;
+use Rector\Custom\Rules\Yii2FindOneFindAllShortcutRector;
+use Rector\Custom\Rules\Yii2FindOneIdShortcutRector;
+use Rector\Custom\Rules\Yii2PropertyAccessRector;
+use Rector\Custom\Rules\Yii2UpdateAllShortcutRector;
+use Rector\Custom\Rules\Yii2UserFindOneToIdentityRector;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
@@ -110,4 +123,13 @@ return RectorConfig::configure()
         LogicalToBooleanRector::class,
         RemoveAlwaysElseRector::class, // Removes else branches that are always executed
         ChangeNestedForeachIfsToEarlyContinueRector::class,
+
+        // Custom Yii2 rules - Improve readability and modernize Yii2 code patterns
+        Yii2PropertyAccessRector::class, // Convert Yii::$app->user->getId() to Yii::$app->user->id
+        Yii2DeleteAllShortcutRector::class, // Simplify ActiveRecord deleteAll operations
+        Yii2FindAllIdShortcutRector::class, // Optimize findAll queries by ID
+        Yii2FindOneFindAllShortcutRector::class, // Convert findOne/findAll patterns to more efficient forms
+        Yii2FindOneIdShortcutRector::class, // Simplify findOne operations by ID
+        Yii2UpdateAllShortcutRector::class, // Streamline ActiveRecord updateAll operations
+        Yii2UserFindOneToIdentityRector::class, // Replace User::findOne() with identity access patterns
     ]);
