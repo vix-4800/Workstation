@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Arch Linux System Post-Installation Setup Script
 
@@ -27,9 +27,7 @@ fi
 install_packages() {
   printf_info "Installing packages: $*"
 
-  sudo pacman -S --noconfirm --needed "$@" >/dev/null 2>&1
-
-  if [ $? -eq 0 ]; then
+  if sudo pacman -S --noconfirm --needed "$@" >/dev/null 2>&1; then
     printf_success "Installed packages: $*"
   else
     printf_error "Failed to install packages: $*"
@@ -41,10 +39,7 @@ enable_service() {
   local service_name=$1
   printf_info "Enabling service: $service_name"
 
-  sudo systemctl enable "$service_name" >/dev/null 2>&1
-  sudo systemctl start "$service_name" >/dev/null 2>&1
-
-  if [ $? -eq 0 ]; then
+  if sudo systemctl enable "$service_name" >/dev/null 2>&1 && sudo systemctl start "$service_name" >/dev/null 2>&1; then
     printf_success "Enabled service: $service_name"
   else
     printf_error "Failed to enable service: $service_name"

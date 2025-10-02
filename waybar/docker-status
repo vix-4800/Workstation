@@ -31,4 +31,6 @@ if [ "$total_containers" -gt 10 ]; then
 fi
 
 # Format the output
+# shellcheck disable=SC2086
+# shellcheck disable=SC2028
 echo '{"text": "'$running_containers'", "tooltip": "Running containers:\n'$container_list'", "class": "running"}'
