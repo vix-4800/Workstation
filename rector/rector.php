@@ -32,6 +32,7 @@ use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRe
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\Config\RectorConfig;
+use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
 use Rector\Custom\Rules\Yii2DeleteAllShortcutRector;
 use Rector\Custom\Rules\Yii2FindAllIdShortcutRector;
 use Rector\Custom\Rules\Yii2FindOneFindAllShortcutRector;
@@ -123,6 +124,9 @@ return RectorConfig::configure()
         LogicalToBooleanRector::class,
         RemoveAlwaysElseRector::class, // Removes else branches that are always executed
         ChangeNestedForeachIfsToEarlyContinueRector::class,
+
+        // Custom code quality rules
+        ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
 
         // Custom Yii2 rules - Improve readability and modernize Yii2 code patterns
         Yii2PropertyAccessRector::class, // Convert Yii::$app->user->getId() to Yii::$app->user->id
