@@ -201,6 +201,7 @@ return (new Config())
         'no_useless_else' => true, // Removes useless else statements
         'no_useless_return' => true, // Removes useless return statements in void functions
         'ternary_to_null_coalescing' => true, // Converts ternary to null coalescing (?: → ??)
+        'null_coalescing_operator' => true,
         'assign_null_coalescing_to_coalesce_equal' => true, // $a = $a ?? $b becomes $a ??= $b
         'no_superfluous_elseif' => true,
 
