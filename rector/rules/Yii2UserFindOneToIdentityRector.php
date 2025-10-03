@@ -70,6 +70,7 @@ final class Yii2UserFindOneToIdentityRector extends AbstractRector
         if ($node->class instanceof Name) {
             $className = $this->getName($node->class);
             $baseName = $className ? basename(str_replace('\\', '/', $className)) : null;
+
             return $baseName === 'User';
         }
 

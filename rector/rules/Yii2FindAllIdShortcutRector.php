@@ -63,6 +63,7 @@ final class Yii2FindAllIdShortcutRector extends AbstractRector
         }
 
         $node->args = [new Arg($firstItem->value)];
+
         return $node;
     }
 }

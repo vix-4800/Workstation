@@ -48,7 +48,8 @@ final class Yii2UpdateAllShortcutRector extends AbstractRector
     /**
      * Performs the transformation for matching MethodCall nodes.
      *
-     * @param  MethodCall      $node
+     * @param MethodCall $node
+     *
      * @return StaticCall|null
      */
     public function refactor(Node $node): ?Node
