@@ -33,12 +33,14 @@ use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\Config\RectorConfig;
 use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
+use Rector\Custom\Rules\ReplaceMultipleEqualWithInArrayRector;
 use Rector\Custom\Rules\Yii2DeleteAllShortcutRector;
 use Rector\Custom\Rules\Yii2FindAllIdShortcutRector;
 use Rector\Custom\Rules\Yii2FindOneFindAllShortcutRector;
 use Rector\Custom\Rules\Yii2FindOneIdShortcutRector;
 use Rector\Custom\Rules\Yii2PropertyAccessRector;
 use Rector\Custom\Rules\Yii2UpdateAllShortcutRector;
+use Rector\Custom\Rules\Yii2UseExistsInsteadOfOneNotNullRector;
 use Rector\Custom\Rules\Yii2UserFindOneToIdentityRector;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
@@ -129,6 +131,7 @@ return RectorConfig::configure()
 
         // Custom code quality rules
         ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
+        ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
 
         // Custom Yii2 rules - Improve readability and modernize Yii2 code patterns
         Yii2PropertyAccessRector::class, // Convert Yii::$app->user->getId() to Yii::$app->user->id
@@ -138,4 +141,5 @@ return RectorConfig::configure()
         Yii2FindOneIdShortcutRector::class, // Simplify findOne operations by ID
         Yii2UpdateAllShortcutRector::class, // Streamline ActiveRecord updateAll operations
         Yii2UserFindOneToIdentityRector::class, // Replace User::findOne() with identity access patterns
+        Yii2UseExistsInsteadOfOneNotNullRector::class, // Replace ->one() !== null with ->exists()
     ]);
