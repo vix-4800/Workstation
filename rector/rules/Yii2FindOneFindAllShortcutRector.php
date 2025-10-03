@@ -8,19 +8,17 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Scalar\LNumber;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * This Rector rule converts query chains like:
  * Model::find()->where([...])->one() / all()
- * Model::find()->where([...])->limit(1)->one() / all()
  * into their shorter equivalents:
  * Model::findOne([...]) / findAll([...])
  *
  * Applies only when the call chain exactly matches the structure:
- * StaticCall::find() -> MethodCall::where(...) -> [MethodCall::limit(1) ->] MethodCall::one()/all()
+ * StaticCall::find() -> MethodCall::where(...) -> MethodCall::one()/all()
  */
 final class Yii2FindOneFindAllShortcutRector extends AbstractRector
 {
@@ -32,7 +30,7 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Converts Model::find()->where([...])->one()/all() or Model::find()->where([...])->limit(1)->one()/all() into Model::findOne([...]) or findAll([...])',
+            'Converts Model::find()->where([...])->one()/all() into Model::findOne([...]) or findAll([...]). Skips chains with limit() to preserve behavior.',
             []
         );
     }
@@ -66,24 +64,13 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
             return null;
         }
 
-        // Allow optional ->limit(1) immediately before ->one()
+        // Get the previous method call (should be ->where(...))
         $whereCall = $node->var;
+
+        // Skip transformation if there's a ->limit() call
+        // because findOne/findAll don't apply limit internally
         if ($whereCall instanceof MethodCall && $whereCall->name instanceof Identifier && $whereCall->name->toString() === 'limit') {
-            // limit is only allowed when calling ->one()
-            if ($methodName !== 'one') {
-                return null;
-            }
-
-            if (count($whereCall->args) < 1) {
-                return null;
-            }
-
-            $limitArg = $whereCall->args[0]->value;
-            if (!$limitArg instanceof LNumber || $limitArg->value !== 1) {
-                return null;
-            }
-
-            $whereCall = $whereCall->var;
+            return null;
         }
 
         // Ensure the previous call is ->where(...)
