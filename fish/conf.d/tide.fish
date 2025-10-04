@@ -3,4 +3,4 @@
 set -g tide_left_prompt_items pwd
 set -g tide_right_prompt_items git status
 
-tide reload
+# tide reload
