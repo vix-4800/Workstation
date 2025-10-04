@@ -8,7 +8,7 @@ decorations = "none"
 decorations_theme_variant = "Dark"
 dynamic_padding = true
 dynamic_title = true
-opacity = 0.75
+opacity = 0.65
 
 [window.padding]
 x = 12
