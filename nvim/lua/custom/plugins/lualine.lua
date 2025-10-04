@@ -17,8 +17,8 @@ return {
     },
     sections = {
       lualine_a = { 'mode' },
-      lualine_b = { 'filename', 'branch' },
-      lualine_c = { '%=' },
+      lualine_b = { 'filename' },
+      lualine_c = { '%{FugitiveStatusline()}' },
       lualine_x = { 'filetype' },
       lualine_y = { 'progress' },
       lualine_z = { 'location' },
