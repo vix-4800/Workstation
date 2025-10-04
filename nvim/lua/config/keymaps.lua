@@ -89,7 +89,3 @@ vim.keymap.set('n', '<leader>cp', function()
   }
   vim.api.nvim_echo({ { table.concat(lines, '\n'), 'Normal' } }, false, {})
 end, { desc = 'Show PHP Code Actions Menu' })
-
-vim.keymap.set('n', '<leader>t', function()
-  vim.cmd 'terminal'
-end, { desc = 'Open a terminal' })
