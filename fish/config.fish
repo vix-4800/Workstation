@@ -4,12 +4,6 @@ set -x EDITOR nvim
 set -x VISUAL $EDITOR
 set -gx TERM xterm-256color
 
-if status is-interactive
-    if type -q starship
-        starship init fish | source
-    end
-end
-
 # ======= Variables =======
 set -x NODE_VERSION v24.7.0
 
