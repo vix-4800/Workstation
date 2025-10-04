@@ -109,3 +109,11 @@ command = "None"
 
 [general]
 live_config_reload = true
+
+# Performance improvements
+[debug]
+log_level = "OFF"
+
+# ——— TERMINAL —————————————————————————————————————
+[terminal.shell]
+program = "/usr/bin/fish"
