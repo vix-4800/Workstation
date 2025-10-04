@@ -2,8 +2,8 @@
 --  See `:help vim.keymap.set()`
 
 -- Remap up and down to center the cursor after moving
-vim.api.nvim_set_keymap('', "<C-u>", '<C-u>zz', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('', "<C-d>", '<C-d>zz', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -67,7 +67,7 @@ vim.keymap.set('n', 'o', 'o<Esc>', { desc = 'Insert new line below and exit inse
 vim.keymap.set('n', 'O', 'O<Esc>', { desc = 'Insert new line above and exit insert mode' })
 
 -- Delete without copying into register
-vim.keymap.set({'n','v'}, 'x', '"_x', { desc = 'Delete without yanking' })
+vim.keymap.set({ 'n', 'v' }, 'x', '"_x', { desc = 'Delete without yanking' })
 
 -- Code Actions Menus
 vim.keymap.set('n', '<leader>cp', function()
@@ -89,3 +89,7 @@ vim.keymap.set('n', '<leader>cp', function()
   }
   vim.api.nvim_echo({ { table.concat(lines, '\n'), 'Normal' } }, false, {})
 end, { desc = 'Show PHP Code Actions Menu' })
+
+vim.keymap.set('n', '<leader>t', function()
+  vim.cmd 'terminal'
+end, { desc = 'Open a terminal' })
