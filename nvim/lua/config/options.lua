@@ -42,6 +42,8 @@ global.inccommand = "split"
 -- Show which line your cursor is on
 global.cursorline = true
 
+-- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
+-- instead raise a dialog asking if you wish to save the current file(s)
 global.confirm = true
 
 -- Additional useful options
@@ -72,3 +74,7 @@ vim.g.have_nerd_font = true
 vim.schedule(function()
   global.clipboard = "unnamedplus"
 end)
+
+-- Sets how neovim will display certain whitespace characters in the editor.
+vim.o.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
