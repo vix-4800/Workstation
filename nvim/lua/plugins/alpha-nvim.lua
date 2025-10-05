@@ -19,6 +19,7 @@ return {
       dashboard.button("p", "  Projects", ":Telescope projects <CR>"),
       dashboard.button("s", "勒 Settings", ":e $MYVIMRC <CR>"),
       dashboard.button("l", "鈴 Lazy", ":Lazy<CR>"),
+      dashboard.button("m", " Mason", ":Mason<CR>"),
       dashboard.button("q", "  Quit", ":qa<CR>"),
     }
 
