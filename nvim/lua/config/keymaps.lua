@@ -36,3 +36,66 @@ vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk, { desc = "git [p]review
 vim.keymap.set("n", "<leader>gd", function()
   gitsigns.diffthis("@")
 end, { desc = "git [d]iff" })
+
+-- Remap up and down to center the cursor after moving
+vim.api.nvim_set_keymap("", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
+
+-- Clear highlights on search when pressing <Esc> in normal mode
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+-- Find and Replace keymaps
+vim.keymap.set(
+  "n",
+  "<leader>rw",
+  ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { desc = "[R]eplace [W]ord under cursor" }
+)
+vim.keymap.set("v", "<leader>r", '"hy:%s/<C-r>h//g<left><left>', { desc = "[R]eplace selection" })
+vim.keymap.set(
+  "n",
+  "<leader>rl",
+  ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { desc = "[R]eplace word in current [L]ine" }
+)
+
+-- Better indenting
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+
+-- Move text up and down
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+
+-- Insert new line below and above and exit insert mode
+vim.keymap.set("n", "o", "o<Esc>", { desc = "Insert new line below and exit insert mode" })
+vim.keymap.set("n", "O", "O<Esc>", { desc = "Insert new line above and exit insert mode" })
+
+-- Delete without copying into register
+vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
+
+-- Code Actions Menus
+vim.keymap.set("n", "<leader>cp", function()
+  local lines = {
+    "╭─────────────────────────────────────────────────────────────────────╮",
+    "│                       📝 PHP Code Actions Menu                      │",
+    "╞═════════════════════════════════════════════════════════════════════╡",
+    "│                                                                     │",
+    "│  🐘 PHP Actions:                                                     │",
+    "│     [R]efactor file (Rector)                                        │",
+    "│     [s]tatic analysis file (PHPStan)                                │",
+    "│     [c]heck coding standards (PHPCS)                                │",
+    "│                                                                     │",
+    "│  🌐 Project-wide PHP Actions:                                       │",
+    "│     [S]tatic analysis entire project (PHPStan)                      │",
+    "│     [C]heck coding standards entire project (PHPCS)                 │",
+    "│                                                                     │",
+    "╰─────────────────────────────────────────────────────────────────────╯",
+  }
+  vim.api.nvim_echo({ { table.concat(lines, "\n"), "Normal" } }, false, {})
+end, { desc = "Show PHP Code Actions Menu" })
+
+-- Quick save and quit
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
+vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "[Q]uit" })
+vim.keymap.set("n", "<leader>x", "<cmd>x<CR>", { desc = "Save and quit" })
