@@ -10,12 +10,29 @@ return {
       show_hidden = true,
       natural_order = true,
       is_always_hidden = function(name, _)
-        return name == ".." or name == ".git" or name == ".DS_Store" or name == "thumbs.db" or name == ".venv"
+        return name == ".."
+          or name == ".git"
+          or name == ".DS_Store"
+          or name == "thumbs.db"
+          or name == ".venv"
+          or name == "__pycache__"
+          or name == "node_modules"
+          or name == ".idea"
+          or name == ".vscode"
+          or name == ".pytest_cache"
+          or name == ".mypy_cache"
       end,
     },
     win_options = {
       wrap = true,
       signcolumn = "yes:2",
+    },
+    watch_for_changes = false,
+    columns = {
+      "icon",
+      -- "permissions",
+      "size",
+      "mtime",
     },
   },
 }
