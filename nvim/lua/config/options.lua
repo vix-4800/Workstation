@@ -24,7 +24,7 @@ global.hlsearch = true -- Highlight search results
 global.incsearch = true -- Incremental search
 
 -- Keep signcolumn on by default
-global.signcolumn = 'yes'
+global.signcolumn = "yes"
 
 -- Decrease update time
 global.updatetime = 250
@@ -37,7 +37,7 @@ global.splitright = true
 global.splitbelow = true
 
 -- Preview substitutions live, as you type!
-global.inccommand = 'split'
+global.inccommand = "split"
 
 -- Show which line your cursor is on
 global.cursorline = true
@@ -45,10 +45,10 @@ global.cursorline = true
 global.confirm = true
 
 -- Additional useful options
-global.fileencoding = 'utf-8' -- File content encoding
+global.fileencoding = "utf-8" -- File content encoding
 
 -- Better completion experience
-global.completeopt = 'menuone,noselect' -- Better autocompletion
+global.completeopt = "menuone,noselect" -- Better autocompletion
 global.pumheight = 10 -- Pop up menu height
 
 -- Better editing experience
@@ -61,14 +61,14 @@ global.writebackup = false -- Don't create backup files
 global.swapfile = false -- Don't use swapfiles
 
 global.spell = true -- Enable spell checking
-global.spelllang = 'en' -- Set spellcheck language to English
+global.spelllang = "en" -- Set spellcheck language to English
 
 -- Other
 vim.g.mapleader = " "
-vim.g.maplocalleader = ' '
+vim.g.maplocalleader = " "
 
 vim.g.have_nerd_font = true
 
 vim.schedule(function()
-	global.clipboard = "unnamedplus"
+  global.clipboard = "unnamedplus"
 end)
