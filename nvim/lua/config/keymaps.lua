@@ -74,27 +74,6 @@ vim.keymap.set("n", "O", "O<Esc>", { desc = "Insert new line above and exit inse
 -- Delete without copying into register
 vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
 
--- Code Actions Menus
-vim.keymap.set("n", "<leader>cp", function()
-  local lines = {
-    "╭─────────────────────────────────────────────────────────────────────╮",
-    "│                       📝 PHP Code Actions Menu                      │",
-    "╞═════════════════════════════════════════════════════════════════════╡",
-    "│                                                                     │",
-    "│  🐘 PHP Actions:                                                     │",
-    "│     [R]efactor file (Rector)                                        │",
-    "│     [s]tatic analysis file (PHPStan)                                │",
-    "│     [c]heck coding standards (PHPCS)                                │",
-    "│                                                                     │",
-    "│  🌐 Project-wide PHP Actions:                                       │",
-    "│     [S]tatic analysis entire project (PHPStan)                      │",
-    "│     [C]heck coding standards entire project (PHPCS)                 │",
-    "│                                                                     │",
-    "╰─────────────────────────────────────────────────────────────────────╯",
-  }
-  vim.api.nvim_echo({ { table.concat(lines, "\n"), "Normal" } }, false, {})
-end, { desc = "Show PHP Code Actions Menu" })
-
 -- Quick save and quit
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
 vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "[Q]uit" })

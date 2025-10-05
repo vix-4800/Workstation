@@ -1,7 +1,18 @@
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
-  opts = {},
+  opts = {
+    spec = {
+      { "<leader>s", group = "[S]earch" },
+      { "<leader>g", group = "[G]it", mode = { "n", "v" } },
+      -- { '<leader>c', group = '[C]ode Tools' },
+      { "<leader>r", group = "[R]eplace" },
+    },
+    delay = 0,
+    icons = {
+      mappings = vim.g.have_nerd_font,
+    },
+  },
   keys = {
     {
       "<leader>?",
