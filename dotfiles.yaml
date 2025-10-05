@@ -1,0 +1,42 @@
+# Dotfiles configuration map in YAML format
+# This file defines mappings between repository files/directories and target locations
+
+# Development tools configuration
+development:
+  php-cs-fixer: ~/.config/php-cs-fixer
+  phpstan: ~/.config/phpstan
+  rector: ~/.config/rector
+  phpcs: ~/.config/phpcs
+  flake8: ~/.config/flake8
+  mypy: ~/.config/mypy
+  .prettierrc: ~/.prettierrc
+
+# Shell configurations
+shell:
+  .profile: ~/.profile
+  .aliases: ~/.aliases
+  bash/bashrc: ~/.bashrc
+  bash/.bash_profile: ~/.bash_profile
+  bash/.bash_aliases: ~/.bash_aliases
+  zsh/zshrc: ~/.zshrc
+  zsh/.zsh_aliases: ~/.zsh_aliases
+  fish: ~/.config/fish
+
+# Desktop environment
+desktop:
+  polybar: ~/.config/polybar
+  i3: ~/.config/i3
+  sway: ~/.config/sway
+  waybar: ~/.config/waybar
+  alacritty: ~/.config/alacritty
+  wofi: ~/.config/wofi
+  mako: ~/.config/mako
+  wlogout: ~/.config/wlogout
+  swaync: ~/.config/swaync
+  wallpapers: ~/Pictures/Wallpapers
+
+# Applications
+applications:
+  nvim: ~/.config/nvim
+  tmux/.tmux.conf: ~/.tmux.conf
+  git/gitconfig: ~/.gitconfig

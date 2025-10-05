@@ -1,3 +1,6 @@
+# Generated from dotfiles.yaml - do not edit manually
+# Edit dotfiles.yaml instead and run: go run . generate
+
 .aliases	$HOME/.aliases
 .prettierrc	$HOME/.prettierrc
 .profile	$HOME/.profile
