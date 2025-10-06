@@ -71,14 +71,16 @@ vim.g.maplocalleader = " "
 
 vim.g.have_nerd_font = true
 
+-- Use system clipboard
 vim.schedule(function()
   global.clipboard = "unnamedplus"
 end)
 
 -- Sets how neovim will display certain whitespace characters in the editor.
-vim.o.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+global.list = true
+global.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
+-- Diagnostic configuration
 vim.diagnostic.enable = true
 vim.diagnostic.config({
   severity_sort = true,
