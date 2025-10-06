@@ -19,11 +19,13 @@ vim.g.maplocalleader = "\\"
 
 require("lazy").setup({
   spec = {
-    -- Plugins directory
+    -- Plugins
     { import = "plugins" },
 
-    -- Themes directory
-    { import = "themes" },
+    -- Themes
+    -- { import = "themes" }, -- Uncomment this line to load all themes
+    -- Or specify individual themes to load
+    require("themes.rose-pine"),
   },
   install = { colorscheme = { "rose-pine" } },
 
