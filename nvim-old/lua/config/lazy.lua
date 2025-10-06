@@ -388,93 +388,24 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
-    opts = {
-      notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, php = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        php = { 'php_cs_fixer' },
-        python = { 'isort', 'black' },
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
-        typescript = { 'prettierd', 'prettier', stop_after_first = true },
-        vue = { 'prettierd', 'prettier', stop_after_first = true },
-        css = { 'prettierd', 'prettier', stop_after_first = true },
-        scss = { 'prettierd', 'prettier', stop_after_first = true },
-        html = { 'prettierd', 'prettier', stop_after_first = true },
-        json = { 'prettierd', 'prettier', stop_after_first = true },
-        jsonc = { 'prettierd', 'prettier', stop_after_first = true },
-        yaml = { 'yamlfmt' },
-        markdown = { 'prettierd', 'prettier', stop_after_first = true },
-        sh = { 'shfmt' },
-      },
-      formatters = {
-        php_cs_fixer = {
-          command = 'php-cs-fixer',
-          args = {
-            'fix',
-            '--config=' .. vim.fn.expand '~/.config/php-cs-fixer/php-cs-fixer.php',
-            '$FILENAME',
-          },
-          stdin = false,
-        },
-        prettier = {
-          command = 'prettier',
-          args = {
-            '--config',
-            vim.fn.expand '~/.prettierrc',
-            '--stdin-filepath',
-            '$FILENAME',
-          },
-          stdin = true,
-        },
-      },
-    },
-  },
-
-  { -- Autocompletion
-    'saghen/blink.cmp',
-    event = 'VimEnter',
-    version = '1.*',
+  -- Autocompletion
+  {
+    "saghen/blink.cmp",
+    event = "VimEnter",
+    version = "1.*",
     dependencies = {
       -- Snippet Engine
       {
-        'L3MON4D3/LuaSnip',
-        version = '2.*',
+        "L3MON4D3/LuaSnip",
+        version = "2.*",
         build = (function()
           -- Build Step is needed for regex support in snippets.
           -- This step is not supported in many windows environments.
           -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+          if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
             return
           end
-          return 'make install_jsregexp'
+          return "make install_jsregexp"
         end)(),
         dependencies = {
           -- `friendly-snippets` contains a variety of premade snippets.
