@@ -78,3 +78,31 @@ end)
 -- Sets how neovim will display certain whitespace characters in the editor.
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+
+vim.diagnostic.enable = true
+vim.diagnostic.config({
+  severity_sort = true,
+  float = { border = 'rounded', source = 'if_many' },
+  underline = { severity = vim.diagnostic.severity.ERROR },
+  signs = vim.g.have_nerd_font and {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '✗',
+      [vim.diagnostic.severity.WARN] = '⚠',
+      [vim.diagnostic.severity.INFO] = 'ℹ',
+      [vim.diagnostic.severity.HINT] = '➤',
+    },
+  } or {},
+  virtual_text = {
+    source = 'if_many',
+    spacing = 4,
+    prefix = '●',
+    format = function(diagnostic)
+      return string.format('%s (%s)', diagnostic.message, diagnostic.code or diagnostic.source)
+    end,
+
+    -- Only show virtual text for selected severities
+    -- Uncomment to enable
+    -- severity = vim.diagnostic.severity.ERROR,
+    -- severity = { min = vim.diagnostic.severity.WARN },
+  },
+})
