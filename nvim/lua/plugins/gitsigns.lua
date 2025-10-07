@@ -67,8 +67,5 @@ return {
     vim.keymap.set("n", "<leader>gR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
     vim.keymap.set("n", "<leader>gu", gitsigns.stage_hunk, { desc = "git [u]ndo stage hunk" })
     vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
-    vim.keymap.set("n", "<leader>gd", function()
-      gitsigns.diffthis("@")
-    end, { desc = "git [d]iff" })
   end,
 }
