@@ -68,6 +68,8 @@ global.spelllang = "en" -- Set spellcheck language to English
 -- Other
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+global.expandtab = true -- Use spaces instead of tabs
+global.shiftwidth = 2 -- Size of an indent
 
 vim.g.have_nerd_font = true
 
