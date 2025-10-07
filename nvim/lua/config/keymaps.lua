@@ -38,3 +38,20 @@ vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
 -- Quick save and quit
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
 vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "[Q]uit" })
+
+-- Buffer navigation
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "[D]elete buffer" })
+
+-- Window navigation
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to down window" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to up window" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+-- Resize windows
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<CR>", { desc = "Increase height" })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<CR>", { desc = "Decrease height" })
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<CR>", { desc = "Decrease width" })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increase width" })
