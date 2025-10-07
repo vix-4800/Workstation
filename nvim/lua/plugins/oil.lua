@@ -36,6 +36,15 @@ return {
         "mtime",
       },
     },
+    keys = {
+      {
+        "<leader>e",
+        function()
+          require("oil").open()
+        end,
+        desc = "Open [E]xplorer",
+      },
+    },
   },
   {
     "refractalize/oil-git-status.nvim",
