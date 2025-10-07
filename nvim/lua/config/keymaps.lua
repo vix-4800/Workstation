@@ -77,4 +77,3 @@ vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
 -- Quick save and quit
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
 vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "[Q]uit" })
-vim.keymap.set("n", "<leader>x", "<cmd>x<CR>", { desc = "Save and quit" })
