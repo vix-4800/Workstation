@@ -16,13 +16,26 @@ return {
     event = "VimEnter",
     dependencies = {
       { "neovim/nvim-lspconfig" },
-      -- {'rafamadriz/friendly-snippets'}
+      {
+        "L3MON4D3/LuaSnip",
+        version = "v2.*",
+        dependencies = {
+          "rafamadriz/friendly-snippets",
+          config = function()
+            require("luasnip.loaders.from_vscode").lazy_load()
+          end,
+        },
+      },
     },
     version = "1.*",
 
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
+      snippets = {
+        preset = "luasnip",
+      },
+
       keymap = {
         preset = "default",
 
