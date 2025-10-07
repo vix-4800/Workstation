@@ -55,6 +55,13 @@ global.pumheight = 10 -- Pop up menu height
 global.wrap = false -- Display lines as one long line
 global.scrolloff = 10 -- Minimal number of screen lines to keep above and below the cursor.
 global.sidescrolloff = 8 -- Minimal number of columns to keep to the left and right of the cursor
+global.mouse = "a" -- Enable mouse support
+
+-- Indentation
+global.expandtab = true -- Use spaces instead of tabs
+global.shiftwidth = 2 -- Indent width
+global.tabstop = 2 -- Tab width
+global.softtabstop = 2 -- Soft tab width
 
 global.backup = false -- Don't create backup files
 global.writebackup = false -- Don't create backup files
@@ -63,12 +70,7 @@ global.swapfile = false -- Don't use swapfiles
 global.spell = true -- Enable spell checking
 global.spelllang = "en" -- Set spellcheck language to English
 
--- Other
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-global.expandtab = true -- Use spaces instead of tabs
-global.shiftwidth = 2 -- Size of an indent
-
+-- Nerd font support
 vim.g.have_nerd_font = true
 
 -- Use system clipboard
