@@ -19,7 +19,7 @@ return {
     styles = {
       bold = true,
       italic = true,
-      transparency = false,
+      transparency = true,
     },
 
     groups = {
@@ -52,16 +52,6 @@ return {
       h5 = "pine",
       h6 = "foam",
     },
-
-    highlight_groups = {
-      -- You can customize specific highlight groups here
-      -- Comment = { fg = "foam" },
-      -- VertSplit = { fg = "muted", bg = "muted" },
-    },
-
-    before_highlight = function(group, highlight, palette)
-      -- Customize highlights before they are applied
-    end,
   },
   config = function()
     vim.cmd.colorscheme("rose-pine")

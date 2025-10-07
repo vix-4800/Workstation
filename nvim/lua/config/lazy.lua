@@ -22,9 +22,9 @@ require("lazy").setup({
     -- Themes
     -- { import = "themes" }, -- Uncomment this line to load all themes
     -- Or specify individual themes to load
-    require("themes.rose-pine"),
+    require("themes.catppuccin"),
   },
-  install = { colorscheme = { "rose-pine" } },
+  install = { colorscheme = { "catppuccin" } },
 
   -- automatically check for plugin updates
   checker = { enabled = true },
