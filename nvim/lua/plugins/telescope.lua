@@ -75,5 +75,19 @@ return {
       end,
       desc = "[S]earch by [G]rep",
     },
+    {
+      "<leader>sq",
+      function()
+        require("telescope.builtin").diagnostics()
+      end,
+      desc = "[S]earch Diagnostics",
+    },
+    {
+      "<leader>sn",
+      function()
+        require("telescope").extensions.notify.notify()
+      end,
+      desc = "[S]earch [N]otifications",
+    },
   },
 }
