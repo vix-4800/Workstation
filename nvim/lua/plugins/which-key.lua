@@ -5,7 +5,9 @@ return {
     spec = {
       { "<leader>s", group = "[S]earch" },
       { "<leader>g", group = "[G]it", mode = { "n", "v" } },
-      -- { '<leader>c', group = '[C]ode Tools' },
+      { "<leader>c", group = "[C]ode Tools" },
+      { "<leader>cp", group = "[C]ode Tools - PHP" },
+      { "<leader>t", group = "[T]oggle" },
       { "<leader>r", group = "[R]eplace" },
     },
     delay = 0,
