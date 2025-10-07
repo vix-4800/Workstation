@@ -6,8 +6,6 @@ global.relativenumber = true
 
 global.showmode = false
 
-global.termguicolors = true
-
 -- Better indentation
 global.breakindent = true
 global.smartindent = true -- Smart indenting
