@@ -46,6 +46,9 @@ return {
         "html-lsp",
         "css-lsp",
 
+        -- JavaScript, TypeScript
+        "typescript-language-server",
+
         -- PHP
         "intelephense",
         "php-cs-fixer",
