@@ -5,18 +5,11 @@ return {
   config = function()
     local notify = require("notify")
     notify.setup({
-      background_colour = "NotifyBackground",
+      background_colour = "#000000",
       fps = 30,
-      icons = {
-        DEBUG = "",
-        ERROR = "",
-        INFO = "",
-        TRACE = "✎",
-        WARN = "",
-      },
       level = 2,
       minimum_width = 50,
-      render = "compact",
+      render = "simple",
       stages = "fade_in_slide_out",
       timeout = 3000,
       top_down = true,
