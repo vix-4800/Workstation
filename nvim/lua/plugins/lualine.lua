@@ -17,13 +17,13 @@ return {
     },
     sections = {
       lualine_a = { "mode" },
-      lualine_b = { "filename" },
+      lualine_b = { "filename", "diagnostics" },
       lualine_c = { "branch" },
       lualine_x = { "filetype" },
-      lualine_y = { "progress" },
+      lualine_y = { "progress", "searchcount" },
       lualine_z = { "location" },
     },
     tabline = {},
-    extensions = { "oil" },
+    extensions = { "oil", "fugitive", "mason", "toggleterm", "trouble", "lazy" },
   },
 }
