@@ -24,7 +24,7 @@ global.hlsearch = true -- Highlight search results
 global.incsearch = true -- Incremental search
 
 -- Keep signcolumn on by default
-global.signcolumn = "yes"
+global.signcolumn = "yes:2"
 
 -- Decrease update time
 global.updatetime = 250
