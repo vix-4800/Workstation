@@ -1,12 +1,14 @@
 return {
   {
     "neovim/nvim-lspconfig",
+    event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       { "saghen/blink.cmp" },
     },
   },
   {
     "mason-org/mason-lspconfig.nvim",
+    event = { "BufReadPost", "BufNewFile" },
     dependencies = { "neovim/nvim-lspconfig" },
     opts = {
       ensure_installed = {},
@@ -15,7 +17,7 @@ return {
   },
   {
     "saghen/blink.cmp",
-    event = "VimEnter",
+    event = "InsertEnter",
     dependencies = {
       { "neovim/nvim-lspconfig" },
       {

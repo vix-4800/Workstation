@@ -1,6 +1,8 @@
 return {
   {
     "mason-org/mason.nvim",
+    cmd = "Mason",
+    event = "VeryLazy",
     opts = function()
       local icons = require("config.icons")
       return {
@@ -12,6 +14,7 @@ return {
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
+    event = "VeryLazy",
     dependencies = { "mason-org/mason.nvim" },
     opts = {
       ensure_installed = {
