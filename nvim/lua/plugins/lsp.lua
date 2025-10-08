@@ -177,6 +177,9 @@ return {
       -- Docker
       lspconfig.dockerls.setup({ capabilities = capabilities })
       lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
+
+      -- Markdown
+      lspconfig.marksman.setup({ capabilities = capabilities })
     end,
   },
   {

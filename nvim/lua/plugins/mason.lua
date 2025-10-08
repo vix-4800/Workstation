@@ -18,55 +18,53 @@ return {
     dependencies = { "mason-org/mason.nvim" },
     opts = {
       ensure_installed = {
-        -- Bash
-        "shfmt",
-        "bash-language-server",
-        "shellcheck",
+        -- ╭─────────────────────────────────────────────────────────╮
+        -- │ LSP Servers                                             │
+        -- ╰─────────────────────────────────────────────────────────╯
+        "lua-language-server", -- Lua
+        "pyright", -- Python
+        "typescript-language-server", -- TypeScript/JavaScript
+        "gopls", -- Go
+        "bash-language-server", -- Bash
+        "intelephense", -- PHP
+        "yaml-language-server", -- YAML
+        "json-lsp", -- JSON
+        "html-lsp", -- HTML
+        "css-lsp", -- CSS
+        "dockerfile-language-server", -- Docker
+        "docker-compose-language-service", -- Docker Compose
+        "marksman", -- Markdown
 
-        -- Go
-        "gopls",
-
-        -- Lua
-        "lua-language-server",
-        "stylua",
-
-        -- YAML
-        "yamlfmt",
-        "yamllint",
-        "yaml-language-server",
-
-        -- JSON
-        "jsonlint",
-        "json-lsp",
-
-        -- Python
-        "pyright",
-        "pylint",
-        "flake8",
-
-        -- HTML, CSS
-        "html-lsp",
-        "css-lsp",
-
-        -- JavaScript, TypeScript
-        "typescript-language-server",
-
-        -- PHP
-        "intelephense",
+        -- ╭─────────────────────────────────────────────────────────╮
+        -- │ Formatters                                              │
+        -- ╰─────────────────────────────────────────────────────────╯
+        "stylua", -- Lua
+        "black", -- Python
+        "isort", -- Python imports
+        "prettier", -- JS/TS/JSON/CSS/HTML/MD
+        -- "prettierd", -- JS/TS/JSON/CSS/HTML/MD
+        "shfmt", -- Shell scripts
+        "yamlfmt", -- YAML
         "php-cs-fixer",
+
+        -- ╭─────────────────────────────────────────────────────────╮
+        -- │ Linters                                                 │
+        -- ╰─────────────────────────────────────────────────────────╯
+        "shellcheck", -- Bash
+        "pylint", -- Python
+        "flake8", -- Python
+        "yamllint", -- YAML
+        "jsonlint", -- JSON
+        "markdownlint", -- Markdown
+        "hadolint", -- Dockerfile
+        "dotenv-linter", -- .env files
         "phpstan",
         "phpcs",
 
-        -- Docker
-        "hadolint",
-        "dockerfile-language-server",
-        "docker-compose-language-service",
-
-        -- Other
-        "editorconfig-checker",
-        "prettier",
-        "markdownlint",
-        "dotenv-linter",
+        -- ╭─────────────────────────────────────────────────────────╮
+        -- │ Other Tools                                             │
+        -- ╰─────────────────────────────────────────────────────────╯
+        "editorconfig-checker", -- EditorConfig
       },
       auto_update = true,
       run_on_start = true,
