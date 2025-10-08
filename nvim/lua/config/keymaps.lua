@@ -28,10 +28,6 @@ vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down (alt)" })
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
--- Insert new line below and above and exit insert mode
-vim.keymap.set("n", "o", "o<Esc>", { desc = "Insert new line below and exit insert mode" })
-vim.keymap.set("n", "O", "O<Esc>", { desc = "Insert new line above and exit insert mode" })
-
 -- Delete without copying into register
 vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
 
