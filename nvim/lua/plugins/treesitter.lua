@@ -1,0 +1,45 @@
+return {
+  "nvim-treesitter/nvim-treesitter",
+  main = "nvim-treesitter.configs", -- Sets main module to use for opts
+  branch = "master",
+  lazy = false,
+  build = ":TSUpdate",
+  opts = {
+    ensure_installed = {
+      "bash",
+      "diff",
+      "html",
+      "lua",
+      "luadoc",
+      "markdown",
+      "markdown_inline",
+      "vim",
+      "vimdoc",
+      "yaml",
+      "json",
+      "css",
+      "typescript",
+      "javascript",
+      "php",
+      "phpdoc",
+      "python",
+      "go",
+      "dockerfile",
+    },
+    auto_install = true,
+    sync_install = false,
+    highlight = {
+      enable = true,
+    },
+    indent = { enable = true },
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "<CR>",
+        node_incremental = "<CR>",
+        scope_incremental = "<TAB>",
+        node_decremental = "<S-TAB>",
+      },
+    },
+  },
+}

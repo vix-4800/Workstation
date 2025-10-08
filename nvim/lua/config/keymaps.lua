@@ -1,91 +1,57 @@
--- [[ Basic Keymaps ]]
---  See `:help vim.keymap.set()`
-
 -- Remap up and down to center the cursor after moving
-vim.api.nvim_set_keymap('', '<C-u>', '<C-u>zz', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('', '<C-d>', '<C-d>zz', { noremap = true, silent = true })
+vim.api.nvim_set_keymap("", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
---  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
--- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
--- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
-
-vim.keymap.set('n', '<leader>e', '<cmd>Oil<CR>', { desc = 'Open [E]xplorer' })
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Find and Replace keymaps
-vim.keymap.set('n', '<leader>rw', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = '[R]eplace [W]ord under cursor' })
-vim.keymap.set('v', '<leader>r', '"hy:%s/<C-r>h//g<left><left>', { desc = '[R]eplace selection' })
-vim.keymap.set('n', '<leader>rl', ':s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = '[R]eplace word in current [L]ine' })
-vim.keymap.set('n', '<leader>rc', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gcI<Left><Left><Left><Left>', { desc = '[R]eplace word with [C]onfirmation' })
+vim.keymap.set(
+  "n",
+  "<leader>rw",
+  ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { desc = "[R]eplace [W]ord under cursor" }
+)
+vim.keymap.set("v", "<leader>r", '"hy:%s/<C-r>h//g<left><left>', { desc = "[R]eplace selection" })
+vim.keymap.set(
+  "n",
+  "<leader>rl",
+  ":s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { desc = "[R]eplace word in current [L]ine" }
+)
 
 -- Better indenting
-vim.keymap.set('v', '<', '<gv', { desc = 'Indent left and reselect' })
-vim.keymap.set('v', '>', '>gv', { desc = 'Indent right and reselect' })
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Move text up and down
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
-
--- Quick save and quit
-vim.keymap.set('n', '<leader>w', '<cmd>w<CR>', { desc = '[W]rite file' })
-vim.keymap.set('n', '<leader>q', '<cmd>q<CR>', { desc = '[Q]uit' })
-vim.keymap.set('n', '<leader>x', '<cmd>x<CR>', { desc = 'Save and quit' })
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
 -- Insert new line below and above and exit insert mode
-vim.keymap.set('n', 'o', 'o<Esc>', { desc = 'Insert new line below and exit insert mode' })
-vim.keymap.set('n', 'O', 'O<Esc>', { desc = 'Insert new line above and exit insert mode' })
+vim.keymap.set("n", "o", "o<Esc>", { desc = "Insert new line below and exit insert mode" })
+vim.keymap.set("n", "O", "O<Esc>", { desc = "Insert new line above and exit insert mode" })
 
 -- Delete without copying into register
-vim.keymap.set({ 'n', 'v' }, 'x', '"_x', { desc = 'Delete without yanking' })
+vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
 
--- Code Actions Menus
-vim.keymap.set('n', '<leader>cp', function()
-  local lines = {
-    '╭─────────────────────────────────────────────────────────────────────╮',
-    '│                       📝 PHP Code Actions Menu                      │',
-    '╞═════════════════════════════════════════════════════════════════════╡',
-    '│                                                                     │',
-    '│  🐘 PHP Actions:                                                     │',
-    '│     [R]efactor file (Rector)                                        │',
-    '│     [s]tatic analysis file (PHPStan)                                │',
-    '│     [c]heck coding standards (PHPCS)                                │',
-    '│                                                                     │',
-    '│  🌐 Project-wide PHP Actions:                                       │',
-    '│     [S]tatic analysis entire project (PHPStan)                      │',
-    '│     [C]heck coding standards entire project (PHPCS)                 │',
-    '│                                                                     │',
-    '╰─────────────────────────────────────────────────────────────────────╯',
-  }
-  vim.api.nvim_echo({ { table.concat(lines, '\n'), 'Normal' } }, false, {})
-end, { desc = 'Show PHP Code Actions Menu' })
+-- Quick save and quit
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
+vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "[Q]uit" })
+
+-- Buffer navigation
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "[D]elete buffer" })
+
+-- Window navigation
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to down window" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to up window" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+-- Resize windows
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<CR>", { desc = "Increase height" })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<CR>", { desc = "Decrease height" })
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<CR>", { desc = "Decrease width" })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increase width" })

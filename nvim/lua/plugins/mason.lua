@@ -1,0 +1,73 @@
+return {
+  {
+    "mason-org/mason.nvim",
+    opts = function()
+      local icons = require("config.icons")
+      return {
+        ui = {
+          icons = icons.mason,
+        },
+      }
+    end,
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "mason-org/mason.nvim" },
+    opts = {
+      ensure_installed = {
+        -- Bash
+        "shfmt",
+        "bash-language-server",
+        "shellcheck",
+
+        -- Go
+        "gopls",
+
+        -- Lua
+        "lua-language-server",
+        "stylua",
+
+        -- YAML
+        "yamlfmt",
+        "yamllint",
+        "yaml-language-server",
+
+        -- JSON
+        "jsonlint",
+        "json-lsp",
+
+        -- Python
+        "pyright",
+        "pylint",
+        "flake8",
+
+        -- HTML, CSS
+        "html-lsp",
+        "css-lsp",
+
+        -- JavaScript, TypeScript
+        "typescript-language-server",
+
+        -- PHP
+        "intelephense",
+        "php-cs-fixer",
+        "phpstan",
+        "phpcs",
+
+        -- Docker
+        "hadolint",
+        "dockerfile-language-server",
+        "docker-compose-language-service",
+
+        -- Other
+        "editorconfig-checker",
+        "prettier",
+        "markdownlint",
+      },
+      auto_update = true,
+      run_on_start = true,
+      start_delay = 3000, -- 3 second delay
+      debounce_hours = 24,
+    },
+  },
+}

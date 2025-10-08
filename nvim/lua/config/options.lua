@@ -1,104 +1,126 @@
--- [[ Setting options ]]
--- See `:help vim.o`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
+local global = vim.opt
 
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+-- Globals
+global.number = true
+global.relativenumber = true
 
-vim.o.termguicolors = true
-
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
-
--- Make line numbers default
-vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
-vim.o.relativenumber = true
-
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.o.mouse = 'a'
-
--- Don't show the mode, since it's already in the status line
-vim.o.showmode = false
-
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
+global.showmode = false
 
 -- Better indentation
-vim.o.breakindent = true
-vim.o.smartindent = true -- Smart indenting
-vim.o.autoindent = true -- Copy indent from current line when starting a new line
+global.breakindent = true
+global.smartindent = true -- Smart indenting
+global.autoindent = true -- Copy indent from current line when starting a new line
 
 -- Save undo history
-vim.o.undofile = true
+global.undofile = true
 
 -- Better search experience
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.o.ignorecase = true
-vim.o.smartcase = true
-vim.o.hlsearch = true -- Highlight search results
-vim.o.incsearch = true -- Incremental search
+global.ignorecase = true
+global.smartcase = true
+global.hlsearch = true -- Highlight search results
+global.incsearch = true -- Incremental search
 
 -- Keep signcolumn on by default
-vim.o.signcolumn = 'yes'
+global.signcolumn = "yes:2"
 
 -- Decrease update time
-vim.o.updatetime = 250
+global.updatetime = 250
 
 -- Decrease mapped sequence wait time
-vim.o.timeoutlen = 300
+global.timeoutlen = 300
 
 -- Configure how new splits should be opened
-vim.o.splitright = true
-vim.o.splitbelow = true
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
---
---  Notice listchars is set using `vim.opt` instead of `vim.o`.
---  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
---   See `:help lua-options`
---   and `:help lua-options-guide`
-vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+global.splitright = true
+global.splitbelow = true
 
 -- Preview substitutions live, as you type!
-vim.o.inccommand = 'split'
+global.inccommand = "split"
 
 -- Show which line your cursor is on
-vim.o.cursorline = true
+global.cursorline = true
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
--- See `:help 'confirm'`
-vim.o.confirm = true
+global.confirm = true
 
 -- Additional useful options
-vim.o.fileencoding = 'utf-8' -- File content encoding
+global.fileencoding = "utf-8" -- File content encoding
 
 -- Better completion experience
-vim.o.completeopt = 'menuone,noselect' -- Better autocompletion
-vim.o.pumheight = 10 -- Pop up menu height
+global.completeopt = "menuone,noselect" -- Better autocompletion
+global.pumheight = 10 -- Pop up menu height
 
 -- Better editing experience
-vim.o.wrap = false -- Display lines as one long line
-vim.o.scrolloff = 10 -- Minimal number of screen lines to keep above and below the cursor.
-vim.o.sidescrolloff = 8 -- Minimal number of columns to keep to the left and right of the cursor
+global.wrap = false -- Display lines as one long line
+global.scrolloff = 10 -- Minimal number of screen lines to keep above and below the cursor.
+global.sidescrolloff = 8 -- Minimal number of columns to keep to the left and right of the cursor
+global.mouse = "a" -- Enable mouse support
 
-vim.o.backup = false -- Don't create backup files
-vim.o.writebackup = false -- Don't create backup files
-vim.o.swapfile = false -- Don't use swapfiles
+-- Indentation
+global.expandtab = true -- Use spaces instead of tabs
+global.shiftwidth = 2 -- Indent width
+global.tabstop = 2 -- Tab width
+global.softtabstop = 2 -- Soft tab width
 
-vim.o.spell = true -- Enable spell checking
-vim.o.spelllang = 'en' -- Set spellcheck language to English
+global.backup = false -- Don't create backup files
+global.writebackup = false -- Don't create backup files
+global.swapfile = false -- Don't use swapfiles
+
+global.spell = true -- Enable spell checking
+global.spelllang = "en" -- Set spellcheck language to English
+
+-- Nerd font support
+vim.g.have_nerd_font = true
+
+-- Use system clipboard
+vim.schedule(function()
+  global.clipboard = "unnamedplus"
+end)
+
+-- Sets how neovim will display certain whitespace characters in the editor.
+local icons = require("config.icons")
+global.list = true
+global.listchars = icons.misc.list_chars
+
+-- Diagnostic configuration
+vim.diagnostic.enable = true
+vim.diagnostic.config({
+  severity_sort = true,
+  float = { border = "rounded", source = "if_many" },
+  underline = { severity = vim.diagnostic.severity.ERROR },
+  signs = vim.g.have_nerd_font
+      and {
+        text = {
+          [vim.diagnostic.severity.ERROR] = icons.diagnostics.error,
+          [vim.diagnostic.severity.WARN] = icons.diagnostics.warn,
+          [vim.diagnostic.severity.INFO] = icons.diagnostics.info,
+          [vim.diagnostic.severity.HINT] = icons.diagnostics.hint,
+        },
+        -- Highlight sign for selected severities
+        -- linehl = {
+        --   [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+        -- },
+        -- Highlight number for selected severities
+        numhl = {
+          [vim.diagnostic.severity.WARN] = "WarningMsg",
+        },
+      }
+    or {},
+  virtual_text = {
+    source = "if_many",
+    spacing = 4,
+    prefix = icons.misc.virtual_text_prefix,
+    format = function(diagnostic)
+      return string.format("%s", diagnostic.message)
+
+      -- To include error code or source, use this instead:
+      -- return string.format("%s (%s)", diagnostic.message, diagnostic.code or diagnostic.source)
+    end,
+
+    -- Only show virtual text for selected severities
+    -- Uncomment to enable
+    -- severity = vim.diagnostic.severity.ERROR,
+    -- severity = { min = vim.diagnostic.severity.WARN },
+  },
+})
