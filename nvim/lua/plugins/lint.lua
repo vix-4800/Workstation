@@ -11,7 +11,6 @@ return {
       python = { "pylint", "flake8" },
       sh = { "shellcheck" },
       -- lua = { "luacheck" },
-      dockerfile = { "hadolint" },
     }
 
     -- Configure phpstan to use custom config
