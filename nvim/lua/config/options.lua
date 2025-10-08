@@ -48,7 +48,7 @@ global.confirm = true
 global.fileencoding = "utf-8" -- File content encoding
 
 -- Better completion experience
-global.completeopt = "menuone,noselect" -- Better autocompletion
+global.completeopt = "menu,menuone,noselect"
 global.pumheight = 10 -- Pop up menu height
 
 -- Better editing experience
