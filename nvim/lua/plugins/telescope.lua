@@ -16,7 +16,14 @@ return {
     { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
   },
   config = function()
-    require("telescope").setup({
+    local telescope = require("telescope")
+
+    -- Enable Telescope extensions if they are installed
+    pcall(telescope.load_extension, "fzf")
+    pcall(telescope.load_extension, "ui-select")
+    pcall(telescope.load_extension, "notify")
+
+    telescope.setup({
       -- defaults = {
       --   mappings = {
       --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
@@ -29,13 +36,6 @@ return {
         },
       },
     })
-
-    local telescope = require("telescope")
-
-    -- Enable Telescope extensions if they are installed
-    pcall(telescope.load_extension, "fzf")
-    pcall(telescope.load_extension, "ui-select")
-    pcall(telescope.load_extension, "notify")
   end,
   keys = {
     {
