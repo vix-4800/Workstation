@@ -7,19 +7,19 @@ return {
         signs = icons.git.signs,
         signs_staged = icons.git.signs_staged,
         signs_staged_enable = true,
-        signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
-        word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+        signcolumn = true,
+        numhl = false,
+        linehl = false,
+        word_diff = false,
         watch_gitdir = {
           follow_files = true,
         },
         auto_attach = true,
         attach_to_untracked = false,
-        current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+        current_line_blame = false,
         current_line_blame_opts = {
           virt_text = true,
-          virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
+          virt_text_pos = "eol",
           delay = 1000,
           ignore_whitespace = false,
           virt_text_priority = 100,
@@ -29,7 +29,7 @@ return {
         sign_priority = 6,
         update_debounce = 100,
         status_formatter = nil,
-        max_file_length = 40000, -- Disable if file is longer than this (in lines)
+        max_file_length = 40000,
         preview_config = {
           style = "minimal",
           relative = "cursor",
@@ -39,39 +39,54 @@ return {
       }
     end,
     event = "BufReadPre",
-    config = function()
-      local gitsigns = require("gitsigns")
+    keys = {
+      { "<leader>gs", function() require("gitsigns").stage_hunk() end, desc = "[S]tage hunk", mode = "n" },
+      { "<leader>gs", function() require("gitsigns").stage_hunk({vim.fn.line("."), vim.fn.line("v")}) end, desc = "[S]tage hunk", mode = "v" },
+      { "<leader>gS", function() require("gitsigns").stage_buffer() end, desc = "[S]tage buffer" },
 
-      -- visual mode
-      vim.keymap.set("v", "<leader>gs", function()
-        gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-      end, { desc = "git [s]tage hunk" })
-      vim.keymap.set("v", "<leader>gr", function()
-        gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-      end, { desc = "git [r]eset hunk" })
+      { "<leader>gr", function() require("gitsigns").reset_hunk() end, desc = "[R]eset hunk", mode = "n" },
+      { "<leader>gr", function() require("gitsigns").reset_hunk({vim.fn.line("."), vim.fn.line("v")}) end, desc = "[R]eset hunk", mode = "v" },
+      { "<leader>gR", function() require("gitsigns").reset_buffer() end, desc = "[R]eset buffer" },
 
-      -- normal mode
-      vim.keymap.set("n", "<leader>gs", gitsigns.stage_hunk, { desc = "git [s]tage hunk" })
-      vim.keymap.set("n", "<leader>gS", gitsigns.stage_buffer, { desc = "git [S]tage buffer" })
-      vim.keymap.set("n", "<leader>gr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
-      vim.keymap.set("n", "<leader>gR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
-      vim.keymap.set("n", "<leader>gu", gitsigns.stage_hunk, { desc = "git [u]ndo stage hunk" })
-      vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
+      { "<leader>gu", function() require("gitsigns").undo_stage_hunk() end, desc = "[U]ndo stage hunk" },
+
+      { "]g", function() require("gitsigns").next_hunk() end, desc = "Next hunk" },
+      { "[g", function() require("gitsigns").prev_hunk() end, desc = "Previous hunk" },
+    },
+    config = function(_, opts)
+      require("gitsigns").setup(opts)
     end,
   },
   {
     "tpope/vim-fugitive",
+    cmd = { "Git", "G", "Gread", "Gwrite", "Ggrep", "GMove", "GDelete", "GBrowse", "GRemove", "GRename", "Glgrep", "Gedit" },
+    keys = {
+      { "<leader>gg", "<cmd>Git<CR>", desc = "status" },
+      { "<leader>gl", "<cmd>Git log<CR>", desc = "[L]og" },
+      { "<leader>gc", "<cmd>Git commit<CR>", desc = "[C]ommit" },
+      { "<leader>gP", "<cmd>Git push<CR>", desc = "[P]ush" },
+    },
   },
   {
     "sindrets/diffview.nvim",
-    event = "BufRead",
-    config = function()
-      local diffview = require("diffview")
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewToggleFiles", "DiffviewFocusFiles", "DiffviewFileHistory" },
+    keys = {
+      { "<leader>gd", "<cmd>DiffviewOpen<CR>", desc = "[V]iew diff" },
+      { "<leader>gD", "<cmd>DiffviewClose<CR>", desc = "Close diff[V]iew" },
 
-      vim.keymap.set("n", "<leader>gd", diffview.open, { desc = "Open Diffview" })
-      vim.keymap.set("n", "<leader>gq", diffview.close, { desc = "[Q]uit Diffview" })
-      vim.keymap.set("n", "<leader>gh", ":DiffviewFileHistory %<CR>", { desc = "File [H]istory" })
-      vim.keymap.set("n", "<leader>gH", ":DiffviewFileHistory<CR>", { desc = "Project [H]istory" })
-    end,
+      { "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", desc = "[H]istory (current file)" },
+      { "<leader>gH", "<cmd>DiffviewFileHistory<CR>", desc = "[H]istory (all)" },
+    },
+    opts = {
+      enhanced_diff_hl = true,
+      view = {
+        default = {
+          layout = "diff2_horizontal",
+        },
+        file_history = {
+          layout = "diff2_horizontal",
+        },
+      },
+    },
   },
 }
