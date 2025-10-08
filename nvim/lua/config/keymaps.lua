@@ -25,8 +25,8 @@ vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Move text up and down
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down (alt)" })
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
 -- Insert new line below and above and exit insert mode
 vim.keymap.set("n", "o", "o<Esc>", { desc = "Insert new line below and exit insert mode" })
@@ -49,8 +49,3 @@ vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to down window" })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to up window" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
-
-vim.keymap.set("n", "<C-Up>", "<C-w>k", { desc = "Move to upper window" })
-vim.keymap.set("n", "<C-Down>", "<C-w>j", { desc = "Move to lower window" })
-vim.keymap.set("n", "<C-Left>", "<C-w>h", { desc = "Move to left window" })
-vim.keymap.set("n", "<C-Right>", "<C-w>l", { desc = "Move to right window" })
