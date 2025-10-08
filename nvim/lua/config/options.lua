@@ -79,8 +79,9 @@ vim.schedule(function()
 end)
 
 -- Sets how neovim will display certain whitespace characters in the editor.
+local icons = require("config.icons")
 global.list = true
-global.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+global.listchars = icons.misc.list_chars
 
 -- Diagnostic configuration
 vim.diagnostic.enable = true
@@ -91,10 +92,10 @@ vim.diagnostic.config({
   signs = vim.g.have_nerd_font
       and {
         text = {
-          [vim.diagnostic.severity.ERROR] = "✗",
-          [vim.diagnostic.severity.WARN] = "⚠",
-          [vim.diagnostic.severity.INFO] = "ℹ",
-          [vim.diagnostic.severity.HINT] = "➤",
+          [vim.diagnostic.severity.ERROR] = icons.diagnostics.error,
+          [vim.diagnostic.severity.WARN] = icons.diagnostics.warn,
+          [vim.diagnostic.severity.INFO] = icons.diagnostics.info,
+          [vim.diagnostic.severity.HINT] = icons.diagnostics.hint,
         },
         -- Highlight sign for selected severities
         -- linehl = {
@@ -109,7 +110,7 @@ vim.diagnostic.config({
   virtual_text = {
     source = "if_many",
     spacing = 4,
-    prefix = "●",
+    prefix = icons.misc.virtual_text_prefix,
     format = function(diagnostic)
       return string.format("%s", diagnostic.message)
 

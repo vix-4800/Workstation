@@ -1,15 +1,14 @@
 return {
   {
     "mason-org/mason.nvim",
-    opts = {
-      ui = {
-        icons = {
-          package_installed = "✓",
-          package_pending = "➜",
-          package_uninstalled = "✗",
+    opts = function()
+      local icons = require("config.icons")
+      return {
+        ui = {
+          icons = icons.mason,
         },
-      },
-    },
+      }
+    end,
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
