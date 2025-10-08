@@ -10,7 +10,6 @@ return {
       { "<leader>t", group = "[T]oggle" },
       { "<leader>r", group = "[R]eplace" },
       { "<leader>d", group = "[D]ocument/Diagnostics" },
-      { "<leader>w", group = "[W]orkspace" },
     },
     delay = 0,
     icons = {

@@ -82,15 +82,6 @@ return {
           ["[A"] = "@parameter.inner",
         },
       },
-      swap = {
-        enable = true,
-        swap_next = {
-          ["<leader>na"] = "@parameter.inner",
-        },
-        swap_previous = {
-          ["<leader>pa"] = "@parameter.inner",
-        },
-      },
     },
   },
 }
