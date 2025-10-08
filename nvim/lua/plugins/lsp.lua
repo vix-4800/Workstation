@@ -1,7 +1,9 @@
 return {
-  "neovim/nvim-lspconfig",
-  dependencies = {
-    { "saghen/blink.cmp" },
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      { "saghen/blink.cmp" },
+    },
   },
   {
     "mason-org/mason-lspconfig.nvim",
