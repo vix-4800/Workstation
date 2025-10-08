@@ -4,5 +4,7 @@
 
 ### NeoVim
 
-- [ ] Comments
+- [x] Comments
 - [ ] Surround
+- [ ] LSP
+- [ ] Separate config file for icons
