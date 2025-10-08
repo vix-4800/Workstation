@@ -11,6 +11,7 @@ return {
       python = { "pylint", "flake8" },
       sh = { "shellcheck" },
       -- lua = { "luacheck" },
+      dotenv = { "dotenv-linter" },
     }
 
     -- Configure phpstan to use custom config
@@ -39,6 +40,34 @@ return {
 
     lint.linters.phpcs.env = {
       PHP_CS_FIXER_IGNORE_ENV = "1",
+    }
+
+    -- Dotenv-linter configuration
+    lint.linters["dotenv-linter"] = {
+      cmd = "dotenv-linter",
+      stdin = false,
+      args = { "check", "--format", "json", "$FILENAME" },
+      -- stream = "stdout",
+      stream = "stderr",
+      ignore_exitcode = true,
+      parser = function(output)
+        local diagnostics = {}
+        local ok, decoded = pcall(vim.json.decode, output)
+        if not ok or type(decoded) ~= "table" then
+          return diagnostics
+        end
+
+        for _, item in ipairs(decoded) do
+          table.insert(diagnostics, {
+            lnum = (item.line - 1) or 0,
+            col = 0,
+            message = item.message,
+            severity = vim.diagnostic.severity.WARN,
+            source = "dotenv-linter",
+          })
+        end
+        return diagnostics
+      end,
     }
 
     -- Create autocommand which carries out the actual linting on the specified events.

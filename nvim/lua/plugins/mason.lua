@@ -63,6 +63,7 @@ return {
         "editorconfig-checker",
         "prettier",
         "markdownlint",
+        "dotenv-linter",
       },
       auto_update = true,
       run_on_start = true,
