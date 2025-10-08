@@ -3,7 +3,14 @@ return {
   event = { "BufReadPost", "BufNewFile" },
   ft = { "css", "scss", "html", "javascript", "typescript", "vue", "lua" },
   config = function()
-    require("colorizer").setup()
+    require("colorizer").setup({
+      "css",
+      "javascript",
+      "html",
+      "typescript",
+      "vue",
+      "lua",
+    }, { mode = "foreground" })
   end,
   -- keys = { "<leader>tc", ":ColorizerToggle<CR>", { desc = "[T]oggle [C]olorizer" } },
 }
