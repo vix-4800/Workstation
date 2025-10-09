@@ -21,20 +21,20 @@ M.diagnostics = {
 -- ╰─────────────────────────────────────────────────────────────────────╯
 M.git = {
   signs = {
-    add = "+",
-    change = "~",
-    delete = "_",
-    topdelete = "‾",
-    changedelete = "~",
-    untracked = "┆",
+    add = "▎",
+    change = "▎",
+    delete = "▁",
+    topdelete = "▔",
+    changedelete = "▎",
+    untracked = "▎",
   },
   signs_staged = {
-    add = "┃",
-    change = "┃",
-    delete = "_",
-    topdelete = "‾",
-    changedelete = "~",
-    untracked = "┆",
+    add = "▎",
+    change = "▎",
+    delete = "▁",
+    topdelete = "▔",
+    changedelete = "▎",
+    untracked = "▎",
   },
 }
 
