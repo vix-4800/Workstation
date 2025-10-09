@@ -104,7 +104,10 @@ vim.keymap.set("n", "<leader>cpC", function()
       if res.code == 0 then
         vim.notify(icons.notifications.success .. " PHPCS: no issues found in project")
       else
-        vim.notify(icons.notifications.warning .. " PHPCS: found coding standard issues in project", vim.log.levels.WARN)
+        vim.notify(
+          icons.notifications.warning .. " PHPCS: found coding standard issues in project",
+          vim.log.levels.WARN
+        )
       end
     end)
   end)
