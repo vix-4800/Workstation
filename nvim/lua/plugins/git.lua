@@ -40,18 +40,76 @@ return {
     end,
     event = "BufReadPre",
     keys = {
-      { "<leader>gs", function() require("gitsigns").stage_hunk() end, desc = "[S]tage hunk", mode = "n" },
-      { "<leader>gs", function() require("gitsigns").stage_hunk({vim.fn.line("."), vim.fn.line("v")}) end, desc = "[S]tage hunk", mode = "v" },
-      { "<leader>gS", function() require("gitsigns").stage_buffer() end, desc = "[S]tage buffer" },
+      {
+        "<leader>gs",
+        function()
+          require("gitsigns").stage_hunk()
+        end,
+        desc = "[S]tage hunk",
+        mode = "n",
+      },
+      {
+        "<leader>gs",
+        function()
+          require("gitsigns").stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end,
+        desc = "[S]tage hunk",
+        mode = "v",
+      },
+      {
+        "<leader>gS",
+        function()
+          require("gitsigns").stage_buffer()
+        end,
+        desc = "[S]tage buffer",
+      },
 
-      { "<leader>gr", function() require("gitsigns").reset_hunk() end, desc = "[R]eset hunk", mode = "n" },
-      { "<leader>gr", function() require("gitsigns").reset_hunk({vim.fn.line("."), vim.fn.line("v")}) end, desc = "[R]eset hunk", mode = "v" },
-      { "<leader>gR", function() require("gitsigns").reset_buffer() end, desc = "[R]eset buffer" },
+      {
+        "<leader>gr",
+        function()
+          require("gitsigns").reset_hunk()
+        end,
+        desc = "[R]eset hunk",
+        mode = "n",
+      },
+      {
+        "<leader>gr",
+        function()
+          require("gitsigns").reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end,
+        desc = "[R]eset hunk",
+        mode = "v",
+      },
+      {
+        "<leader>gR",
+        function()
+          require("gitsigns").reset_buffer()
+        end,
+        desc = "[R]eset buffer",
+      },
 
-      { "<leader>gu", function() require("gitsigns").undo_stage_hunk() end, desc = "[U]ndo stage hunk" },
+      {
+        "<leader>gu",
+        function()
+          require("gitsigns").undo_stage_hunk()
+        end,
+        desc = "[U]ndo stage hunk",
+      },
 
-      { "]g", function() require("gitsigns").next_hunk() end, desc = "Next hunk" },
-      { "[g", function() require("gitsigns").prev_hunk() end, desc = "Previous hunk" },
+      {
+        "]g",
+        function()
+          require("gitsigns").next_hunk()
+        end,
+        desc = "Next hunk",
+      },
+      {
+        "[g",
+        function()
+          require("gitsigns").prev_hunk()
+        end,
+        desc = "Previous hunk",
+      },
     },
     config = function(_, opts)
       require("gitsigns").setup(opts)
@@ -59,7 +117,20 @@ return {
   },
   {
     "tpope/vim-fugitive",
-    cmd = { "Git", "G", "Gread", "Gwrite", "Ggrep", "GMove", "GDelete", "GBrowse", "GRemove", "GRename", "Glgrep", "Gedit" },
+    cmd = {
+      "Git",
+      "G",
+      "Gread",
+      "Gwrite",
+      "Ggrep",
+      "GMove",
+      "GDelete",
+      "GBrowse",
+      "GRemove",
+      "GRename",
+      "Glgrep",
+      "Gedit",
+    },
     keys = {
       { "<leader>gg", "<cmd>Git<CR>", desc = "status" },
       { "<leader>gl", "<cmd>Git log<CR>", desc = "[L]og" },
