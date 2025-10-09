@@ -28,7 +28,8 @@
 
 ### Инструменты разработки:
 
-- **PHP**: php, php-gd, php-intl, composer + глобальные пакеты (PHPStan, PHP-CS-Fixer, PHPCS, Rector)
+- **PHP**: php, php-gd, php-intl, composer + глобальные пакеты (PHPStan, PHP-CS-Fixer, PHPCS,
+  Rector)
 - **Python**: python-pip, pipx + инструменты (black, flake8, mypy, pre-commit)
 - **JavaScript**: Node.js через NVM (устанавливается отдельно)
 - **Docker**: docker, docker-compose
