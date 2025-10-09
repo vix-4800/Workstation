@@ -3,6 +3,10 @@ return {
   event = { "BufReadPost", "BufNewFile" },
   config = function()
     local lint = require("lint")
+
+    -- Global linting state
+    vim.g.linting_enabled = true
+
     lint.linters_by_ft = {
       markdown = { "markdownlint" },
       php = { "phpstan", "phpcs" },
@@ -79,10 +83,24 @@ return {
         -- Only run the linter in buffers that you can modify in order to
         -- avoid superfluous noise, notably within the handy LSP pop-ups that
         -- describe the hovered symbol using Markdown.
-        if vim.bo.modifiable then
+        if vim.bo.modifiable and vim.g.linting_enabled then
           lint.try_lint()
         end
       end,
     })
+
+    -- Toggle all linting
+    vim.api.nvim_create_user_command("ToggleLinting", function()
+      vim.g.linting_enabled = not vim.g.linting_enabled
+      local status = vim.g.linting_enabled and "enabled" or "disabled"
+      vim.notify("Linting " .. status, vim.log.levels.INFO)
+      if not vim.g.linting_enabled then
+        vim.diagnostic.reset(nil, 0)
+      else
+        if vim.bo.modifiable then
+          lint.try_lint()
+        end
+      end
+    end, { desc = "Toggle all linting" })
   end,
 }
