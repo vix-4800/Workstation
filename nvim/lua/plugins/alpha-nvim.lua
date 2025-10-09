@@ -35,4 +35,7 @@ return {
 
     require("alpha").setup(dashboard.opts)
   end,
+  keys = {
+    { "<leader>h", ":Alpha<CR>", desc = "  Go [H]ome" },
+  },
 }
