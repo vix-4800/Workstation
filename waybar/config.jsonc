@@ -233,14 +233,14 @@
     "tooltip-format": "Microphone (click to mute/unmute)",
     "interval": 1,
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    "exec": "~/.config/waybar/mic-status",
+    "exec": "~/.config/waybar/scripts/mic-status",
     "return-type": "json"
   },
 
   "custom/vpn": {
     "format": "{}",
     "tooltip": true,
-    "exec": "~/.config/waybar/vpn-status",
+    "exec": "~/.config/waybar/scripts/vpn-status",
     "return-type": "json",
     "interval": 5,
     "on-click": "~/.config/waybar/vpn-toggle"
@@ -249,7 +249,7 @@
   "custom/docker": {
     "format": " {}",
     "tooltip": true,
-    "exec": "~/.config/waybar/docker-status",
+    "exec": "~/.config/waybar/scripts/docker-status",
     "return-type": "json",
     "interval": 10,
     "on-click": "alacritty -e sh -c 'docker ps -a; echo \"\nPress Enter to close...\"; read'"
