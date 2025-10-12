@@ -243,7 +243,7 @@
     "exec": "~/.config/waybar/scripts/vpn-status",
     "return-type": "json",
     "interval": 5,
-    "on-click": "~/.config/waybar/vpn-toggle"
+    "on-click": "~/.config/waybar/scripts/vpn-toggle"
   },
 
   "custom/docker": {
