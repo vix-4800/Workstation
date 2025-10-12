@@ -1,270 +1,103 @@
-/* ========== Base ========== */
+@import 'mocha.css';
+
 * {
-  border: none;
-  font-family:
-    Iosevka,
-    FontAwesome,
-    Noto Sans CJK;
-  font-size: 16px;
-  min-height: 10px;
+  font-family: FantasqueSansMono Nerd Font;
+  font-size: 17px;
+  min-height: 0;
 }
 
-window#waybar {
+#waybar {
   background: transparent;
+  color: @text;
+  margin: 5px 5px;
 }
 
-/* ========== Colors ========== */
-.modules-left,
-.modules-center,
-.modules-right {
-  background: rgba(15, 17, 26, 0.88);
-  color: #d7dce2;
-  border: 2px solid #61afef;
-  border-radius: 10px;
-  padding: 5px 10px;
-  margin: 8px 8px;
-}
-
-.modules-left > *,
-.modules-center > *,
-.modules-right > * {
-  background: transparent;
-  color: #d7dce2;
-}
-
-.modules-left > * + *,
-.modules-center > * + *,
-.modules-right > * + * {
-  border-left: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* ========== Workspaces ========== */
 #workspaces {
-  padding: 0 4px;
+  border-radius: 1rem;
+  margin: 5px;
+  background-color: @surface0;
+  margin-left: 1rem;
 }
 
 #workspaces button {
-  color: #abb2bf;
-  background: transparent;
-  padding: 2px 6px;
-  margin: 0 3px;
-  border-radius: 6px;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
-}
-
-#workspaces button:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #d7dce2;
+  color: @lavender;
+  border-radius: 1rem;
+  padding: 0.4rem;
 }
 
 #workspaces button.active {
-  background: #61afef;
-  color: #0f111a;
+  color: @sky;
+  border-radius: 1rem;
 }
 
-#workspaces button.urgent {
-  background: #e06c75;
-  color: white;
+#workspaces button:hover {
+  color: @sapphire;
+  border-radius: 1rem;
 }
 
-/* ========== Modules ========== */
-
-#memory,
-#cpu,
-#temperature,
-#network,
-#bluetooth,
+#custom-music,
+#tray,
+#backlight,
+#clock,
 #battery,
-#idle_inhibitor,
 #pulseaudio,
-#pulseaudio_slider,
-#clock {
-  margin: 0 10px;
+#custom-lock,
+#custom-power {
+  background-color: @surface0;
+  padding: 0.5rem 1rem;
+  margin: 5px 0;
 }
 
 #clock {
-  color: #d7dce2;
-}
-
-#cpu {
-  color: #d7dce2;
-  min-width: 50px;
-}
-
-#custom-gpu-temp {
-  color: #d7dce2;
-  min-width: 50px;
-  margin-right: 10px;
-}
-
-#memory {
-  color: #d7dce2;
-  min-width: 50px;
-}
-
-#temperature {
-  color: #d7dce2;
-}
-
-#network {
-  color: #d7dce2;
-  min-width: 25px;
-}
-
-#pulseaudio,
-#pulseaudio_slider {
-  color: #d7dce2;
-  min-width: 75px;
-}
-
-#bluetooth {
-  color: #d7dce2;
-}
-
-#idle_inhibitor {
-  color: #d7dce2;
-  padding-right: 5px;
-}
-
-#keyboard-state {
-  color: #d7dce2;
+  color: @blue;
+  border-radius: 0px 1rem 1rem 0px;
+  margin-right: 1rem;
 }
 
 #battery {
-  color: #d7dce2;
-  min-width: 60px;
+  color: @green;
 }
 
 #battery.charging {
-  color: #98c379;
+  color: @green;
 }
 
-#battery.warning {
-  color: #e5c07b;
+#battery.warning:not(.charging) {
+  color: @red;
 }
 
-#battery.critical {
-  color: #e06c75;
+#backlight {
+  color: @yellow;
 }
 
-#custom-archicon {
-  font-size: 18px;
-  color: #61afef;
-  padding-right: 10px;
+#backlight,
+#battery {
+  border-radius: 0;
 }
 
-#mode {
-  color: #61afef;
-  font-style: italic;
+#pulseaudio {
+  color: @maroon;
+  border-radius: 1rem 0px 0px 1rem;
+  margin-left: 1rem;
+}
+
+#custom-music {
+  color: @mauve;
+  border-radius: 1rem;
+}
+
+#custom-lock {
+  border-radius: 1rem 0px 0px 1rem;
+  color: @lavender;
+}
+
+#custom-power {
+  margin-right: 1rem;
+  border-radius: 0px 1rem 1rem 0px;
+  color: @red;
 }
 
 #tray {
-  padding: 0 6px;
-}
-
-#custom-weather {
-  padding: 0 10px;
-}
-
-#language {
-  color: #d7dce2;
-  margin: 0 10px;
-  padding: 0 5px;
-  background: transparent;
-}
-
-window#waybar.hidden {
-  opacity: 0.15;
-}
-
-/* ========== System Group ========== */
-#system {
-  padding: 0 8px;
-}
-
-#custom-system-icon {
-  font-size: 16px;
-  color: #61afef;
-  padding: 0 8px;
-}
-
-.system-hidden {
-  opacity: 0;
-  min-width: 0px;
-}
-
-#system:hover .system-hidden,
-#system.open .system-hidden {
-  opacity: 1;
-  transition: all 0.5s ease-in-out;
-}
-
-/* ========== Microphone ========== */
-#custom-microphone {
-  padding: 0 8px;
-  min-width: 20px;
-}
-
-#custom-microphone.muted {
-  color: #e06c75;
-}
-
-#custom-microphone.active {
-  color: #98c379;
-}
-
-#custom-microphone.disconnected {
-  color: #666;
-}
-
-/* ========== VPN ========== */
-#custom-vpn {
-  padding: 0 8px;
-  min-width: 15px;
-}
-
-#custom-vpn.connected {
-  color: #98c379;
-}
-
-#custom-vpn.disconnected {
-  color: #e06c75;
-}
-
-/* ========== Docker ========== */
-#custom-docker {
-  min-width: 40px;
-  padding: 0 8px;
-}
-
-#custom-docker.running {
-  color: #61afef;
-}
-
-#custom-docker.stopped {
-  color: #8499aa;
-}
-
-/* ========== Notification ========== */
-#custom-notification {
-  font-size: 14px;
-  padding: 0 5px;
-  background-color: transparent;
-  min-width: 20px;
-}
-
-#custom-notification.none,
-#custom-notification.dnd-none,
-#custom-notification.inhibited-none,
-#custom-notification.dnd-inhibited-none {
-  color: #b6b6b6;
-}
-
-#custom-notification.notification,
-#custom-notification.dnd-notification,
-#custom-notification.inhibited-notification,
-#custom-notification.dnd-inhibited-notification {
-  color: #e5c07b;
+  margin-right: 1rem;
+  border-radius: 1rem;
 }

@@ -1,40 +1,33 @@
 {
-  /* === Appearance === */
   "layer": "top",
   "position": "top",
   "passthrough": false,
   "reload_style_on_change": true,
-  "margin": "5 10 0 10",
+  "height": 42,
 
-  /* === Modules Position === */
-  "modules-left": ["custom/archicon", "clock", "custom/weather"],
-  "modules-center": ["sway/mode", "sway/workspaces"],
+  "modules-left": ["custom/arch", "sway/workspaces"],
+  "modules-center": ["clock"],
   "modules-right": [
-    "tray",
+    "sway/mode",
+    // "tray",
     "idle_inhibitor",
-    "bluetooth",
     "network",
+    "bluetooth",
     "custom/vpn",
     "custom/docker",
     "pulseaudio",
-    "custom/microphone",
     "group/system",
     "battery",
     "sway/language",
     "custom/notification"
   ],
 
-  /* === Modules === */
   "sway/workspaces": {
     "disable-scroll": true,
+    "warp-on-scroll": false,
     "all-outputs": true,
-    "format": "{icon}",
+    "format": "{name}",
     "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "5": "",
       "default": "",
       "urgent": "",
       "focused": ""
@@ -46,7 +39,9 @@
   },
 
   "sway/language": {
-    "format": "{short} {variant}",
+    "format": "  {}",
+    "format-en": "EN",
+    "format-ru": "RU",
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
   },
 
@@ -67,11 +62,9 @@
   },
 
   "clock": {
-    "format": "{:%H:%M  %d.%m.%Y} 📅",
-    "format-alt": "{:%A, %B %d, %Y (%R)}",
-    "tooltip": true,
+    "format": "{:%H:%M | %e %B} 📅",
+    "format-alt": "{:%Y-%m-%d}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "on-click-right": "mode",
     "calendar": {
       "mode": "month",
       "mode-mon-col": 3,
@@ -89,63 +82,66 @@
   },
 
   "cpu": {
-    "format": "{usage}% ",
+    "format": "  {usage}%",
     "tooltip": true,
     "interval": 5
   },
 
   "memory": {
-    "format": "{}% ",
+    "format": "  {}%",
     "tooltip": true,
     "tooltip-format": "Memory: {used:0.1f}G/{total:0.1f}G ({percentage}%)\nSwap: {swapUsed}G/{swapTotal}G"
   },
 
   "temperature": {
     "critical-threshold": 80,
-    "format": "{temperatureC}°C {icon}",
-    "format-icons": ["", "", ""],
-    "tooltip": true,
+    "format": " {temperatureC}°C",
+    "format-critical": " {temperatureC}",
     "tooltip-format": "CPU Temperature: {temperatureC}°C",
-    "interval": 5
+    "interval": 10
   },
 
   "battery": {
-    "format": "{capacity}% {icon}",
-    "format-charging": "{capacity}% ",
-    "format-plugged": "{capacity}% ",
-    "format-alt": "{time} {icon}",
+    "format": "{icon}  {capacity}%",
+    "format-full": "{icon}  {capacity}%",
+    "format-charging": "  {capacity}%",
+    "format-plugged": "  {capacity}%",
     "format-icons": ["", "", "", "", ""],
     "states": {
       "warning": 30,
       "critical": 15
-    },
-    "tooltip": true,
-    "tooltip-format": "{timeTo}"
+    }
   },
 
   "network": {
-    "format-wifi": "",
-    "format-ethernet": "",
-    "format-disconnected": "⚠",
-    "tooltip-format": "{ifname} via {gwaddr}",
-    "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-    "tooltip-format-ethernet": "{ifname} ",
-    "tooltip-format-disconnected": "Disconnected",
+    "format-wifi": "   {essid}",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "format-disconnected": "Disconnected ⚠",
+    "tooltip-format": "{ifname} via {gwaddr} ",
+    "format-linked": "{ifname} (No IP) ",
     "max-length": 50,
     "on-click": "networkmanager_dmenu"
   },
 
   "pulseaudio": {
-    "format": "{volume}% {icon}",
-    "format-muted": "",
-    "format-icons": ["", "", ""],
+    "format": "{icon}  {volume}%",
+    "format-muted": " {format_source}",
+    "format-source": " {volume}%",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    },
     "on-click": "pactl list short sinks | wofi --dmenu --width=45% --height=30% --location=center | awk '{print $2}' | xargs -I{} pactl set-default-sink {}",
     "on-click-middle": "flatpak run com.github.wwmm.easyeffects",
     "on-click-right": "pactl list short sources | wofi --dmenu --width=45% --height=30% --location=center | awk '{print $2}' | xargs -I{} pactl set-default-source {}",
-    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ --limit 1.0",
-    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
-    "tooltip": true,
-    "tooltip-format": "{desc}"
+    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+ --limit 1.0",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
   },
 
   "bluetooth": {
@@ -166,10 +162,11 @@
     "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t({device_battery_percentage}%)"
   },
 
-  "custom/archicon": {
-    "format": "",
+  "custom/arch": {
+    "format": "󰣇",
     "on-click": "wofi --show drun",
-    "tooltip": false
+    "tooltip": true,
+    "tooltip-format": "btw"
   },
 
   "custom/weather": {
@@ -225,16 +222,6 @@
     "format": "",
     "tooltip": true,
     "tooltip-format": "System monitoring (click to expand)"
-  },
-
-  "custom/microphone": {
-    "format": "{}",
-    "tooltip": true,
-    "tooltip-format": "Microphone (click to mute/unmute)",
-    "interval": 1,
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    "exec": "~/.config/waybar/scripts/mic-status",
-    "return-type": "json"
   },
 
   "custom/vpn": {
