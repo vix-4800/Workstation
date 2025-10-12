@@ -19,7 +19,7 @@ alias neovim 'nvim'
 alias ls 'eza --color=auto --group-directories-first --icons=always'
 alias ll 'eza -la --color=auto --group-directories-first --icons=always'
 alias tree 'eza --tree'
-alias cat 'bat --style=plain'
+alias cat 'bat'
 alias grep 'rg'
 alias find 'fd'
 
