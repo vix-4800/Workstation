@@ -1,6 +1,9 @@
-
 [env]
 TERM = "xterm-256color"
+
+[general]
+live_config_reload = true
+import = ["~/.config/alacritty/catppuccin-mocha.toml"]
 
 # ——— WINDOW ———————————————————————————————————————
 [window]
@@ -37,60 +40,6 @@ y = 1
 x = 0
 y = 0
 
-# ——— COLORS ———————————————————————————————————————
-[colors.primary]
-background = "#0f111a"
-foreground = "#d7dce2"
-
-[colors.normal]
-black   = "#1e222a"
-red     = "#e06c75"
-green   = "#98c379"
-yellow  = "#e5c07b"
-blue    = "#61afef"
-magenta = "#c678dd"
-cyan    = "#56b6c2"
-white   = "#abb2bf"
-
-[colors.bright]
-black   = "#3e4452"
-red     = "#ff7a86"
-green   = "#b6e094"
-yellow  = "#ffd787"
-blue    = "#79b8ff"
-magenta = "#de98ff"
-cyan    = "#7cd6cf"
-white   = "#e6e6e6"
-
-# Cursor colors
-[colors.cursor]
-text = "#0f111a"
-cursor = "#61afef"
-
-# # Selection colors
-[colors.selection]
-text = "#0f111a"
-background = "#61afef"
-
-# # Search colors
-[colors.search.matches]
-foreground = "#0f111a"
-background = "#e5c07b"
-
-[colors.search.focused_match]
-foreground = "#0f111a"
-background = "#61afef"
-
-# # Line indicator
-[colors.line_indicator]
-foreground = "None"
-background = "None"
-
-# # Footer bar
-[colors.footer_bar]
-foreground = "#d7dce2"
-background = "#1e222a"
-
 # ——— SCROLLING ———————————————————————————————————
 [scrolling]
 history = 10000
@@ -106,9 +55,6 @@ animation = "EaseOut"
 duration = 0
 color = "#000000"
 command = "None"
-
-[general]
-live_config_reload = true
 
 # Performance improvements
 [debug]
