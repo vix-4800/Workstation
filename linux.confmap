@@ -26,3 +26,4 @@ wlogout	$HOME/.config/wlogout
 wofi	$HOME/.config/wofi
 zsh/.zsh_aliases	$HOME/.zsh_aliases
 zsh/zshrc	$HOME/.zshrc
+swaylock	$HOME/.config/swaylock
