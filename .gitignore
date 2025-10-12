@@ -11,6 +11,7 @@ nvim/lua/local.lua
 # Fish shell runtime/state
 fish/fish_variables
 fish/fishd.tmp.*
+fish/themes
 
 # Neovim runtime files
 nvim/lazy-lock.json
