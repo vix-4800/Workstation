@@ -136,7 +136,7 @@
     "exec": "~/.config/waybar/scripts/docker-status",
     "return-type": "json",
     "interval": 10,
-    "on-click": "alacritty -e sh -c 'docker ps -a; echo \"\nPress Enter to close...\"; read'"
+    "on-click": "~/.config/waybar/scripts/docker-menu"
   },
 
   "custom/notification": {
