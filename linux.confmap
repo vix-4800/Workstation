@@ -1,28 +1,46 @@
+# General for all shells
 .aliases	$HOME/.aliases
 .prettierrc	$HOME/.prettierrc
 .profile	$HOME/.profile
-alacritty	$HOME/.config/alacritty
+
+# Bash
 bash/.bash_aliases	$HOME/.bash_aliases
 bash/.bash_profile	$HOME/.bash_profile
 bash/bashrc	$HOME/.bashrc
+
+# Fish
 fish	$HOME/.config/fish
-flake8	$HOME/.config/flake8
-git/gitconfig	$HOME/.gitconfig
-mypy	$HOME/.config/mypy
-nvim	$HOME/.config/nvim
-php-cs-fixer	$HOME/.config/php-cs-fixer
-phpcs	$HOME/.config/phpcs
-phpstan	$HOME/.config/phpstan
-rector	$HOME/.config/rector
+
+# Zsh
+zsh/.zsh_aliases	$HOME/.zsh_aliases
+zsh/zshrc	$HOME/.zshrc
+
+# Terminals
+alacritty	$HOME/.config/alacritty
+tmux/.tmux.conf	$HOME/.config/tmux/tmux.conf
+
+# Development - Python
+development/python/flake8	$HOME/.config/flake8
+development/python/mypy	$HOME/.config/mypy
+
+# Development - PHP
+development/php/php-cs-fixer	$HOME/.config/php-cs-fixer
+development/php/phpcs	$HOME/.config/phpcs
+development/php/phpstan	$HOME/.config/phpstan
+development/php/rector	$HOME/.config/rector
+
+# Desktop Environment - Sway
 sway	$HOME/.config/sway
 swaync	$HOME/.config/swaync
-tmux/.tmux.conf	$HOME/.config/tmux/tmux.conf
-wallpapers	$HOME/Pictures/Wallpapers
+swaylock	$HOME/.config/swaylock
 waybar	$HOME/.config/waybar
 wlogout	$HOME/.config/wlogout
 wofi	$HOME/.config/wofi
-zsh/.zsh_aliases	$HOME/.zsh_aliases
-zsh/zshrc	$HOME/.zshrc
-swaylock	$HOME/.config/swaylock
+
+# Applications
+git/gitconfig	$HOME/.gitconfig
+nvim	$HOME/.config/nvim
 bat	$HOME/.config/bat
 zathura	$HOME/.config/zathura
+
+wallpapers	$HOME/Pictures/Wallpapers
