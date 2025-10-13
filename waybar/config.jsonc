@@ -12,6 +12,7 @@
     "network",
     "bluetooth",
     "pulseaudio",
+    "custom/microphone",
     "battery",
     "sway/language",
     "custom/notification"
@@ -65,7 +66,21 @@
     "timezone": "Europe/Saratov",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "format": "  {:%H:%M | %e %B}",
-    "format-alt": "  {:%d/%m/%Y}"
+    "format-alt": "  {:%d/%m/%Y}",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "left",
+      "on-scroll": 1,
+      "on-click-right": "mode",
+      "format": {
+        "months": "<span color='#d3c6aa'><b>{}</b></span>",
+        "days": "<span color='#e67e80'>{}</span>",
+        "weeks": "<span color='#a7c080'><b>W{}</b></span>",
+        "weekdays": "<span color='#7fbbb3'><b>{}</b></span>",
+        "today": "<span color='#dbbc7f'><b><u>{}</u></b></span>"
+      }
+    }
   },
 
   "battery": {
@@ -86,7 +101,18 @@
     "format-icons": {
       "default": ["", "", " "]
     },
-    "on-click": "pavucontrol"
+    "on-click": "pactl list short sinks | wofi --dmenu --width=45% --height=30% --location=center | awk '{print $2}' | xargs -I{} pactl set-default-sink {}",
+    "on-click-middle": "flatpak run com.github.wwmm.easyeffects"
+  },
+
+  "custom/microphone": {
+    "format": "{}",
+    "tooltip-format": "Microphone (click to mute/unmute)",
+    "interval": 1,
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-click-right": "pactl list short sources | wofi --dmenu --width=45% --height=30% --location=center | awk '{print $2}' | xargs -I{} pactl set-default-source {}",
+    "exec": "~/.config/waybar/scripts/mic-status",
+    "return-type": "json"
   },
 
   "sway/language": {
