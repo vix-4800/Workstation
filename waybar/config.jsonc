@@ -102,15 +102,16 @@
       "default": ["", "", " "]
     },
     "on-click": "~/.config/waybar/scripts/audio-output-menu",
-    "on-click-middle": "flatpak run com.github.wwmm.easyeffects"
+    "on-click-middle": "flatpak run com.github.wwmm.easyeffects",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
 
   "custom/microphone": {
     "format": "{}",
     "tooltip-format": "Microphone (click to mute/unmute)",
     "interval": 1,
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    "on-click-right": "~/.config/waybar/scripts/audio-input-menu",
+    "on-click": "~/.config/waybar/scripts/audio-input-menu",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     "exec": "~/.config/waybar/scripts/mic-status",
     "return-type": "json"
   },
