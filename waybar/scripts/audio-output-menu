@@ -24,7 +24,7 @@ BEGIN {
     gsub(/Family 17h\/19h HD Audio Controller /, "🎧 ", desc)
     gsub(/Digital Stereo \(HDMI/, "📺 HDMI", desc)
     gsub(/Digital Stereo \(IEC958/, "📺 Digital", desc)
-    gsub(/Analog Stereo/, "🎵 Стерео", desc)
+    gsub(/Analog Stereo/, "🎵 Stereo", desc)
     gsub(/Pro Audio/, "🎙️ Pro", desc)
 
     # Add running indicator
@@ -71,7 +71,7 @@ device_name=$(echo "$selected" | awk -F'\t' '{print $2}')
 if pactl set-default-sink "$device_name"; then
     # Get the short description for notification
     short_desc=$(echo "$selected" | awk -F'\t' '{print $1}' | sed 's/^[▶️⏸️⏹️ ]*//')
-    notify-send "Audio" "Устройство вывода: $short_desc" -u normal
+    notify-send "Audio" "Output: $short_desc" -u normal
 else
-    notify-send "Audio" "Ошибка при переключении устройства" -u critical
+    notify-send "Audio" "Error switching device" -u critical
 fi

@@ -32,9 +32,9 @@ BEGIN {
     gsub(/Starship\/Matisse HD Audio Controller /, "🎙️ ", desc)
     gsub(/Family 17h\/19h HD Audio Controller /, "🎙️ ", desc)
     gsub(/Webcam /, "📷 ", desc)
-    gsub(/Analog Stereo/, "🎵 Стерео", desc)
+    gsub(/Analog Stereo/, "🎵 Stereo", desc)
     gsub(/Pro Audio/, "🎙️ Pro", desc)
-    gsub(/Monitor of /, "🔊 Монитор: ", desc)
+    gsub(/Monitor of /, "🔊 Monitor: ", desc)
 
     # Add running indicator
     if (state == "RUNNING") {
@@ -80,7 +80,7 @@ device_name=$(echo "$selected" | awk -F'\t' '{print $2}')
 if pactl set-default-source "$device_name"; then
     # Get the short description for notification
     short_desc=$(echo "$selected" | awk -F'\t' '{print $1}' | sed 's/^[▶️⏸️⏹️ ]*//')
-    notify-send "Audio" "Устройство ввода: $short_desc" -u normal
+    notify-send "Audio" "Input: $short_desc" -u normal
 else
-    notify-send "Audio" "Ошибка при переключении устройства" -u critical
+    notify-send "Audio" "Error switching device" -u critical
 fi
