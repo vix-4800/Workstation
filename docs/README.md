@@ -28,7 +28,6 @@ cd ~/Code/Dotfiles
 - **Sway** - Wayland compositor configuration
 - **Waybar** - Status bar configuration
 - **Wofi** - Application launcher
-- **Mako** - Notification daemon
 - **SwayNC** - Sway notification manager
 - **Alacritty** - Terminal emulator
 - **Neovim** - Editor configuration with plugins

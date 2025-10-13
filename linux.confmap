@@ -9,7 +9,6 @@ fish	$HOME/.config/fish
 flake8	$HOME/.config/flake8
 git/gitconfig	$HOME/.gitconfig
 i3	$HOME/.config/i3
-mako	$HOME/.config/mako
 mypy	$HOME/.config/mypy
 nvim	$HOME/.config/nvim
 php-cs-fixer	$HOME/.config/php-cs-fixer

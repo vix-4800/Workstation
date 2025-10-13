@@ -137,7 +137,6 @@ nvm use node
 - **Neovim**: `nvim/` (полная конфигурация)
 - **Fish**: `fish/config.fish` и дополнительные функции
 - **Git**: `git/gitconfig`
-- **Mako**: `mako/config`
 - **Wofi**: `wofi/config` и `wofi/style.css`
 
 ## Решение проблем
