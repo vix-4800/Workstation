@@ -27,3 +27,4 @@ zsh/.zsh_aliases	$HOME/.zsh_aliases
 zsh/zshrc	$HOME/.zshrc
 swaylock	$HOME/.config/swaylock
 bat	$HOME/.config/bat
+zathura	$HOME/.config/zathura
