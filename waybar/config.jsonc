@@ -101,7 +101,7 @@
     "format-icons": {
       "default": ["", "", " "]
     },
-    "on-click": "pactl list short sinks | wofi --dmenu --width=45% --height=30% --location=center | awk '{print $2}' | xargs -I{} pactl set-default-sink {}",
+    "on-click": "~/.config/waybar/scripts/audio-output-menu",
     "on-click-middle": "flatpak run com.github.wwmm.easyeffects"
   },
 
@@ -110,7 +110,7 @@
     "tooltip-format": "Microphone (click to mute/unmute)",
     "interval": 1,
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    "on-click-right": "pactl list short sources | wofi --dmenu --width=45% --height=30% --location=center | awk '{print $2}' | xargs -I{} pactl set-default-source {}",
+    "on-click-right": "~/.config/waybar/scripts/audio-input-menu",
     "exec": "~/.config/waybar/scripts/mic-status",
     "return-type": "json"
   },

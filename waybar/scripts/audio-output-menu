@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+# Get list of output devices (sinks) with better formatting
+devices=$(pactl list sinks | awk '
+BEGIN {
+    name = ""
+    desc = ""
+    state = ""
+}
+/Name:/ {
+    name = $2
+}
+/Description:/ {
+    # Get everything after "Description: "
+    desc = $0
+    sub(/^[[:space:]]*Description:[[:space:]]*/, "", desc)
+}
+/State:/ {
+    state = $2
+
+    # Clean up common prefixes and make description more readable
+    gsub(/Built-in /, "🔊 ", desc)
+    gsub(/Starship\/Matisse HD Audio Controller /, "🎧 ", desc)
+    gsub(/Family 17h\/19h HD Audio Controller /, "🎧 ", desc)
+    gsub(/Digital Stereo \(HDMI/, "📺 HDMI", desc)
+    gsub(/Digital Stereo \(IEC958/, "📺 Digital", desc)
+    gsub(/Analog Stereo/, "🎵 Стерео", desc)
+    gsub(/Pro Audio/, "🎙️ Pro", desc)
+
+    # Add running indicator
+    if (state == "RUNNING") {
+        icon = "▶️ "
+    } else if (state == "SUSPENDED") {
+        icon = "⏸️  "
+    } else {
+        icon = "⏹️  "
+    }
+
+    # Truncate long descriptions
+    if (length(desc) > 60) {
+        desc = substr(desc, 1, 57) "..."
+    }
+
+    printf "%s%s\t%s\n", icon, desc, name
+    name = ""
+    desc = ""
+    state = ""
+}
+')
+
+if [ -z "$devices" ]; then
+    notify-send "Audio" "No output devices found" -u normal
+    exit 0
+fi
+
+# Show wofi menu with formatted device names
+selected=$(echo "$devices" | wofi \
+    --dmenu \
+    --prompt "Choose Output Device" \
+    --width 900 \
+    --height 300)
+
+if [ -z "$selected" ]; then
+    exit 0
+fi
+
+# Extract the actual device name from the selection
+device_name=$(echo "$selected" | awk -F'\t' '{print $2}')
+
+# Set the default sink
+if pactl set-default-sink "$device_name"; then
+    # Get the short description for notification
+    short_desc=$(echo "$selected" | awk -F'\t' '{print $1}' | sed 's/^[▶️⏸️⏹️ ]*//')
+    notify-send "Audio" "Устройство вывода: $short_desc" -u normal
+else
+    notify-send "Audio" "Ошибка при переключении устройства" -u critical
+fi
