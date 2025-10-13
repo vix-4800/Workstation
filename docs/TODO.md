@@ -6,5 +6,5 @@
 
 - [x] Comments
 - [ ] Surround
-- [ ] LSP
-- [ ] Separate config file for icons
+- [x] LSP
+- [x] Separate config file for icons
