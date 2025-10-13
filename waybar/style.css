@@ -81,8 +81,6 @@
 
 #custom-microphone {
   color: @peach;
-  border-radius: 0px 1rem 1rem 0px;
-  margin-right: 1rem;
 }
 
 #custom-microphone.muted {
@@ -105,7 +103,7 @@
 
 #language {
   color: @peach;
-  border-radius: 1rem;
+  border-radius: 0 1rem 1rem 0;
   margin-right: 1rem;
 }
 
