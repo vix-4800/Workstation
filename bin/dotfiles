@@ -31,7 +31,6 @@ ${BOLD}dotfiles${OFF} — manages symbolic links from repository.
 ${BOLD}Usage:${OFF}
     dotfiles link [-n] [--map PATH]     Create/update links (dry-run with -n)
     dotfiles unlink [-n] [--map PATH]   Remove links (dry-run with -n)
-    dotfiles update [--map PATH]        git pull in repository + relink
     dotfiles status [--map PATH]        Show link status
     dotfiles doctor [--map PATH]        Environment checks
     dotfiles which [--map PATH]         Show path to repo and map
@@ -194,11 +193,6 @@ do_status() {
     done
 }
 
-do_update() {
-    (cd "${REPO_ROOT}" && git pull --ff-only)
-    do_link 0
-}
-
 do_doctor() {
     local ok_all=1
     command -v git >/dev/null || { err "git not found in PATH"; ok_all=0; }
@@ -218,7 +212,6 @@ case "${cmd}" in
     init)  usage ;;
     link)    if [ "${1:-}" = "-n" ]; then do_link 1; else do_link 0; fi ;;
     unlink)  if [ "${1:-}" = "-n" ]; then do_unlink 1; else do_unlink 0; fi ;;
-    update) do_update ;;
     status) do_status ;;
     doctor) do_doctor ;;
     *) err "Unknown command: ${cmd}"; usage; exit 1 ;;
