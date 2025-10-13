@@ -8,13 +8,11 @@ bash/bashrc	$HOME/.bashrc
 fish	$HOME/.config/fish
 flake8	$HOME/.config/flake8
 git/gitconfig	$HOME/.gitconfig
-i3	$HOME/.config/i3
 mypy	$HOME/.config/mypy
 nvim	$HOME/.config/nvim
 php-cs-fixer	$HOME/.config/php-cs-fixer
 phpcs	$HOME/.config/phpcs
 phpstan	$HOME/.config/phpstan
-polybar	$HOME/.config/polybar
 rector	$HOME/.config/rector
 sway	$HOME/.config/sway
 swaync	$HOME/.config/swaync
