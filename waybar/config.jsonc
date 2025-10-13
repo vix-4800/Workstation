@@ -3,20 +3,15 @@
   "position": "top",
   "passthrough": false,
   "reload_style_on_change": true,
-  "height": 42,
 
-  "modules-left": ["custom/arch", "sway/workspaces"],
+  "modules-left": ["sway/workspaces"],
   "modules-center": ["clock"],
   "modules-right": [
-    "sway/mode",
-    // "tray",
-    "idle_inhibitor",
-    "network",
-    "bluetooth",
     "custom/vpn",
     "custom/docker",
+    "network",
+    "bluetooth",
     "pulseaudio",
-    "group/system",
     "battery",
     "sway/language",
     "custom/notification"
@@ -24,124 +19,23 @@
 
   "sway/workspaces": {
     "disable-scroll": true,
-    "warp-on-scroll": false,
-    "all-outputs": true,
-    "format": "{name}",
+    "sort-by-name": true,
+    "format": " {icon} ",
     "format-icons": {
-      "default": "",
-      "urgent": "",
-      "focused": ""
-    }
-  },
-
-  "sway/mode": {
-    "format": "<span style=\"italic\">{}</span>"
-  },
-
-  "sway/language": {
-    "format": "  {}",
-    "format-en": "EN",
-    "format-ru": "RU",
-    "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
-  },
-
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "",
-      "deactivated": ""
-    },
-    "tooltip-format-activated": "Idle inhibitor active",
-    "tooltip-format-deactivated": "Idle inhibitor inactive"
-  },
-
-  "tray": {
-    "icon-size": 21,
-    "spacing": 10,
-    "show-passive-items": true
-  },
-
-  "clock": {
-    "format": "{:%H:%M | %e %B} 📅",
-    "format-alt": "{:%Y-%m-%d}",
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "calendar": {
-      "mode": "month",
-      "mode-mon-col": 3,
-      "weeks-pos": "left",
-      "on-scroll": 1,
-      "on-click-right": "mode",
-      "format": {
-        "months": "<span color='#d3c6aa'><b>{}</b></span>",
-        "days": "<span color='#e67e80'>{}</span>",
-        "weeks": "<span color='#a7c080'><b>W{}</b></span>",
-        "weekdays": "<span color='#7fbbb3'><b>{}</b></span>",
-        "today": "<span color='#dbbc7f'><b><u>{}</u></b></span>"
-      }
-    }
-  },
-
-  "cpu": {
-    "format": "  {usage}%",
-    "tooltip": true,
-    "interval": 5
-  },
-
-  "memory": {
-    "format": "  {}%",
-    "tooltip": true,
-    "tooltip-format": "Memory: {used:0.1f}G/{total:0.1f}G ({percentage}%)\nSwap: {swapUsed}G/{swapTotal}G"
-  },
-
-  "temperature": {
-    "critical-threshold": 80,
-    "format": " {temperatureC}°C",
-    "format-critical": " {temperatureC}",
-    "tooltip-format": "CPU Temperature: {temperatureC}°C",
-    "interval": 10
-  },
-
-  "battery": {
-    "format": "{icon}  {capacity}%",
-    "format-full": "{icon}  {capacity}%",
-    "format-charging": "  {capacity}%",
-    "format-plugged": "  {capacity}%",
-    "format-icons": ["", "", "", "", ""],
-    "states": {
-      "warning": 30,
-      "critical": 15
+      "default": ""
     }
   },
 
   "network": {
-    "format-wifi": "   {essid}",
-    "format-ethernet": "{ipaddr}/{cidr} ",
-    "format-disconnected": "Disconnected ⚠",
-    "tooltip-format": "{ifname} via {gwaddr} ",
-    "format-linked": "{ifname} (No IP) ",
+    "format-wifi": "",
+    "format-ethernet": "",
+    "format-disconnected": "⚠",
+    "tooltip-format": "{ifname} via {gwaddr}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+    "tooltip-format-ethernet": "{ifname} ",
+    "tooltip-format-disconnected": "Disconnected",
     "max-length": 50,
     "on-click": "networkmanager_dmenu"
-  },
-
-  "pulseaudio": {
-    "format": "{icon}  {volume}%",
-    "format-muted": " {format_source}",
-    "format-source": " {volume}%",
-    "format-source-muted": "",
-    "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
-      "default": ["", "", ""]
-    },
-    "on-click": "pactl list short sinks | wofi --dmenu --width=45% --height=30% --location=center | awk '{print $2}' | xargs -I{} pactl set-default-sink {}",
-    "on-click-middle": "flatpak run com.github.wwmm.easyeffects",
-    "on-click-right": "pactl list short sources | wofi --dmenu --width=45% --height=30% --location=center | awk '{print $2}' | xargs -I{} pactl set-default-source {}",
-    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+ --limit 1.0",
-    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
   },
 
   "bluetooth": {
@@ -158,24 +52,65 @@
     "on-click": "blueman-manager",
     "tooltip-format": "{status}",
     "tooltip-format-connected": "Connected: {device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t({device_battery_percentage}%)"
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t({device_battery_percentage}%)"
   },
 
-  "custom/arch": {
-    "format": "󰣇",
-    "on-click": "wofi --show drun",
-    "tooltip": true,
-    "tooltip-format": "btw"
+  "tray": {
+    "icon-size": 21,
+    "spacing": 10
   },
 
-  "custom/weather": {
-    "exec": "curl -s 'wttr.in/Saratov?format=%t+%c' | sed 's/+/ /'",
-    "interval": 1800,
-    "return-type": "string",
+  "clock": {
+    "timezone": "Europe/Saratov",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format": "  {:%H:%M | %e %B}",
+    "format-alt": "  {:%d/%m/%Y}"
+  },
+
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": "{capacity}% ",
+    "format-icons": ["", "", "", "", ""]
+  },
+
+  "pulseaudio": {
+    "scroll-step": 2,
+    "format": "{icon} {volume}%",
+    "format-muted": "",
+    "format-icons": {
+      "default": ["", "", " "]
+    },
+    "on-click": "pavucontrol"
+  },
+
+  "sway/language": {
+    "format": "{short} {variant}",
+    "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+    "tooltip": false
+  },
+
+  "custom/vpn": {
     "format": "{}",
     "tooltip": true,
-    "tooltip-format": "Weather in Saratov"
+    "exec": "~/.config/waybar/scripts/vpn-status",
+    "return-type": "json",
+    "interval": 5,
+    "on-click": "~/.config/waybar/scripts/vpn-toggle"
+  },
+
+  "custom/docker": {
+    "format": " {}",
+    "tooltip": true,
+    "exec": "~/.config/waybar/scripts/docker-status",
+    "return-type": "json",
+    "interval": 10,
+    "on-click": "alacritty -e sh -c 'docker ps -a; echo \"\nPress Enter to close...\"; read'"
   },
 
   "custom/notification": {
@@ -197,48 +132,5 @@
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
     "escape": true
-  },
-
-  "custom/gpu-temp": {
-    "format": "{}°C 󰍛",
-    "exec": "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null || sensors | grep -i gpu | awk '{print $2}' | tr -d '+°C' | head -n1 || echo 'N/A'",
-    "interval": 5,
-    "tooltip": true,
-    "tooltip-format": "GPU Temperature: {}°C"
-  },
-
-  "group/system": {
-    "orientation": "inherit",
-    "drawer": {
-      "transition-duration": 500,
-      "children-class": "system-hidden",
-      "click-to-reveal": true,
-      "transition-left-to-right": false
-    },
-    "modules": ["custom/system-icon", "memory", "cpu", "temperature", "custom/gpu-temp"]
-  },
-
-  "custom/system-icon": {
-    "format": "",
-    "tooltip": true,
-    "tooltip-format": "System monitoring (click to expand)"
-  },
-
-  "custom/vpn": {
-    "format": "{}",
-    "tooltip": true,
-    "exec": "~/.config/waybar/scripts/vpn-status",
-    "return-type": "json",
-    "interval": 5,
-    "on-click": "~/.config/waybar/scripts/vpn-toggle"
-  },
-
-  "custom/docker": {
-    "format": " {}",
-    "tooltip": true,
-    "exec": "~/.config/waybar/scripts/docker-status",
-    "return-type": "json",
-    "interval": 10,
-    "on-click": "alacritty -e sh -c 'docker ps -a; echo \"\nPress Enter to close...\"; read'"
   }
 }

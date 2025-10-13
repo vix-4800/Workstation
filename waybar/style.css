@@ -35,14 +35,16 @@
   border-radius: 1rem;
 }
 
-#custom-music,
 #tray,
-#backlight,
 #clock,
 #battery,
 #pulseaudio,
-#custom-lock,
-#custom-power {
+#network,
+#bluetooth,
+#language,
+#custom-vpn,
+#custom-docker,
+#custom-notification {
   background-color: @surface0;
   padding: 0.5rem 1rem;
   margin: 5px 0;
@@ -50,29 +52,22 @@
 
 #clock {
   color: @blue;
-  border-radius: 0px 1rem 1rem 0px;
+  border-radius: 1rem;
   margin-right: 1rem;
 }
 
 #battery {
   color: @green;
+  border-radius: 0px 1rem 1rem 0px;
+  margin-right: 1rem;
 }
 
 #battery.charging {
-  color: @green;
+  color: @teal;
 }
 
 #battery.warning:not(.charging) {
   color: @red;
-}
-
-#backlight {
-  color: @yellow;
-}
-
-#backlight,
-#battery {
-  border-radius: 0;
 }
 
 #pulseaudio {
@@ -81,23 +76,54 @@
   margin-left: 1rem;
 }
 
-#custom-music {
-  color: @mauve;
+#tray {
   border-radius: 1rem;
 }
 
-#custom-lock {
-  border-radius: 1rem 0px 0px 1rem;
-  color: @lavender;
+#network {
+  color: @yellow;
+  border-radius: 1rem 0 0 1rem;
 }
 
-#custom-power {
+#bluetooth {
+  color: @sapphire;
+  border-radius: 0 1rem 1rem 0;
+}
+
+#language {
+  color: @peach;
+  border-radius: 1rem;
   margin-right: 1rem;
-  border-radius: 0px 1rem 1rem 0px;
+}
+
+#custom-vpn {
+  border-radius: 1rem 0 0 1rem;
+}
+
+#custom-vpn.connected {
+  color: @green;
+}
+
+#custom-vpn.disconnected {
   color: @red;
 }
 
-#tray {
+#custom-docker {
+  color: @blue;
+  border-radius: 0 1rem 1rem 0;
   margin-right: 1rem;
+}
+
+#custom-docker.running {
+  color: @sky;
+}
+
+#custom-docker.stopped {
+  color: @gray;
+}
+
+#custom-notification {
+  color: @yellow;
   border-radius: 1rem;
+  margin-right: 1rem;
 }
