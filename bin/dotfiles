@@ -144,6 +144,8 @@ do_link() {
             ok "Linked: ${TGT} -> ${SRC}"
         fi
     done
+
+    bat cache --build
 }
 
 do_unlink() {
