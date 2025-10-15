@@ -5,8 +5,8 @@ datestr=%A, %d %B
 image=~/Pictures/Wallpapers/city-horizon.jpg
 fade-in=0.5
 indicator-radius=75
-indicator-thickness=5
-effect-vignette=0.3:1
+indicator-thickness=9
+effect-vignette=0.45:1
 effect-blur=7x5
 
 color=1e1e2e
