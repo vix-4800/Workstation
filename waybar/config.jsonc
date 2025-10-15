@@ -13,6 +13,7 @@
     "bluetooth",
     "pulseaudio",
     "custom/microphone",
+    "custom/resources",
     "battery",
     "sway/language",
     "custom/notification"
@@ -167,6 +168,14 @@
     "interval": 60,
     "exec": "~/.config/waybar/scripts/calendar",
     "on-click": "gnome-calendar || notify-send 'Calendar' 'No calendar app found'",
+    "tooltip": true
+  },
+
+  "custom/resources": {
+    "format": "",
+    "return-type": "json",
+    "interval": 15,
+    "exec": "~/.config/waybar/scripts/system-resources",
     "tooltip": true
   },
 

@@ -39,6 +39,7 @@
 #clock,
 #custom-calendar,
 #custom-weather,
+#custom-resources,
 #battery,
 #pulseaudio,
 #network,
@@ -84,6 +85,9 @@
 
 #custom-microphone {
   color: @peach;
+  border-radius: 0px 1rem 1rem 0px;
+  margin-right: 1rem;
+  padding-right: 1.5rem;
 }
 
 #custom-microphone.muted {
@@ -140,6 +144,19 @@
   color: @yellow;
   border-radius: 1rem;
   margin-right: 1rem;
+}
+
+#custom-resources {
+  color: @blue;
+  border-radius: 1rem 0 0 1rem;
+}
+
+#custom-resources.warning {
+  color: @peach;
+}
+
+#custom-resources.critical {
+  color: @red;
 }
 
 #custom-weather {
