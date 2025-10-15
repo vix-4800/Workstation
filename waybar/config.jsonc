@@ -4,7 +4,7 @@
   "passthrough": false,
   "reload_style_on_change": true,
 
-  "modules-left": ["sway/workspaces"],
+  "modules-left": ["custom/weather", "sway/workspaces"],
   "modules-center": ["custom/calendar"],
   "modules-right": [
     "custom/vpn",
@@ -167,6 +167,15 @@
     "interval": 60,
     "exec": "~/.config/waybar/scripts/calendar",
     "on-click": "gnome-calendar || notify-send 'Calendar' 'No calendar app found'",
+    "tooltip": true
+  },
+
+  "custom/weather": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 1800,
+    "exec": "~/.config/waybar/scripts/weather",
+    "on-click": "xdg-open https://wttr.in/Saratov",
     "tooltip": true
   }
 }

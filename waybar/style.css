@@ -38,6 +38,7 @@
 #tray,
 #clock,
 #custom-calendar,
+#custom-weather,
 #battery,
 #pulseaudio,
 #network,
@@ -139,4 +140,10 @@
   color: @yellow;
   border-radius: 1rem;
   margin-right: 1rem;
+}
+
+#custom-weather {
+  color: @sky;
+  border-radius: 1rem;
+  margin-left: 1rem;
 }
