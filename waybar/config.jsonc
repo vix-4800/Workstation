@@ -5,7 +5,7 @@
   "reload_style_on_change": true,
 
   "modules-left": ["sway/workspaces"],
-  "modules-center": ["clock"],
+  "modules-center": ["custom/calendar"],
   "modules-right": [
     "custom/vpn",
     "custom/docker",
@@ -159,5 +159,14 @@
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
     "escape": true
+  },
+
+  "custom/calendar": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 60,
+    "exec": "~/.config/waybar/scripts/calendar",
+    "on-click": "gnome-calendar || notify-send 'Calendar' 'No calendar app found'",
+    "tooltip": true
   }
 }

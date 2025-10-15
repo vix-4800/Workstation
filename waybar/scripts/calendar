@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+# Custom calendar module for waybar with enhanced tooltip
+
+# Get current date info
+current_time=$(date +"%H:%M")
+current_date=$(date +"%e %B")
+current_day=$(date +"%d")
+current_month=$(date +"%B %Y")
+current_weekday=$(date +"%A")
+week_num=$(date +"%V")
+
+# Generate calendar
+cal_output=$(cal -m --color=never | tail -n +2)
+
+# Catppuccin Mocha colors
+color_header="#cba6f7"      # Mauve
+color_weekdays="#89b4fa"    # Blue
+color_today="#f38ba8"       # Red
+color_weekend="#fab387"     # Peach
+color_normal="#cdd6f4"      # Text
+color_week_num="#a6e3a1"    # Green
+color_dimmed="#6c7086"      # Surface2
+
+# Build tooltip
+tooltip="<span font_size='xx-large' color='$color_header'><b>$current_month</b></span>\n"
+tooltip+="<span font_size='x-large' color='$color_weekdays'><b>$current_weekday</b></span>\n\n"
+
+# Calendar header
+tooltip+="<tt><span font_size='large'>"
+tooltip+="<span color='$color_week_num'><b>  </b></span> "
+tooltip+="<span color='$color_weekdays'><b>Mo Tu We Th Fr </b></span>"
+tooltip+="<span color='$color_weekend'><b>Sa Su</b></span>"
+tooltip+="</span></tt>\n"
+
+# Parse calendar and build rows
+week_count=0
+while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+
+    tooltip+="<tt><span font_size='large'>"
+
+    # Get week number (first field if exists)
+    if [[ "$line" =~ ^[[:space:]]*([0-9]+)[[:space:]]+ ]]; then
+        week="${BASH_REMATCH[1]}"
+        tooltip+="<span color='$color_week_num'><b>W$week</b></span> "
+        # Remove week number from line
+        line="${line#*[0-9] }"
+    else
+        tooltip+="<span color='$color_week_num'><b>   </b></span> "
+    fi
+
+    # Parse days
+    day_in_week=0
+    for day in $line; do
+        # Format day to always be 2 chars
+        day_formatted=$(printf "%2s" "$day")
+
+        # Check if it's today
+        day_trimmed=$(echo "$day" | sed 's/^0*//')
+        current_day_trimmed=$(echo "$current_day" | sed 's/^0*//')
+
+        if [[ "$day_trimmed" == "$current_day_trimmed" ]]; then
+            # Today - highlight
+            tooltip+="<span color='$color_today' bgcolor='#313244'><b> $day_formatted </b></span>"
+        elif [[ $day_in_week -ge 5 ]]; then
+            # Weekend
+            tooltip+="<span color='$color_weekend'> $day_formatted </span>"
+        else
+            # Regular day
+            tooltip+="<span color='$color_normal'> $day_formatted </span>"
+        fi
+
+        ((day_in_week++))
+    done
+
+    tooltip+="</span></tt>\n"
+    ((week_count++))
+done <<< "$cal_output"
+
+# Footer with additional info
+tooltip+="\n<span font_size='medium' color='$color_dimmed'>"
+tooltip+="Week $week_num of $(date +%Y)"
+
+# Days left in month
+days_in_month=$(date -d "$(date +%Y-%m-01) + 1 month - 1 day" +%d)
+days_remaining=$((days_in_month - current_day_trimmed))
+tooltip+=" • $days_remaining days left"
+
+# Days left in year
+day_of_year=$(date +%j)
+days_in_year=$(date -d "$(date +%Y)-12-31" +%j)
+days_remaining_year=$((days_in_year - day_of_year))
+tooltip+=" • $days_remaining_year days until $(date -d "next year" +%Y)"
+
+tooltip+="</span>"
+
+# Output JSON for waybar
+echo -n "{\"text\":\"  $current_time | $current_date\", \"tooltip\":\"$tooltip\"}"

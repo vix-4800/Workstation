@@ -37,6 +37,7 @@
 
 #tray,
 #clock,
+#custom-calendar,
 #battery,
 #pulseaudio,
 #network,
@@ -51,7 +52,8 @@
   margin: 5px 0;
 }
 
-#clock {
+#clock,
+#custom-calendar {
   color: @blue;
   border-radius: 1rem;
   margin-right: 1rem;
