@@ -60,10 +60,8 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
 
-      local lspconfig = require("lspconfig")
-
       -- PHP (Intelephense)
-      lspconfig.intelephense.setup({
+      vim.lsp.config("intelephense", {
         capabilities = capabilities,
         settings = {
           intelephense = {
@@ -148,7 +146,7 @@ return {
       })
 
       -- Lua
-      lspconfig.lua_ls.setup({
+      vim.lsp.config("lua_ls", {
         capabilities = capabilities,
         settings = {
           Lua = {
@@ -164,7 +162,7 @@ return {
       })
 
       -- Python
-      lspconfig.pyright.setup({
+      vim.lsp.config("pyright", {
         capabilities = capabilities,
         settings = {
           python = {
@@ -190,7 +188,7 @@ return {
         includeInlayEnumMemberValueHints = true,
       }
 
-      lspconfig.ts_ls.setup({
+      vim.lsp.config("ts_ls", {
         capabilities = capabilities,
         settings = {
           typescript = {
@@ -203,7 +201,7 @@ return {
       })
 
       -- Go
-      lspconfig.gopls.setup({
+      vim.lsp.config("gopls", {
         capabilities = capabilities,
         settings = {
           gopls = {
@@ -221,26 +219,41 @@ return {
       })
 
       -- Bash
-      lspconfig.bashls.setup({ capabilities = capabilities })
+      vim.lsp.config("bashls", { capabilities = capabilities })
 
       -- JSON
-      lspconfig.jsonls.setup({ capabilities = capabilities })
+      vim.lsp.config("jsonls", { capabilities = capabilities })
 
       -- YAML
-      lspconfig.yamlls.setup({ capabilities = capabilities })
+      vim.lsp.config("yamlls", { capabilities = capabilities })
 
       -- HTML
-      lspconfig.html.setup({ capabilities = capabilities })
+      vim.lsp.config("html", { capabilities = capabilities })
 
       -- CSS
-      lspconfig.cssls.setup({ capabilities = capabilities })
+      vim.lsp.config("cssls", { capabilities = capabilities })
 
       -- Docker
-      lspconfig.dockerls.setup({ capabilities = capabilities })
-      lspconfig.docker_compose_language_service.setup({ capabilities = capabilities })
+      vim.lsp.config("dockerls", { capabilities = capabilities })
+      vim.lsp.config("docker_compose_language_service", { capabilities = capabilities })
 
       -- Markdown
-      lspconfig.marksman.setup({ capabilities = capabilities })
+      vim.lsp.config("marksman", { capabilities = capabilities })
+
+      -- Enable LSP servers
+      vim.lsp.enable("intelephense")
+      vim.lsp.enable("lua_ls")
+      vim.lsp.enable("pyright")
+      vim.lsp.enable("ts_ls")
+      vim.lsp.enable("gopls")
+      vim.lsp.enable("bashls")
+      vim.lsp.enable("jsonls")
+      vim.lsp.enable("yamlls")
+      vim.lsp.enable("html")
+      vim.lsp.enable("cssls")
+      vim.lsp.enable("dockerls")
+      vim.lsp.enable("docker_compose_language_service")
+      vim.lsp.enable("marksman")
     end,
   },
   {
