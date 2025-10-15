@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+
+# Desktop context menu with common actions
+menu="📁 Files
+🌐 Browser
+💻 Terminal
+📝 Editor
+---
+🔊 Audio Output
+🎤 Audio Input
+📶 Network
+🐳 Docker
+---
+⚙️  System Settings
+🖥️  Display Settings
+🔐 Power Menu
+📋 Clipboard History
+🎨 Color Picker
+📸 Screenshot
+---
+🔒 Lock Screen
+🚪 Logout
+🔄 Reload Sway"
+
+selected=$(echo -e "$menu" | wofi \
+    --dmenu \
+    --prompt "Quick Actions" \
+    --width 400 \
+    --height 600 \
+    --cache-file=/dev/null)
+
+if [ -z "$selected" ]; then
+    exit 0
+fi
+
+case "$selected" in
+    "📁 Files")
+        thunar &
+        ;;
+    "🌐 Browser")
+        firefox &
+        ;;
+    "💻 Terminal")
+        alacritty &
+        ;;
+    "📝 Editor")
+        code &
+        ;;
+    "🔊 Audio Output")
+        ~/.config/waybar/scripts/audio-output-menu &
+        ;;
+    "🎤 Audio Input")
+        ~/.config/waybar/scripts/audio-input-menu &
+        ;;
+    "📶 Network")
+        ~/.config/waybar/scripts/network-menu &
+        ;;
+    "🐳 Docker")
+        ~/.config/waybar/scripts/docker-menu &
+        ;;
+    "⚙️  System Settings")
+        # Try different system settings apps
+        if command -v gnome-control-center &> /dev/null; then
+            gnome-control-center &
+        elif command -v systemsettings5 &> /dev/null; then
+            systemsettings5 &
+        elif command -v xfce4-settings-manager &> /dev/null; then
+            xfce4-settings-manager &
+        else
+            notify-send "Settings" "No settings app found" -u normal
+        fi
+        ;;
+    "🖥️  Display Settings")
+        if command -v wdisplays &> /dev/null; then
+            wdisplays &
+        elif command -v arandr &> /dev/null; then
+            arandr &
+        else
+            notify-send "Display" "No display settings app found" -u normal
+        fi
+        ;;
+    "🔐 Power Menu")
+        wlogout &
+        ;;
+    "📋 Clipboard History")
+        if command -v cliphist &> /dev/null; then
+            cliphist list | wofi --dmenu --prompt "Clipboard" | cliphist decode | wl-copy
+        else
+            notify-send "Clipboard" "cliphist not installed" -u normal
+        fi
+        ;;
+    "🎨 Color Picker")
+        if command -v hyprpicker &> /dev/null; then
+            color=$(hyprpicker -a)
+            notify-send "Color Picker" "Copied: $color" -u normal
+        elif command -v grim &> /dev/null && command -v slurp &> /dev/null; then
+            grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -1 | cut -d' ' -f4 | wl-copy
+            notify-send "Color Picker" "Color copied to clipboard" -u normal
+        else
+            notify-send "Color Picker" "No color picker found" -u normal
+        fi
+        ;;
+    "📸 Screenshot")
+        screenshot_menu=""
+        screenshot_menu+="📸 Full Screen\n"
+        screenshot_menu+="🖼️  Selection\n"
+        screenshot_menu+="🪟 Window\n"
+        screenshot_menu+="⏱️  Full Screen (5s)\n"
+        screenshot_menu+="📹 Record Selection"
+
+        screenshot_choice=$(echo -e "$screenshot_menu" | wofi \
+            --dmenu \
+            --prompt "Screenshot" \
+            --width 300 \
+            --height 250 \
+            --cache-file=/dev/null)
+
+        case "$screenshot_choice" in
+            "📸 Full Screen")
+                grim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
+                notify-send "Screenshot" "Full screen saved" -u normal
+                ;;
+            "🖼️  Selection")
+                grim -g "$(slurp)" ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
+                notify-send "Screenshot" "Selection saved" -u normal
+                ;;
+            "🪟 Window")
+                grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
+                notify-send "Screenshot" "Window saved" -u normal
+                ;;
+            "⏱️  Full Screen (5s)")
+                sleep 5
+                grim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
+                notify-send "Screenshot" "Full screen saved" -u normal
+                ;;
+            "📹 Record Selection")
+                if command -v wf-recorder &> /dev/null; then
+                    notify-send "Recording" "Select area to record" -u normal
+                    wf-recorder -g "$(slurp)" -f ~/Videos/recording_$(date +%Y%m%d_%H%M%S).mp4
+                else
+                    notify-send "Recording" "wf-recorder not installed" -u normal
+                fi
+                ;;
+        esac
+        ;;
+    "🔒 Lock Screen")
+        swaylock
+        ;;
+    "🚪 Logout")
+        swaymsg exit
+        ;;
+    "🔄 Reload Sway")
+        swaymsg reload
+        notify-send "Sway" "Configuration reloaded" -u normal
+        ;;
+esac
