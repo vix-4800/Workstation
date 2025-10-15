@@ -79,7 +79,7 @@ while IFS= read -r line; do
 done <<< "$cal_output"
 
 # Footer with additional info
-tooltip+="\n<span font_size='medium' color='$color_dimmed'>"
+tooltip+="<span font_size='medium' color='$color_dimmed'>"
 tooltip+="Week $week_num of $(date +%Y)"
 
 # Days left in month
