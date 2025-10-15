@@ -2,7 +2,7 @@ clock
 hide-keyboard-layout
 timestr=%I:%M %p
 datestr=%A, %d %B
-image=~/Pictures/Wallpapers/forest-1.jpg
+image=~/Pictures/Wallpapers/city-horizon.jpg
 fade-in=0.5
 indicator-radius=75
 indicator-thickness=5
