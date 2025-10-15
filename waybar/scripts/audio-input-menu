@@ -7,12 +7,14 @@ BEGIN {
     desc = ""
     state = ""
 }
+/State:/ {
+    state = $2
+}
 /Name:/ {
     name = $2
     # Skip monitor sources (they are outputs, not inputs)
     if (name ~ /\.monitor$/) {
         name = ""
-        next
     }
 }
 /Description:/ {
@@ -21,39 +23,38 @@ BEGIN {
     # Get everything after "Description: "
     desc = $0
     sub(/^[[:space:]]*Description:[[:space:]]*/, "", desc)
-}
-/State:/ {
-    if (name == "") next
 
-    state = $2
+    # Only output when we have all three fields
+    if (name != "" && desc != "" && state != "") {
+        # Clean up common prefixes and make description more readable
+        gsub(/Built-in /, "🎤 ", desc)
+        gsub(/Starship\/Matisse HD Audio Controller /, "🎙️ ", desc)
+        gsub(/Family 17h\/19h HD Audio Controller /, "🎙️ ", desc)
+        gsub(/Family 17h\/19h\/1ah HD Audio Controller /, "🎙️ ", desc)
+        gsub(/Webcam /, "📷 ", desc)
+        gsub(/Analog Stereo/, "🎵 Stereo", desc)
+        gsub(/Pro Audio/, "🎙️ Pro", desc)
+        gsub(/Monitor of /, "🔊 Monitor: ", desc)
 
-    # Clean up common prefixes and make description more readable
-    gsub(/Built-in /, "🎤 ", desc)
-    gsub(/Starship\/Matisse HD Audio Controller /, "🎙️ ", desc)
-    gsub(/Family 17h\/19h HD Audio Controller /, "🎙️ ", desc)
-    gsub(/Webcam /, "📷 ", desc)
-    gsub(/Analog Stereo/, "🎵 Stereo", desc)
-    gsub(/Pro Audio/, "🎙️ Pro", desc)
-    gsub(/Monitor of /, "🔊 Monitor: ", desc)
+        # Add running indicator
+        if (state == "RUNNING") {
+            icon = "▶️ "
+        } else if (state == "SUSPENDED") {
+            icon = "⏸️  "
+        } else {
+            icon = "⏹️  "
+        }
 
-    # Add running indicator
-    if (state == "RUNNING") {
-        icon = "▶️ "
-    } else if (state == "SUSPENDED") {
-        icon = "⏸️  "
-    } else {
-        icon = "⏹️  "
+        # Truncate long descriptions
+        if (length(desc) > 60) {
+            desc = substr(desc, 1, 57) "..."
+        }
+
+        printf "%s%s\t%s\n", icon, desc, name
+        name = ""
+        desc = ""
+        state = ""
     }
-
-    # Truncate long descriptions
-    if (length(desc) > 60) {
-        desc = substr(desc, 1, 57) "..."
-    }
-
-    printf "%s%s\t%s\n", icon, desc, name
-    name = ""
-    desc = ""
-    state = ""
 }
 ')
 
