@@ -34,7 +34,6 @@
         name:
           - spotify
           - catppuccin-gtk-theme-mocha
-          - catppuccin-cursors-mocha
           - wdisplays
         state: present
         executable: yay

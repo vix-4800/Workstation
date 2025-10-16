@@ -1,7 +1,7 @@
 - name: 'Install shell and terminal'
   hosts: localhost
   connection: local
-  gather_facts: false
+  gather_facts: true
   become: true
   tasks:
     - name: 'Install shell and terminal'
@@ -22,7 +22,7 @@
     - name: 'Check if Fisher is already installed'
       become: false
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish"
+        path: "{{ lookup('env', 'HOME') }}/.config/fish/functions/fisher.fish"
       register: fisher_installed
 
     - name: 'Install Fisher plugin manager'

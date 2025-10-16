@@ -1,7 +1,7 @@
 - name: 'Install development tools'
   hosts: localhost
   connection: local
-  gather_facts: false
+  gather_facts: true
   become: true
   tasks:
     - name: 'Install development packages'
@@ -51,7 +51,7 @@
     - name: 'Ensure Composer global bin directory is in PATH'
       become: false
       ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.profile"
+        path: "{{ lookup('env', 'HOME') }}/.profile"
         line: 'export PATH="$HOME/.config/composer/vendor/bin:$PATH"'
         create: yes
         mode: '0644'

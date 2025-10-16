@@ -1,7 +1,7 @@
 - name: 'Configure system environment'
   hosts: localhost
   connection: local
-  gather_facts: false
+  gather_facts: true
   become: true
   tasks:
     - name: 'Configure environment variables'
