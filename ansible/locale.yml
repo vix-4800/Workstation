@@ -1,0 +1,34 @@
+- name: 'Configure timezone and locale'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Set timezone'
+      community.general.timezone:
+        name: 'Europe/Moscow'
+
+    - name: 'Enable NTP time synchronization'
+      ansible.builtin.command:
+        cmd: timedatectl set-ntp true
+      changed_when: false
+
+    - name: 'Configure locale.gen'
+      ansible.builtin.lineinfile:
+        path: /etc/locale.gen
+        regexp: "^#?{{ item }}"
+        line: "{{ item }}"
+        state: present
+      loop:
+        - 'en_US.UTF-8 UTF-8'
+        - 'ru_RU.UTF-8 UTF-8'
+
+    - name: 'Generate locales'
+      ansible.builtin.command:
+        cmd: locale-gen
+      changed_when: false
+
+    - name: 'Set system locale'
+      ansible.builtin.command:
+        cmd: localectl set-locale LANG=en_US.UTF-8
+      changed_when: false

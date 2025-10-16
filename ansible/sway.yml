@@ -1,0 +1,49 @@
+- name: 'Install Sway ecosystem'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install Sway ecosystem packages'
+      community.general.pacman:
+        name:
+          - waybar
+          - wofi
+          - swaync
+          - swayidle
+          - swaybg
+          - wl-clipboard
+          - cliphist
+          - grim
+          - slurp
+          - brightnessctl
+          - xorg-xwayland
+        state: present
+
+    - name: 'Check if yay is installed'
+      ansible.builtin.command:
+        cmd: which yay
+      register: yay_check
+      changed_when: false
+      failed_when: false
+
+    - name: 'Remove standard sway/swaylock before installing enhanced versions'
+      community.general.pacman:
+        name:
+          - sway
+          - swaylock
+        state: absent
+      ignore_errors: true
+      when: yay_check.rc == 0
+
+    - name: 'Install SwayFX and Swaylock Effects from AUR'
+      become: false
+      community.general.pacman:
+        name:
+          - swayfx
+          - swaylock-effects
+          - wlogout
+        state: present
+        executable: yay
+        extra_args: --builddir /var/cache/yay
+      when: yay_check.rc == 0

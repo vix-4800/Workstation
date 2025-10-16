@@ -1,0 +1,44 @@
+- name: 'Apply dotfiles symlinks'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  vars:
+    repo_root: "{{ playbook_dir | dirname }}"
+    conf_map: "{{ repo_root }}/linux.confmap"
+  tasks:
+    - name: 'Check if dotfiles script exists'
+      ansible.builtin.stat:
+        path: "{{ repo_root }}/bin/dotfiles"
+      register: dotfiles_script
+
+    - name: 'Fail if dotfiles script not found'
+      ansible.builtin.fail:
+        msg: 'Dotfiles script not found at {{ repo_root }}/bin/dotfiles'
+      when: not dotfiles_script.stat.exists
+
+    - name: 'Make dotfiles script executable'
+      ansible.builtin.file:
+        path: "{{ repo_root }}/bin/dotfiles"
+        mode: '0755'
+
+    - name: 'Check if confmap exists'
+      ansible.builtin.stat:
+        path: "{{ conf_map }}"
+      register: confmap_file
+
+    - name: 'Fail if confmap not found'
+      ansible.builtin.fail:
+        msg: 'Config map not found at {{ conf_map }}'
+      when: not confmap_file.stat.exists
+
+    - name: 'Apply dotfiles symlinks'
+      ansible.builtin.command:
+        cmd: "{{ repo_root }}/bin/dotfiles link"
+      register: dotfiles_output
+      changed_when: "'Linked:' in dotfiles_output.stdout"
+
+    - name: 'Show dotfiles output'
+      ansible.builtin.debug:
+        var: dotfiles_output.stdout_lines
+      when: dotfiles_output.stdout_lines | length > 0

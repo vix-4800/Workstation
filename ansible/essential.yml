@@ -1,0 +1,29 @@
+- name: 'Install essential packages'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install essential packages'
+      community.general.pacman:
+        name:
+          - base-devel
+          - git
+          - curl
+          - jq
+          - make
+          - less
+          - unzip
+          - gcc
+          - udiskie
+          - ffmpeg
+        state: present
+
+    - name: 'Install modern CLI tools'
+      community.general.pacman:
+        name:
+          - eza
+          - bat
+          - ripgrep
+          - fd
+        state: present

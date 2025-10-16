@@ -1,0 +1,28 @@
+- name: 'Docker and container tools setup'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install Docker'
+      community.general.pacman:
+        name:
+          - docker
+          - docker-compose
+        state: present
+
+    - name: 'Enable and start Docker service'
+      ansible.builtin.systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: 'Add user to docker group'
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        groups: docker
+        append: true
+
+    - name: 'Inform user about docker group'
+      ansible.builtin.debug:
+        msg: 'User {{ ansible_user_id }} added to docker group. You may need to log out and back in for changes to take effect.'

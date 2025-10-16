@@ -1,0 +1,19 @@
+- name: 'Install and configure Bluetooth'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install Bluetooth packages'
+      community.general.pacman:
+        name:
+          - bluez
+          - bluez-utils
+          - blueman
+        state: present
+
+    - name: 'Enable and start Bluetooth service'
+      ansible.builtin.systemd:
+        name: bluetooth
+        enabled: true
+        state: started

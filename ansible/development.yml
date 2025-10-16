@@ -1,0 +1,57 @@
+- name: 'Install development tools'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install development packages'
+      community.general.pacman:
+        name:
+          - php
+          - php-gd
+          - php-intl
+          - composer
+          - python-pip
+          - python-pipx
+          - go
+        state: present
+
+    - name: 'Install Python development tools via pipx'
+      become: false
+      community.general.pipx:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - pre-commit
+        - black
+        - flake8
+        - mypy
+      ignore_errors: true
+
+    - name: 'Configure Composer global plugins'
+      become: false
+      ansible.builtin.command:
+        cmd: composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+      changed_when: false
+
+    - name: 'Install PHP development packages globally via Composer'
+      become: false
+      ansible.builtin.command:
+        cmd: >
+          composer global require --no-interaction
+          squizlabs/php_codesniffer
+          phpstan/phpstan
+          friendsofphp/php-cs-fixer
+          rector/rector
+          slevomat/coding-standard
+      register: composer_install
+      changed_when: "'Nothing to install' not in composer_install.stdout"
+      ignore_errors: true
+
+    - name: 'Ensure Composer global bin directory is in PATH'
+      become: false
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.profile"
+        line: 'export PATH="$HOME/.config/composer/vendor/bin:$PATH"'
+        create: yes
+        mode: '0644'

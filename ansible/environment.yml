@@ -1,0 +1,41 @@
+- name: 'Configure system environment'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Configure environment variables'
+      ansible.builtin.copy:
+        dest: /etc/environment
+        content: |
+          # Base environment variables
+          MOZ_ENABLE_WAYLAND=1
+          # Disable portal issues that can cause startup delays
+          GTK_USE_PORTAL=0
+          GDK_DEBUG=no-portals
+
+          # Wayland/Sway environment variables
+          XDG_SESSION_TYPE=wayland
+          XDG_CURRENT_DESKTOP=sway
+          XDG_SESSION_DESKTOP=sway
+          QT_QPA_PLATFORM=wayland
+          GDK_BACKEND=wayland
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: 'Enable wheel group in sudoers'
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/wheel-group
+        content: |
+          %wheel ALL=(ALL:ALL) ALL
+        owner: root
+        group: root
+        mode: '0440'
+        validate: 'visudo -cf %s'
+
+    - name: 'Add user to wheel group'
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        groups: wheel
+        append: true

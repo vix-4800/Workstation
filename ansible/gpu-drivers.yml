@@ -1,0 +1,15 @@
+- name: 'Install GPU drivers'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install AMD/Intel drivers'
+      community.general.pacman:
+        name:
+          - xf86-video-amdgpu
+          - xf86-video-intel
+          - vulkan-radeon
+          - vulkan-intel
+          - mesa
+        state: present

@@ -1,0 +1,35 @@
+- name: 'Install applications'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install applications'
+      community.general.pacman:
+        name:
+          - firefox
+          - discord
+          - telegram-desktop
+          - vlc
+          - obsidian
+          - wireguard-tools
+          - github-cli
+          - flatpak
+        state: present
+
+    - name: 'Check if yay is installed'
+      ansible.builtin.command:
+        cmd: which yay
+      register: yay_check
+      changed_when: false
+      failed_when: false
+
+    - name: 'Install Spotify from AUR'
+      become: false
+      community.general.pacman:
+        name:
+          - spotify
+        state: present
+        executable: yay
+        extra_args: --builddir /var/cache/yay
+      when: yay_check.rc == 0

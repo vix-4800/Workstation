@@ -1,0 +1,26 @@
+- name: 'Install audio system'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install PipeWire audio system'
+      community.general.pacman:
+        name:
+          - pipewire
+          - pipewire-alsa
+          - pavucontrol
+          - pipewire-pulse
+          - wireplumber
+        state: present
+
+    - name: 'Enable PipeWire services for user'
+      become: false
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+        scope: user
+      loop:
+        - pipewire.service
+        - pipewire-pulse.service
+        - wireplumber.service

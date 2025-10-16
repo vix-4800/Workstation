@@ -1,0 +1,33 @@
+- name: 'Install multimedia codecs'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install multimedia codecs'
+      community.general.pacman:
+        name:
+          - a52dec
+          - faac
+          - faad2
+          - flac
+          - jasper
+          - lame
+          - libdca
+          - libdv
+          - libmad
+          - libmpeg2
+          - libtheora
+          - libvorbis
+          - libxv
+          - wavpack
+          - x264
+          - xvidcore
+          - gstreamer
+          - gst-libav
+          - libdvdnav
+          - fuse-exfat
+          - libdvdcss
+          - libdvdread
+          - exfat-utils
+        state: present

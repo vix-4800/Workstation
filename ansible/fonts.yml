@@ -1,0 +1,12 @@
+- name: 'Install fonts'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install fonts'
+      community.general.pacman:
+        name:
+          - ttf-jetbrains-mono-nerd
+          - otf-font-awesome
+        state: present

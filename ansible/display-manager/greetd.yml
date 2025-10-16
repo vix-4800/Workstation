@@ -1,0 +1,119 @@
+- name: 'Install and configure Greetd Display Manager'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install Display Manager'
+      community.general.pacman:
+        name:
+          - greetd
+          - greetd-regreet
+        state: present
+
+    - name: 'Create greetd configuration directory'
+      ansible.builtin.file:
+        path: /etc/greetd
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: 'Enable greetd service'
+      ansible.builtin.systemd:
+        name: greetd
+        enabled: true
+        daemon_reload: true
+
+    - name: 'Create Sway configuration for greetd'
+      ansible.builtin.copy:
+        dest: /etc/greetd/sway-config
+        content: |
+          # Sway configuration for greetd with ReGreet
+          # Do not modify this file unless you know what you're doing
+
+          # Output configuration
+          output * bg #1e1e2e solid_color
+
+          # Disable Sway decorations and bars
+          default_border none
+          default_floating_border none
+          font pango:monospace 0
+          titlebar_border_thickness 0
+          titlebar_padding 0
+
+          # Security: disable dangerous key bindings
+          bindsym --release Ctrl+Alt+t exec true
+          bindsym --release Ctrl+Alt+Delete exec true
+
+          # Run ReGreet and exit Sway when it's done
+          exec "regreet; swaymsg exit"
+
+          # Include system-wide Sway configuration if needed
+          include /etc/sway/config.d/*
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: 'Configure greetd config.toml'
+      ansible.builtin.copy:
+        dest: /etc/greetd/config.toml
+        content: |
+          [terminal]
+          vt = 1
+
+          [default_session]
+          command = "sway --config /etc/greetd/sway-config"
+          user = "greeter"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: 'Configure ReGreet for Sway'
+      ansible.builtin.copy:
+        dest: /etc/greetd/regreet.toml
+        content: |
+          [background]
+          # Path to background image (optional)
+          # path = "/usr/share/backgrounds/city-horizon.jpg"
+          # fit = "Cover"
+
+          [GTK]
+          application_prefer_dark_theme = true
+          cursor_theme_name = "Adwaita"
+          font_name = "JetBrains Mono Nerd Font 12"
+          icon_theme_name = "Adwaita"
+          theme_name = "Adwaita"
+
+          [commands]
+          reboot = ["systemctl", "reboot"]
+          poweroff = ["systemctl", "poweroff"]
+
+          [appearance]
+          greeting_msg = "Welcome to Arch Linux!"
+
+          [widget.clock]
+          format = "%a, %B %d  %H:%M"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: 'Create greeter user'
+      ansible.builtin.user:
+        name: greeter
+        system: true
+        shell: /bin/false
+        home: /var/lib/greeter
+        comment: "Greeter user"
+        create_home: true
+
+    - name: 'Setup state and log directories for regreet'
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: greeter
+        group: greeter
+        mode: '0755'
+      loop:
+        - /var/lib/regreet
+        - /var/log/regreet

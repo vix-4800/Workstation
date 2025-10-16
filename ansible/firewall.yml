@@ -1,0 +1,26 @@
+- name: 'Install and configure UFW firewall'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install UFW'
+      community.general.pacman:
+        name:
+          - ufw
+        state: present
+
+    - name: 'Enable UFW service'
+      ansible.builtin.systemd:
+        name: ufw
+        enabled: true
+        state: started
+
+    - name: 'Configure UFW default policies'
+      community.general.ufw:
+        state: enabled
+        policy: "{{ item.policy }}"
+        direction: "{{ item.direction }}"
+      loop:
+        - { direction: 'incoming', policy: 'deny' }
+        - { direction: 'outgoing', policy: 'allow' }

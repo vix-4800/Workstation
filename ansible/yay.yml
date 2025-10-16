@@ -1,0 +1,47 @@
+- name: 'Install YAY AUR helper'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  tasks:
+    - name: 'Check if yay is already installed'
+      ansible.builtin.command:
+        cmd: which yay
+      register: yay_check
+      changed_when: false
+      failed_when: false
+
+    - name: 'Install git if not present (required for yay)'
+      become: true
+      community.general.pacman:
+        name: git
+        state: present
+      when: yay_check.rc != 0
+
+    - name: 'Clone yay repository'
+      ansible.builtin.git:
+        repo: https://aur.archlinux.org/yay.git
+        dest: /tmp/yay
+        clone: yes
+        update: no
+      when: yay_check.rc != 0
+
+    - name: 'Build and install yay'
+      ansible.builtin.command:
+        chdir: /tmp/yay
+        cmd: makepkg -si --noconfirm
+      when: yay_check.rc != 0
+
+    - name: 'Clean up yay build files'
+      ansible.builtin.file:
+        path: /tmp/yay
+        state: absent
+      when: yay_check.rc != 0
+
+    - name: 'Create yay build directory'
+      become: true
+      ansible.builtin.file:
+        path: /var/cache/yay
+        state: directory
+        mode: '0755'
+      when: yay_check.rc != 0

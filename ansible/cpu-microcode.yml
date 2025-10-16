@@ -1,0 +1,11 @@
+- name: 'Install CPU microcode'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Install AMD microcode'
+      community.general.pacman:
+        name:
+          - amd-ucode
+        state: present
