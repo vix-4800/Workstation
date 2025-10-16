@@ -19,6 +19,8 @@
           - brightnessctl
           - xorg-xwayland
           - libnotify
+          - xdg-desktop-portal
+          - xdg-desktop-portal-wlr
         state: present
 
     - name: 'Check if yay is installed'
