@@ -72,7 +72,8 @@ done
 tooltip+="</span></tt>"
 
 # Output
-output="{\"text\":\"\", \"tooltip\":\"$tooltip\"}"
+text="$icon ${temp}°C"
+output="{\"text\":\"$text\", \"tooltip\":\"$tooltip\"}"
 
 # Cache the result
 echo "$output" > "$CACHE_FILE"
