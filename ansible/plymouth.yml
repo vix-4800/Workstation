@@ -1,0 +1,57 @@
+---
+- name: Configure Plymouth boot splash screen
+  hosts: localhost
+  become: yes
+  vars:
+    plymouth_theme: spinner
+    grub_cmdline_params: "loglevel=3 quiet splash rd.udev.log_priority=3 vt.global_cursor_default=0"
+    mkinitcpio_hooks: "base udev plymouth autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck"
+
+  tasks:
+    - name: Install Plymouth
+      community.general.pacman:
+        name: plymouth
+        state: present
+        executable: yay
+        extra_args: --needed --noconfirm
+
+    - name: Configure Plymouth theme in plymouthd.conf
+      ini_file:
+        path: /etc/plymouth/plymouthd.conf
+        section: Daemon
+        option: Theme
+        value: "{{ plymouth_theme }}"
+        create: yes
+        mode: '0644'
+      notify:
+        - rebuild initramfs
+        - update grub
+
+    - name: Set Plymouth default theme
+      command: plymouth-set-default-theme -R {{ plymouth_theme }}
+      register: plymouth_theme_result
+      changed_when: plymouth_theme_result.rc == 0
+      failed_when: plymouth_theme_result.rc != 0
+
+    - name: Update mkinitcpio.conf HOOKS
+      lineinfile:
+        path: /etc/mkinitcpio.conf
+        regexp: '^HOOKS='
+        line: 'HOOKS=({{ mkinitcpio_hooks }})'
+        backup: yes
+      notify: rebuild initramfs
+
+    - name: Update GRUB cmdline parameters
+      lineinfile:
+        path: /etc/default/grub
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ grub_cmdline_params }}"'
+        backup: yes
+      notify: update grub
+
+  handlers:
+    - name: rebuild initramfs
+      command: mkinitcpio -P
+
+    - name: update grub
+      command: grub-mkconfig -o /boot/grub/grub.cfg
