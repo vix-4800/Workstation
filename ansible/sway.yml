@@ -18,6 +18,7 @@
           - slurp
           - brightnessctl
           - xorg-xwayland
+          - libnotify
         state: present
 
     - name: 'Check if yay is installed'

@@ -3,9 +3,19 @@
   connection: local
   gather_facts: false
   become: true
+  vars:
+    cpu_type: amd # amd | intel | none
   tasks:
     - name: 'Install AMD microcode'
       community.general.pacman:
         name:
           - amd-ucode
         state: present
+      when: cpu_type == 'amd'
+
+    - name: 'Install Intel microcode'
+      community.general.pacman:
+        name:
+          - intel-ucode
+        state: present
+      when: cpu_type == 'intel'

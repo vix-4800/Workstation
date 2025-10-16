@@ -17,6 +17,8 @@
           - gcc
           - udiskie
           - ffmpeg
+          - man
+          - wget
         state: present
 
     - name: 'Install modern CLI tools'
@@ -26,4 +28,6 @@
           - bat
           - ripgrep
           - fd
+          - tldr
+          - chafa
         state: present

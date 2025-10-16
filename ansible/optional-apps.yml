@@ -15,6 +15,11 @@
           - wireguard-tools
           - github-cli
           - flatpak
+          - zathura
+          - zathura-pdf-mupdf
+          - thunar
+          - feh
+          - wdisplays
         state: present
 
     - name: 'Check if yay is installed'
@@ -24,11 +29,13 @@
       changed_when: false
       failed_when: false
 
-    - name: 'Install Spotify from AUR'
+    - name: 'Install AUR applications'
       become: false
       community.general.pacman:
         name:
           - spotify
+          - catppuccin-gtk-theme-mocha
+          - catppuccin-cursors-mocha
         state: present
         executable: yay
         extra_args: --builddir /var/cache/yay

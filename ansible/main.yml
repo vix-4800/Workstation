@@ -20,6 +20,7 @@
 - import_playbook: cpu-microcode.yml
 - import_playbook: gpu-drivers.yml
 - import_playbook: yay.yml
+- import_playbook: dotfiles.yml
 - import_playbook: shell.yml
 - import_playbook: editors.yml
 - import_playbook: network.yml
@@ -35,7 +36,6 @@
 - import_playbook: multimedia.yml
 - import_playbook: development.yml
 - import_playbook: optional-apps.yml
-- import_playbook: dotfiles.yml
 
 - name: 'Final system cleanup'
   hosts: localhost

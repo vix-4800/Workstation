@@ -19,16 +19,35 @@
         shell: /usr/bin/fish
       when: ansible_user_id is defined
 
-    - name: 'Create Fish config directory'
+    - name: 'Check if Fisher is already installed'
       become: false
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.config/fish"
-        state: directory
-        mode: '0755'
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish"
+      register: fisher_installed
 
     - name: 'Install Fisher plugin manager'
       become: false
       ansible.builtin.shell:
         cmd: fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
-        creates: "{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish"
+      when: not fisher_installed.stat.exists
       ignore_errors: true
+
+    - name: 'Update Fisher plugins from fish_plugins file'
+      become: false
+      ansible.builtin.shell:
+        cmd: fish -c "fisher update"
+      when: fisher_installed.stat.exists or not fisher_installed.stat.exists
+      ignore_errors: true
+
+    - name: 'Show Fisher plugins status'
+      become: false
+      ansible.builtin.shell:
+        cmd: fish -c "fisher list"
+      register: fisher_list
+      changed_when: false
+      ignore_errors: true
+
+    - name: 'Display installed Fisher plugins'
+      ansible.builtin.debug:
+        msg: "{{ fisher_list.stdout_lines }}"
+      when: fisher_list.stdout_lines is defined and fisher_list.stdout_lines | length > 0

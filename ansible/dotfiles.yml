@@ -41,4 +41,15 @@
     - name: 'Show dotfiles output'
       ansible.builtin.debug:
         var: dotfiles_output.stdout_lines
-      when: dotfiles_output.stdout_lines | length > 0
+      when: dotfiles_output.stdout_lines is defined and dotfiles_output.stdout_lines | length > 0
+
+    - name: 'Check dotfiles status'
+      ansible.builtin.command:
+        cmd: "{{ repo_root }}/bin/dotfiles status"
+      register: dotfiles_status
+      changed_when: false
+
+    - name: 'Display dotfiles status'
+      ansible.builtin.debug:
+        msg: "{{ dotfiles_status.stdout_lines }}"
+      when: dotfiles_status.stdout_lines is defined and dotfiles_status.stdout_lines | length > 0

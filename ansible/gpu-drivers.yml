@@ -3,13 +3,32 @@
   connection: local
   gather_facts: false
   become: true
+  vars:
+    gpu_type: hybrid # nvidia | amd | intel | hybrid | none
   tasks:
-    - name: 'Install AMD/Intel drivers'
+    - name: 'Install NVIDIA drivers'
+      community.general.pacman:
+        name:
+          - nvidia
+          - nvidia-utils
+          - nvidia-settings
+        state: present
+      when: gpu_type == 'nvidia'
+
+    - name: 'Install AMD drivers'
       community.general.pacman:
         name:
           - xf86-video-amdgpu
-          - xf86-video-intel
           - vulkan-radeon
+          - mesa
+        state: present
+      when: gpu_type == 'amd' or gpu_type == 'hybrid'
+
+    - name: 'Install Intel drivers'
+      community.general.pacman:
+        name:
+          - xf86-video-intel
           - vulkan-intel
           - mesa
         state: present
+      when: gpu_type == 'intel' or gpu_type == 'hybrid'
