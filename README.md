@@ -3,26 +3,6 @@
 Personal configuration files for Linux desktop environment with Sway (Wayland) and development
 tools.
 
-## Quick Start
-
-### Arch Linux Auto Setup
-
-For a fresh Arch Linux installation:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/vix-4800/dotfiles/main/bin/arch-setup | bash
-```
-
-See [ARCH_SETUP.md](ARCH_SETUP.md) for detailed information.
-
-### Manual Installation
-
-```bash
-git clone https://github.com/vix-4800/dotfiles.git ~/Code/Dotfiles
-cd ~/Code/Dotfiles
-./bin/dotfiles link
-```
-
 ## What's Included
 
 - **Sway** - Wayland compositor configuration
@@ -35,16 +15,3 @@ cd ~/Code/Dotfiles
 - **Git** - Git configuration and aliases
 - **Development tools** - PHP, Python, JavaScript toolchain configs
 - **Shell Configuration** - Centralized configuration for bash, zsh, and fish
-
-## Scripts
-
-- `bin/arch-setup` - Complete Arch Linux system setup
-- `bin/dotfiles` - Dotfiles management (link/unlink)
-
-## Usage
-
-### Link dotfiles
-
-```bash
-./bin/dotfiles link
-```
