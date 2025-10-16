@@ -34,20 +34,22 @@ ansible-playbook ansible/main.yml
 **System:**
 - SwayFX, Swaylock Effects, wlogout
 - Greetd + ReGreet
+- Plymouth boot splash screen
 - PipeWire, NetworkManager
 - UFW firewall, Bluetooth
 - AMD microcode, AMD/Intel GPU drivers
+- Reflector
 
 **Applications:**
-- VS Code, Firefox
+- Visual Studio Code, Firefox
 - Discord, Telegram, Spotify, VLC, Obsidian
 - Thunar, Zathura, Feh, Wdisplays
 - Catppuccin GTK theme
 
 **CLI:**
 - Fish shell (default) + Alacritty + Tmux
-- Neovim + micro
-- eza, bat, ripgrep, fd, tldr, neofetch
+- Neovim
+- eza, bat, ripgrep, fd, tldr, chafa
 
 **Development:**
 - Docker
@@ -73,4 +75,30 @@ ansible-playbook ansible/main.yml --check
 ansible-playbook ansible/docker.yml
 ansible-playbook ansible/sway.yml
 ansible-playbook ansible/dotfiles.yml
+ansible-playbook ansible/development.yml
+ansible-playbook ansible/optional-apps.yml
 ```
+
+## Individual Playbooks
+
+- **essential.yml** - Base packages, modern CLI tools (eza, bat, ripgrep, fd, bottom), mesa, reflector
+- **cpu-microcode.yml** - CPU microcode (AMD/Intel)
+- **gpu-drivers.yml** - GPU drivers (NVIDIA/AMD/Intel)
+- **yay.yml** - AUR helper installation
+- **dotfiles.yml** - Apply symlinks from dotfiles
+- **shell.yml** - Fish shell, Alacritty, tmux, Fisher
+- **editors.yml** - Neovim
+- **network.yml** - NetworkManager, openssh, openssl, WireGuard
+- **audio.yml** - PipeWire, WirePlumber, pavucontrol
+- **fonts.yml** - JetBrains Mono Nerd Font, Font Awesome
+- **sway.yml** - SwayFX, Swaylock Effects, Waybar, wofi, wlogout
+- **plymouth.yml** - Plymouth boot splash screen
+- **display-manager/greetd.yml** - Greetd + ReGreet display manager
+- **docker.yml** - Docker and docker-compose
+- **bluetooth.yml** - Bluez, bluez-utils, blueman
+- **firewall.yml** - UFW firewall
+- **environment.yml** - Environment variables, sudoers, wheel group
+- **locale.yml** - Localization, timezone
+- **multimedia.yml** - Codecs and libraries
+- **development.yml** - PHP, Python, Go + dev tools
+- **optional-apps.yml** - Firefox, Discord, Telegram, Spotify, VLC, Obsidian, Visual Studio Code
