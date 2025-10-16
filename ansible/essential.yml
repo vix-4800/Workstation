@@ -30,4 +30,10 @@
           - fd
           - tldr
           - chafa
+          - reflector
         state: present
+
+    - name: 'Update mirror list with reflector'
+      ansible.builtin.command:
+        cmd: reflector --country 'Russia' --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
+      changed_when: false

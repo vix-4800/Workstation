@@ -58,7 +58,7 @@
 
           Important next steps:
           1. REBOOT your system: sudo reboot
-          2. Log out and back in for group changes (docker) to take effect
+          2. Log out and back in for group changes (docker, wheel) to take effect
           3. Fish is now your default shell
           4. Configure GitHub CLI: gh auth login
           5. All dotfiles symlinks have been applied
@@ -67,12 +67,14 @@
           Installed:
           - SwayFX + Swaylock Effects + wlogout
           - Greetd + ReGreet (display manager)
+          - Plymouth boot splash screen
           - Visual Studio Code
           - Spotify, Discord, Telegram, VLC, Obsidian
           - Docker (you're in docker group now)
           - UFW firewall, Bluetooth
           - Development tools: PHP, Python, Go
           - Fish shell with Fisher
+          - Modern CLI tools: eza, bat, ripgrep, fd
           - All config symlinks from dotfiles
 
           ===================================
