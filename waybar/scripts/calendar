@@ -8,7 +8,6 @@ current_date=$(date +"%e %B")
 current_day=$(date +"%d")
 current_month=$(date +"%B %Y")
 current_weekday=$(date +"%A")
-week_num=$(date +"%V")
 
 # Generate calendar
 cal_output=$(cal -m --color=never | tail -n +2)
@@ -24,13 +23,11 @@ color_dimmed="#6c7086"      # Surface2
 
 # Build tooltip
 tooltip="<span font_size='xx-large' color='$color_header'><b>$current_month</b></span>\n"
-tooltip+="<span font_size='x-large' color='$color_weekdays'><b>$current_weekday</b></span>\n\n"
+tooltip+="<span font_size='x-large' color='$color_weekdays'><b>$current_weekday</b></span>\n"
 
 # Calendar header
 tooltip+="<tt><span font_size='large'>"
 tooltip+="<span color='$color_week_num'><b>  </b></span> "
-tooltip+="<span color='$color_weekdays'><b>Mo Tu We Th Fr </b></span>"
-tooltip+="<span color='$color_weekend'><b>Sa Su</b></span>"
 tooltip+="</span></tt>\n"
 
 # Parse calendar and build rows
@@ -80,12 +77,11 @@ done <<< "$cal_output"
 
 # Footer with additional info
 tooltip+="<span font_size='medium' color='$color_dimmed'>"
-tooltip+="Week $week_num of $(date +%Y)"
 
 # Days left in month
 days_in_month=$(date -d "$(date +%Y-%m-01) + 1 month - 1 day" +%d)
 days_remaining=$((days_in_month - current_day_trimmed))
-tooltip+=" • $days_remaining days left"
+tooltip+="$days_remaining days left"
 
 # Days left in year
 day_of_year=$(date +%j)
