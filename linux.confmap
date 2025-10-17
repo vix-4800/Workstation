@@ -37,6 +37,7 @@ waybar	$HOME/.config/waybar
 wlogout	$HOME/.config/wlogout
 wofi	$HOME/.config/wofi
 swayosd	$HOME/.config/swayosd
+waypaper	$HOME/.config/waypaper
 
 # Applications
 git/gitconfig	$HOME/.gitconfig

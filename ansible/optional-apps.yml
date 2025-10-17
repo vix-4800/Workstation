@@ -35,6 +35,7 @@
           - spotify
           - catppuccin-gtk-theme-mocha
           - wdisplays
+          - waypaper
           - better-control-git
           - swayosd
         state: present
