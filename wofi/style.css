@@ -54,15 +54,17 @@
 * {
   font-family: 'JetBrainsMono Nerd Font';
   font-size: 14px;
+  transition: all 0.2s ease;
 }
 
 /* Window */
 window {
   margin: 0px;
   padding: 10px;
-  border: 0.05em solid @lavender;
-  border-radius: 0.1em;
-  background-color: @base;
+  border: none;
+  border-radius: 12.6px;
+  background-color: rgba(30, 30, 46, 0.95);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px @surface1;
   animation: slideIn 0.35s ease-in-out both;
 }
 
@@ -82,7 +84,7 @@ window {
   margin: 5px;
   padding: 10px;
   border: none;
-  background-color: @base;
+  background-color: transparent;
   animation: fadeIn 0.5s ease-in-out both;
 }
 
@@ -102,7 +104,7 @@ window {
   margin: 5px;
   padding: 10px;
   border: none;
-  background-color: @base;
+  background-color: transparent;
 }
 
 /* Scroll */
@@ -110,7 +112,7 @@ window {
   margin: 0px;
   padding: 10px;
   border: none;
-  background-color: @base;
+  background-color: transparent;
 }
 
 /* Input */
@@ -118,9 +120,10 @@ window {
   margin: 5px 20px;
   padding: 10px;
   border: none;
-  border-radius: 0.1em;
+  border-radius: 12.6px;
   color: @text;
-  background-color: @base;
+  background-color: @surface0;
+  box-shadow: inset 0 0 0 1px @surface1;
   animation: fadeIn 0.5s ease-in-out both;
 }
 
@@ -142,9 +145,11 @@ window {
 }
 
 #entry {
-  background-color: @base;
-  margin: 5px 0;
+  background-color: transparent;
+  margin: 5px 8px;
   padding: 10px 15px;
+  border-radius: 7px;
+  transition: all 0.2s ease;
 }
 
 #entry arrow {
@@ -152,9 +157,15 @@ window {
   color: @lavender;
 }
 
+/* Entry hover effect */
+#entry:hover {
+  background-color: @surface0;
+}
+
 /* Selected Entry */
 #entry:selected {
-  border: 0.11em solid @lavender;
+  background-color: @surface1;
+  box-shadow: inset 0 0 0 1px @lavender;
 }
 
 #entry:selected #text {
