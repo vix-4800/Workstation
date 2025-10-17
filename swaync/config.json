@@ -50,7 +50,7 @@
       "app-name": "Spotify"
     }
   },
-  "widgets": ["inhibitors", "title", "dnd", "notifications"],
+  "widgets": ["inhibitors", "title", "dnd", "notifications", "buttons-grid", "mpris", "volume"],
   "widget-config": {
     "notifications": {
       "vexpand": true
@@ -68,25 +68,53 @@
     "dnd": {
       "text": "Do Not Disturb"
     },
-    "label": {
-      "max-lines": 5,
-      "text": "Label Text"
-    },
     "mpris": {
       "blacklist": [],
       "autohide": false,
       "show-album-art": "always",
       "loop-carousel": false
     },
+    "volume": {
+      "label": "",
+      "show-per-app": true,
+      "show-per-app-icon": true,
+      "show-per-app-label": true
+    },
     "buttons-grid": {
-      "buttons-per-row": 7,
+      "buttons-per-row": 5,
       "actions": [
         {
-          "label": "直",
+          "label": "󰖩",
           "type": "toggle",
           "active": true,
           "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
           "update-command": "sh -c '[[ $(nmcli radio wifi) == \"enabled\" ]] && echo true || echo false'"
+        },
+        {
+          "label": "󰂯",
+          "type": "toggle",
+          "active": true,
+          "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && bluetoothctl power on || bluetoothctl power off'",
+          "update-command": "sh -c 'bluetoothctl show | grep -q \"Powered: yes\" && echo true || echo false'"
+        },
+        {
+          "label": "",
+          "type": "toggle",
+          "active": true,
+          "command": "swayosd-client --output-volume mute-toggle",
+          "update-command": "sh -c 'pactl get-sink-mute @DEFAULT_SINK@ | grep -q \"no\" && echo true || echo false'"
+        },
+        {
+          "label": "󰍭",
+          "type": "toggle",
+          "active": true,
+          "command": "swayosd-client --input-volume mute-toggle",
+          "update-command": "sh -c 'pactl get-source-mute @DEFAULT_SOURCE@ | grep -q \"no\" && echo true || echo false'"
+        },
+        {
+          "label": "",
+          "type": "normal",
+          "command": "thunar"
         }
       ]
     }
