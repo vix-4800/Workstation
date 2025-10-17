@@ -9,4 +9,5 @@
         name:
           - ttf-jetbrains-mono-nerd
           - otf-font-awesome
+          - woff2-font-awesome
         state: present
