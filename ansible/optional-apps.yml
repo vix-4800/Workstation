@@ -19,6 +19,7 @@
           - zathura-pdf-mupdf
           - thunar
           - feh
+          - trash-cli
         state: present
 
     - name: 'Check if yay is installed'
