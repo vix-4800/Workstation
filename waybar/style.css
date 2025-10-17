@@ -100,7 +100,6 @@
 
 #network {
   color: @yellow;
-  border-radius: 1rem 0 0 1rem;
 }
 
 #bluetooth {
@@ -128,7 +127,7 @@
 
 #custom-docker {
   color: @blue;
-  border-radius: 0 1rem 1rem 0;
+  border-radius: 1rem;
   margin-right: 1rem;
 }
 

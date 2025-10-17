@@ -7,8 +7,8 @@
   "modules-left": ["custom/weather", "sway/workspaces"],
   "modules-center": ["custom/calendar"],
   "modules-right": [
-    "custom/vpn",
     "custom/docker",
+    "custom/vpn",
     "network",
     "bluetooth",
     "pulseaudio",
