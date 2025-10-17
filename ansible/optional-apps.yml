@@ -31,7 +31,8 @@
 
     - name: 'Install AUR applications'
       become: false
-      community.general.pacman:
+      kewlfft.aur.aur:
+        use: yay
         name:
           - spotify
           - catppuccin-gtk-theme-mocha
@@ -43,8 +44,6 @@
           - swayosd
           - batsignal
         state: present
-        executable: yay
-        extra_args: --builddir /var/cache/yay
       when: yay_check.rc == 0
 
     - name: 'Enable and start arch-update timer'

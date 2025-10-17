@@ -19,11 +19,10 @@
 
     - name: 'Install Plymouth from AUR'
       become: false
-      community.general.pacman:
+      kewlfft.aur.aur:
+        use: yay
         name: plymouth
         state: present
-        executable: yay
-        extra_args: --builddir /var/cache/yay
       when: yay_check.rc == 0
 
     - name: 'Ensure Plymouth configuration directory exists'

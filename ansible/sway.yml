@@ -41,12 +41,11 @@
 
     - name: 'Install SwayFX and Swaylock Effects from AUR'
       become: false
-      community.general.pacman:
+      kewlfft.aur.aur:
+        use: yay
         name:
           - swayfx
           - swaylock-effects
           - wlogout
         state: present
-        executable: yay
-        extra_args: --builddir /var/cache/yay
       when: yay_check.rc == 0
