@@ -13,7 +13,6 @@
         state: present
 
     - name: 'Set Fish as default shell for user'
-      become: false
       ansible.builtin.user:
         name: "{{ ansible_user_id }}"
         shell: /usr/bin/fish
