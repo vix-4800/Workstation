@@ -146,9 +146,6 @@ do_link() {
 
     # BAT
     bat cache --build
-
-    # GRUB
-    sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
 do_unlink() {
