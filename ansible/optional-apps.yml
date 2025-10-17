@@ -44,12 +44,16 @@
           - swayosd
           - batsignal
           - waybar-module-pacman-updates-git
+          - auto-cpufreq
         state: present
       when: yay_check.rc == 0
 
     - name: 'Enable and start arch-update timer'
       ansible.builtin.systemd:
-        name: arch-update.timer
+        name: "{{ item }}"
         enabled: true
         state: started
       when: yay_check.rc == 0
+      loop:
+        - arch-update.timer
+        - auto-cpufreq
