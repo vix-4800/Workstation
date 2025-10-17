@@ -1,52 +1,52 @@
 # General for all shells
-.aliases	$HOME/.aliases
-.prettierrc	$HOME/.prettierrc
-.profile	$HOME/.profile
+config/.aliases	$HOME/.aliases
+config/.prettierrc	$HOME/.prettierrc
+config/.profile	$HOME/.profile
 
 # Bash
-bash/.bash_aliases	$HOME/.bash_aliases
-bash/.bash_profile	$HOME/.bash_profile
-bash/bashrc	$HOME/.bashrc
+config/bash/.bash_aliases	$HOME/.bash_aliases
+config/bash/.bash_profile	$HOME/.bash_profile
+config/bash/bashrc	$HOME/.bashrc
 
 # Fish
-fish	$HOME/.config/fish
+config/fish	$HOME/.config/fish
 
 # Zsh
-zsh/.zsh_aliases	$HOME/.zsh_aliases
-zsh/zshrc	$HOME/.zshrc
+config/zsh/.zsh_aliases	$HOME/.zsh_aliases
+config/zsh/zshrc	$HOME/.zshrc
 
 # Terminals
-alacritty	$HOME/.config/alacritty
-tmux/.tmux.conf	$HOME/.config/tmux/tmux.conf
+config/alacritty	$HOME/.config/alacritty
+config/tmux/.tmux.conf	$HOME/.config/tmux/tmux.conf
 
 # Development - Python
-development/python/flake8	$HOME/.config/flake8
-development/python/mypy	$HOME/.config/mypy
+config/development/python/flake8	$HOME/.config/flake8
+config/development/python/mypy	$HOME/.config/mypy
 
 # Development - PHP
-development/php/php-cs-fixer	$HOME/.config/php-cs-fixer
-development/php/phpcs	$HOME/.config/phpcs
-development/php/phpstan	$HOME/.config/phpstan
-development/php/rector	$HOME/.config/rector
+config/development/php/php-cs-fixer	$HOME/.config/php-cs-fixer
+config/development/php/phpcs	$HOME/.config/phpcs
+config/development/php/phpstan	$HOME/.config/phpstan
+config/development/php/rector	$HOME/.config/rector
 
 # Desktop Environment - Sway
-sway	$HOME/.config/sway
-swaync	$HOME/.config/swaync
-swaylock	$HOME/.config/swaylock
-waybar	$HOME/.config/waybar
-wlogout	$HOME/.config/wlogout
-wofi	$HOME/.config/wofi
-swayosd	$HOME/.config/swayosd
-swappy	$HOME/.config/swappy
-waypaper	$HOME/.config/waypaper
+config/sway	$HOME/.config/sway
+config/swaync	$HOME/.config/swaync
+config/swaylock	$HOME/.config/swaylock
+config/waybar	$HOME/.config/waybar
+config/wlogout	$HOME/.config/wlogout
+config/wofi	$HOME/.config/wofi
+config/swayosd	$HOME/.config/swayosd
+config/swappy	$HOME/.config/swappy
+config/waypaper	$HOME/.config/waypaper
 
 # Systemd user services
 systemd/user	$HOME/.config/systemd/user
 
 # Applications
-git/gitconfig	$HOME/.gitconfig
-nvim	$HOME/.config/nvim
-bat	$HOME/.config/bat
-zathura	$HOME/.config/zathura
+config/git/gitconfig	$HOME/.gitconfig
+config/nvim	$HOME/.config/nvim
+config/bat	$HOME/.config/bat
+config/zathura	$HOME/.config/zathura
 
 wallpapers	$HOME/Pictures/Wallpapers

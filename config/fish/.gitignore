@@ -1,0 +1,18 @@
+# Fish shell auto-generated files
+functions/_tide_*
+functions/tide/
+completions/tide.fish
+conf.d/_tide_init.fish
+
+functions/_nvm_*
+functions/nvm.fish
+completions/nvm.fish
+conf.d/nvm.fish
+
+functions/fisher.fish
+completions/fisher.fish
+
+# Fish shell runtime/state
+fish_variables
+fishd.tmp.*
+themes
