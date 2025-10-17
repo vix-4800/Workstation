@@ -1,0 +1,21 @@
+- name: 'Install cursors'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Check if yay is installed'
+      ansible.builtin.command:
+        cmd: which yay
+      register: yay_check
+      changed_when: false
+      failed_when: false
+
+    - name: 'Install Catppuccin Cursors from AUR'
+      become: false
+      kewlfft.aur.aur:
+        use: yay
+        name:
+          - catppuccin-cursors-mocha
+        state: present
+      when: yay_check.rc == 0

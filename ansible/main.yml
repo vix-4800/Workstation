@@ -37,6 +37,7 @@
 - import_playbook: multimedia.yml
 - import_playbook: development.yml
 - import_playbook: optional-apps.yml
+- import_playbook: cursors.yml
 
 - name: 'Final system cleanup'
   hosts: localhost
