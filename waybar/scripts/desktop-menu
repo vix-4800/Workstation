@@ -59,15 +59,10 @@ case "$selected" in
         ~/.config/waybar/scripts/docker-menu &
         ;;
     "⚙️  System Settings")
-        # Try different system settings apps
-        if command -v gnome-control-center &> /dev/null; then
-            gnome-control-center &
-        elif command -v systemsettings5 &> /dev/null; then
-            systemsettings5 &
-        elif command -v xfce4-settings-manager &> /dev/null; then
-            xfce4-settings-manager &
+        if command -v better-control &> /dev/null; then
+            better-control settings &
         else
-            notify-send "Settings" "No settings app found" -u normal
+            notify-send "System Settings" "better-control not installed" -u normal
         fi
         ;;
     "🖥️  Display Settings")
