@@ -8,7 +8,7 @@ Automatic installation and configuration of Arch Linux with Sway.
 sudo pacman -S ansible
 ansible-galaxy collection install kewlfft.aur
 cd ~/Code/Workstation
-ansible-playbook ansible/main.yml
+ansible-playbook ansible/main.yml --ask-become-pass
 ```
 
 ## Workflow Between Machines
@@ -26,7 +26,7 @@ git push
 ### Apply on the Second Machine
 ```bash
 git pull
-ansible-playbook ansible/main.yml
+ansible-playbook ansible/main.yml --ask-become-pass
 ```
 
 ## What Gets Installed
@@ -66,17 +66,17 @@ ansible-playbook ansible/main.yml
 
 ```bash
 # Syntax check
-ansible-playbook ansible/main.yml --syntax-check
+ansible-playbook ansible/main.yml --syntax-check --ask-become-pass
 
 # Dry-run
-ansible-playbook ansible/main.yml --check
+ansible-playbook ansible/main.yml --check --ask-become-pass
 
 # Install only specific components
-ansible-playbook ansible/docker.yml
-ansible-playbook ansible/sway.yml
-ansible-playbook ansible/dotfiles.yml
-ansible-playbook ansible/development.yml
-ansible-playbook ansible/optional-apps.yml
+ansible-playbook ansible/docker.yml --ask-become-pass
+ansible-playbook ansible/sway.yml --ask-become-pass
+ansible-playbook ansible/dotfiles.yml --ask-become-pass
+ansible-playbook ansible/development.yml --ask-become-pass
+ansible-playbook ansible/optional-apps.yml --ask-become-pass
 ```
 
 ## Individual Playbooks
