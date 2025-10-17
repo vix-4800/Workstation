@@ -36,6 +36,7 @@
           - catppuccin-gtk-theme-mocha
           - wdisplays
           - waypaper
+          - swappy
           - better-control-git
           - swayosd
         state: present
