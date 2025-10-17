@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# This script runs after a successful git merge.
-bash bin/dotfiles link
