@@ -36,6 +36,7 @@ swaylock	$HOME/.config/swaylock
 waybar	$HOME/.config/waybar
 wlogout	$HOME/.config/wlogout
 wofi	$HOME/.config/wofi
+swayosd	$HOME/.config/swayosd
 
 # Applications
 git/gitconfig	$HOME/.gitconfig
