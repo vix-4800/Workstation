@@ -40,6 +40,9 @@ swayosd	$HOME/.config/swayosd
 swappy	$HOME/.config/swappy
 waypaper	$HOME/.config/waypaper
 
+# Systemd user services
+systemd/user	$HOME/.config/systemd/user
+
 # Applications
 git/gitconfig	$HOME/.gitconfig
 nvim	$HOME/.config/nvim

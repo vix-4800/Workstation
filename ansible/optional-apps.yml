@@ -38,9 +38,17 @@
           - wdisplays
           - waypaper
           - swappy
+          - arch-update
           - better-control-git
           - swayosd
         state: present
         executable: yay
         extra_args: --builddir /var/cache/yay
+      when: yay_check.rc == 0
+
+    - name: 'Enable and start arch-update timer'
+      ansible.builtin.systemd:
+        name: arch-update.timer
+        enabled: true
+        state: started
       when: yay_check.rc == 0
