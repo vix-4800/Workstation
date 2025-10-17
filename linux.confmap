@@ -50,3 +50,4 @@ config/bat	$HOME/.config/bat
 config/zathura	$HOME/.config/zathura
 
 wallpapers	$HOME/Pictures/Wallpapers
+themes	$HOME/.config/themes

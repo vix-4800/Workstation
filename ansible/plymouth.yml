@@ -5,9 +5,9 @@
   gather_facts: false
   become: true
   vars:
-    plymouth_theme: spinner
-    grub_cmdline_params: "loglevel=3 quiet splash rd.udev.log_priority=3 vt.global_cursor_default=0"
-    mkinitcpio_hooks: "base udev plymouth autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck"
+    plymouth_theme: catppuccin-mocha
+    grub_cmdline_params: 'loglevel=3 quiet splash rd.udev.log_priority=3 vt.global_cursor_default=0'
+    mkinitcpio_hooks: 'base udev plymouth autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck'
 
   tasks:
     - name: 'Check if yay is installed'
@@ -33,12 +33,20 @@
         group: root
         mode: '0755'
 
+    - name: 'Copy themes'
+      ansible.builtin.copy:
+        src: ~/.config/themes/plymouth/
+        dest: /usr/share/plymouth/themes/
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: 'Configure Plymouth theme'
       ansible.builtin.ini_file:
         path: /etc/plymouth/plymouthd.conf
         section: Daemon
         option: Theme
-        value: "{{ plymouth_theme }}"
+        value: '{{ plymouth_theme }}'
         create: yes
         mode: '0644'
       notify:
