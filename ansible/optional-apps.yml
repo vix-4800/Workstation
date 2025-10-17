@@ -43,6 +43,7 @@
           - better-control-git
           - swayosd
           - batsignal
+          - waybar-module-pacman-updates-git
         state: present
       when: yay_check.rc == 0
 
