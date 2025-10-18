@@ -20,14 +20,14 @@ config/alacritty	$HOME/.config/alacritty
 config/tmux/.tmux.conf	$HOME/.config/tmux/tmux.conf
 
 # Development - Python
-config/development/python/flake8	$HOME/.config/flake8
-config/development/python/mypy	$HOME/.config/mypy
+extra/python/flake8	$HOME/.config/flake8
+extra/python/mypy	$HOME/.config/mypy
 
 # Development - PHP
-config/development/php/php-cs-fixer	$HOME/.config/php-cs-fixer
-config/development/php/phpcs	$HOME/.config/phpcs
-config/development/php/phpstan	$HOME/.config/phpstan
-config/development/php/rector	$HOME/.config/rector
+extra/php/php-cs-fixer	$HOME/.config/php-cs-fixer
+extra/php/phpcs	$HOME/.config/phpcs
+extra/php/phpstan	$HOME/.config/phpstan
+extra/php/rector	$HOME/.config/rector
 
 # Desktop Environment - Sway
 config/sway	$HOME/.config/sway
