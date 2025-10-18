@@ -55,5 +55,4 @@
         state: started
       when: yay_check.rc == 0
       loop:
-        - arch-update.timer
         - auto-cpufreq
