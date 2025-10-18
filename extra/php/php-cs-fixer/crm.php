@@ -128,15 +128,6 @@ return (new Config())
             'method' => 'one',
             'trait_import' => 'none',
         ]], // Enforces separation between class attributes
-        // 'ordered_class_elements' => [
-        //     'order' => [
-        //         'use_trait',
-        //         'constant_public', 'constant_protected', 'constant_private',
-        //         'property_public', 'property_protected', 'property_private',
-        //         'construct',
-        //         'method_public', 'method_protected', 'method_private',
-        //     ],
-        // ], // Enforces order of class elements
         'single_class_element_per_statement' => ['elements' => ['const', 'property']], // Enforces single class element per statement
         'single_trait_insert_per_statement' => true,
 
@@ -169,12 +160,6 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────────────────
         // Type-related
         // ─────────────────────────────────────────────────────────────────────────
-        // 'phpdoc_to_param_type' => true, // Converts PHPDoc @param to type hints
-        // 'phpdoc_to_return_type' => true, // Converts PHPDoc @return to return type declarations
-        // 'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
-        // 'declare_strict_types' => true, // Force strict types declaration in all files.
-        // 'strict_comparison' => true, // Uses === and !== instead of == and !=
-        // 'strict_param' => true, // Enforces strict parameter types
         'void_return' => true, // Enforces void return type for functions that do not return a value
 
         // ─────────────────────────────────────────────────────────────────────────
