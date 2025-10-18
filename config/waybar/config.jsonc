@@ -168,7 +168,6 @@
     "return-type": "json",
     "interval": 60,
     "exec": "~/.config/waybar/scripts/calendar",
-    "on-click": "gnome-calendar || notify-send 'Calendar' 'No calendar app found'",
     "tooltip": true
   },
 
