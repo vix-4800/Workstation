@@ -49,7 +49,7 @@ Number prefixes control load order. Always check `config.d/*.conf` before modify
 
 **Shell configs** support Fish (primary) and Bash:
 - Fish: `config/fish/` (with completions, functions, conf.d)
-- Bash: `config/bash/` (separate .bash_aliases, .bash_profile, bashrc)
+- Bash: `config/bash/` (separate .bash_profile, bashrc)
 
 **Development tools** configs in `extra/`:
 - PHP: phpstan, rector, php-cs-fixer, pint configs

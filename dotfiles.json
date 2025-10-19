@@ -16,10 +16,6 @@
       "target": "$HOME/.profile"
     },
     {
-      "source": "config/bash/.bash_aliases",
-      "target": "$HOME/.bash_aliases"
-    },
-    {
       "source": "config/bash/.bash_profile",
       "target": "$HOME/.bash_profile"
     },
