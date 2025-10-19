@@ -1,6 +1,6 @@
 ## Ideas
 
-- [ ] Fix plymouth theme to Catppuccin Mocha
+- [x] Fix plymouth theme to Catppuccin Mocha
 
 ### NeoVim
 
