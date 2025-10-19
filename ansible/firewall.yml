@@ -10,6 +10,17 @@
           - ufw
         state: present
 
+    - name: 'Load required kernel modules for netfilter'
+      community.general.modprobe:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - ip_tables
+        - ip6_tables
+        - iptable_filter
+        - ip6table_filter
+      ignore_errors: true
+
     - name: 'Enable UFW service'
       ansible.builtin.systemd:
         name: ufw
