@@ -1,20 +1,17 @@
 ---
 # Main playbook - Full system setup
 # Run this to set up a complete Arch Linux system with Sway
-#
-# Usage:
-#   ansible-playbook ansible/main.yml
 
-- name: 'Update system packages'
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  become: true
-  tasks:
-    - name: 'Update all packages'
-      community.general.pacman:
-        update_cache: true
-        upgrade: true
+# - name: 'Update system packages'
+#   hosts: localhost
+#   connection: local
+#   gather_facts: false
+#   become: true
+#   tasks:
+#     - name: 'Update all packages'
+#       community.general.pacman:
+#         update_cache: true
+#         upgrade: true
 
 - import_playbook: essential.yml
 - import_playbook: cpu-microcode.yml
