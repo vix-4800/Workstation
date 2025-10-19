@@ -59,7 +59,7 @@ ansible-playbook ansible/main.yml --ask-become-pass
 
 **Dotfiles:**
 - All configs managed via symlinks
-- Described in `linux.confmap`
+- Described in `dotfiles.json`
 - Automatically applied after installation
 
 ## Useful Commands
