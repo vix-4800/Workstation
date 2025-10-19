@@ -121,6 +121,47 @@ list_timers() {
     systemctl --user list-timers
 }
 
+# Function to setup health & productivity timers
+setup_timers() {
+    log_info "Setting up health & productivity timers..."
+    echo ""
+
+    # Ensure symlinks are created
+    if [ -f "$SCRIPT_DIR/dotfiles" ]; then
+        log_info "Creating symlinks..."
+        "$SCRIPT_DIR/dotfiles" link
+        echo ""
+    else
+        log_error "dotfiles script not found!"
+        exit 1
+    fi
+
+    # List of timers to enable
+    local TIMERS=(
+        "break-reminder.timer"
+        "water-reminder.timer"
+        "posture-check.timer"
+    )
+
+    log_info "Enabling timers..."
+    systemctl --user daemon-reload
+
+    for timer in "${TIMERS[@]}"; do
+        if systemctl --user enable "$timer" 2>/dev/null; then
+            systemctl --user start "$timer" 2>/dev/null || true
+            log_info "✓ Started: $timer"
+        else
+            log_warn "⚠ Failed to enable: $timer"
+        fi
+    done
+
+    echo ""
+    log_info "All timers configured!"
+    echo ""
+    log_info "Check status with: $(basename "$0") timers"
+    log_info "Disable a timer with: systemctl --user disable --now <timer-name>"
+}
+
 # Function to show help
 show_help() {
     cat << EOF
@@ -137,13 +178,15 @@ Commands:
     enable-all          - Enable all services from dotfiles
     reload              - Reload systemd user daemon
     timers              - Show active timers
+    setup-timers        - Setup health & productivity timers
     help                - Show this help message
 
 Examples:
-    $(basename "$0") enable arch-update.timer
-    $(basename "$0") status arch-update.timer
+    $(basename "$0") enable break-reminder.timer
+    $(basename "$0") status break-reminder.timer
     $(basename "$0") enable-all
     $(basename "$0") timers
+    $(basename "$0") setup-timers
 
 Services in dotfiles:
 EOF
@@ -193,6 +236,9 @@ case "${1:-help}" in
         ;;
     timers)
         list_timers
+        ;;
+    setup-timers)
+        setup_timers
         ;;
     help|--help|-h)
         show_help

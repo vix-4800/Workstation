@@ -1,0 +1,10 @@
+[Unit]
+Description=Posture check every 45 minutes
+
+[Timer]
+OnBootSec=45min
+OnUnitActiveSec=45min
+Persistent=false
+
+[Install]
+WantedBy=timers.target

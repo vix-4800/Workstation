@@ -1,0 +1,6 @@
+[Unit]
+Description=Water drinking reminder
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/notify-send -u normal -i water "Drink some water" "Don't forget to stay hydrated"

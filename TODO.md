@@ -6,3 +6,7 @@
 ### NeoVim
 
 - [ ] Surround
+
+### Systemd User Services
+
+- [ ] Weekly system cleanup timer and service

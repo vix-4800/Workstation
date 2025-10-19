@@ -1,0 +1,10 @@
+[Unit]
+Description=Break reminder every 1.5 hours
+
+[Timer]
+OnBootSec=90min
+OnUnitActiveSec=90min
+Persistent=false
+
+[Install]
+WantedBy=timers.target

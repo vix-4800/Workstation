@@ -1,0 +1,10 @@
+[Unit]
+Description=Water drinking reminder every hour
+
+[Timer]
+OnBootSec=60min
+OnUnitActiveSec=60min
+Persistent=false
+
+[Install]
+WantedBy=timers.target

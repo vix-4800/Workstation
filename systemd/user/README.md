@@ -2,16 +2,28 @@
 
 Services managed via dotfiles symlinks to `~/.config/systemd/user/`.
 
+## Available Timers
+
+### Health & Wellness
+- **break-reminder.timer** - Every 90 min: reminder to take a break
+- **eye-exercise-reminder.timer** - Every 20 min: 20-20-20 rule for eyes
+- **water-reminder.timer** - Every 60 min: stay hydrated
+- **posture-check.timer** - Every 45 min: check your posture
+
+### System Maintenance
+- **dotfiles-backup.timer** - Daily: check for uncommitted dotfiles changes
+- **system-cleanup.timer** - Weekly: clean package cache
+- **batsignal.service** - Battery notification service
+
 ## Structure
 
 ```
 systemd/user/
-├── arch-update/
-│   ├── arch-update.service
-│   └── arch-update.timer
-└── my-service/
-    ├── my-service.service
-    └── my-service.timer
+├── break-reminder.service
+├── break-reminder.timer
+├── eye-exercise-reminder.service
+├── eye-exercise-reminder.timer
+└── ...
 ```
 
 ## Management
