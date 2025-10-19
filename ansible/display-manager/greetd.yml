@@ -69,13 +69,21 @@
         group: root
         mode: '0644'
 
+    - name: 'Copy background image'
+      ansible.builtin.copy:
+        src: ~/Pictures/Wallpapers/city-horizon.jpg
+        dest: /usr/share/backgrounds/city-horizon.jpg
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: 'Configure ReGreet for Sway'
       ansible.builtin.copy:
         dest: /etc/greetd/regreet.toml
         content: |
           [background]
           # Path to background image (optional)
-          path = "/home/vix/Pictures/Wallpapers/city-horizon.jpg"
+          path = "/usr/share/backgrounds/city-horizon.jpg"
           fit = "Cover"
 
           [GTK]
