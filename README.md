@@ -22,6 +22,7 @@ Personal configuration files for Arch Linux with Sway (Wayland) desktop environm
 
 ### Launchers & Tools
 - **Wofi** - Application launcher
+- **Search Menu** - Fast file & directory search - `$mod+Shift+s`
 - **Cliphist** - Clipboard manager
 - **Wdisplays** - Display configuration GUI
 - **Waypaper** - Wallpaper selector

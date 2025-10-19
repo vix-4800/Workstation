@@ -5,6 +5,10 @@
 # Add local bins
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
+# Add dotfiles scripts
+export DOTFILES_DIR="$HOME/Code/Workstation"
+export PATH="$DOTFILES_DIR/bin:$PATH"
+
 # Add Go paths
 export PATH="/usr/local/go/bin:$HOME/go/bin:$PATH"
 
