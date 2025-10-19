@@ -42,6 +42,7 @@
           - swayosd
           - batsignal
           - auto-cpufreq
+          - betterdiscord-installer
         state: present
       when: yay_check.rc == 0
       become_user: aur_builder
