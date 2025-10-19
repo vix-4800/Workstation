@@ -50,6 +50,10 @@ config/nvim	$HOME/.config/nvim
 config/bat	$HOME/.config/bat
 config/zathura	$HOME/.config/zathura
 
-config/gtk-3.0/settings.ini	$HOME/.config/gtk-3.0/settings.ini
+# GTK
+config/gtk/2.0/.gtkrc-2.0	$HOME/.gtkrc-2.0
+config/gtk/3.0/settings.ini	$HOME/.config/gtk-3.0/settings.ini
+config/gtk/4.0/settings.ini	$HOME/.config/gtk-4.0/settings.ini
+
 wallpapers	$HOME/Pictures/Wallpapers
 themes	$HOME/.config/themes
