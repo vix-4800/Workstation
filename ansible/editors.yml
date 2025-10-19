@@ -18,10 +18,11 @@
       failed_when: false
 
     - name: 'Install Visual Studio Code from AUR'
-      become: false
       kewlfft.aur.aur:
         use: yay
         name:
           - visual-studio-code-bin
         state: present
       when: yay_check.rc == 0
+      become: yes
+      become_user: aur_builder

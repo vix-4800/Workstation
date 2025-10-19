@@ -28,10 +28,11 @@
       failed_when: false
 
     - name: 'Install NetworkManager dmenu from AUR'
-      become: false
       kewlfft.aur.aur:
         use: yay
         name:
           - networkmanager-dmenu-git
         state: present
       when: yay_check.rc == 0
+      become: yes
+      become_user: aur_builder

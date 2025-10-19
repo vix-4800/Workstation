@@ -45,9 +45,11 @@
           - betterdiscord-installer
         state: present
       when: yay_check.rc == 0
+      become: yes
       become_user: aur_builder
 
     - name: 'Enable and start services for AUR applications'
+      become: yes
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: true

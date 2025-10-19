@@ -18,12 +18,13 @@
       failed_when: false
 
     - name: 'Install Plymouth from AUR'
-      become: false
       kewlfft.aur.aur:
         use: yay
         name: plymouth
         state: present
       when: yay_check.rc == 0
+      become: yes
+      become_user: aur_builder
 
     - name: 'Ensure Plymouth configuration directory exists'
       ansible.builtin.file:

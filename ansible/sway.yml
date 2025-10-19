@@ -40,7 +40,6 @@
       when: yay_check.rc == 0
 
     - name: 'Install SwayFX and Swaylock Effects from AUR'
-      become: false
       kewlfft.aur.aur:
         use: yay
         name:
@@ -49,3 +48,5 @@
           - wlogout
         state: present
       when: yay_check.rc == 0
+      become: yes
+      become_user: aur_builder
