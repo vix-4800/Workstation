@@ -48,8 +48,7 @@
 #custom-vpn,
 #custom-docker,
 #custom-notification,
-#custom-microphone,
-#custom-updates {
+#custom-microphone {
   background-color: @surface0;
   padding: 0.5rem 1rem;
   margin: 5px 0;
@@ -142,13 +141,8 @@
 
 #custom-notification {
   color: @yellow;
-  border-radius: 0 1rem 1rem 0;
+  border-radius: 1rem;
   margin-right: 1rem;
-}
-
-#custom-updates {
-  color: @green;
-  border-radius: 1rem 0 0 1rem;
 }
 
 #custom-resources {

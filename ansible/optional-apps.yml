@@ -41,7 +41,6 @@
           - better-control-git
           - swayosd
           - batsignal
-          - waybar-module-pacman-updates-git
           - auto-cpufreq
         state: present
       when: yay_check.rc == 0
