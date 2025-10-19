@@ -54,8 +54,8 @@ while IFS= read -r line; do
         day_formatted=$(printf "%2s" "$day")
 
         # Check if it's today
-        day_trimmed=$(echo "$day" | sed 's/^0*//')
-        current_day_trimmed=$(echo "$current_day" | sed 's/^0*//')
+        day_trimmed=${day##0}
+        current_day_trimmed=${current_day##0}
 
         if [[ "$day_trimmed" == "$current_day_trimmed" ]]; then
             # Today - highlight

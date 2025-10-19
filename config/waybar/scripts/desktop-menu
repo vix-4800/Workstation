@@ -16,7 +16,6 @@ menu="📁 Files
 🔐 Power Menu
 📋 Clipboard History
 🎨 Color Picker
-📸 Screenshot
 ---
 🔒 Lock Screen
 🚪 Logout
@@ -94,49 +93,6 @@ case "$selected" in
         else
             notify-send "Color Picker" "No color picker found" -u normal
         fi
-        ;;
-    "📸 Screenshot")
-        screenshot_menu=""
-        screenshot_menu+="📸 Full Screen\n"
-        screenshot_menu+="🖼️  Selection\n"
-        screenshot_menu+="🪟 Window\n"
-        screenshot_menu+="⏱️  Full Screen (5s)\n"
-        screenshot_menu+="📹 Record Selection"
-
-        screenshot_choice=$(echo -e "$screenshot_menu" | wofi \
-            --dmenu \
-            --prompt "Screenshot" \
-            --width 300 \
-            --height 250 \
-            --cache-file=/dev/null)
-
-        case "$screenshot_choice" in
-            "📸 Full Screen")
-                grim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
-                notify-send "Screenshot" "Full screen saved" -u normal
-                ;;
-            "🖼️  Selection")
-                grim -g "$(slurp)" ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
-                notify-send "Screenshot" "Selection saved" -u normal
-                ;;
-            "🪟 Window")
-                grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
-                notify-send "Screenshot" "Window saved" -u normal
-                ;;
-            "⏱️  Full Screen (5s)")
-                sleep 5
-                grim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
-                notify-send "Screenshot" "Full screen saved" -u normal
-                ;;
-            "📹 Record Selection")
-                if command -v wf-recorder &> /dev/null; then
-                    notify-send "Recording" "Select area to record" -u normal
-                    wf-recorder -g "$(slurp)" -f ~/Videos/recording_$(date +%Y%m%d_%H%M%S).mp4
-                else
-                    notify-send "Recording" "wf-recorder not installed" -u normal
-                fi
-                ;;
-        esac
         ;;
     "🔒 Lock Screen")
         swaylock

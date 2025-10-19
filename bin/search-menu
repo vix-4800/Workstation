@@ -105,14 +105,16 @@ handle_selection() {
     case "$type" in
         "📄")
             # Open file with xdg-open
-            local filepath=$(echo "$content" | cut -d'|' -f2 | xargs)
+            local filepath
+            filepath=$(echo "$content" | cut -d'|' -f2 | xargs)
             if [[ -f "$filepath" ]]; then
                 xdg-open "$filepath" &>/dev/null &
             fi
             ;;
         "📁")
             # Open directory in file manager
-            local dirpath=$(echo "$content" | cut -d'|' -f2 | xargs)
+            local dirpath
+            dirpath=$(echo "$content" | cut -d'|' -f2 | xargs)
             if [[ -d "$dirpath" ]]; then
                 thunar "$dirpath" &>/dev/null &
             fi

@@ -30,6 +30,7 @@ else
 fi
 
 # Determine RAM icon based on usage
+# shellcheck disable=SC2034
 if (( mem_percent >= 80 )); then
     mem_icon="󰍛"
     mem_class="critical"
