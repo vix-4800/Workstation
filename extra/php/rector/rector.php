@@ -30,7 +30,7 @@ use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescing
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
-use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
+use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
 use Rector\Custom\Rules\ReplaceMultipleEqualWithInArrayRector;
@@ -42,15 +42,9 @@ use Rector\Custom\Rules\Yii2PropertyAccessRector;
 use Rector\Custom\Rules\Yii2UpdateAllShortcutRector;
 use Rector\Custom\Rules\Yii2UseExistsInsteadOfOneNotNullRector;
 use Rector\Custom\Rules\Yii2UserFindOneToIdentityRector;
-use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
-use Rector\EarlyReturn\Rector\Foreach_\ChangeNestedForeachIfsToEarlyContinueRector;
-use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
-use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
-use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
-use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
@@ -65,12 +59,26 @@ return RectorConfig::configure()
     ->withParallel()
     ->withSkip([
         'vendor',
+        'storage',
+        'runtime',
+        'tests',
+        '*.blade.php',
     ])
     ->withPhpSets(php83: true)
-    ->withTypeCoverageLevel(0) // Type coverage level: 0 — no requirement for full type coverage
-    ->withDeadCodeLevel(0) // Dead code detection level: 0 — do not analyze dead code
-    ->withCodeQualityLevel(0) // Code quality improvement level: 0 — do not apply globally
+    ->withTypeCoverageLevel(2) // Type coverage level: 0 — no requirement for full type coverage
+    ->withDeadCodeLevel(2) // Dead code detection level: 0 — do not analyze dead code
+    ->withCodeQualityLevel(3) // Code quality improvement level: 0 — do not apply globally
+    ->withNoDiffs()
+    ->withPreparedSets(
+        earlyReturn: true,
+        strictBooleans: true,
+        privatization: true,
+        codingStyle: true,
+    )
     ->withImportNames(removeUnusedImports: true) // Import use-statements and remove unused ones
+    ->withSkip([
+        EncapsedStringsToSprintfRector::class
+    ])
     ->withRules([
         // Simplifying conditions
         SimplifyBoolIdenticalTrueRector::class, // Replaces $a === true with just $a
@@ -81,9 +89,6 @@ return RectorConfig::configure()
         SimplifyDeMorganBinaryRector::class,
 
         // Code optimization
-        ChangeIfElseValueAssignToEarlyReturnRector::class,
-        PreparedValueToEarlyReturnRector::class,
-        ReturnEarlyIfVariableRector::class, // Return early if variable is set
         SimplifyUselessVariableRector::class,
         UnusedForeachValueToArrayKeysRector::class,
         SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
@@ -102,7 +107,6 @@ return RectorConfig::configure()
         // Remove dead code
         RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
         RemoveUnusedPrivatePropertyRector::class, // Removes unused private properties
-        RemoveDuplicatedArrayKeyRector::class,
         RemoveConcatAutocastRector::class,
 
         // Modern PHP constructs and functions
@@ -123,11 +127,8 @@ return RectorConfig::configure()
         SimplifyRegexPatternRector::class,
 
         // Code style
-        NewlineBeforeNewAssignSetRector::class, // Enforces newline style before `new` assignments
         InlineIfToExplicitIfRector::class,
         LogicalToBooleanRector::class,
-        RemoveAlwaysElseRector::class, // Removes else branches that are always executed
-        ChangeNestedForeachIfsToEarlyContinueRector::class,
 
         // Custom code quality rules
         ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
