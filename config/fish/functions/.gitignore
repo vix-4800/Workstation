@@ -1,0 +1,8 @@
+*
+!.gitignore
+
+# Custom fish functions
+!fan.fish
+!.extract.fish
+!sysinfo.fish
+!trash.fish

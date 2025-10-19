@@ -1,0 +1,5 @@
+*
+!.gitignore
+
+# Custom completions
+!dotfiles.fish
