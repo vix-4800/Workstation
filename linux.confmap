@@ -28,6 +28,7 @@ extra/php/php-cs-fixer	$HOME/.config/php-cs-fixer
 extra/php/phpcs	$HOME/.config/phpcs
 extra/php/phpstan	$HOME/.config/phpstan
 extra/php/rector	$HOME/.config/rector
+extra/php/pint	$HOME/.config/pint
 
 # Desktop Environment - Sway
 config/sway	$HOME/.config/sway
