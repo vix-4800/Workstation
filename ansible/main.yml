@@ -31,6 +31,7 @@
 - import_playbook: firewall.yml
 - import_playbook: environment.yml
 - import_playbook: locale.yml
+- import_playbook: hostname.yml
 - import_playbook: multimedia.yml
 - import_playbook: development.yml
 - import_playbook: optional-apps.yml
