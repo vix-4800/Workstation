@@ -34,3 +34,8 @@ if test "$XDG_SESSION_TYPE" = "wayland"
     alias code "code --ozone-platform=wayland"
     alias spotify "spotify --ozone-platform=wayland"
 end
+
+# ======= Dotfiles Aliases =======
+alias dfstatus "$DOTFILES_DIR/bin/dotfiles status"
+alias dflink "$DOTFILES_DIR/bin/dotfiles link"
+alias dfedit "$EDITOR $DOTFILES_DIR/dotfiles.json"
