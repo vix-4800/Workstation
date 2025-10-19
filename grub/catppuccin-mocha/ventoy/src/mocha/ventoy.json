@@ -1,9 +1,0 @@
-{
-    "theme":{
-        "file": "/ventoy/catppuccin-mocha/theme.txt",
-        "ventoy_color": "#89b4fa",
-        "fonts":[
-            "/ventoy/catppuccin-mocha/terminus-14.pf2"
-        ]
-    }
-}
