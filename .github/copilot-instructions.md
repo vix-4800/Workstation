@@ -47,15 +47,14 @@ config/sway/config.d/      # Split by concern (10-variables, 40-keybindings, etc
 ```
 Number prefixes control load order. Always check `config.d/*.conf` before modifying main config.
 
-**Shell configs** support Fish (primary), Bash, and Zsh:
+**Shell configs** support Fish (primary) and Bash:
 - Fish: `config/fish/` (with completions, functions, conf.d)
 - Bash: `config/bash/` (separate .bash_aliases, .bash_profile, bashrc)
-- Zsh: `config/zsh/` (minimal, Fish is preferred)
 
 **Development tools** configs in `extra/`:
 - PHP: phpstan, rector, php-cs-fixer, pint configs
 - Python: flake8, mypy configs
-- Completions for custom scripts in `extra/{bash,zsh}/` and `config/fish/completions/`
+- Completions for custom scripts in `config/fish/completions/`
 
 ### Systemd Services
 Managed via `bin/systemd-services`:

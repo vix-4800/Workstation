@@ -32,14 +32,6 @@
       "target": "$HOME/.config/fish"
     },
     {
-      "source": "config/zsh/.zsh_aliases",
-      "target": "$HOME/.zsh_aliases"
-    },
-    {
-      "source": "config/zsh/zshrc",
-      "target": "$HOME/.zshrc"
-    },
-    {
       "source": "config/alacritty",
       "target": "$HOME/.config/alacritty"
     },
