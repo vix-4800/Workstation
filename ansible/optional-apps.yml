@@ -2,9 +2,9 @@
   hosts: localhost
   connection: local
   gather_facts: false
-  become: true
   tasks:
     - name: 'Install applications'
+      become: yes
       community.general.pacman:
         name:
           - firefox
@@ -30,7 +30,6 @@
       failed_when: false
 
     - name: 'Install AUR applications'
-      become: false
       kewlfft.aur.aur:
         use: yay
         name:
@@ -46,8 +45,9 @@
           - auto-cpufreq
         state: present
       when: yay_check.rc == 0
+      become_user: aur_builder
 
-    - name: 'Enable and start arch-update timer'
+    - name: 'Enable and start services for AUR applications'
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: true
