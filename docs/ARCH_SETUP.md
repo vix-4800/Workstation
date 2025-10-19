@@ -58,14 +58,13 @@ cd ~/Code/Dotfiles
    - Мультимедийные кодеки и дополнительные приложения
    - Настройка таймзоны, локали и hostname
    - Дополнительные dev-инструменты (Python/PHP пакеты)
-   - Кастомная тема GRUB (Xenlism theme + grub-customizer)
    - Автоматическая настройка firewall (ufw)
 
 2. **Обновление системы** - `pacman -Syu` + reflector для зеркал
 3. **Установка пакетов** - все необходимые пакеты из pacman
 4. **Установка GPU драйверов** - NVIDIA или AMD/Intel драйверы
 5. **Установка AUR helper** - yay для доступа к AUR
-6. **Установка AUR пакетов** - grub-customizer и опционально SwayFX
+6. **Установка AUR пакетов** - опционально SwayFX
 7. **Системные сервисы** - NetworkManager, Docker, Bluetooth, Firewall
 8. **Базовые настройки системы** - таймзона, локаль, hostname, sudo права
 9. **Мультимедийные кодеки** - поддержка всех популярных форматов
@@ -252,19 +251,9 @@ sudo systemctl restart greetd
 ### Настройка GRUB темы:
 
 ```bash
-# Если установлена кастомная тема GRUB (Xenlism):
-# Скрипт автоматически использует локальную тему из ~/Code/Dotfiles/grub/themes/Xenlism Arch/
-# или скачивает её из репозитория GitHub
-
 # Тема устанавливается в стандартное системное расположение:
-# /usr/share/grub/themes/Xenlism-Arch/
+# /usr/share/grub/themes/
 
-# Установка использует оригинальный installer.sh из темы для максимальной совместимости
-
-# Для дальнейшей кастомизации используйте grub-customizer:
-sudo grub-customizer
-
-# Ручная настройка GRUB (если нужно):
 sudo nano /etc/default/grub
 
 # После изменений обновите конфигурацию:
@@ -272,10 +261,6 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 # Проверка установленной темы:
 grep GRUB_THEME /etc/default/grub
-# Должно показать: GRUB_THEME="/usr/share/grub/themes/Xenlism-Arch/theme.txt"
-
-# Если тема не отображается, проверьте файлы темы:
-ls -la /usr/share/grub/themes/Xenlism-Arch/
 ```
 
 ### Для обновления dotfiles:

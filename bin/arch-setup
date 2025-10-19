@@ -160,9 +160,6 @@ echo "3) KDE Plasma (full desktop environment)"
 echo "4) None"
 read -r -p "Choice (1-4): " dm_choice
 
-log_prompt "Install custom GRUB theme? (y/n): "
-read -r -p "Choice (y/n): " grub_theme_choice
-
 log_prompt "Select GPU drivers:"
 echo "1) NVIDIA (proprietary)"
 echo "2) AMD/Intel (open source)"
@@ -647,12 +644,6 @@ if [[ $wlogout_choice =~ ^[Yy]$ ]]; then
     install_packages aur-app wlogout
 fi
 
-# Configure GRUB theme if requested
-if [[ $grub_theme_choice =~ ^[Yy]$ ]]; then
-    log_info "Installing and configuring custom GRUB theme..."
-    install_packages aur-app grub-customizer
-fi
-
 # GitHub CLI authentication prompt
 log_info "Setting up GitHub CLI (optional)..."
 log_warn "You can authenticate with GitHub CLI later using: gh auth login"
@@ -714,10 +705,6 @@ if [[ $ghcli_choice =~ ^[Yy]$ ]]; then
 fi
 if [[ $ufw_choice =~ ^[Yy]$ ]]; then
     echo "  - Firewall (ufw) is enabled and configured"
-fi
-if [[ $grub_theme_choice =~ ^[Yy]$ ]]; then
-    echo "  - Custom GRUB theme is installed and configured"
-    echo "     Use 'sudo grub-customizer' to further customize GRUB appearance"
 fi
 if [[ $locale_choice =~ ^[Yy]$ ]]; then
     echo "  - Timezone, locale, and hostname have been configured"

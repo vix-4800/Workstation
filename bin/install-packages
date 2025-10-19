@@ -381,9 +381,6 @@ install_aur_app() {
     wlogout)
         install_aur_packages "wlogout" wlogout
         ;;
-    grub-customizer)
-        install_aur_packages "GRUB Customizer" grub-customizer
-        ;;
     *)
         log_warn "Unknown AUR application: $app"
         ;;
@@ -564,7 +561,7 @@ main() {
         echo "  yay                - Install yay AUR helper"
         echo "  aur-essentials     - Install essential AUR packages"
         echo "  optional-app <app> - Install optional app (discord|telegram|spotify|vlc|obsidian)"
-        echo "  aur-app <app>      - Install AUR app (vscode|swayfx|swaylock-effects|wlogout|grub-customizer)"
+        echo "  aur-app <app>      - Install AUR app (vscode|swayfx|swaylock-effects|wlogout)"
         echo "  all-basic          - Install all basic packages"
         echo ""
         echo "Examples:"
