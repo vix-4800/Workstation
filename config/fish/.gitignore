@@ -1,6 +1,7 @@
 # Fish shell auto-generated files
 functions/_tide_*
 functions/tide/
+functions/tide.fish
 completions/tide.fish
 conf.d/_tide_init.fish
 
@@ -16,3 +17,5 @@ completions/fisher.fish
 fish_variables
 fishd.tmp.*
 themes
+functions/fish_mode_prompt.fish
+functions/fish_prompt.fish
