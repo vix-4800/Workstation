@@ -120,8 +120,6 @@ When adding new tool configs, check if Catppuccin theme exists for it.
 
 ## Quick Reference Files
 
-- System setup entry: `bin/arch-setup`
-- Package installer: `bin/install-packages`
 - Main Ansible: `ansible/main.yml`
 - Dotfiles config: `dotfiles.json`
 - Sway main: `config/sway/config`
