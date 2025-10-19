@@ -3,8 +3,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-CONF_MAP_DEFAULT="${REPO_ROOT}/linux.confmap"
-CONF_MAP="${DOTFILES_MAP:-${CONF_MAP_DEFAULT}}"
+CONF_JSON_DEFAULT="${REPO_ROOT}/dotfiles.json"
+CONF_JSON="${DOTFILES_JSON:-${CONF_JSON_DEFAULT}}"
 BACKUP_DIR="${HOME}/.local/share/dotfiles/backups"
 LOG_PREFIX="[dotfiles]"
 
@@ -26,20 +26,32 @@ fi
 
 usage() {
     cat <<EOF
-${BOLD}dotfiles${OFF} — manages symbolic links from repository.
+${BOLD}dotfiles${OFF} — manages symbolic links from repository (JSON-based).
 
 ${BOLD}Usage:${OFF}
-    dotfiles link [-n] [--map PATH]     Create/update links (dry-run with -n)
-    dotfiles unlink [-n] [--map PATH]   Remove links (dry-run with -n)
-    dotfiles status [--map PATH]        Show link status
-    dotfiles doctor [--map PATH]        Environment checks
-    dotfiles which [--map PATH]         Show path to repo and map
-    dotfiles edit  [--map PATH]         Open map in \$EDITOR
-    dotfiles help                       Help
+    dotfiles link [-n] [--json PATH]       Create/update symlinks
+    dotfiles unlink [-n] [--json PATH]     Remove symlinks
+    dotfiles status [--json PATH]          Show link status
+    dotfiles doctor [--json PATH]          Environment checks
+    dotfiles which [--json PATH]           Show repo and config paths
+    dotfiles edit [--json PATH]            Open config in \$EDITOR
+    dotfiles help                          Show this help
 
-${BOLD}Map format:${OFF}
-    Line format: <source_relpath>\t<target_absolute_path>
-    Empty lines and #comments are ignored.
+${BOLD}Options:${OFF}
+    -n            Dry-run mode (don't make changes)
+    --json PATH   Path to dotfiles.json (default: ${CONF_JSON_DEFAULT})
+
+${BOLD}JSON format:${OFF}
+    {
+      "version": "1.0",
+      "mappings": [
+        {
+          "source": "config/file",
+          "target": "\$HOME/.config/file",
+          "comment": "Optional comment"
+        }
+      ]
+    }
 EOF
 }
 
@@ -48,27 +60,40 @@ ok()  { echo -e "${GRN}${LOG_PREFIX}${OFF} $*"; }
 warn(){ echo -e "${YLW}${LOG_PREFIX}${OFF} $*"; }
 err() { echo -e "${RED}${LOG_PREFIX}${OFF} $*" >&2; }
 
-maybe_pick_map() {
-    local next_is_map=0
-    for arg in "$@"; do
-        if [ "${next_is_map}" -eq 1 ]; then
-            CONF_MAP="$arg"
-            next_is_map=0
-            continue
-        fi
-        case "$arg" in
-            --map)
-                next_is_map=1
+parse_args() {
+    DRYRUN=0
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --json)
+                CONF_JSON="${2:-}"
+                shift 2
                 ;;
-            --map=*)
-                CONF_MAP="${arg#--map=}"
+            --json=*)
+                CONF_JSON="${1#--json=}"
+                shift
+                ;;
+            -n)
+                DRYRUN=1
+                shift
+                ;;
+            *)
+                shift
                 ;;
         esac
     done
 }
 
-require_map() {
-    [ -f "${CONF_MAP}" ] || { err "Map not found: ${CONF_MAP}"; exit 1; }
+require_json() {
+    if [ ! -f "${CONF_JSON}" ]; then
+        err "JSON config not found: ${CONF_JSON}"
+        exit 1
+    fi
+
+    if ! command -v jq >/dev/null 2>&1; then
+        err "jq is required but not installed"
+        exit 1
+    fi
 }
 
 timestamp() { date +"%Y%m%d-%H%M%S"; }
@@ -80,20 +105,9 @@ resolve_variables() {
     echo "$path"
 }
 
-read_map() {
-    require_map
-    awk -v repo="${REPO_ROOT}" '
-        BEGIN{ FS="\t" }
-        /^[[:space:]]*$/ {next}
-        /^[[:space:]]*#/ {next}
-        {
-            src = $1
-            tgt = $2
-            for (i=3; i<=NF; i++) { tgt = tgt "\t" $i }
-
-            if (src ~ /^\//) print src "\t" tgt;
-            else print repo "/" src "\t" tgt;
-        }' "${CONF_MAP}"
+read_mappings() {
+    require_json
+    jq -r '.mappings[] | "\(.source)\t\(.target)"' "${CONF_JSON}"
 }
 
 ensure_parent_dir() {
@@ -118,24 +132,35 @@ backup_if_exists() {
 
 canonical() {
     if command -v realpath >/dev/null 2>&1; then
-        realpath "$1"
+        realpath "$1" 2>/dev/null || echo "$1"
     else
-        printf '%s' "$1"
+        echo "$1"
+    fi
+}
+
+make_absolute_source() {
+    local src="$1"
+    if [[ "$src" =~ ^/ ]]; then
+        echo "$src"
+    else
+        echo "${REPO_ROOT}/${src}"
     fi
 }
 
 do_link() {
-    local dryrun="${1:-0}"
-    read_map | while IFS=$'\t' read -r SRC TGT_RAW; do
+    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW; do
+        local SRC TGT
+        SRC="$(make_absolute_source "$SRC_RAW")"
         TGT="$(resolve_variables "$TGT_RAW")"
 
         if [ ! -e "${SRC}" ]; then
             warn "Source missing: ${SRC} — skipping"
             continue
         fi
+
         ensure_parent_dir "${TGT}"
 
-        if [ "${dryrun}" -eq 1 ]; then
+        if [ "${DRYRUN}" -eq 1 ]; then
             msg "DRY-RUN: ln -sfn ${SRC} ${TGT}"
         else
             backup_if_exists "${TGT}"
@@ -144,16 +169,20 @@ do_link() {
         fi
     done
 
-    # BAT
-    bat cache --build
+    if [ "${DRYRUN}" -eq 0 ]; then
+        if command -v bat >/dev/null 2>&1; then
+            bat cache --build >/dev/null 2>&1 || true
+        fi
+    fi
 }
 
 do_unlink() {
-    local dryrun="${1:-0}"
-    read_map | while IFS=$'\t' read -r _ TGT_RAW; do
+    read_mappings | while IFS=$'\t' read -r _ TGT_RAW; do
+        local TGT
         TGT="$(resolve_variables "$TGT_RAW")"
+
         if [ -L "${TGT}" ]; then
-            if [ "${dryrun}" -eq 1 ]; then
+            if [ "${DRYRUN}" -eq 1 ]; then
                 msg "DRY-RUN: rm ${TGT}"
             else
                 rm "${TGT}"
@@ -166,21 +195,24 @@ do_unlink() {
 }
 
 do_status() {
-    read_map | while IFS=$'\t' read -r SRC TGT_RAW; do
+    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW; do
+        local SRC TGT
+        SRC="$(make_absolute_source "$SRC_RAW")"
         TGT="$(resolve_variables "$TGT_RAW")"
-        if [ -L "${TGT}" ]; then
 
-            local points expect
+        if [ -L "${TGT}" ]; then
+            local points
             points="$(readlink "${TGT}")"
 
             case "$points" in
                 /*) ;;
                 *) points="$(cd "$(dirname "${TGT}")" && pwd)/${points}";;
             esac
-            expect="${SRC}"
+
             local cpoints cexpected
             cpoints="$(canonical "$points")"
-            cexpected="$(canonical "$expect")"
+            cexpected="$(canonical "$SRC")"
+
             if [ -n "$cexpected" ] && [ -n "$cpoints" ] && [ "$cpoints" = "$cexpected" ]; then
                 echo -e "✓ ${TGT} ${DIM}->${OFF} ${SRC}"
             else
@@ -196,24 +228,57 @@ do_status() {
 
 do_doctor() {
     local ok_all=1
+
     command -v git >/dev/null || { err "git not found in PATH"; ok_all=0; }
-    [ -d "${REPO_ROOT}/.git" ] || { err "This doesn't appear to be a git repository: ${REPO_ROOT}"; ok_all=0; }
-    require_map || ok_all=0
-    if [ "${ok_all}" -eq 1 ]; then ok "All checks passed"; else exit 1; fi
+    command -v jq >/dev/null || { err "jq not found in PATH"; ok_all=0; }
+    [ -d "${REPO_ROOT}/.git" ] || { err "Not a git repository: ${REPO_ROOT}"; ok_all=0; }
+
+    if [ -f "${CONF_JSON}" ]; then
+        if ! jq empty "${CONF_JSON}" 2>/dev/null; then
+            err "Invalid JSON in ${CONF_JSON}"
+            ok_all=0
+        fi
+    else
+        err "JSON config not found: ${CONF_JSON}"
+        ok_all=0
+    fi
+
+    if [ "${ok_all}" -eq 1 ]; then
+        ok "All checks passed"
+    else
+        exit 1
+    fi
 }
 
 cmd="${1:-}"
 shift || true
-maybe_pick_map "$@"
+parse_args "$@"
 
 case "${cmd}" in
-    help|-h|--help|"") usage ;;
-    which) echo -e "REPO: ${REPO_ROOT}\nMAP:  ${CONF_MAP}";;
-    edit)  ${EDITOR:-vi} "${CONF_MAP}";;
-    init)  usage ;;
-    link)    if [ "${1:-}" = "-n" ]; then do_link 1; else do_link 0; fi ;;
-    unlink)  if [ "${1:-}" = "-n" ]; then do_unlink 1; else do_unlink 0; fi ;;
-    status) do_status ;;
-    doctor) do_doctor ;;
-    *) err "Unknown command: ${cmd}"; usage; exit 1 ;;
+    help|-h|--help|"")
+        usage
+        ;;
+    which)
+        echo -e "REPO: ${REPO_ROOT}\nJSON: ${CONF_JSON}"
+        ;;
+    edit)
+        ${EDITOR:-vi} "${CONF_JSON}"
+        ;;
+    link)
+        do_link
+        ;;
+    unlink)
+        do_unlink
+        ;;
+    status)
+        do_status
+        ;;
+    doctor)
+        do_doctor
+        ;;
+    *)
+        err "Unknown command: ${cmd}"
+        usage
+        exit 1
+        ;;
 esac

@@ -1,0 +1,154 @@
+{
+  "version": "1.0",
+  "mappings": [
+    {
+      "source": "config/.aliases",
+      "target": "$HOME/.aliases",
+      "comment": "General aliases for all shells"
+    },
+    {
+      "source": "config/.prettierrc",
+      "target": "$HOME/.prettierrc"
+    },
+    {
+      "source": "config/.profile",
+      "target": "$HOME/.profile"
+    },
+    {
+      "source": "config/bash/.bash_aliases",
+      "target": "$HOME/.bash_aliases"
+    },
+    {
+      "source": "config/bash/.bash_profile",
+      "target": "$HOME/.bash_profile"
+    },
+    {
+      "source": "config/bash/bashrc",
+      "target": "$HOME/.bashrc"
+    },
+    {
+      "source": "config/fish",
+      "target": "$HOME/.config/fish"
+    },
+    {
+      "source": "config/zsh/.zsh_aliases",
+      "target": "$HOME/.zsh_aliases"
+    },
+    {
+      "source": "config/zsh/zshrc",
+      "target": "$HOME/.zshrc"
+    },
+    {
+      "source": "config/alacritty",
+      "target": "$HOME/.config/alacritty"
+    },
+    {
+      "source": "config/tmux/.tmux.conf",
+      "target": "$HOME/.config/tmux/tmux.conf"
+    },
+    {
+      "source": "extra/python/flake8",
+      "target": "$HOME/.config/flake8"
+    },
+    {
+      "source": "extra/python/mypy",
+      "target": "$HOME/.config/mypy"
+    },
+    {
+      "source": "extra/php/php-cs-fixer",
+      "target": "$HOME/.config/php-cs-fixer"
+    },
+    {
+      "source": "extra/php/phpcs",
+      "target": "$HOME/.config/phpcs"
+    },
+    {
+      "source": "extra/php/phpstan",
+      "target": "$HOME/.config/phpstan"
+    },
+    {
+      "source": "extra/php/rector",
+      "target": "$HOME/.config/rector"
+    },
+    {
+      "source": "extra/php/pint",
+      "target": "$HOME/.config/pint"
+    },
+    {
+      "source": "config/sway",
+      "target": "$HOME/.config/sway"
+    },
+    {
+      "source": "config/swaync",
+      "target": "$HOME/.config/swaync"
+    },
+    {
+      "source": "config/swaylock",
+      "target": "$HOME/.config/swaylock"
+    },
+    {
+      "source": "config/waybar",
+      "target": "$HOME/.config/waybar"
+    },
+    {
+      "source": "config/wlogout",
+      "target": "$HOME/.config/wlogout"
+    },
+    {
+      "source": "config/wofi",
+      "target": "$HOME/.config/wofi"
+    },
+    {
+      "source": "config/swayosd",
+      "target": "$HOME/.config/swayosd"
+    },
+    {
+      "source": "config/swappy",
+      "target": "$HOME/.config/swappy"
+    },
+    {
+      "source": "config/waypaper",
+      "target": "$HOME/.config/waypaper"
+    },
+    {
+      "source": "systemd/user",
+      "target": "$HOME/.config/systemd/user"
+    },
+    {
+      "source": "config/git/gitconfig",
+      "target": "$HOME/.gitconfig"
+    },
+    {
+      "source": "config/nvim",
+      "target": "$HOME/.config/nvim"
+    },
+    {
+      "source": "config/bat",
+      "target": "$HOME/.config/bat"
+    },
+    {
+      "source": "config/zathura",
+      "target": "$HOME/.config/zathura"
+    },
+    {
+      "source": "config/gtk/2.0/.gtkrc-2.0",
+      "target": "$HOME/.gtkrc-2.0"
+    },
+    {
+      "source": "config/gtk/3.0/settings.ini",
+      "target": "$HOME/.config/gtk-3.0/settings.ini"
+    },
+    {
+      "source": "config/gtk/4.0/settings.ini",
+      "target": "$HOME/.config/gtk-4.0/settings.ini"
+    },
+    {
+      "source": "wallpapers",
+      "target": "$HOME/Pictures/Wallpapers"
+    },
+    {
+      "source": "themes",
+      "target": "$HOME/.config/themes"
+    }
+  ]
+}
