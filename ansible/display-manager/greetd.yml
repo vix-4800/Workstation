@@ -3,6 +3,9 @@
   connection: local
   gather_facts: false
   become: true
+  vars:
+    wallpaper_file: city-horizon.jpg
+
   tasks:
     - name: 'Install Display Manager'
       community.general.pacman:
@@ -71,8 +74,8 @@
 
     - name: 'Copy background image'
       ansible.builtin.copy:
-        src: ~/Pictures/Wallpapers/city-horizon.jpg
-        dest: /usr/share/backgrounds/city-horizon.jpg
+        src: ~/Pictures/Wallpapers/{{ wallpaper_file }}
+        dest: /usr/share/backgrounds/{{ wallpaper_file }}
         owner: root
         group: root
         mode: '0644'
@@ -83,7 +86,7 @@
         content: |
           [background]
           # Path to background image (optional)
-          path = "/usr/share/backgrounds/city-horizon.jpg"
+          path = "/usr/share/backgrounds/{{ wallpaper_file }}"
           fit = "Cover"
 
           [GTK]
