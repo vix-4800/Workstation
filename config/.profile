@@ -19,11 +19,6 @@ if [ -d "$HOME/.local/share/nvm/v24.7.0/bin" ]; then
     export PATH="$HOME/.local/share/nvm/v24.7.0/bin:$PATH"
 fi
 
-# Add spoof-dpi if exists
-if [ -d "$HOME/.spoof-dpi/bin" ]; then
-    export PATH="$PATH:$HOME/.spoof-dpi/bin"
-fi
-
 # ======= Environment Variables =======
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
