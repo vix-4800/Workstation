@@ -6,7 +6,7 @@
   tasks:
     - name: 'Set timezone'
       community.general.timezone:
-        name: 'Europe/Moscow'
+        name: 'Europe/Saratov'
 
     - name: 'Enable NTP time synchronization'
       ansible.builtin.command:
