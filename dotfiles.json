@@ -1,4 +1,5 @@
 {
+  "$schema": "./dotfiles.schema.json",
   "version": "1.0",
   "mappings": [
     {
