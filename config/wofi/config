@@ -32,7 +32,7 @@ layer=overlay
 gtk_dark=true
 
 # Performance
-cache-file=/home/vix/.cache/wofi-drun
+cache-file=~/.cache/wofi-drun
 parse-search=true
 sort-order=alphabetical
 image_size=20
