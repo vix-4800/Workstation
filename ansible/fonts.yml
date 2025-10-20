@@ -10,4 +10,14 @@
           - ttf-jetbrains-mono-nerd
           - otf-font-awesome
           - woff2-font-awesome
+          - ttf-dejavu
+          - ttf-liberation
+          - noto-fonts
+          - noto-fonts-emoji
+          - ttf-opensans
+          - ttf-roboto
+          - ttf-ubuntu-font-family
+          - inter-font
+          - freetype2
+          - fontconfig
         state: present

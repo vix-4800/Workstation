@@ -22,7 +22,6 @@
 - import_playbook: editors.yml
 - import_playbook: network.yml
 - import_playbook: audio.yml
-- import_playbook: fonts.yml
 - import_playbook: sway.yml
 - import_playbook: plymouth.yml
 - import_playbook: display-manager/greetd.yml
@@ -35,7 +34,11 @@
 - import_playbook: multimedia.yml
 - import_playbook: development.yml
 - import_playbook: optional-apps.yml
+
+# Appearance
+- import_playbook: fonts.yml
 - import_playbook: cursors.yml
+- import_playbook: icons.yml
 
 - name: 'Final system cleanup'
   hosts: localhost

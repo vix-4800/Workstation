@@ -1,0 +1,116 @@
+---
+- name: 'Install icon themes and fonts for better GTK experience'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Check if yay is installed'
+      ansible.builtin.command:
+        cmd: which yay
+      register: yay_check
+      changed_when: false
+      failed_when: false
+
+    - name: 'Install icon themes from AUR'
+      kewlfft.aur.aur:
+        use: yay
+        name:
+          - papirus-folders-catppuccin-git
+        state: present
+      when: yay_check.rc == 0
+      become: yes
+      become_user: aur_builder
+
+    - name: 'Configure Papirus folders to use Catppuccin Lavender color'
+      ansible.builtin.shell: |
+        if command -v papirus-folders &> /dev/null; then
+          papirus-folders -C cat-mocha-lavender --theme Papirus-Dark
+        fi
+      become: no
+      when: yay_check.rc == 0
+      register: papirus_config
+      changed_when: papirus_config.rc == 0
+      failed_when: false
+
+    - name: 'Create fontconfig directory'
+      ansible.builtin.file:
+        path: ~/.config/fontconfig
+        state: directory
+        mode: '0755'
+      become: no
+
+    - name: 'Deploy font configuration for better rendering'
+      ansible.builtin.copy:
+        content: |
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+          <fontconfig>
+            <!-- Default fonts -->
+            <alias>
+              <family>sans-serif</family>
+              <prefer>
+                <family>Inter</family>
+                <family>Cantarell</family>
+                <family>Noto Sans</family>
+                <family>DejaVu Sans</family>
+              </prefer>
+            </alias>
+            <alias>
+              <family>serif</family>
+              <prefer>
+                <family>Noto Serif</family>
+                <family>DejaVu Serif</family>
+              </prefer>
+            </alias>
+            <alias>
+              <family>monospace</family>
+              <prefer>
+                <family>JetBrainsMono Nerd Font</family>
+                <family>JetBrains Mono</family>
+                <family>Noto Sans Mono</family>
+              </prefer>
+            </alias>
+
+            <!-- Font rendering settings -->
+            <match target="font">
+              <edit name="antialias" mode="assign">
+                <bool>true</bool>
+              </edit>
+              <edit name="hinting" mode="assign">
+                <bool>true</bool>
+              </edit>
+              <edit name="hintstyle" mode="assign">
+                <const>hintfull</const>
+              </edit>
+              <edit name="rgba" mode="assign">
+                <const>rgb</const>
+              </edit>
+              <edit name="lcdfilter" mode="assign">
+                <const>lcddefault</const>
+              </edit>
+              <edit name="embeddedbitmap" mode="assign">
+                <bool>false</bool>
+              </edit>
+            </match>
+
+            <!-- Emoji font fallback -->
+            <match target="pattern">
+              <test name="family">
+                <string>sans-serif</string>
+              </test>
+              <edit name="family" mode="append">
+                <string>Noto Color Emoji</string>
+              </edit>
+            </match>
+          </fontconfig>
+        dest: ~/.config/fontconfig/fonts.conf
+        mode: '0644'
+      become: no
+
+    - name: 'Rebuild font cache'
+      ansible.builtin.command:
+        cmd: fc-cache -fv
+      become: no
+      changed_when: true
+
