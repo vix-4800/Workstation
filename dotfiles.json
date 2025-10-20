@@ -148,6 +148,11 @@
     {
       "source": "themes",
       "target": "$HOME/.config/themes"
+    },
+    {
+      "source": "config/fontconfig",
+      "target": "$HOME/.config/fontconfig",
+      "comment": "Custom fontconfig settings"
     }
   ]
 }
