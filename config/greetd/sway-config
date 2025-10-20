@@ -1,0 +1,22 @@
+# Sway configuration for greetd with ReGreet
+# Do not modify this file unless you know what you're doing
+
+# Output configuration
+output * bg #1e1e2e solid_color
+
+# Disable Sway decorations and bars
+default_border none
+default_floating_border none
+font pango:monospace 0
+titlebar_border_thickness 0
+titlebar_padding 0
+
+# Security: disable dangerous key bindings
+bindsym --release Ctrl+Alt+t exec true
+bindsym --release Ctrl+Alt+Delete exec true
+
+# Run ReGreet and exit Sway when it's done
+exec "regreet; swaymsg exit"
+
+# Include system-wide Sway configuration if needed
+include /etc/sway/config.d/*

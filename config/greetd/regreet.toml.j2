@@ -1,0 +1,22 @@
+[background]
+# Path to background image (optional)
+path = "/usr/share/backgrounds/{{ wallpaper_file }}"
+fit = "Cover"
+
+[GTK]
+application_prefer_dark_theme = true
+cursor_theme_name = "catppuccin-mocha-lavender-cursors"
+font_name = "JetBrainsMono Nerd Font Mono 12"
+icon_theme_name = "catppuccin-mocha-lavender-cursors"
+theme_name = "catppuccin-mocha-lavender-standard+default"
+cursor_size = 24
+
+[commands]
+reboot = ["systemctl", "reboot"]
+poweroff = ["systemctl", "poweroff"]
+
+[appearance]
+greeting_msg = "Welcome to Arch Linux!"
+
+[widget.clock]
+format = "%a, %B %d  %H:%M"

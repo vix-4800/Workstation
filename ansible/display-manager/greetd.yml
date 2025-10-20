@@ -30,44 +30,16 @@
 
     - name: 'Create Sway configuration for greetd'
       ansible.builtin.copy:
+        src: ../../config/greetd/sway-config
         dest: /etc/greetd/sway-config
-        content: |
-          # Sway configuration for greetd with ReGreet
-          # Do not modify this file unless you know what you're doing
-
-          # Output configuration
-          output * bg #1e1e2e solid_color
-
-          # Disable Sway decorations and bars
-          default_border none
-          default_floating_border none
-          font pango:monospace 0
-          titlebar_border_thickness 0
-          titlebar_padding 0
-
-          # Security: disable dangerous key bindings
-          bindsym --release Ctrl+Alt+t exec true
-          bindsym --release Ctrl+Alt+Delete exec true
-
-          # Run ReGreet and exit Sway when it's done
-          exec "regreet; swaymsg exit"
-
-          # Include system-wide Sway configuration if needed
-          include /etc/sway/config.d/*
         owner: root
         group: root
         mode: '0644'
 
     - name: 'Configure greetd config.toml'
       ansible.builtin.copy:
+        src: ../../config/greetd/config.toml
         dest: /etc/greetd/config.toml
-        content: |
-          [terminal]
-          vt = 1
-
-          [default_session]
-          command = "sway --config /etc/greetd/sway-config --unsupported-gpu"
-          user = "greeter"
         owner: root
         group: root
         mode: '0644'
@@ -81,31 +53,9 @@
         mode: '0644'
 
     - name: 'Configure ReGreet for Sway'
-      ansible.builtin.copy:
+      ansible.builtin.template:
+        src: ../../config/greetd/regreet.toml.j2
         dest: /etc/greetd/regreet.toml
-        content: |
-          [background]
-          # Path to background image (optional)
-          path = "/usr/share/backgrounds/{{ wallpaper_file }}"
-          fit = "Cover"
-
-          [GTK]
-          application_prefer_dark_theme = true
-          cursor_theme_name = "catppuccin-mocha-lavender-cursors"
-          font_name = "JetBrainsMono Nerd Font Mono 12"
-          icon_theme_name = "catppuccin-mocha-lavender-cursors"
-          theme_name = "catppuccin-mocha-lavender-standard+default"
-          cursor_size = 24
-
-          [commands]
-          reboot = ["systemctl", "reboot"]
-          poweroff = ["systemctl", "poweroff"]
-
-          [appearance]
-          greeting_msg = "Welcome to Arch Linux!"
-
-          [widget.clock]
-          format = "%a, %B %d  %H:%M"
         owner: root
         group: root
         mode: '0644'
