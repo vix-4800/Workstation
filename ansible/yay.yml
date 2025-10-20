@@ -58,5 +58,5 @@
       ansible.builtin.copy:
         content: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/yay'
         dest: /etc/sudoers.d/11-install-aur_builder
-        mode: '0644'
+        mode: '0440'
         validate: 'visudo -cf %s'
