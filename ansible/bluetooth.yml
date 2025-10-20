@@ -12,8 +12,32 @@
           - blueman
         state: present
 
+    - name: 'Create /etc/bluetooth directory'
+      ansible.builtin.file:
+        path: /etc/bluetooth
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+
+    - name: 'Deploy optimized Bluetooth configuration'
+      ansible.builtin.copy:
+        src: ../config/bluetooth/main.conf
+        dest: /etc/bluetooth/main.conf
+        mode: '0644'
+        owner: root
+        group: root
+        backup: true
+      notify: restart bluetooth
+
     - name: 'Enable and start Bluetooth service'
       ansible.builtin.systemd:
         name: bluetooth
         enabled: true
         state: started
+
+  handlers:
+    - name: restart bluetooth
+      ansible.builtin.systemd:
+        name: bluetooth
+        state: restarted
