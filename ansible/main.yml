@@ -24,7 +24,7 @@
 - import_playbook: audio.yml
 - import_playbook: sway.yml
 - import_playbook: plymouth.yml
-- import_playbook: display-manager/greetd.yml
+- import_playbook: display-managers/greetd.yml
 - import_playbook: docker.yml
 - import_playbook: bluetooth.yml
 - import_playbook: firewall.yml

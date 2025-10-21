@@ -104,7 +104,7 @@ When adding new tool configs, check if Catppuccin theme exists for it.
 
 ## Integration Points
 
-- **Display manager**: Greetd + ReGreet (configured in `ansible/display-manager/greetd.yml`)
+- **Display manager**: Greetd + ReGreet (configured in `ansible/display-managers/greetd.yml`)
 - **Notifications**: SwayNC (`config/swaync/`)
 - **Status bar**: Waybar with custom scripts in `config/waybar/scripts/`
 - **Lock screen**: Swaylock Effects (config in `config/swaylock/`)
