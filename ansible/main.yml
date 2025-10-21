@@ -35,6 +35,10 @@
 - import_playbook: development.yml
 - import_playbook: optional-apps.yml
 
+# Applications
+- import_playbook: apps/spicetify.yml
+- import_playbook: apps/waypaper.yml
+
 # Appearance
 - import_playbook: fonts.yml
 - import_playbook: cursors.yml

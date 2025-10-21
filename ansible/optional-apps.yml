@@ -56,5 +56,3 @@
       when: yay_check.rc == 0
       loop:
         - auto-cpufreq
-
-- import_playbook: apps/waypaper.yml

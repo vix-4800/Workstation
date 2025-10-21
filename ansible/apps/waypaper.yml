@@ -1,8 +1,8 @@
+---
 - name: 'Install and configure waypaper'
   hosts: localhost
   connection: local
   gather_facts: false
-
   tasks:
     - name: 'Check if original waypaper is installed'
       ansible.builtin.command:
