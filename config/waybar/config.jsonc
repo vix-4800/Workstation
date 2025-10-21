@@ -55,7 +55,8 @@
     "tooltip-format": "{status}",
     "tooltip-format-connected": "Connected: {device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
-    "tooltip-format-enumerate-connected-battery": "{device_alias}\t({device_battery_percentage}%)"
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t({device_battery_percentage}%)",
+    "max-length": 10
   },
 
   "tray": {
