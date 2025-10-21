@@ -153,6 +153,11 @@
       "source": "config/fontconfig",
       "target": "$HOME/.config/fontconfig",
       "comment": "Custom fontconfig settings"
+    },
+    {
+      "source": "config/swayidle",
+      "target": "$HOME/.config/swayidle",
+      "comment": "Idle management configuration for Sway"
     }
   ]
 }
