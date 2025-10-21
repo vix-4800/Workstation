@@ -1,0 +1,76 @@
+- name: 'Install and configure waypaper'
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: 'Check if original waypaper is installed'
+      ansible.builtin.command:
+        cmd: pacman -Qi waypaper
+      register: waypaper_check
+      changed_when: false
+      failed_when: false
+
+    - name: 'Remove original waypaper if installed'
+      become: yes
+      community.general.pacman:
+        name: waypaper
+        state: absent
+      when: waypaper_check.rc == 0
+
+    - name: 'Install dependencies for custom waypaper'
+      become: yes
+      community.general.pacman:
+        name:
+          - python
+          - python-pip
+          - python-gobject
+          - gtk3
+          - imagemagick
+          - python-pillow
+        state: present
+
+    - name: 'Install Python dependencies for waypaper'
+      become: yes
+      ansible.builtin.pip:
+        name:
+          - imageio
+          - imageio-ffmpeg
+          - screeninfo
+          - platformdirs
+        state: present
+        extra_args: '--break-system-packages'
+
+    - name: 'Remove old waypaper clone if exists'
+      become: yes
+      ansible.builtin.file:
+        path: '/tmp/waypaper-custom'
+        state: absent
+
+    - name: 'Clone custom waypaper repository'
+      ansible.builtin.git:
+        repo: 'https://github.com/vix-4800/waypaper.git'
+        dest: '/tmp/waypaper-custom'
+        version: main
+
+    - name: 'Install custom waypaper via pip'
+      become: yes
+      ansible.builtin.pip:
+        name: 'file:///tmp/waypaper-custom'
+        state: forcereinstall
+        extra_args: '--break-system-packages --no-deps'
+
+    - name: 'Ensure waypaper binary is accessible'
+      become: yes
+      ansible.builtin.file:
+        src: '/usr/bin/waypaper'
+        dest: '/usr/local/bin/waypaper'
+        state: link
+        force: yes
+      failed_when: false
+
+    - name: 'Clean up waypaper clone'
+      become: yes
+      ansible.builtin.file:
+        path: '/tmp/waypaper-custom'
+        state: absent
