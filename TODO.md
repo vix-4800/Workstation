@@ -6,7 +6,7 @@
 - [ ] BetterDiscord configs
 - [ ] Different themes
 - [ ] Different dotfiles setup for laptop vs desktop
-- [ ] Sway - autotiling
+- [x] Sway - autotiling
 - [ ] Sway - per-workspace wallpapers
 
 ### NeoVim
