@@ -107,6 +107,7 @@
             <property name="allowFullyQualifiedGlobalClasses" value="false" />
             <property name="allowFullyQualifiedGlobalFunctions" value="false" />
             <property name="allowFullyQualifiedGlobalConstants" value="false" />
+            <property name="allowPartialUses" value="false" />
             <property name="allowFullyQualifiedNameForCollidingClasses" value="true" />
             <property name="searchAnnotations" value="true" />
         </properties>
