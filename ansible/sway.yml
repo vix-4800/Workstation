@@ -39,7 +39,7 @@
       ignore_errors: true
       when: yay_check.rc == 0
 
-    - name: 'Install SwayFX and Swaylock Effects from AUR'
+    - name: 'Install enhanced Sway packages from AUR'
       kewlfft.aur.aur:
         use: yay
         name:
