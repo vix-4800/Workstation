@@ -1,0 +1,52 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+*.fish text eol=lf
+
+# Configuration files
+*.conf text eol=lf
+*.config text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.ini text eol=lf
+
+# Documentation
+*.md text eol=lf
+*.txt text eol=lf
+
+# Executable scripts (no extension)
+bin/* text eol=lf
+
+# Ansible files
+ansible/*.yml linguist-language=YAML
+ansible/**/*.yml linguist-language=YAML
+
+# Config directories
+config/**/*.conf linguist-language=INI
+config/**/*.toml linguist-language=TOML
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# Archives
+*.zip binary
+*.tar binary
+*.gz binary
+*.bz2 binary
+*.xz binary
+
+# Theme files
+*.tmTheme linguist-language=XML
