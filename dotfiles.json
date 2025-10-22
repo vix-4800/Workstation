@@ -159,14 +159,9 @@
       "comment": "Idle management configuration for Sway"
     },
     {
-      "source": "bin/workstation",
-      "target": "$HOME/.local/bin/workstation",
-      "comment": "Unified dotfiles and systemd management tool"
-    },
-    {
-      "source": "bin/search-menu",
-      "target": "$HOME/.local/bin/search-menu",
-      "comment": "Fast file and directory search menu"
+      "source": "bin",
+      "target": "$HOME/.local/bin",
+      "comment": "User-specific executable scripts"
     }
   ]
 }
