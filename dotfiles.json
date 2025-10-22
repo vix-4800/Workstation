@@ -35,31 +35,31 @@
       "target": "$HOME/.config/tmux/tmux.conf"
     },
     {
-      "source": "extra/python/flake8",
+      "source": "tools/python/flake8",
       "target": "$HOME/.config/flake8"
     },
     {
-      "source": "extra/python/mypy",
+      "source": "tools/python/mypy",
       "target": "$HOME/.config/mypy"
     },
     {
-      "source": "extra/php/php-cs-fixer",
+      "source": "tools/php/php-cs-fixer",
       "target": "$HOME/.config/php-cs-fixer"
     },
     {
-      "source": "extra/php/phpcs",
+      "source": "tools/php/phpcs",
       "target": "$HOME/.config/phpcs"
     },
     {
-      "source": "extra/php/phpstan",
+      "source": "tools/php/phpstan",
       "target": "$HOME/.config/phpstan"
     },
     {
-      "source": "extra/php/rector",
+      "source": "tools/php/rector",
       "target": "$HOME/.config/rector"
     },
     {
-      "source": "extra/php/pint",
+      "source": "tools/php/pint",
       "target": "$HOME/.config/pint"
     },
     {
