@@ -2,4 +2,4 @@
 !.gitignore
 
 # Custom completions
-!dotfiles.fish
+!workstation.fish
