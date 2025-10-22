@@ -4,6 +4,10 @@
   "description": "Configuration schema for dotfiles symlink mappings",
   "type": "object",
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path to the JSON schema"
+    },
     "mappings": {
       "type": "array",
       "description": "List of symlink mappings",
