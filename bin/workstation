@@ -42,6 +42,9 @@ ${BOLD}workstation${OFF} — unified dotfiles and systemd services management.
 ${BOLD}Usage:${OFF}
     workstation <command> [options]
 
+${BOLD}Setup Commands:${OFF}
+    setup                         Bootstrap dotfiles on a new system
+
 ${BOLD}Dotfiles Commands:${OFF}
     link [-n] [--json PATH]       Create/update symlinks
     unlink [-n] [--json PATH]     Remove symlinks
@@ -66,6 +69,7 @@ ${BOLD}Global Options:${OFF}
     -h, --help    Show this help
 
 ${BOLD}Examples:${OFF}
+    workstation setup                      # Bootstrap new system
     workstation link -n                    # Dry-run symlinks
     workstation status                     # Check link status
     workstation service enable batsignal.service
@@ -193,6 +197,7 @@ do_link() {
         if command -v bat >/dev/null 2>&1; then
             bat cache --build >/dev/null 2>&1 || true
         fi
+        # shellcheck disable=SC2015
         command -v fisher >/dev/null 2>&1 && fisher update >/dev/null 2>&1 || true
     fi
 }
@@ -355,11 +360,102 @@ timers_setup() {
     msg "Disable a timer with: systemctl --user disable --now <timer-name>"
 }
 
+# Setup command - bootstrap dotfiles on new system
+do_setup() {
+    cat <<EOF
+${BOLD}╔═══════════════════════════════════════════════════════════╗
+║           Workstation Dotfiles Bootstrap                  ║
+╚═══════════════════════════════════════════════════════════╝${OFF}
+
+This will:
+  1. Check if running on Arch Linux
+  2. Install Ansible (if needed)
+  3. Run Ansible playbooks to provision system
+  4. Create symlinks for dotfiles
+  5. Enable systemd user services
+
+EOF
+
+    # Confirmation
+    read -rp "${YLW}Continue? [y/N]${OFF} " confirm
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        warn "Setup cancelled"
+        exit 0
+    fi
+
+    echo ""
+    ok "Starting bootstrap..."
+    echo ""
+
+    # Check if on Arch Linux
+    if ! command -v pacman >/dev/null 2>&1; then
+        err "This script is designed for Arch Linux"
+        err "Please install dependencies manually"
+        exit 1
+    fi
+
+    # Install Ansible if not present
+    if ! command -v ansible-playbook >/dev/null 2>&1; then
+        ok "Installing Ansible..."
+        sudo pacman -S --needed --noconfirm ansible
+    else
+        ok "✓ Ansible already installed"
+    fi
+
+    # Install aur helper
+    if ! ansible-galaxy collection list | grep -q '^kewlfft.aur '; then
+        ok "Installing kewlfft.aur Ansible collection..."
+        ansible-galaxy collection install kewlfft.aur
+    else
+        ok "✓ kewlfft.aur collection already installed"
+    fi
+
+    # Run Ansible playbooks
+    ok "Running Ansible playbooks..."
+    echo ""
+
+    if [ -f "${REPO_ROOT}/ansible/main.yml" ]; then
+        cd "${REPO_ROOT}"
+        ansible-playbook ansible/main.yml --ask-become-pass
+    else
+        err "Ansible playbook not found: ${REPO_ROOT}/ansible/main.yml"
+        exit 1
+    fi
+
+    echo ""
+    ok "Ansible provisioning complete"
+    echo ""
+
+    # Enable systemd services
+    ok "Setting up systemd services..."
+    timers_setup
+
+    echo ""
+    cat <<EOF
+${GRN}╔═══════════════════════════════════════════════════════════╗
+║                  Bootstrap Complete! 🎉                   ║
+╚═══════════════════════════════════════════════════════════╝${OFF}
+
+${BOLD}Next steps:${OFF}
+  1. Logout and login again for changes to take effect
+  2. Run ${BLU}workstation doctor${OFF} to verify setup
+  3. Check ${BLU}workstation status${OFF} for symlink status
+  4. View active timers with ${BLU}workstation timers${OFF}
+
+${DIM}For help: workstation --help${OFF}
+EOF
+}
+
 # Main command router
 cmd="${1:-}"
 shift || true
 
 case "${cmd}" in
+    # Setup command
+    setup)
+        do_setup
+        ;;
+
     # Dotfiles commands
     link|unlink|status|doctor)
         parse_args "$@"
