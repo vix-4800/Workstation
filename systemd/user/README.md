@@ -6,7 +6,6 @@ Services managed via dotfiles symlinks to `~/.config/systemd/user/`.
 
 ### Health & Wellness
 - **break-reminder.timer** - Every 90 min: reminder to take a break
-- **eye-exercise-reminder.timer** - Every 20 min: 20-20-20 rule for eyes
 - **water-reminder.timer** - Every 60 min: stay hydrated
 - **posture-check.timer** - Every 45 min: check your posture
 
@@ -21,8 +20,6 @@ Services managed via dotfiles symlinks to `~/.config/systemd/user/`.
 systemd/user/
 ├── break-reminder.service
 ├── break-reminder.timer
-├── eye-exercise-reminder.service
-├── eye-exercise-reminder.timer
 └── ...
 ```
 
