@@ -1,8 +1,8 @@
 ## Ideas
 
 - [x] Fix plymouth theme to Catppuccin Mocha
-- [ ] Create a custom waypaper app
-- [ ] Spicetify
+- [x] Create a custom waypaper app
+- [ ] Spicetify configs
 - [ ] BetterDiscord configs
 
 ### NeoVim
