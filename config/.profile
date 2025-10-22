@@ -3,11 +3,10 @@
 
 # ======= PATH Configuration =======
 # Add local bins
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
-# Add dotfiles scripts
+# Add dotfiles directory for environment variable
 export DOTFILES_DIR="$HOME/Code/Workstation"
-export PATH="$DOTFILES_DIR/bin:$PATH"
 
 # Add Go paths
 export PATH="/usr/local/go/bin:$HOME/go/bin:$PATH"

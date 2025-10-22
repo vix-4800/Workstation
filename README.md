@@ -2,6 +2,27 @@
 
 Personal configuration files for Arch Linux with Sway (Wayland) desktop environment.
 
+## Quick Start
+
+### Management Tool
+
+The `workstation` command provides unified management for dotfiles and systemd services:
+
+```bash
+# Dotfiles management
+workstation link           # Apply all symlinks
+workstation status         # Check symlink status
+workstation doctor         # Validate environment
+
+# Systemd services
+workstation service list   # List available services
+workstation service enable batsignal.service
+workstation timers         # Show active timers
+workstation timers setup   # Setup health timers
+```
+
+After running `workstation link`, the script is available globally from any directory.
+
 ## Installed Components
 
 ### Desktop Environment

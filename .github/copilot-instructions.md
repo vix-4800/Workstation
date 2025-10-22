@@ -13,7 +13,7 @@ This is a **dotfiles repository** for Arch Linux with Sway (Wayland) desktop env
 
 ### Workstation Management (Primary Workflow)
 ```bash
-# Dotfiles commands
+# Dotfiles commands (available globally after first setup)
 workstation status         # Check all symlinks
 workstation link -n        # Dry-run before applying
 workstation link           # Apply symlinks from dotfiles.json
@@ -24,6 +24,8 @@ workstation service list   # List available services
 workstation service enable <name>  # Enable service/timer
 workstation timers         # Show active timers
 ```
+
+**Script location**: `bin/workstation` is symlinked to `~/.local/bin/workstation` and available globally in PATH.
 
 **Key file**: `dotfiles.json` - JSON array mapping `source` (relative to repo root) to `target` (with `$HOME` variable support). Schema validation via `dotfiles.schema.json`.
 
