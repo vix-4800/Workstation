@@ -42,7 +42,7 @@ Playbooks are **idempotent** and **modular** - each `ansible/*.yml` handles one 
 
 ### Directory Structure
 - `config/` - Application configs that get symlinked to `~/.config/` or `~/`
-- `extra/` - Tool-specific configs (PHP linters, Python formatters, shell completions)
+- `tools/` - Tool-specific configs (PHP linters, Python formatters, shell completions)
 - `bin/` - Executable scripts (no `.sh` extensions)
 - `systemd/user/` - User systemd services/timers
 - `themes/` & `wallpapers/` - Visual assets (also symlinked)
@@ -60,7 +60,7 @@ Number prefixes control load order. Always check `config.d/*.conf` before modify
 - Fish: `config/fish/` (with completions, functions, conf.d)
 - Bash: `config/bash/` (separate .bash_profile, bashrc)
 
-**Development tools** configs in `extra/`:
+**Development tools** configs in `tools/`:
 - PHP: phpstan, rector, php-cs-fixer, pint configs
 - Python: flake8, mypy configs
 - Completions for custom scripts in `config/fish/completions/`
