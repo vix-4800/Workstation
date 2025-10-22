@@ -28,20 +28,20 @@ systemd/user/
 
 ## Management
 
-Use `bin/systemd-services` script:
+Use `workstation` script:
 
 ```bash
-bin/systemd-services list        # list all
-bin/systemd-services enable-all  # enable all
-bin/systemd-services timers      # show active timers
+workstation service list        # list all
+workstation timers              # show active timers
+workstation timers setup        # enable health timers
 ```
 
 ## Adding service
 
 1. Create directory: `systemd/user/my-service/`
 2. Add `my-service.service` and optionally `my-service.timer`
-3. Run: `bin/dotfiles link`
-4. Enable: `bin/systemd-services enable my-service.timer`
+3. Run: `workstation link`
+4. Enable: `workstation service enable my-service.timer`
 
 ## Logs
 

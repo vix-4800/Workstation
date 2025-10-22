@@ -27,7 +27,7 @@ repos:
     hooks:
       - id: dotfiles-syntax-check
         name: Check dotfiles syntax
-        entry: ./bin/dotfiles
+        entry: ./bin/workstation
         args: ['doctor']
         language: script
         pass_filenames: false

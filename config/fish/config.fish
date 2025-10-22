@@ -36,6 +36,7 @@ if test "$XDG_SESSION_TYPE" = "wayland"
 end
 
 # ======= Dotfiles Aliases =======
-alias dfstatus "$DOTFILES_DIR/bin/dotfiles status"
-alias dflink "$DOTFILES_DIR/bin/dotfiles link"
-alias dfedit "$EDITOR $DOTFILES_DIR/dotfiles.json"
+alias ws "workstation"
+alias wsstatus "workstation status"
+alias wslink "workstation link"
+alias wsedit "$EDITOR $DOTFILES_DIR/dotfiles.json"

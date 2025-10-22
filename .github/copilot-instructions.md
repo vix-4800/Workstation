@@ -4,23 +4,30 @@
 
 This is a **dotfiles repository** for Arch Linux with Sway (Wayland) desktop environment. The system uses:
 - **Ansible playbooks** (`ansible/*.yml`) for system provisioning and package installation
-- **JSON-based symlink manager** (`bin/dotfiles` + `dotfiles.json`) for configuration file deployment
+- **Unified management tool** (`bin/workstation`) for dotfiles and systemd services
+- **JSON-based symlink manager** (`dotfiles.json`) for configuration file deployment
 - **Catppuccin Mocha** theme consistently across all applications
 - **Modular Sway config** split into `config/sway/config.d/*.conf` files by concern
 
 ## Critical Workflows
 
-### Dotfiles Management (Primary Workflow)
+### Workstation Management (Primary Workflow)
 ```bash
-bin/dotfiles status        # Check all symlinks
-bin/dotfiles link -n       # Dry-run before applying
-bin/dotfiles link          # Apply symlinks from dotfiles.json
-bin/dotfiles doctor        # Validate environment
+# Dotfiles commands
+workstation status         # Check all symlinks
+workstation link -n        # Dry-run before applying
+workstation link           # Apply symlinks from dotfiles.json
+workstation doctor         # Validate environment
+
+# Systemd commands
+workstation service list   # List available services
+workstation service enable <name>  # Enable service/timer
+workstation timers         # Show active timers
 ```
 
 **Key file**: `dotfiles.json` - JSON array mapping `source` (relative to repo root) to `target` (with `$HOME` variable support). Schema validation via `dotfiles.schema.json`.
 
-**Adding new configs**: Edit `dotfiles.json` → run `bin/dotfiles link`. Files are symlinked, not copied. Backups auto-created in `~/.local/share/dotfiles/backups/`.
+**Adding new configs**: Edit `dotfiles.json` → run `workstation link`. Files are symlinked, not copied. Backups auto-created in `~/.local/share/dotfiles/backups/`.
 
 ### System Provisioning
 ```bash
@@ -57,11 +64,12 @@ Number prefixes control load order. Always check `config.d/*.conf` before modify
 - Completions for custom scripts in `config/fish/completions/`
 
 ### Systemd Services
-Managed via `bin/systemd-services`:
+Managed via `workstation service`:
 ```bash
-bin/systemd-services enable batsignal.service
-bin/systemd-services list
-bin/systemd-services timers
+workstation service enable batsignal.service
+workstation service list
+workstation timers
+workstation timers setup
 ```
 
 Service files in `systemd/user/` are symlinked to `~/.config/systemd/user/`. See `docs/SYSTEMD.md`.
@@ -75,7 +83,7 @@ All `bin/` scripts follow consistent patterns:
 - **Relative path resolution**: Scripts find repo root via `SCRIPT_DIR`
 - **Error handling**: `set -euo pipefail` for bash scripts
 
-Example: `bin/dotfiles` uses `jq` for JSON parsing, `realpath` for canonicalization.
+Example: `bin/workstation` uses `jq` for JSON parsing, `realpath` for canonicalization, and unified command interface.
 
 ## Ansible Specifics
 
@@ -97,9 +105,9 @@ When adding new tool configs, check if Catppuccin theme exists for it.
 
 ## Testing & Validation
 
-- **Always dry-run first**: `bin/dotfiles link -n`
+- **Always dry-run first**: `workstation link -n`
 - **Validate JSON**: `jq empty dotfiles.json`
-- **Check symlinks**: `bin/dotfiles status | grep "✗\|⚠"`
+- **Check symlinks**: `workstation status | grep "✗\|⚠"`
 - **Test Ansible**: Add `--check` flag for dry-run mode
 
 ## Integration Points

@@ -7,19 +7,19 @@
     repo_root: "{{ playbook_dir | dirname }}"
     conf_map: "{{ repo_root }}/dotfiles.json"
   tasks:
-    - name: 'Check if dotfiles script exists'
+    - name: 'Check if workstation script exists'
       ansible.builtin.stat:
-        path: "{{ repo_root }}/bin/dotfiles"
-      register: dotfiles_script
+        path: "{{ repo_root }}/bin/workstation"
+      register: workstation_script
 
-    - name: 'Fail if dotfiles script not found'
+    - name: 'Fail if workstation script not found'
       ansible.builtin.fail:
-        msg: 'Dotfiles script not found at {{ repo_root }}/bin/dotfiles'
-      when: not dotfiles_script.stat.exists
+        msg: 'Workstation script not found at {{ repo_root }}/bin/workstation'
+      when: not workstation_script.stat.exists
 
-    - name: 'Make dotfiles script executable'
+    - name: 'Make workstation script executable'
       ansible.builtin.file:
-        path: "{{ repo_root }}/bin/dotfiles"
+        path: "{{ repo_root }}/bin/workstation"
         mode: '0755'
 
     - name: 'Check if confmap exists'
@@ -34,7 +34,7 @@
 
     - name: 'Apply dotfiles symlinks'
       ansible.builtin.command:
-        cmd: "{{ repo_root }}/bin/dotfiles link"
+        cmd: "{{ repo_root }}/bin/workstation link"
       register: dotfiles_output
       changed_when: "'Linked:' in dotfiles_output.stdout"
 
@@ -45,7 +45,7 @@
 
     - name: 'Check dotfiles status'
       ansible.builtin.command:
-        cmd: "{{ repo_root }}/bin/dotfiles status"
+        cmd: "{{ repo_root }}/bin/workstation status"
       register: dotfiles_status
       changed_when: false
 
