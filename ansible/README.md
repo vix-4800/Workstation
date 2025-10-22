@@ -7,7 +7,7 @@ Automatic installation and configuration of Arch Linux with Sway.
 ```bash
 sudo pacman -S ansible
 ansible-galaxy collection install kewlfft.aur
-cd ~/Code/Workstation
+cd <path_to_this_repo>
 ansible-playbook ansible/main.yml --ask-become-pass
 ```
 
@@ -38,4 +38,3 @@ ansible-playbook ansible/main.yml --ask-become-pass
 ### Applications (`apps/`)
 - **apps/spicetify.yml** - Spicetify CLI, Marketplace, and Spotify permissions
 - **apps/waypaper.yml** - Waypaper wallpaper manager
-

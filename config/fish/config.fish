@@ -6,7 +6,6 @@ set -gx TERM xterm-256color
 
 # ======= Variables =======
 set -x NODE_VERSION v24.7.0
-set -x DOTFILES_DIR "$HOME/Code/Workstation"
 
 # ======= PATH Configuration =======
 fish_add_path /usr/local/go/bin
@@ -36,4 +35,3 @@ end
 
 # ======= Dotfiles Aliases =======
 alias ws "workstation"
-alias wsedit "$EDITOR $DOTFILES_DIR/dotfiles.json"
