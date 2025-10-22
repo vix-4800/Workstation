@@ -226,6 +226,11 @@ do_status() {
         SRC="$(make_absolute_source "$SRC_RAW")"
         TGT="$(resolve_variables "$TGT_RAW")"
 
+        if [ -L "${TGT}" ] && [ ! -e "${TGT}" ]; then
+            echo -e "💀 ${TGT} ${DIM}->${OFF} ${RED}BROKEN LINK${OFF} (source missing: ${SRC})"
+            continue
+        fi
+
         if [ -L "${TGT}" ]; then
             local points
             points="$(readlink "${TGT}")"
