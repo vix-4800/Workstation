@@ -3,3 +3,6 @@
 
 # Custom configs
 !tide.fish
+!00-environment.fish
+!01-path.fish
+!02-aliases.fish
