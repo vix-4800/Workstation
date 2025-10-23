@@ -102,7 +102,7 @@ window {
 /* Outer Box */
 #outer-box {
   margin: 5px;
-  padding: 10px;
+  padding: 20px 5px;
   border: none;
   background-color: transparent;
 }
