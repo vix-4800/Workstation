@@ -21,6 +21,9 @@
           - libnotify
           - xdg-desktop-portal
           - xdg-desktop-portal-wlr
+          # - wlsunset
+          # - kanshi
+          # - wf-recorder
         state: present
 
     - name: 'Check if yay is installed'
