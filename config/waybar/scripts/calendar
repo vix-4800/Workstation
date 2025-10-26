@@ -18,34 +18,17 @@ color_weekdays="#89b4fa"    # Blue
 color_today="#f38ba8"       # Red
 color_weekend="#fab387"     # Peach
 color_normal="#cdd6f4"      # Text
-color_week_num="#a6e3a1"    # Green
 color_dimmed="#6c7086"      # Surface2
 
 # Build tooltip
 tooltip="<span font_size='xx-large' color='$color_header'><b>$current_month</b></span>\n"
-tooltip+="<span font_size='x-large' color='$color_weekdays'><b>$current_weekday</b></span>\n"
-
-# Calendar header
-tooltip+="<tt><span font_size='large'>"
-tooltip+="<span color='$color_week_num'><b>  </b></span> "
-tooltip+="</span></tt>\n"
+tooltip+="<span font_size='x-large' color='$color_weekdays'><b>$current_weekday</b></span>\n\n"
 
 # Parse calendar and build rows
-week_count=0
 while IFS= read -r line; do
     [[ -z "$line" ]] && continue
 
     tooltip+="<tt><span font_size='large'>"
-
-    # Get week number (first field if exists)
-    if [[ "$line" =~ ^[[:space:]]*([0-9]+)[[:space:]]+ ]]; then
-        week="${BASH_REMATCH[1]}"
-        tooltip+="<span color='$color_week_num'><b>W$week</b></span> "
-        # Remove week number from line
-        line="${line#*[0-9] }"
-    else
-        tooltip+="<span color='$color_week_num'><b>   </b></span> "
-    fi
 
     # Parse days
     day_in_week=0
@@ -72,7 +55,6 @@ while IFS= read -r line; do
     done
 
     tooltip+="</span></tt>\n"
-    ((week_count++))
 done <<< "$cal_output"
 
 # Footer with additional info
