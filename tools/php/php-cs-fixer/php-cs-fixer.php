@@ -87,6 +87,7 @@ return (new Config())
         'no_unused_imports' => true, // Removes unused imports
         'fully_qualified_strict_types' => ['import_symbols' => true], // Removes the leading part of fully qualified symbol references if a given symbol is imported
         'single_line_after_imports' => true, // Ensures a single blank line after import statements
+        'no_leading_import_slash' => true, // Removes leading slashes in use statements
 
         // ─────────────────────────────────────────────────────────────────────────
         // Arrays & collections
