@@ -9,10 +9,9 @@ Services managed via dotfiles symlinks to `~/.config/systemd/user/`.
 - **water-reminder.timer** - Every 60 min: stay hydrated
 - **posture-check.timer** - Every 45 min: check your posture
 
-### System Maintenance
-- **dotfiles-backup.timer** - Daily: check for uncommitted dotfiles changes
-- **system-cleanup.timer** - Weekly: clean package cache
-- **batsignal.service** - Battery notification service
+### System Services
+- **batsignal.service** - Battery notification service (laptops)
+- **gpu-fan-control.service** - NVIDIA GPU fan control (desktops only, auto-detects)
 
 ## Structure
 

@@ -5,6 +5,7 @@
 ```bash
 # Enable service
 workstation service enable arch-update.timer
+workstation service enable gpu-fan-control.service
 
 # Check status
 workstation service status arch-update.timer
