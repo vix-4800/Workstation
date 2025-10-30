@@ -10,18 +10,18 @@ The `workstation` command provides unified management for dotfiles and systemd s
 
 ```bash
 # Dotfiles management
-workstation link           # Apply all symlinks
-workstation status         # Check symlink status
-workstation doctor         # Validate environment
+workstation dotfiles link           # Apply all symlinks
+workstation dotfiles status         # Check symlink status
+workstation dotfiles doctor         # Validate environment
 
 # Systemd services
-workstation service list   # List available services
-workstation service enable batsignal.service
-workstation timers         # Show active timers
-workstation timers setup   # Setup health timers
+workstation services list           # List available services
+workstation services enable-all     # Enable all services/timers
+workstation services disable-all    # Disable all services/timers
+workstation services status         # Show status of all services
 ```
 
-After running `workstation link`, the script is available globally from any directory.
+After running `workstation dotfiles link`, the script is available globally from any directory.
 
 ## Installed Components
 

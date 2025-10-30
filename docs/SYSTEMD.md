@@ -3,35 +3,33 @@
 ## Quick commands
 
 ```bash
-# Enable service
-workstation service enable arch-update.timer
-workstation service enable gpu-fan-control.service
+# Enable all services/timers
+workstation services enable-all
 
-# Check status
-workstation service status arch-update.timer
+# Disable all services/timers
+workstation services disable-all
+
+# Check status of all services
+workstation services status
 
 # List all services
-workstation service list
+workstation services list
 
-# Show active timers
-workstation timers
-
-# Setup timers
-workstation timers setup
-
-# Enable all
+# Manual control (if needed)
 systemctl --user enable --now <service>
+systemctl --user disable --now <service>
+systemctl --user status <service>
 ```
 
 ## Add new service
 
 1. Create `systemd/user/my-service.{service,timer}`
-2. Apply: `workstation link`
-3. Enable: `workstation service enable my-service.timer`
+2. Apply: `workstation dotfiles link`
+3. Enable: `workstation services enable-all` or `systemctl --user enable --now my-service.timer`
 
 ## Logs
 
 ```bash
-journalctl --user -u arch-update.service
-journalctl --user -u arch-update.service -f  # follow
+journalctl --user -u <service-name>.service
+journalctl --user -u <service-name>.service -f  # follow
 ```

@@ -46,22 +46,18 @@ ${BOLD}Setup Commands:${OFF}
     setup                         Bootstrap dotfiles on a new system
 
 ${BOLD}Dotfiles Commands:${OFF}
-    link [-n] [--json PATH]       Create/update symlinks
-    unlink [-n] [--json PATH]     Remove symlinks
-    status [--json PATH]          Show link status
-    doctor [--json PATH]          Environment checks
-    which [--json PATH]           Show repo and config paths
-    edit [--json PATH]            Open config in \$EDITOR
+    dotfiles link [-n] [--json PATH]      Create/update symlinks
+    dotfiles unlink [-n] [--json PATH]    Remove symlinks
+    dotfiles status [--json PATH]         Show link status
+    dotfiles doctor [--json PATH]         Environment checks
+    dotfiles which [--json PATH]          Show repo and config paths
+    dotfiles edit [--json PATH]           Open config in \$EDITOR
 
-${BOLD}Systemd Commands:${OFF}
-    service enable <name>         Enable and start a service/timer
-    service disable <name>        Disable and stop a service/timer
-    service restart <name>        Restart a service
-    service status <name>         Show status of a service
-    service list                  List all services in dotfiles
-    service reload                Reload systemd user daemon
-    timers [list]                 Show active timers
-    timers setup                  Setup health & productivity timers
+${BOLD}Services Commands:${OFF}
+    services enable-all           Enable and start all services/timers
+    services disable-all          Disable and stop all services/timers
+    services status               Show status of all services/timers
+    services list                 List all services in dotfiles
 
 ${BOLD}Global Options:${OFF}
     -n            Dry-run mode (don't make changes)
@@ -70,11 +66,11 @@ ${BOLD}Global Options:${OFF}
 
 ${BOLD}Examples:${OFF}
     workstation setup                      # Bootstrap new system
-    workstation link -n                    # Dry-run symlinks
-    workstation status                     # Check link status
-    workstation service enable batsignal.service
-    workstation timers                     # Show active timers
-    workstation doctor                     # Run environment checks
+    workstation dotfiles link -n           # Dry-run symlinks
+    workstation dotfiles status            # Check link status
+    workstation dotfiles doctor            # Run environment checks
+    workstation services enable-all        # Enable all services
+    workstation services status            # Show services status
 EOF
 }
 
@@ -282,36 +278,87 @@ do_doctor() {
 }
 
 # Systemd commands
-service_enable() {
-    local service="$1"
-    ok "Enabling and starting ${service}..."
+services_enable_all() {
+    if [ ! -d "${SYSTEMD_DIR}" ]; then
+        err "Systemd user directory not found: ${SYSTEMD_DIR}"
+        exit 1
+    fi
+
+    ok "Enabling all services and timers..."
     systemctl --user daemon-reload
-    systemctl --user enable "$service"
-    systemctl --user start "$service" 2>/dev/null || true
-    ok "✓ ${service} enabled"
+
+    find "$SYSTEMD_DIR" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
+        local service
+        service="$(basename "$file")"
+
+        if systemctl --user enable "$service" 2>/dev/null; then
+            systemctl --user start "$service" 2>/dev/null || true
+            ok "✓ Enabled: ${service}"
+        else
+            warn "⚠ Failed to enable: ${service}"
+        fi
+    done
+
+    echo ""
+    ok "All services enabled!"
 }
 
-service_disable() {
-    local service="$1"
-    ok "Disabling ${service}..."
-    systemctl --user stop "$service" 2>/dev/null || true
-    systemctl --user disable "$service" 2>/dev/null || true
-    ok "✓ ${service} disabled"
+services_disable_all() {
+    if [ ! -d "${SYSTEMD_DIR}" ]; then
+        err "Systemd user directory not found: ${SYSTEMD_DIR}"
+        exit 1
+    fi
+
+    ok "Disabling all services and timers..."
+
+    find "$SYSTEMD_DIR" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
+        local service
+        service="$(basename "$file")"
+
+        systemctl --user stop "$service" 2>/dev/null || true
+        if systemctl --user disable "$service" 2>/dev/null; then
+            ok "✓ Disabled: ${service}"
+        else
+            warn "⚠ Failed to disable: ${service}"
+        fi
+    done
+
+    echo ""
+    ok "All services disabled!"
 }
 
-service_restart() {
-    local service="$1"
-    ok "Restarting ${service}..."
-    systemctl --user restart "$service"
-    ok "✓ ${service} restarted"
+services_status() {
+    if [ ! -d "${SYSTEMD_DIR}" ]; then
+        err "Systemd user directory not found: ${SYSTEMD_DIR}"
+        exit 1
+    fi
+
+    ok "Services status:"
+    echo ""
+
+    find "$SYSTEMD_DIR" -type f \( -name "*.service" -o -name "*.timer" \) | sort | while read -r file; do
+        local service
+        service="$(basename "$file")"
+
+        local state
+        state="$(systemctl --user is-enabled "$service" 2>/dev/null || echo "disabled")"
+        local active
+        active="$(systemctl --user is-active "$service" 2>/dev/null || echo "inactive")"
+
+        local status_icon
+        if [ "$active" = "active" ]; then
+            status_icon="${GRN}●${OFF}"
+        elif [ "$active" = "inactive" ] && [ "$state" = "enabled" ]; then
+            status_icon="${YLW}●${OFF}"
+        else
+            status_icon="${DIM}○${OFF}"
+        fi
+
+        printf "%s ${BOLD}%-40s${OFF} %s / %s\n" "$status_icon" "$service" "$state" "$active"
+    done
 }
 
-service_status() {
-    local service="$1"
-    systemctl --user status "$service"
-}
-
-service_list() {
+services_list() {
     if [ ! -d "${SYSTEMD_DIR}" ]; then
         err "Systemd user directory not found: ${SYSTEMD_DIR}"
         exit 1
@@ -322,47 +369,6 @@ service_list() {
     find "$SYSTEMD_DIR" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
         basename "$file"
     done | sort
-}
-
-service_reload() {
-    ok "Reloading systemd user daemon..."
-    systemctl --user daemon-reload
-    ok "✓ Daemon reloaded"
-}
-
-timers_list() {
-    ok "Active timers:"
-    echo ""
-    systemctl --user list-timers
-}
-
-timers_setup() {
-    ok "Setting up health & productivity timers..."
-    echo ""
-
-    local TIMERS=(
-        "break-reminder.timer"
-        "water-reminder.timer"
-        "posture-check.timer"
-    )
-
-    ok "Enabling timers..."
-    systemctl --user daemon-reload
-
-    for timer in "${TIMERS[@]}"; do
-        if systemctl --user enable "$timer" 2>/dev/null; then
-            systemctl --user start "$timer" 2>/dev/null || true
-            ok "✓ Started: ${timer}"
-        else
-            warn "⚠ Failed to enable: ${timer}"
-        fi
-    done
-
-    echo ""
-    ok "All timers configured!"
-    echo ""
-    msg "Check status with: workstation timers"
-    msg "Disable a timer with: systemctl --user disable --now <timer-name>"
 }
 
 # Setup command - bootstrap dotfiles on new system
@@ -433,7 +439,7 @@ EOF
 
     # Enable systemd services
     ok "Setting up systemd services..."
-    timers_setup
+    services_enable_all
 
     echo ""
     cat <<EOF
@@ -443,9 +449,9 @@ ${GRN}╔═══════════════════════�
 
 ${BOLD}Next steps:${OFF}
   1. Logout and login again for changes to take effect
-  2. Run ${BLU}workstation doctor${OFF} to verify setup
-  3. Check ${BLU}workstation status${OFF} for symlink status
-  4. View active timers with ${BLU}workstation timers${OFF}
+  2. Run ${BLU}workstation dotfiles doctor${OFF} to verify setup
+  3. Check ${BLU}workstation dotfiles status${OFF} for symlink status
+  4. View services with ${BLU}workstation services status${OFF}
 
 ${DIM}For help: workstation --help${OFF}
 EOF
@@ -462,68 +468,48 @@ case "${cmd}" in
         ;;
 
     # Dotfiles commands
-    link|unlink|status|doctor)
+    dotfiles)
+        subcmd="${1:-}"
+        shift || true
         parse_args "$@"
-        case "${cmd}" in
+        case "${subcmd}" in
             link) do_link ;;
             unlink) do_unlink ;;
             status) do_status ;;
             doctor) do_doctor ;;
-        esac
-        ;;
-
-    which)
-        parse_args "$@"
-        echo -e "REPO: ${REPO_ROOT}\nJSON: ${CONF_JSON}"
-        ;;
-
-    edit)
-        parse_args "$@"
-        ${EDITOR:-vi} "${CONF_JSON}"
-        ;;
-
-    # Systemd commands
-    service)
-        subcmd="${1:-}"
-        shift || true
-        case "${subcmd}" in
-            enable)
-                [ -z "${1:-}" ] && { err "Please specify a service name"; exit 1; }
-                service_enable "$1"
+            which)
+                echo -e "REPO: ${REPO_ROOT}\nJSON: ${CONF_JSON}"
                 ;;
-            disable)
-                [ -z "${1:-}" ] && { err "Please specify a service name"; exit 1; }
-                service_disable "$1"
-                ;;
-            restart)
-                [ -z "${1:-}" ] && { err "Please specify a service name"; exit 1; }
-                service_restart "$1"
-                ;;
-            status)
-                [ -z "${1:-}" ] && { err "Please specify a service name"; exit 1; }
-                service_status "$1"
-                ;;
-            list)
-                service_list
-                ;;
-            reload)
-                service_reload
+            edit)
+                ${EDITOR:-vi} "${CONF_JSON}"
                 ;;
             *)
-                err "Unknown service command: ${subcmd}"
+                err "Unknown dotfiles command: ${subcmd}"
                 usage
                 exit 1
                 ;;
         esac
         ;;
 
-    timers)
-        subcmd="${1:-list}"
+    # Services commands
+    services)
+        subcmd="${1:-}"
+        shift || true
         case "${subcmd}" in
-            list) timers_list ;;
-            setup) timers_setup ;;
+            enable-all)
+                services_enable_all
+                ;;
+            disable-all)
+                services_disable_all
+                ;;
+            status)
+                services_status
+                ;;
+            list)
+                services_list
+                ;;
             *)
-                err "Unknown timers command: ${subcmd}"
+                err "Unknown services command: ${subcmd}"
                 usage
                 exit 1
                 ;;
