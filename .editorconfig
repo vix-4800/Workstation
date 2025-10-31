@@ -25,6 +25,9 @@ trim_trailing_whitespace = false
 [*.{json,yaml,yml,toml}]
 indent_size = 2
 
+[**/{waybar,swaylock,swayidle,wofi}/config*]
+indent_size = 2
+
 # ————————————————
 # Makefile
 # ————————————————
@@ -44,7 +47,6 @@ indent_size = 2
 [*.php]
 end_of_line = lf
 max_line_length = 120
-indent_size = 4
 
 # ————————————————
 # HTML / CSS / JS
