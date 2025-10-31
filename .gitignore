@@ -1,3 +1,25 @@
 # IDE settings
 .vscode/
 .idea/
+
+# Pre-commit cache
+.pre-commit-cache/
+
+# Backup files
+*.bak
+*~
+.*.swp
+.*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Local test files
+test-*.sh
+scratch/
