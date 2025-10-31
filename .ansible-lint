@@ -1,0 +1,49 @@
+---
+# Ansible-lint configuration for dotfiles repository
+
+# Use moderate profile (less strict than production)
+profile: moderate
+
+# Exclude paths
+exclude_paths:
+  - .git/
+  - .cache/
+  - .vscode/
+  - config/
+
+# Skip specific rules that are too strict for dotfiles
+skip_list:
+  - name[play]  # Imported playbooks don't need names in main.yml
+  - yaml[truthy]  # Allow yes/no in addition to true/false
+  - risky-file-permissions  # Some files intentionally don't set permissions
+  - ignore-errors  # Sometimes needed for optional steps
+  - no-changed-when  # Not all commands need idempotency checks
+  - command-instead-of-shell  # Sometimes shell features are needed
+  - latest[git]  # For yay installation from git
+
+# Warn only for these rules (don't fail)
+warn_list:
+  - command-instead-of-module  # Sometimes shell commands are necessary
+  - risky-shell-pipe  # Sometimes pipes are needed
+  - name[casing]  # Handler naming can be lowercase
+
+# Enable specific rules
+enable_list:
+  - yaml
+  - no-changed-when
+  - no-handler
+
+# Use offline mode to avoid network lookups
+offline: false
+
+# Mock roles
+mock_roles: []
+
+# Set loop variable prefix
+loop_var_prefix: "{role}_"
+
+# Var naming pattern
+var_naming_pattern: "^[a-z_][a-z0-9_]*$"
+
+# Task file naming
+task_name_prefix: "{stem}"
