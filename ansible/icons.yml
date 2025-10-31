@@ -19,7 +19,7 @@
           - papirus-folders-catppuccin-git
         state: present
       when: yay_check.rc == 0
-      become: yes
+      become: true
       become_user: aur_builder
 
     - name: 'Configure Papirus folders to use Catppuccin Lavender color'
@@ -27,7 +27,7 @@
         if command -v papirus-folders &> /dev/null; then
           papirus-folders -C cat-mocha-lavender --theme Papirus-Dark
         fi
-      become: no
+      become: false
       when: yay_check.rc == 0
       register: papirus_config
       changed_when: papirus_config.rc == 0
@@ -36,5 +36,5 @@
     - name: 'Rebuild font cache'
       ansible.builtin.command:
         cmd: fc-cache -fv
-      become: no
+      become: false
       changed_when: true

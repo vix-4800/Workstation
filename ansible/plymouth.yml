@@ -23,7 +23,7 @@
         name: plymouth
         state: present
       when: yay_check.rc == 0
-      become: yes
+      become: true
       become_user: aur_builder
 
     - name: 'Ensure Plymouth configuration directory exists'
@@ -48,7 +48,7 @@
         section: Daemon
         option: Theme
         value: '{{ plymouth_theme }}'
-        create: yes
+        create: true
         mode: '0644'
       notify:
         - rebuild initramfs
@@ -67,7 +67,7 @@
         path: /etc/mkinitcpio.conf
         regexp: '^HOOKS='
         line: 'HOOKS=({{ mkinitcpio_hooks }})'
-        backup: yes
+        backup: true
       notify: rebuild initramfs
 
     - name: 'Update GRUB cmdline parameters for Plymouth'
@@ -75,7 +75,7 @@
         path: /etc/default/grub
         regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
         line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ grub_cmdline_params }}"'
-        backup: yes
+        backup: true
       notify: update grub
 
   handlers:

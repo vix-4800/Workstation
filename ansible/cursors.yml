@@ -18,5 +18,5 @@
           - catppuccin-cursors-mocha
         state: present
       when: yay_check.rc == 0
-      become: yes
+      become: true
       become_user: aur_builder

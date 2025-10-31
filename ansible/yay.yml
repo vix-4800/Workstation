@@ -22,8 +22,8 @@
       ansible.builtin.git:
         repo: https://aur.archlinux.org/yay.git
         dest: /tmp/yay
-        clone: yes
-        update: no
+        clone: true
+        update: false
       when: yay_check.rc != 0
 
     - name: 'Build and install yay'
@@ -47,14 +47,14 @@
       when: yay_check.rc != 0
 
     - name: Create the `aur_builder` user
-      become: yes
+      become: true
       ansible.builtin.user:
         name: aur_builder
-        create_home: yes
+        create_home: true
         group: users
 
     - name: Allow the `aur_builder` user to run `sudo pacman` without a password
-      become: yes
+      become: true
       ansible.builtin.copy:
         content: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/yay'
         dest: /etc/sudoers.d/11-install-aur_builder

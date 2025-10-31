@@ -53,5 +53,5 @@
       ansible.builtin.lineinfile:
         path: "{{ lookup('env', 'HOME') }}/.profile"
         line: 'export PATH="$HOME/.config/composer/vendor/bin:$PATH"'
-        create: yes
+        create: true
         mode: '0644'

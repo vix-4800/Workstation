@@ -12,14 +12,14 @@
       failed_when: false
 
     - name: 'Remove original waypaper if installed'
-      become: yes
+      become: true
       community.general.pacman:
         name: waypaper
         state: absent
       when: waypaper_check.rc == 0
 
     - name: 'Install dependencies for custom waypaper'
-      become: yes
+      become: true
       community.general.pacman:
         name:
           - python
@@ -31,7 +31,7 @@
         state: present
 
     - name: 'Install Python dependencies for waypaper'
-      become: yes
+      become: true
       ansible.builtin.pip:
         name:
           - imageio
@@ -42,7 +42,7 @@
         extra_args: '--break-system-packages'
 
     - name: 'Remove old waypaper clone if exists'
-      become: yes
+      become: true
       ansible.builtin.file:
         path: '/tmp/waypaper-custom'
         state: absent
@@ -54,23 +54,23 @@
         version: main
 
     - name: 'Install custom waypaper via pip'
-      become: yes
+      become: true
       ansible.builtin.pip:
         name: 'file:///tmp/waypaper-custom'
         state: forcereinstall
         extra_args: '--break-system-packages --no-deps'
 
     - name: 'Ensure waypaper binary is accessible'
-      become: yes
+      become: true
       ansible.builtin.file:
         src: '/usr/bin/waypaper'
         dest: '/usr/local/bin/waypaper'
         state: link
-        force: yes
+        force: true
       failed_when: false
 
     - name: 'Clean up waypaper clone'
-      become: yes
+      become: true
       ansible.builtin.file:
         path: '/tmp/waypaper-custom'
         state: absent
