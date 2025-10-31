@@ -26,6 +26,7 @@ After running `workstation dotfiles link`, the script is available globally from
 ## Installed Components
 
 ### Desktop Environment
+
 - **SwayFX** - Wayland compositor with blur, shadows, rounded corners
 - **Waybar** - Status bar with custom scripts
 - **Greetd + ReGreet** - Display manager (login screen)
@@ -36,12 +37,14 @@ After running `workstation dotfiles link`, the script is available globally from
 - **Swaybg** - Wallpaper setter
 
 ### Notifications & OSD
+
 - **SwayNC** - Notification daemon with DND
 - **SwayOSD** - Volume/brightness overlay
 - **Batsignal** - Battery notifications
 - **libnotify** - Notification library
 
 ### Launchers & Tools
+
 - **Wofi** - Application launcher
 - **Search Menu** - Fast file & directory search - `$mod+Shift+s`
 - **Cliphist** - Clipboard manager
@@ -49,6 +52,7 @@ After running `workstation dotfiles link`, the script is available globally from
 - **Waypaper** - Wallpaper selector
 
 ### Screenshots & Media
+
 - **Grim** - Screenshot capture
 - **Slurp** - Region selector
 - **Swappy** - Screenshot editor
@@ -57,6 +61,7 @@ After running `workstation dotfiles link`, the script is available globally from
 - **FFmpeg** - Media processing
 
 ### Terminal & Shell
+
 - **Alacritty** - GPU terminal emulator
 - **Fish** - Shell with syntax highlighting
 - **Tmux** - Terminal multiplexer
@@ -64,6 +69,7 @@ After running `workstation dotfiles link`, the script is available globally from
 - **Tide** - Fish prompt theme
 
 ### CLI Tools
+
 - **Bat** - Syntax-highlighted cat
 - **Eza** - Modern ls replacement
 - **Ripgrep** - Fast grep
@@ -74,6 +80,7 @@ After running `workstation dotfiles link`, the script is available globally from
 - **GitHub CLI** - GitHub integration
 
 ### Development
+
 - **Neovim** - Text editor with LSP
 - **Visual Studio Code** - IDE
 - **Git** - Version control
@@ -84,6 +91,7 @@ After running `workstation dotfiles link`, the script is available globally from
 - **Base-devel** - Build tools (GCC, Make, etc.)
 
 ### Applications
+
 - **Firefox** - Web browser
 - **Discord** - Chat (with BetterDiscord)
 - **Telegram Desktop** - Messenger
@@ -93,6 +101,7 @@ After running `workstation dotfiles link`, the script is available globally from
 - **Thunar** - File manager
 
 ### System Services
+
 - **PipeWire** + WirePlumber - Audio system
 - **PulseAudio** (via pipewire-pulse) - Audio compatibility
 - **Pavucontrol** - Audio mixer
@@ -105,26 +114,31 @@ After running `workstation dotfiles link`, the script is available globally from
 - **WireGuard** - VPN
 
 ### Hardware Support
+
 - **Brightnessctl** - Backlight control
 - **CPU Microcode** - AMD/Intel updates
 - **GPU Drivers** - NVIDIA/AMD/Intel support
 - **Xorg-xwayland** - X11 app compatibility
 
 ### Desktop Integration
+
 - **XDG Desktop Portal** - Desktop integration
 - **xdg-desktop-portal-wlr** - Wayland portal
 - **GTK** - GTK theming (Catppuccin)
 - **Cursor Theme** - Catppuccin cursors
 
 ### Package Management
+
 - **Yay** - AUR helper
 - **Flatpak** - Universal packages
 
 ### Fonts
+
 - **JetBrains Mono Nerd Font** - Primary monospace font
 - **Font Awesome** - Icon fonts (TTF, OTF, WOFF2)
 
 ### Theming
+
 - **Catppuccin Mocha** - Consistent color scheme across:
   - GTK (2.0, 3.0, 4.0)
   - Sway/SwayFX

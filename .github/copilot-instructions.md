@@ -3,6 +3,7 @@
 ## Architecture Overview
 
 This is a **dotfiles repository** for Arch Linux with Sway (Wayland) desktop environment. The system uses:
+
 - **Ansible playbooks** (`ansible/*.yml`) for system provisioning and package installation
 - **Unified management tool** (`bin/workstation`) for dotfiles and systemd services
 - **JSON-based symlink manager** (`dotfiles.json`) for configuration file deployment
@@ -12,6 +13,7 @@ This is a **dotfiles repository** for Arch Linux with Sway (Wayland) desktop env
 ## Critical Workflows
 
 ### Workstation Management (Primary Workflow)
+
 ```bash
 # Dotfiles commands (available globally after first setup)
 workstation status         # Check all symlinks
@@ -32,6 +34,7 @@ workstation timers         # Show active timers
 **Adding new configs**: Edit `dotfiles.json` → run `workstation link`. Files are symlinked, not copied. Backups auto-created in `~/.local/share/dotfiles/backups/`.
 
 ### System Provisioning
+
 ```bash
 ansible-playbook ansible/main.yml  # Full system setup
 ```
@@ -41,6 +44,7 @@ Playbooks are **idempotent** and **modular** - each `ansible/*.yml` handles one 
 ## Project-Specific Conventions
 
 ### Directory Structure
+
 - `config/` - Application configs that get symlinked to `~/.config/` or `~/`
 - `tools/` - Tool-specific configs (PHP linters, Python formatters, shell completions)
 - `bin/` - Executable scripts (no `.sh` extensions)
@@ -50,23 +54,29 @@ Playbooks are **idempotent** and **modular** - each `ansible/*.yml` handles one 
 ### Configuration Patterns
 
 **Sway config** is modular:
+
 ```
 config/sway/config         # Main file, includes catppuccin-mocha theme
 config/sway/config.d/      # Split by concern (10-variables, 40-keybindings, etc.)
 ```
+
 Number prefixes control load order. Always check `config.d/*.conf` before modifying main config.
 
 **Shell configs** support Fish (primary) and Bash:
+
 - Fish: `config/fish/` (with completions, functions, conf.d)
 - Bash: `config/bash/` (separate .bash_profile, bashrc)
 
 **Development tools** configs in `tools/`:
+
 - PHP: phpstan, rector, php-cs-fixer, pint configs
 - Python: flake8, mypy configs
 - Completions for custom scripts in `config/fish/completions/`
 
 ### Systemd Services
+
 Managed via `workstation service`:
+
 ```bash
 workstation service enable batsignal.service
 workstation service list
@@ -79,6 +89,7 @@ Service files in `systemd/user/` are symlinked to `~/.config/systemd/user/`. See
 ## Shell Script Patterns
 
 All `bin/` scripts follow consistent patterns:
+
 - **Colored output**: `RED/GRN/YLW` vars for terminal colors
 - **Logging functions**: `ok()`, `warn()`, `err()`, `msg()`
 - **Dry-run support**: `-n` flag for safe testing
@@ -97,6 +108,7 @@ Example: `bin/workstation` uses `jq` for JSON parsing, `realpath` for canonicali
 ## Theme & Visual Consistency
 
 **Catppuccin Mocha** palette is used everywhere:
+
 - GTK: `config/gtk/*/settings.ini`
 - Terminal: `config/alacritty/catppuccin-mocha.toml`
 - Sway: `config/sway/catppuccin-mocha` (color variables)

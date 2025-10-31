@@ -36,5 +36,6 @@ ansible-playbook ansible/main.yml --ask-become-pass
 - **optional-apps.yml** - Firefox, Discord, Telegram, Spotify, VLC, Obsidian, Visual Studio Code
 
 ### Applications (`apps/`)
+
 - **apps/spicetify.yml** - Spicetify CLI, Marketplace, and Spotify permissions
 - **apps/waypaper.yml** - Waypaper wallpaper manager
