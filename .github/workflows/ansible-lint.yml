@@ -26,6 +26,7 @@ jobs:
         run: |
           pip install ansible ansible-lint
           ansible-galaxy collection install community.general
+          ansible-galaxy collection install kewlfft.aur
 
       - name: Run ansible-lint
         run: ansible-lint
