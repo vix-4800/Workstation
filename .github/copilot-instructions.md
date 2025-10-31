@@ -27,11 +27,14 @@ workstation service enable <name>  # Enable service/timer
 workstation timers         # Show active timers
 ```
 
-**Script location**: `bin/workstation` is symlinked to `~/.local/bin/workstation` and available globally in PATH.
+**Script location**: `bin/workstation` is symlinked to `~/.local/bin/workstation`
+and available globally in PATH.
 
-**Key file**: `dotfiles.json` - JSON array mapping `source` (relative to repo root) to `target` (with `$HOME` variable support). Schema validation via `dotfiles.schema.json`.
+**Key file**: `dotfiles.json` - JSON array mapping `source` (relative to repo root)
+to `target` (with `$HOME` variable support). Schema validation via `dotfiles.schema.json`.
 
-**Adding new configs**: Edit `dotfiles.json` → run `workstation link`. Files are symlinked, not copied. Backups auto-created in `~/.local/share/dotfiles/backups/`.
+**Adding new configs**: Edit `dotfiles.json` → run `workstation link`. Files are symlinked,
+not copied. Backups auto-created in `~/.local/share/dotfiles/backups/`.
 
 ### System Provisioning
 
@@ -39,7 +42,8 @@ workstation timers         # Show active timers
 ansible-playbook ansible/main.yml  # Full system setup
 ```
 
-Playbooks are **idempotent** and **modular** - each `ansible/*.yml` handles one concern (audio, fonts, sway, etc.). Order matters - see `ansible/main.yml` for sequence.
+Playbooks are **idempotent** and **modular** - each `ansible/*.yml` handles one concern
+(audio, fonts, sway, etc.). Order matters - see `ansible/main.yml` for sequence.
 
 ## Project-Specific Conventions
 
@@ -55,7 +59,7 @@ Playbooks are **idempotent** and **modular** - each `ansible/*.yml` handles one 
 
 **Sway config** is modular:
 
-```
+```text
 config/sway/config         # Main file, includes catppuccin-mocha theme
 config/sway/config.d/      # Split by concern (10-variables, 40-keybindings, etc.)
 ```

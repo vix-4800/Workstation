@@ -17,7 +17,7 @@ Services managed via dotfiles symlinks to `~/.config/systemd/user/`.
 
 ## Structure
 
-```
+```text
 systemd/user/
 ├── break-reminder.service
 ├── break-reminder.timer
