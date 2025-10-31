@@ -39,7 +39,7 @@
           - sway
           - swaylock
         state: absent
-      ignore_errors: true
+      failed_when: false  # Packages may not be installed
       when: yay_check.rc == 0
 
     - name: 'Install enhanced Sway packages from AUR'

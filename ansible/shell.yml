@@ -29,22 +29,26 @@
       ansible.builtin.shell:
         cmd: fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
       when: not fisher_installed.stat.exists
-      ignore_errors: true
+      failed_when: false  # Fisher may already be installed
+      changed_when: "'Fetching' in fisher_install.stdout"
+      register: fisher_install
 
     - name: 'Update Fisher plugins from fish_plugins file'
       become: false
-      ansible.builtin.shell:
+      ansible.builtin.command:
         cmd: fish -c "fisher update"
       when: fisher_installed.stat.exists or not fisher_installed.stat.exists
-      ignore_errors: true
+      failed_when: false  # Plugins may already be up to date
+      changed_when: "'Updated' in fisher_update.stdout or 'Installed' in fisher_update.stdout"
+      register: fisher_update
 
     - name: 'Show Fisher plugins status'
       become: false
-      ansible.builtin.shell:
+      ansible.builtin.command:
         cmd: fish -c "fisher list"
       register: fisher_list
       changed_when: false
-      ignore_errors: true
+      failed_when: false  # Don't fail if no plugins installed
 
     - name: 'Display installed Fisher plugins'
       ansible.builtin.debug:

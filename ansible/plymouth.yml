@@ -43,7 +43,7 @@
         mode: '0644'
 
     - name: 'Configure Plymouth theme'
-      ansible.builtin.ini_file:
+      community.general.ini_file:
         path: /etc/plymouth/plymouthd.conf
         section: Daemon
         option: Theme
@@ -82,7 +82,9 @@
     - name: Rebuild initramfs
       ansible.builtin.command:
         cmd: mkinitcpio -P
+      changed_when: true
 
     - name: Update grub
       ansible.builtin.command:
         cmd: grub-mkconfig -o /boot/grub/grub.cfg
+      changed_when: true

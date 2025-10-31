@@ -46,6 +46,9 @@
         line: "127.0.1.1\t{{ new_hostname }}"
         state: present
         create: true
+        owner: root
+        group: root
+        mode: '0644'
       when: new_hostname is defined
 
     - name: 'Apply hostname using hostnamectl'

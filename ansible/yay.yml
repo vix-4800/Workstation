@@ -31,6 +31,7 @@
         chdir: /tmp/yay
         cmd: makepkg -si --noconfirm
       when: yay_check.rc != 0
+      changed_when: true  # This always installs yay
 
     - name: 'Clean up yay build files'
       ansible.builtin.file:

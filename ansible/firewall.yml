@@ -19,7 +19,7 @@
         - ip6_tables
         - iptable_filter
         - ip6table_filter
-      ignore_errors: true
+      failed_when: false  # Modules may already be loaded or built-in
 
     - name: 'Enable UFW service'
       ansible.builtin.systemd:

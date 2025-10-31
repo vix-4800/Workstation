@@ -26,7 +26,9 @@
         - black
         - flake8
         - mypy
-      ignore_errors: true
+      failed_when: false  # Optional tools, don't fail if they can't be installed
+      changed_when: "'installed package' in result.stdout"
+      register: result
 
     - name: 'Configure Composer global plugins'
       become: false
