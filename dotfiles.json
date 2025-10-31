@@ -75,6 +75,10 @@
             "target": "$HOME/.config/pint"
         },
         {
+            "source": "tools/markdown/markdownlint",
+            "target": "$HOME/.config/markdownlint"
+        },
+        {
             "source": "config/sway",
             "target": "$HOME/.config/sway"
         },
