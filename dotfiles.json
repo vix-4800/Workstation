@@ -159,9 +159,19 @@
       "comment": "Idle management configuration for Sway"
     },
     {
-      "source": "bin",
-      "target": "$HOME/.local/bin",
-      "comment": "User-specific executable scripts"
+      "source": "bin/workstation",
+      "target": "$HOME/.local/bin/workstation",
+      "comment": "Workstation management script"
+    },
+    {
+      "source": "bin/desktop-menu",
+      "target": "$HOME/.local/bin/desktop-menu",
+      "comment": "Desktop application menu management script"
+    },
+    {
+      "source": "bin/search-menu",
+      "target": "$HOME/.local/bin/search-menu",
+      "comment": "Desktop application search menu script"
     }
   ]
 }
