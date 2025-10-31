@@ -47,5 +47,6 @@ return (new Config())
             'method' => 'one',
             'trait_import' => 'none',
         ]],
+        'array_syntax' => ['syntax' => 'short'],
     ])
     ->setUsingCache(false);
