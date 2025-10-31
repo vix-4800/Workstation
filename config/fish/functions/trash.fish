@@ -30,11 +30,11 @@ function trash-empty
     if command -v trash-empty >/dev/null 2>&1
         echo "Are you sure you want to empty trash? (y/N)"
         read -l confirm
-        if test "$confirm" = "y" -o "$confirm" = "Y"
+        if test "$confirm" = y -o "$confirm" = Y
             command trash-empty
             echo "Trash emptied"
         else
-            echo "Cancelled"
+            echo Cancelled
         end
     else
         echo "trash-cli is not installed"
