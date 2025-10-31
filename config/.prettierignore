@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+dist/
+build/
+.next/
+.nuxt/
+
+# Cache
+.cache/
+*.cache
+
+# Logs
+*.log
+logs/
+
+# Storage
+storage/
+
+# Git
+.git/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# Lock files
+package-lock.json
+yarn.lock
+composer.lock
+
+# Generated files
+*.min.js
+*.min.css
+
+# Laravel/PHP specific
+storage/framework/views/
+bootstrap/cache/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# Documentation that shouldn't be reformatted
+CHANGELOG.md
+LICENSE

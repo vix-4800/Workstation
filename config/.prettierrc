@@ -7,10 +7,14 @@
   "arrowParens": "always",
   "trailingComma": "es5",
   "bracketSpacing": true,
+  "bracketSameLine": false,
   "htmlWhitespaceSensitivity": "css",
   "proseWrap": "preserve",
   "quoteProps": "as-needed",
   "endOfLine": "lf",
+  "embeddedLanguageFormatting": "auto",
+  "singleAttributePerLine": false,
+  "vueIndentScriptAndStyle": false,
   "overrides": [
     {
       "files": ["*.json", "*.jsonc"],
@@ -22,7 +26,21 @@
     {
       "files": "*.md",
       "options": {
-        "proseWrap": "always"
+        "proseWrap": "always",
+        "printWidth": 88
+      }
+    },
+    {
+      "files": ["*.yml", "*.yaml"],
+      "options": {
+        "tabWidth": 2,
+        "singleQuote": false
+      }
+    },
+    {
+      "files": "*.toml",
+      "options": {
+        "tabWidth": 2
       }
     }
   ]
