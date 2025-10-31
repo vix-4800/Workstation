@@ -1,3 +1,5 @@
+# TODO
+
 ## Ideas
 
 - [ ] Spicetify configs
