@@ -68,7 +68,7 @@
         regexp: '^HOOKS='
         line: 'HOOKS=({{ mkinitcpio_hooks }})'
         backup: true
-      notify: rebuild initramfs
+      notify: Rebuild initramfs
 
     - name: 'Update GRUB cmdline parameters for Plymouth'
       ansible.builtin.lineinfile:
@@ -76,13 +76,13 @@
         regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
         line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ grub_cmdline_params }}"'
         backup: true
-      notify: update grub
+      notify: Update grub
 
   handlers:
-    - name: rebuild initramfs
+    - name: Rebuild initramfs
       ansible.builtin.command:
         cmd: mkinitcpio -P
 
-    - name: update grub
+    - name: Update grub
       ansible.builtin.command:
         cmd: grub-mkconfig -o /boot/grub/grub.cfg

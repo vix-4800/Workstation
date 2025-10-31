@@ -37,7 +37,7 @@
         state: started
 
   handlers:
-    - name: restart bluetooth
+    - name: Restart bluetooth
       ansible.builtin.systemd:
         name: bluetooth
         state: restarted
