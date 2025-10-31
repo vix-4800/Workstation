@@ -55,6 +55,10 @@
             "target": "$HOME/.config/mypy"
         },
         {
+            "source": "tools/python/black",
+            "target": "$HOME/.config/black"
+        },
+        {
             "source": "tools/php/php-cs-fixer",
             "target": "$HOME/.config/php-cs-fixer"
         },
