@@ -28,7 +28,7 @@ repos:
       - id: dotfiles-syntax-check
         name: Check dotfiles syntax
         entry: ./bin/workstation
-        args: ['doctor']
+        args: ['dotfiles', 'doctor']
         language: script
         pass_filenames: false
         always_run: true
