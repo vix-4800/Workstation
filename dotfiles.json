@@ -143,22 +143,12 @@
             "target": "$HOME/.gtkrc-2.0"
         },
         {
-            "source": "config/gtk/3.0/settings.ini",
-            "target": "$HOME/.config/gtk-3.0/settings.ini"
+            "source": "config/gtk/3.0",
+            "target": "$HOME/.config/gtk-3.0"
         },
         {
-            "source": "config/gtk/3.0/gtk.css",
-            "target": "$HOME/.config/gtk-3.0/gtk.css",
-            "comment": "Custom CSS overrides for GTK3"
-        },
-        {
-            "source": "config/gtk/4.0/settings.ini",
-            "target": "$HOME/.config/gtk-4.0/settings.ini"
-        },
-        {
-            "source": "config/gtk/4.0/gtk.css",
-            "target": "$HOME/.config/gtk-4.0/gtk.css",
-            "comment": "Custom CSS overrides for GTK4"
+            "source": "config/gtk/4.0",
+            "target": "$HOME/.config/gtk-4.0"
         },
         {
             "source": "wallpapers",
