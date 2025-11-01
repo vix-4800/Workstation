@@ -43,8 +43,8 @@
             "target": "$HOME/.config/alacritty"
         },
         {
-            "source": "config/tmux/.tmux.conf",
-            "target": "$HOME/.config/tmux/tmux.conf"
+            "source": "config/tmux",
+            "target": "$HOME/.config/tmux"
         },
         {
             "source": "tools/python/flake8",
