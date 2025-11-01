@@ -16,25 +16,25 @@ This is a **dotfiles repository** for Arch Linux with Sway (Wayland) desktop env
 
 ```bash
 # Dotfiles commands (available globally after first setup)
-workstation status         # Check all symlinks
-workstation link -n        # Dry-run before applying
-workstation link           # Apply symlinks from dotfiles.json
-workstation doctor         # Validate environment
+workstation dotfiles status         # Check all symlinks
+workstation dotfiles link -n        # Dry-run before applying
+workstation dotfiles link           # Apply symlinks from dotfiles.json
+workstation dotfiles doctor         # Validate environment
 
 # Systemd commands
-workstation service list   # List available services
-workstation service enable <name>  # Enable service/timer
-workstation timers         # Show active timers
+workstation services list           # List available services
+workstation services enable-all     # Enable all services/timers
+workstation services disable-all    # Disable all services/timers
+workstation services status         # Show status of all services
 ```
 
-**Script location**: `bin/workstation` is symlinked to `~/.local/bin/workstation`
-and available globally in PATH.
+**Script location**: `bin/workstation` is symlinked to `~/.local/bin/workstation` and available globally in PATH.
 
-**Key file**: `dotfiles.json` - JSON array mapping `source` (relative to repo root)
-to `target` (with `$HOME` variable support). Schema validation via `dotfiles.schema.json`.
+**Key file**: `dotfiles.json` - JSON array mapping `source` (relative to repo root) to `target` (with `$HOME` variable
+support). Schema validation via `dotfiles.schema.json`.
 
-**Adding new configs**: Edit `dotfiles.json` → run `workstation link`. Files are symlinked,
-not copied. Backups auto-created in `~/.local/share/dotfiles/backups/`.
+**Adding new configs**: Edit `dotfiles.json` → run `workstation dotfiles link`. Files are symlinked, not copied. Backups
+auto-created in `~/.local/share/dotfiles/backups/`.
 
 ### System Provisioning
 
@@ -42,8 +42,8 @@ not copied. Backups auto-created in `~/.local/share/dotfiles/backups/`.
 ansible-playbook ansible/main.yml  # Full system setup
 ```
 
-Playbooks are **idempotent** and **modular** - each `ansible/*.yml` handles one concern
-(audio, fonts, sway, etc.). Order matters - see `ansible/main.yml` for sequence.
+Playbooks are **idempotent** and **modular** - each `ansible/*.yml` handles one concern (audio, fonts, sway, etc.).
+Order matters - see `ansible/main.yml` for sequence.
 
 ## Project-Specific Conventions
 
