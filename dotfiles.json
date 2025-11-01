@@ -182,6 +182,11 @@
             "source": "bin/search-menu",
             "target": "$HOME/.local/bin/search-menu",
             "comment": "Desktop application search menu script"
+        },
+        {
+            "source": "config/user-dirs.dirs",
+            "target": "$HOME/.config/user-dirs.dirs",
+            "comment": "XDG user directories configuration"
         }
     ]
 }
