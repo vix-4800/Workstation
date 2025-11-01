@@ -145,7 +145,7 @@ backup_if_exists() {
         base="$(basename "${target}")"
         dest="${BACKUP_DIR}/${base}.${ts}.bak"
         mv "${target}" "${dest}"
-        ok "Backup ${target} -> ${dest}"
+        ok "Backup ${BOLD}${target}${OFF} ${DIM}->${OFF} ${BLU}${dest}${OFF}"
     fi
 }
 
@@ -174,18 +174,18 @@ do_link() {
         TGT="$(resolve_variables "$TGT_RAW")"
 
         if [ ! -e "${SRC}" ]; then
-            warn "Source missing: ${SRC} — skipping"
+            warn "Source missing: ${DIM}${SRC}${OFF} — skipping"
             continue
         fi
 
         ensure_parent_dir "${TGT}"
 
         if [ "${DRYRUN}" -eq 1 ]; then
-            msg "DRY-RUN: ln -sfn ${SRC} ${TGT}"
+            msg "${DIM}DRY-RUN:${OFF} ln -sfn ${BLU}${SRC}${OFF} ${BOLD}${TGT}${OFF}"
         else
             backup_if_exists "${TGT}"
             ln -sfn "${SRC}" "${TGT}"
-            ok "Linked: ${TGT} -> ${SRC}"
+            ok "Linked: ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${BLU}${SRC}${OFF}"
         fi
     done
 
@@ -205,13 +205,13 @@ do_unlink() {
 
         if [ -L "${TGT}" ]; then
             if [ "${DRYRUN}" -eq 1 ]; then
-                msg "DRY-RUN: rm ${TGT}"
+                msg "${DIM}DRY-RUN:${OFF} rm ${BOLD}${TGT}${OFF}"
             else
                 rm "${TGT}"
-                ok "Removed symlink: ${TGT}"
+                ok "Removed symlink: ${BOLD}${TGT}${OFF}"
             fi
         else
-            warn "No symlink: ${TGT}"
+            warn "No symlink: ${BOLD}${TGT}${OFF}"
         fi
     done
 }
@@ -223,7 +223,7 @@ do_status() {
         TGT="$(resolve_variables "$TGT_RAW")"
 
         if [ -L "${TGT}" ] && [ ! -e "${TGT}" ]; then
-            echo -e "💀 ${TGT} ${DIM}->${OFF} ${RED}BROKEN LINK${OFF} (source missing: ${SRC})"
+            echo -e "${RED}💀${OFF} ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${RED}BROKEN LINK${OFF} ${DIM}(source missing: ${SRC})${OFF}"
             continue
         fi
 
@@ -241,14 +241,14 @@ do_status() {
             cexpected="$(canonical "$SRC")"
 
             if [ -n "$cexpected" ] && [ -n "$cpoints" ] && [ "$cpoints" = "$cexpected" ]; then
-                echo -e "✓ ${TGT} ${DIM}->${OFF} ${SRC}"
+                echo -e "${GRN}✓${OFF} ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${BLU}${SRC}${OFF}"
             else
-                echo -e "✗ ${TGT} ${DIM}->${OFF} ${points} ${RED}(expected ${SRC})${OFF}"
+                echo -e "${RED}✗${OFF} ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${YLW}${points}${OFF} ${RED}(expected ${SRC})${OFF}"
             fi
         elif [ -e "${TGT}" ]; then
-            echo -e "⚠ ${TGT} — regular file/folder, not symlink"
+            echo -e "${YLW}⚠${OFF} ${BOLD}${TGT}${OFF} ${DIM}— regular file/folder, not symlink${OFF}"
         else
-            echo -e "– ${TGT} — missing"
+            echo -e "${DIM}–${OFF} ${BOLD}${TGT}${OFF} ${DIM}— missing${OFF}"
         fi
     done
 }
@@ -256,23 +256,47 @@ do_status() {
 do_doctor() {
     local ok_all=1
 
-    command -v git >/dev/null || { err "git not found in PATH"; ok_all=0; }
-    command -v jq >/dev/null || { err "jq not found in PATH"; ok_all=0; }
-    [ -d "${REPO_ROOT}/.git" ] || { err "Not a git repository: ${REPO_ROOT}"; ok_all=0; }
+    echo "${BOLD}Running environment checks...${OFF}"
+    echo ""
 
-    if [ -f "${CONF_JSON}" ]; then
-        if ! jq empty "${CONF_JSON}" 2>/dev/null; then
-            err "Invalid JSON in ${CONF_JSON}"
-            ok_all=0
-        fi
+    if command -v git >/dev/null 2>&1; then
+        ok "${GRN}✓${OFF} git found in PATH"
     else
-        err "JSON config not found: ${CONF_JSON}"
+        err "${RED}✗${OFF} git not found in PATH"
         ok_all=0
     fi
 
-    if [ "${ok_all}" -eq 1 ]; then
-        ok "All checks passed"
+    if command -v jq >/dev/null 2>&1; then
+        ok "${GRN}✓${OFF} jq found in PATH"
     else
+        err "${RED}✗${OFF} jq not found in PATH"
+        ok_all=0
+    fi
+
+    if [ -d "${REPO_ROOT}/.git" ]; then
+        ok "${GRN}✓${OFF} Git repository: ${BLU}${REPO_ROOT}${OFF}"
+    else
+        err "${RED}✗${OFF} Not a git repository: ${REPO_ROOT}"
+        ok_all=0
+    fi
+
+    if [ -f "${CONF_JSON}" ]; then
+        if jq empty "${CONF_JSON}" 2>/dev/null; then
+            ok "${GRN}✓${OFF} JSON config valid: ${BLU}${CONF_JSON}${OFF}"
+        else
+            err "${RED}✗${OFF} Invalid JSON in ${CONF_JSON}"
+            ok_all=0
+        fi
+    else
+        err "${RED}✗${OFF} JSON config not found: ${CONF_JSON}"
+        ok_all=0
+    fi
+
+    echo ""
+    if [ "${ok_all}" -eq 1 ]; then
+        ok "${GRN}All checks passed!${OFF}"
+    else
+        err "${RED}Some checks failed${OFF}"
         exit 1
     fi
 }
@@ -478,7 +502,8 @@ case "${cmd}" in
             status) do_status ;;
             doctor) do_doctor ;;
             which)
-                echo -e "REPO: ${REPO_ROOT}\nJSON: ${CONF_JSON}"
+                echo -e "${BOLD}Repository:${OFF} ${BLU}${REPO_ROOT}${OFF}"
+                echo -e "${BOLD}Config JSON:${OFF} ${BLU}${CONF_JSON}${OFF}"
                 ;;
             edit)
                 ${EDITOR:-vi} "${CONF_JSON}"
