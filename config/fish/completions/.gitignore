@@ -6,3 +6,4 @@
 !phpcs.fish
 !php-cs-fixer.fish
 !phpstan.fish
+!rector.fish
