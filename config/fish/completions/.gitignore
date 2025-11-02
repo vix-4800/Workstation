@@ -5,3 +5,4 @@
 !workstation.fish
 !phpcs.fish
 !php-cs-fixer.fish
+!phpstan.fish
