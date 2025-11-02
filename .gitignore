@@ -23,3 +23,6 @@ Thumbs.db
 # Local test files
 test-*.sh
 scratch/
+
+# Dependency directories
+node_modules/
