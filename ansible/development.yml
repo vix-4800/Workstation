@@ -57,3 +57,16 @@
         line: 'export PATH="$HOME/.config/composer/vendor/bin:$PATH"'
         create: true
         mode: '0644'
+
+    - name: 'Install general linters and code quality tools'
+      community.general.pacman:
+        name:
+          # Shell linting
+          - shellcheck
+
+          # YAML/JSON
+          - yamllint
+
+          # Markdown
+          - markdownlint-cli
+        state: present
