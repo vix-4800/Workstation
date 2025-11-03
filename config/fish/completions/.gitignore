@@ -3,6 +3,7 @@
 
 # Custom completions
 !workstation.fish
+!waybar.fish
 
 !phpcs.fish
 !phpcbf.fish
