@@ -39,7 +39,7 @@ repos:
     rev: v0.45.0
     hooks:
       - id: markdownlint
-        args: [--fix]
+        args: ['--fix', '--config', 'tools/markdown/markdownlint/.markdownlint.jsonc']
 
   - repo: local
     hooks:
