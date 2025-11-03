@@ -36,16 +36,9 @@
             "target": "$HOME/.config/tmux"
         },
         {
-            "source": "tools/python/flake8",
-            "target": "$HOME/.config/flake8"
-        },
-        {
-            "source": "tools/python/mypy",
-            "target": "$HOME/.config/mypy"
-        },
-        {
-            "source": "tools/python/black",
-            "target": "$HOME/.config/black"
+            "source": "tools/python/ruff",
+            "target": "$HOME/.config/ruff",
+            "comment": "Ruff linter and formatter"
         },
         {
             "source": "tools/php/php-cs-fixer",
