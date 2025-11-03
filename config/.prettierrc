@@ -7,7 +7,7 @@
   "arrowParens": "always",
   "trailingComma": "es5",
   "bracketSpacing": true,
-  "bracketSameLine": false,
+  "bracketSameLine": true,
   "htmlWhitespaceSensitivity": "css",
   "proseWrap": "preserve",
   "quoteProps": "as-needed",
