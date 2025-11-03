@@ -46,8 +46,8 @@ fi
 tooltip="<span font_size='large' color='#cba6f7'><b>System Resources</b></span>\n\n"
 
 tooltip+="<span font_size='medium'>"
-tooltip+="<b>CPU:</b> $(printf "%.1f" "$cpu_usage")%"
-if [ -n "$cpu_temp" ]; then
+tooltip+="<b>CPU:</b> $(printf "%.1f" "${cpu_usage}")%"
+if [[ -n "${cpu_temp}" ]]; then
     tooltip+=" @ ${cpu_temp}°C"
 fi
 tooltip+="\n"
@@ -57,6 +57,6 @@ tooltip+="<b>Disk:</b> ${disk_used} / ${disk_total} (${disk_usage}%)"
 tooltip+="</span>"
 
 # Simple text output
-text="$cpu_icon $(printf "%.0f" "$cpu_usage")% $mem_icon ${mem_percent}%"
+text="${cpu_icon} $(printf "%.0f" "${cpu_usage}")% ${mem_icon} ${mem_percent}%"
 
-echo "{\"text\":\"$text\", \"tooltip\":\"$tooltip\", \"class\":\"$cpu_class\"}"
+echo "{\"text\":\"${text}\", \"tooltip\":\"${tooltip}\", \"class\":\"${cpu_class}\"}"

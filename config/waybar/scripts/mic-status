@@ -2,7 +2,7 @@
 
 MIC_STATUS=$(pactl get-source-mute @DEFAULT_SOURCE@ | grep 'Mute: yes')
 
-if [ -z "$MIC_STATUS" ]; then
+if [[ -z "${MIC_STATUS}" ]]; then
     echo '{"text": "", "class": "active", "tooltip": "Mic Active"}'
 else
     echo '{"text": "", "class": "muted", "tooltip": "Mic Muted"}'

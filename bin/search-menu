@@ -14,17 +14,17 @@ readonly NC='\033[0m' # No Color
 readonly MAX_FILE_RESULTS=100
 readonly MAX_DIR_RESULTS=50
 readonly SEARCH_PATHS=(
-    "$HOME/Documents"
-    "$HOME/Downloads"
-    "$HOME/Pictures"
-    "$HOME/Code"
-    "$HOME/.config"
-    "$HOME/Desktop"
+    "${HOME}/Documents"
+    "${HOME}/Downloads"
+    "${HOME}/Pictures"
+    "${HOME}/Code"
+    "${HOME}/.config"
+    "${HOME}/Desktop"
 )
 
 # Cache directory
-readonly CACHE_DIR="$HOME/.cache/search-menu"
-mkdir -p "$CACHE_DIR"
+readonly CACHE_DIR="${HOME}/.cache/search-menu"
+mkdir -p "${CACHE_DIR}"
 
 # Functions
 msg() { echo -e "${GRN}==>${NC} $*"; }
@@ -37,7 +37,7 @@ get_files_and_dirs() {
 
     # Only include paths that exist
     for path in "${SEARCH_PATHS[@]}"; do
-        [[ -d "$path" ]] && search_paths+=("$path")
+        [[ -d "${path}" ]] && search_paths+=("${path}")
     done
 
     if [[ ${#search_paths[@]} -eq 0 ]]; then
@@ -57,7 +57,7 @@ get_files_and_dirs() {
         -not -path "*/.venv/*" \
         -mtime -60 \
         -printf "📄 %f | %p\n" \
-        2>/dev/null | head -n "$MAX_FILE_RESULTS" || true
+        2>/dev/null | head -n "${MAX_FILE_RESULTS}" || true
 
     # Find directories (max depth 5)
     find "${search_paths[@]}" \
@@ -73,25 +73,25 @@ get_files_and_dirs() {
         -not -path "*/__pycache__" \
         -not -path "*/__pycache__/*" \
         -printf "📁 %f | %p\n" \
-        2>/dev/null | head -n "$MAX_DIR_RESULTS" || true
+        2>/dev/null | head -n "${MAX_DIR_RESULTS}" || true
 }
 
 # Build search index
 build_search_index() {
-    local cache_file="$CACHE_DIR/search-index"
+    local cache_file="${CACHE_DIR}/search-index"
     local cache_age=1800 # 30 minutes
 
     # Check if cache is fresh
-    if [[ -f "$cache_file" ]]; then
-        local age=$(($(date +%s) - $(stat -c %Y "$cache_file")))
-        if [[ $age -lt $cache_age ]]; then
-            cat "$cache_file"
+    if [[ -f "${cache_file}" ]]; then
+        local age=$(($(date +%s) - $(stat -c %Y "${cache_file}")))
+        if [[ ${age} -lt ${cache_age} ]]; then
+            cat "${cache_file}"
             return
         fi
     fi
 
     # Build new index
-    get_files_and_dirs | tee "$cache_file"
+    get_files_and_dirs | tee "${cache_file}"
 }
 
 # Handle selection
@@ -102,22 +102,25 @@ handle_selection() {
     local type="${selection%% *}"
     local content="${selection#* }"
 
-    case "$type" in
+    case "${type}" in
         "📄")
             # Open file with xdg-open
             local filepath
-            filepath=$(echo "$content" | cut -d'|' -f2 | xargs)
-            if [[ -f "$filepath" ]]; then
-                xdg-open "$filepath" &>/dev/null &
+            filepath=$(echo "${content}" | cut -d'|' -f2 | xargs)
+            if [[ -f "${filepath}" ]]; then
+                xdg-open "${filepath}" &>/dev/null &
             fi
             ;;
         "📁")
             # Open directory in file manager
             local dirpath
-            dirpath=$(echo "$content" | cut -d'|' -f2 | xargs)
-            if [[ -d "$dirpath" ]]; then
-                thunar "$dirpath" &>/dev/null &
+            dirpath=$(echo "${content}" | cut -d'|' -f2 | xargs)
+            if [[ -d "${dirpath}" ]]; then
+                thunar "${dirpath}" &>/dev/null &
             fi
+            ;;
+        *)
+            warn "Unknown selection type: ${type}"
             ;;
     esac
 }
@@ -126,8 +129,8 @@ handle_selection() {
 main() {
     # Check dependencies
     for cmd in wofi find xdg-open; do
-        if ! command -v "$cmd" &>/dev/null; then
-            err "Required command not found: $cmd"
+        if ! command -v "${cmd}" &>/dev/null; then
+            err "Required command not found: ${cmd}"
             exit 1
         fi
     done
@@ -146,8 +149,8 @@ main() {
         --cache-file=/dev/null)
 
     # Handle selection
-    if [[ -n "$selection" ]]; then
-        handle_selection "$selection"
+    if [[ -n "${selection}" ]]; then
+        handle_selection "${selection}"
     fi
 }
 

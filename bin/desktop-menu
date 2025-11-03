@@ -21,18 +21,18 @@ menu="📁 Files
 🚪 Logout
 🔄 Reload Sway"
 
-selected=$(echo -e "$menu" | wofi \
+selected=$(echo -e "${menu}" | wofi \
     --dmenu \
     --prompt "Quick Actions" \
     --width 400 \
     --height 600 \
     --cache-file=/dev/null)
 
-if [ -z "$selected" ]; then
+if [[ -z "${selected}" ]]; then
     exit 0
 fi
 
-case "$selected" in
+case "${selected}" in
     "📁 Files")
         thunar &
         ;;
@@ -86,7 +86,7 @@ case "$selected" in
     "🎨 Color Picker")
         if command -v hyprpicker &> /dev/null; then
             color=$(hyprpicker -a)
-            notify-send "Color Picker" "Copied: $color" -u normal
+            notify-send "Color Picker" "Copied: ${color}" -u normal
         elif command -v grim &> /dev/null && command -v slurp &> /dev/null; then
             grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -1 | cut -d' ' -f4 | wl-copy
             notify-send "Color Picker" "Color copied to clipboard" -u normal
@@ -103,5 +103,7 @@ case "$selected" in
     "🔄 Reload Sway")
         swaymsg reload
         notify-send "Sway" "Configuration reloaded" -u normal
+        ;;
+    *)
         ;;
 esac

@@ -9,13 +9,13 @@ fi
 # Get all containers (running and stopped)
 containers=$(docker ps -a --format "{{.Names}}\t{{.Status}}\t{{.Image}}" 2>/dev/null)
 
-if [ -z "$containers" ]; then
+if [[ -z "${containers}" ]]; then
     notify-send "Docker" "No Docker containers found" -u normal
     exit 0
 fi
 
 # Format containers for wofi menu
-formatted_containers=$(echo "$containers" | awk -F'\t' '{
+formatted_containers=$(echo "${containers}" | awk -F'\t' '{
     name = $1
     status = $2
     image = $3
@@ -35,7 +35,7 @@ formatted_containers=$(echo "$containers" | awk -F'\t' '{
 }')
 
 # Show wofi menu centered and above all windows
-selected=$(echo "$formatted_containers" | wofi \
+selected=$(echo "${formatted_containers}" | wofi \
     --dmenu \
     --prompt "Docker Containers" \
     --width 600 \
@@ -44,18 +44,18 @@ selected=$(echo "$formatted_containers" | wofi \
     --layer overlay \
     --insensitive)
 
-if [ -z "$selected" ]; then
+if [[ -z "${selected}" ]]; then
     exit 0
 fi
 
 # Extract container name from selection
-container_name=$(echo "$selected" | awk '{print $2}')
+container_name=$(echo "${selected}" | awk '{print $2}')
 
 # Get container status to determine available actions
 container_status=$(docker ps -a --filter "name=^${container_name}$" --format "{{.Status}}" 2>/dev/null)
 
 # Build action menu based on container status
-if echo "$container_status" | grep -q "^Up"; then
+if echo "${container_status}" | grep -q "^Up"; then
     # Container is running
     actions="📊 Show logs
 🔄 Restart
@@ -69,34 +69,34 @@ else
 fi
 
 # Show action menu
-action=$(echo "$actions" | wofi \
+action=$(echo "${actions}" | wofi \
     --dmenu \
-    --prompt "Action for $container_name" \
+    --prompt "Action for ${container_name}" \
     --width 400 \
     --height 300 \
     --location center \
     --layer overlay \
     --insensitive)
 
-if [ -z "$action" ]; then
+if [[ -z "${action}" ]]; then
     exit 0
 fi
 
 # Execute selected action
-case "$action" in
+case "${action}" in
     *"Show logs"*)
-        alacritty -e sh -c "docker logs --tail 100 -f '$container_name'; read -p 'Press Enter to close...'" &
+        alacritty -e sh -c "docker logs --tail 100 -f '${container_name}'; read -p 'Press Enter to close...'" &
         ;;
     *"Restart"*)
-        docker restart "$container_name" && notify-send "Docker" "Container '$container_name' restarted" -u normal
+        docker restart "${container_name}" && notify-send "Docker" "Container '${container_name}' restarted" -u normal
         ;;
     *"Stop"*)
-        docker stop "$container_name" && notify-send "Docker" "Container '$container_name' stopped" -u normal
+        docker stop "${container_name}" && notify-send "Docker" "Container '${container_name}' stopped" -u normal
         ;;
     *"Start"*)
-        docker start "$container_name" && notify-send "Docker" "Container '$container_name' started" -u normal
+        docker start "${container_name}" && notify-send "Docker" "Container '${container_name}' started" -u normal
         ;;
     *"Remove"*)
-        docker rm -f "$container_name" && notify-send "Docker" "Container '$container_name' removed" -u normal
+        docker rm -f "${container_name}" && notify-send "Docker" "Container '${container_name}' removed" -u normal
         ;;
 esac

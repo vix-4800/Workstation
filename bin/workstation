@@ -3,12 +3,12 @@ set -euo pipefail
 
 # Resolve the real path of the script (following symlinks)
 SCRIPT_PATH="${BASH_SOURCE[0]}"
-while [ -L "$SCRIPT_PATH" ]; do
-    SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
-    SCRIPT_PATH="$(readlink "$SCRIPT_PATH")"
-    [[ $SCRIPT_PATH != /* ]] && SCRIPT_PATH="$SCRIPT_DIR/$SCRIPT_PATH"
+while [[ -L "${SCRIPT_PATH}" ]]; do
+    SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_PATH}")" && pwd)"
+    SCRIPT_PATH="$(readlink "${SCRIPT_PATH}")"
+    [[ ${SCRIPT_PATH} != /* ]] && SCRIPT_PATH="${SCRIPT_DIR}/${SCRIPT_PATH}"
 done
-SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_PATH}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 CONF_JSON_DEFAULT="${REPO_ROOT}/dotfiles.json"
@@ -17,7 +17,7 @@ BACKUP_DIR="${HOME}/.local/share/dotfiles/backups"
 SYSTEMD_DIR="${REPO_ROOT}/systemd/user"
 LOG_PREFIX="[workstation]"
 
-if [ -t 1 ]; then
+if [[ -t 1 ]]; then
     BOLD="$(printf '\033[1m')";
     DIM="$(printf '\033[2m')";
     RED="$(printf '\033[31m')"
@@ -104,7 +104,7 @@ parse_args() {
 }
 
 require_json() {
-    if [ ! -f "${CONF_JSON}" ]; then
+    if [[ ! -f "${CONF_JSON}" ]]; then
         err "JSON config not found: ${CONF_JSON}"
         exit 1
     fi
@@ -119,9 +119,9 @@ timestamp() { date +"%Y%m%d-%H%M%S"; }
 
 resolve_variables() {
     local path="$1"
-    path="${path//\$HOME/$HOME}"
-    path="${path/#\~/$HOME}"
-    echo "$path"
+    path="${path//\$HOME/${HOME}}"
+    path="${path/#\~/${HOME}}"
+    echo "${path}"
 }
 
 read_mappings() {
@@ -132,13 +132,13 @@ read_mappings() {
 ensure_parent_dir() {
     local path="$1"
     local dir
-    dir="$(dirname "$path")"
-    mkdir -p "$dir"
+    dir="$(dirname "${path}")"
+    mkdir -p "${dir}"
 }
 
 backup_if_exists() {
     local target="$1"
-    if [ -e "${target}" ] && [ ! -L "${target}" ]; then
+    if [[ -e "${target}" ]] && [[ ! -L "${target}" ]]; then
         mkdir -p "${BACKUP_DIR}"
         local ts base dest
         ts="$(timestamp)"
@@ -159,8 +159,8 @@ canonical() {
 
 make_absolute_source() {
     local src="$1"
-    if [[ "$src" =~ ^/ ]]; then
-        echo "$src"
+    if [[ "${src}" =~ ^/ ]]; then
+        echo "${src}"
     else
         echo "${REPO_ROOT}/${src}"
     fi
@@ -170,17 +170,17 @@ make_absolute_source() {
 do_link() {
     read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW; do
         local SRC TGT
-        SRC="$(make_absolute_source "$SRC_RAW")"
-        TGT="$(resolve_variables "$TGT_RAW")"
+        SRC="$(make_absolute_source "${SRC_RAW}")"
+        TGT="$(resolve_variables "${TGT_RAW}")"
 
-        if [ ! -e "${SRC}" ]; then
+        if [[ ! -e "${SRC}" ]]; then
             warn "Source missing: ${DIM}${SRC}${OFF} — skipping"
             continue
         fi
 
         ensure_parent_dir "${TGT}"
 
-        if [ "${DRYRUN}" -eq 1 ]; then
+        if [[ "${DRYRUN}" -eq 1 ]]; then
             msg "${DIM}DRY-RUN:${OFF} ln -sfn ${BLU}${SRC}${OFF} ${BOLD}${TGT}${OFF}"
         else
             backup_if_exists "${TGT}"
@@ -189,7 +189,7 @@ do_link() {
         fi
     done
 
-    if [ "${DRYRUN}" -eq 0 ]; then
+    if [[ "${DRYRUN}" -eq 0 ]]; then
         if command -v bat >/dev/null 2>&1; then
             bat cache --build >/dev/null 2>&1 || true
         fi
@@ -201,10 +201,10 @@ do_link() {
 do_unlink() {
     read_mappings | while IFS=$'\t' read -r _ TGT_RAW; do
         local TGT
-        TGT="$(resolve_variables "$TGT_RAW")"
+        TGT="$(resolve_variables "${TGT_RAW}")"
 
-        if [ -L "${TGT}" ]; then
-            if [ "${DRYRUN}" -eq 1 ]; then
+        if [[ -L "${TGT}" ]]; then
+            if [[ "${DRYRUN}" -eq 1 ]]; then
                 msg "${DIM}DRY-RUN:${OFF} rm ${BOLD}${TGT}${OFF}"
             else
                 rm "${TGT}"
@@ -219,33 +219,33 @@ do_unlink() {
 do_status() {
     read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW; do
         local SRC TGT
-        SRC="$(make_absolute_source "$SRC_RAW")"
-        TGT="$(resolve_variables "$TGT_RAW")"
+        SRC="$(make_absolute_source "${SRC_RAW}")"
+        TGT="$(resolve_variables "${TGT_RAW}")"
 
-        if [ -L "${TGT}" ] && [ ! -e "${TGT}" ]; then
+        if [[ -L "${TGT}" ]] && [[ ! -e "${TGT}" ]]; then
             echo -e "${RED}💀${OFF} ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${RED}BROKEN LINK${OFF} ${DIM}(source missing: ${SRC})${OFF}"
             continue
         fi
 
-        if [ -L "${TGT}" ]; then
+        if [[ -L "${TGT}" ]]; then
             local points
             points="$(readlink "${TGT}")"
 
-            case "$points" in
+            case "${points}" in
                 /*) ;;
                 *) points="$(cd "$(dirname "${TGT}")" && pwd)/${points}";;
             esac
 
             local cpoints cexpected
-            cpoints="$(canonical "$points")"
-            cexpected="$(canonical "$SRC")"
+            cpoints="$(canonical "${points}")"
+            cexpected="$(canonical "${SRC}")"
 
-            if [ -n "$cexpected" ] && [ -n "$cpoints" ] && [ "$cpoints" = "$cexpected" ]; then
+            if [[ -n "${cexpected}" ]] && [[ -n "${cpoints}" ]] && [[ "${cpoints}" = "${cexpected}" ]]; then
                 echo -e "${GRN}✓${OFF} ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${BLU}${SRC}${OFF}"
             else
                 echo -e "${RED}✗${OFF} ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${YLW}${points}${OFF} ${RED}(expected ${SRC})${OFF}"
             fi
-        elif [ -e "${TGT}" ]; then
+        elif [[ -e "${TGT}" ]]; then
             echo -e "${YLW}⚠${OFF} ${BOLD}${TGT}${OFF} ${DIM}— regular file/folder, not symlink${OFF}"
         else
             echo -e "${DIM}–${OFF} ${BOLD}${TGT}${OFF} ${DIM}— missing${OFF}"
@@ -273,14 +273,14 @@ do_doctor() {
         ok_all=0
     fi
 
-    if [ -d "${REPO_ROOT}/.git" ]; then
+    if [[ -d "${REPO_ROOT}/.git" ]]; then
         ok "${GRN}✓${OFF} Git repository: ${BLU}${REPO_ROOT}${OFF}"
     else
         err "${RED}✗${OFF} Not a git repository: ${REPO_ROOT}"
         ok_all=0
     fi
 
-    if [ -f "${CONF_JSON}" ]; then
+    if [[ -f "${CONF_JSON}" ]]; then
         if jq empty "${CONF_JSON}" 2>/dev/null; then
             ok "${GRN}✓${OFF} JSON config valid: ${BLU}${CONF_JSON}${OFF}"
         else
@@ -293,7 +293,7 @@ do_doctor() {
     fi
 
     echo ""
-    if [ "${ok_all}" -eq 1 ]; then
+    if [[ "${ok_all}" -eq 1 ]]; then
         ok "${GRN}All checks passed!${OFF}"
     else
         err "${RED}Some checks failed${OFF}"
@@ -303,7 +303,7 @@ do_doctor() {
 
 # Systemd commands
 services_enable_all() {
-    if [ ! -d "${SYSTEMD_DIR}" ]; then
+    if [[ ! -d "${SYSTEMD_DIR}" ]]; then
         err "Systemd user directory not found: ${SYSTEMD_DIR}"
         exit 1
     fi
@@ -311,12 +311,12 @@ services_enable_all() {
     ok "Enabling all services and timers..."
     systemctl --user daemon-reload
 
-    find "$SYSTEMD_DIR" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
+    find "${SYSTEMD_DIR}" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
         local service
-        service="$(basename "$file")"
+        service="$(basename "${file}")"
 
-        if systemctl --user enable "$service" 2>/dev/null; then
-            systemctl --user start "$service" 2>/dev/null || true
+        if systemctl --user enable "${service}" 2>/dev/null; then
+            systemctl --user start "${service}" 2>/dev/null || true
             ok "✓ Enabled: ${service}"
         else
             warn "⚠ Failed to enable: ${service}"
@@ -328,19 +328,19 @@ services_enable_all() {
 }
 
 services_disable_all() {
-    if [ ! -d "${SYSTEMD_DIR}" ]; then
+    if [[ ! -d "${SYSTEMD_DIR}" ]]; then
         err "Systemd user directory not found: ${SYSTEMD_DIR}"
         exit 1
     fi
 
     ok "Disabling all services and timers..."
 
-    find "$SYSTEMD_DIR" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
+    find "${SYSTEMD_DIR}" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
         local service
-        service="$(basename "$file")"
+        service="$(basename "${file}")"
 
-        systemctl --user stop "$service" 2>/dev/null || true
-        if systemctl --user disable "$service" 2>/dev/null; then
+        systemctl --user stop "${service}" 2>/dev/null || true
+        if systemctl --user disable "${service}" 2>/dev/null; then
             ok "✓ Disabled: ${service}"
         else
             warn "⚠ Failed to disable: ${service}"
@@ -352,7 +352,7 @@ services_disable_all() {
 }
 
 services_status() {
-    if [ ! -d "${SYSTEMD_DIR}" ]; then
+    if [[ ! -d "${SYSTEMD_DIR}" ]]; then
         err "Systemd user directory not found: ${SYSTEMD_DIR}"
         exit 1
     fi
@@ -360,38 +360,38 @@ services_status() {
     ok "Services status:"
     echo ""
 
-    find "$SYSTEMD_DIR" -type f \( -name "*.service" -o -name "*.timer" \) | sort | while read -r file; do
+    find "${SYSTEMD_DIR}" -type f \( -name "*.service" -o -name "*.timer" \) | sort | while read -r file; do
         local service
-        service="$(basename "$file")"
+        service="$(basename "${file}")"
 
         local state
-        state="$(systemctl --user is-enabled "$service" 2>/dev/null || echo "disabled")"
+        state="$(systemctl --user is-enabled "${service}" 2>/dev/null || echo "disabled")"
         local active
-        active="$(systemctl --user is-active "$service" 2>/dev/null || echo "inactive")"
+        active="$(systemctl --user is-active "${service}" 2>/dev/null || echo "inactive")"
 
         local status_icon
-        if [ "$active" = "active" ]; then
+        if [[ "${active}" = "active" ]]; then
             status_icon="${GRN}●${OFF}"
-        elif [ "$active" = "inactive" ] && [ "$state" = "enabled" ]; then
+        elif [[ "${active}" = "inactive" ]] && [[ "${state}" = "enabled" ]]; then
             status_icon="${YLW}●${OFF}"
         else
             status_icon="${DIM}○${OFF}"
         fi
 
-        printf "%s ${BOLD}%-40s${OFF} %s / %s\n" "$status_icon" "$service" "$state" "$active"
+        printf "%s ${BOLD}%-40s${OFF} %s / %s\n" "${status_icon}" "${service}" "${state}" "${active}"
     done
 }
 
 services_list() {
-    if [ ! -d "${SYSTEMD_DIR}" ]; then
+    if [[ ! -d "${SYSTEMD_DIR}" ]]; then
         err "Systemd user directory not found: ${SYSTEMD_DIR}"
         exit 1
     fi
 
     ok "Services available in dotfiles:"
     echo ""
-    find "$SYSTEMD_DIR" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
-        basename "$file"
+    find "${SYSTEMD_DIR}" -type f \( -name "*.service" -o -name "*.timer" \) | while read -r file; do
+        basename "${file}"
     done | sort
 }
 
@@ -413,7 +413,7 @@ EOF
 
     # Confirmation
     read -rp "${YLW}Continue? [y/N]${OFF} " confirm
-    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    if [[ ! "${confirm}" =~ ^[Yy]$ ]]; then
         warn "Setup cancelled"
         exit 0
     fi
@@ -449,7 +449,7 @@ EOF
     ok "Running Ansible playbooks..."
     echo ""
 
-    if [ -f "${REPO_ROOT}/ansible/main.yml" ]; then
+    if [[ -f "${REPO_ROOT}/ansible/main.yml" ]]; then
         cd "${REPO_ROOT}"
         ansible-playbook ansible/main.yml --ask-become-pass
     else

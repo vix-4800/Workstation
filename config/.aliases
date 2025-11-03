@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # ~/.aliases
 # Common aliases for all shells
 
@@ -50,7 +52,7 @@ fi
 
 # ======= Wayland-specific aliases =======
 # Only for wayland sessions
-if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+if [[ "${XDG_SESSION_TYPE}" = "wayland" ]]; then
     if command -v code >/dev/null 2>&1; then
         alias code='code --ozone-platform=wayland'
     fi
@@ -61,6 +63,6 @@ fi
 
 # ======= Utility aliases =======
 # Alert for long running commands (bash)
-if [ -n "$BASH_VERSION" ]; then
+if [[ -n "${BASH_VERSION}" ]]; then
     alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 fi

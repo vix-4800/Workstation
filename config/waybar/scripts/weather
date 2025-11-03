@@ -10,10 +10,10 @@ CACHE_TIME=1800  # 30 minutes
 LOCATION="Saratov"
 
 # Check cache
-if [ -f "$CACHE_FILE" ]; then
-    cache_age=$(($(date +%s) - $(stat -c %Y "$CACHE_FILE")))
-    if [ $cache_age -lt $CACHE_TIME ]; then
-        cat "$CACHE_FILE"
+if [[ -f "${CACHE_FILE}" ]]; then
+    cache_age=$(($(date +%s) - $(stat -c %Y "${CACHE_FILE}")))
+    if [[ "${cache_age}" -lt "${CACHE_TIME}" ]]; then
+        cat "${CACHE_FILE}"
         exit 0
     fi
 fi
@@ -21,22 +21,22 @@ fi
 # Fetch weather data
 weather_data=$(curl -s "https://wttr.in/${LOCATION}?format=j1" 2>/dev/null)
 
-if [ -z "$weather_data" ]; then
+if [[ -z "${weather_data}" ]]; then
     echo '{"text":"", "tooltip":"Weather data unavailable"}'
     exit 0
 fi
 
 # Parse JSON
-temp=$(echo "$weather_data" | jq -r '.current_condition[0].temp_C')
-feels_like=$(echo "$weather_data" | jq -r '.current_condition[0].FeelsLikeC')
-humidity=$(echo "$weather_data" | jq -r '.current_condition[0].humidity')
-wind_speed=$(echo "$weather_data" | jq -r '.current_condition[0].windspeedKmph')
-wind_dir=$(echo "$weather_data" | jq -r '.current_condition[0].winddir16Point')
-description=$(echo "$weather_data" | jq -r '.current_condition[0].weatherDesc[0].value')
-weather_code=$(echo "$weather_data" | jq -r '.current_condition[0].weatherCode')
+temp=$(echo "${weather_data}" | jq -r '.current_condition[0].temp_C')
+feels_like=$(echo "${weather_data}" | jq -r '.current_condition[0].FeelsLikeC')
+humidity=$(echo "${weather_data}" | jq -r '.current_condition[0].humidity')
+wind_speed=$(echo "${weather_data}" | jq -r '.current_condition[0].windspeedKmph')
+wind_dir=$(echo "${weather_data}" | jq -r '.current_condition[0].winddir16Point')
+description=$(echo "${weather_data}" | jq -r '.current_condition[0].weatherDesc[0].value')
+weather_code=$(echo "${weather_data}" | jq -r '.current_condition[0].weatherCode')
 
 # Determine icon based on weather code
-case $weather_code in
+case ${weather_code} in
     113) icon="󰖙" ;;  # Sunny/Clear
     116) icon="󰖕" ;;  # Partly cloudy
     119|122) icon="󰖐" ;;  # Cloudy
@@ -50,7 +50,7 @@ case $weather_code in
 esac
 
 # Build tooltip
-tooltip="<span font_size='x-large' color='#cba6f7'><b>$description</b></span>\n\n"
+tooltip="<span font_size='x-large' color='#cba6f7'><b>${description}</b></span>\n\n"
 tooltip+="<span font_size='large'>"
 tooltip+="<b>Temperature:</b> ${temp}°C (feels like ${feels_like}°C)\n"
 tooltip+="<b>Humidity:</b> ${humidity}%\n"
@@ -62,21 +62,21 @@ tooltip+="<span font_size='medium' color='#89b4fa'><b>Forecast:</b></span>\n"
 tooltip+="<tt><span font_size='small'>"
 
 for i in 0 1 2; do
-    date=$(echo "$weather_data" | jq -r ".weather[$i].date")
-    max_temp=$(echo "$weather_data" | jq -r ".weather[$i].maxtempC")
-    min_temp=$(echo "$weather_data" | jq -r ".weather[$i].mintempC")
-    desc=$(echo "$weather_data" | jq -r ".weather[$i].hourly[4].weatherDesc[0].value")
+    date=$(echo "${weather_data}" | jq -r ".weather[${i}].date")
+    max_temp=$(echo "${weather_data}" | jq -r ".weather[${i}].maxtempC")
+    min_temp=$(echo "${weather_data}" | jq -r ".weather[${i}].mintempC")
+    desc=$(echo "${weather_data}" | jq -r ".weather[${i}].hourly[4].weatherDesc[0].value")
 
-    day_name=$(date -d "$date" +"%a")
-    tooltip+="$day_name: $min_temp°-$max_temp°C, $desc\n"
+    day_name=$(date -d "${date}" +"%a")
+    tooltip+="${day_name}: ${min_temp}°-${max_temp}°C, ${desc}\n"
 done
 
 tooltip+="</span></tt>"
 
 # Output
-text="$icon ${temp}°C"
-output="{\"text\":\"$text\", \"tooltip\":\"$tooltip\"}"
+text="${icon} ${temp}°C"
+output="{\"text\":\"${text}\", \"tooltip\":\"${tooltip}\"}"
 
 # Cache the result
-echo "$output" > "$CACHE_FILE"
-echo "$output"
+echo "${output}" > "${CACHE_FILE}"
+echo "${output}"
