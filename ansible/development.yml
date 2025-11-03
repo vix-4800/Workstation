@@ -70,3 +70,15 @@
           # Markdown
           - markdownlint-cli
         state: present
+
+    - name: 'Install Node.js-based development tools globally'
+      become: false
+      community.general.npm:
+        name: "{{ item }}"
+        global: true
+        state: present
+      loop:
+        # Commit linting
+        - '@commitlint/cli'
+        - '@commitlint/config-conventional'
+      failed_when: false

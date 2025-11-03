@@ -83,6 +83,11 @@
             "comment": "ShellCheck configuration"
         },
         {
+            "source": "tools/commitlint",
+            "target": "$HOME/.config/commitlint",
+            "comment": "Commitlint configuration for conventional commits"
+        },
+        {
             "source": "tools/markdown/markdownlint",
             "target": "$HOME/.config/markdownlint",
             "comment": "markdownlint configuration"
