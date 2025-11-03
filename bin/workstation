@@ -44,6 +44,7 @@ ${BOLD}Usage:${OFF}
 
 ${BOLD}Setup Commands:${OFF}
     setup                         Bootstrap dotfiles on a new system
+    update [-n]                   Pull changes from git and reapply config
 
 ${BOLD}Dotfiles Commands:${OFF}
     dotfiles link [-n] [--json PATH]      Create/update symlinks
@@ -66,6 +67,7 @@ ${BOLD}Global Options:${OFF}
 
 ${BOLD}Examples:${OFF}
     workstation setup                      # Bootstrap new system
+    workstation update                     # Update from git repo
     workstation dotfiles link -n           # Dry-run symlinks
     workstation dotfiles status            # Check link status
     workstation dotfiles doctor            # Run environment checks
@@ -481,6 +483,144 @@ ${DIM}For help: workstation --help${OFF}
 EOF
 }
 
+# Update command - pull changes from git and reapply configuration
+do_update() {
+    cat <<EOF
+${BOLD}╔═══════════════════════════════════════════════════════════╗
+║         Workstation Dotfiles Update from Git              ║
+╚═══════════════════════════════════════════════════════════╝${OFF}
+
+This will:
+  1. Stop and disable all systemd services
+  2. Remove existing symlinks
+  3. Pull latest changes from git
+  4. Recreate symlinks
+  5. Enable and start services again
+
+EOF
+
+    # Check if in git repo
+    if [[ ! -d "${REPO_ROOT}/.git" ]]; then
+        err "Not a git repository: ${REPO_ROOT}"
+        exit 1
+    fi
+
+    # Check for uncommitted changes
+    cd "${REPO_ROOT}"
+    if ! git diff-index --quiet HEAD -- 2>/dev/null; then
+        warn "You have uncommitted changes in the repository"
+        warn "These changes might be lost during update"
+        echo ""
+        git status --short
+        echo ""
+        read -rp "${YLW}Continue anyway? [y/N]${OFF} " confirm
+        if [[ ! "${confirm}" =~ ^[Yy]$ ]]; then
+            warn "Update cancelled"
+            exit 0
+        fi
+    fi
+
+    if [[ "${DRYRUN}" -eq 1 ]]; then
+        msg "${DIM}DRY-RUN MODE: No changes will be made${OFF}"
+        echo ""
+    else
+        # Confirmation
+        read -rp "${YLW}Continue with update? [y/N]${OFF} " confirm
+        if [[ ! "${confirm}" =~ ^[Yy]$ ]]; then
+            warn "Update cancelled"
+            exit 0
+        fi
+    fi
+
+    echo ""
+    ok "Starting update process..."
+    echo ""
+
+    # Step 1: Disable services
+    if [[ "${DRYRUN}" -eq 1 ]]; then
+        msg "${DIM}[1/5]${OFF} Would stop and disable all services"
+    else
+        ok "${BOLD}[1/5]${OFF} Stopping and disabling services..."
+        services_disable_all
+    fi
+    echo ""
+
+    # Step 2: Unlink dotfiles
+    if [[ "${DRYRUN}" -eq 1 ]]; then
+        msg "${DIM}[2/5]${OFF} Would remove symlinks"
+        DRYRUN=1 do_unlink
+    else
+        ok "${BOLD}[2/5]${OFF} Removing symlinks..."
+        do_unlink
+    fi
+    echo ""
+
+    # Step 3: Git pull
+    if [[ "${DRYRUN}" -eq 1 ]]; then
+        msg "${DIM}[3/5]${OFF} Would pull from git (currently on branch: $(git branch --show-current))"
+        msg "${DIM}      Remote commits:${OFF}"
+        git log 'HEAD..@{u}' --oneline 2>/dev/null || msg "${DIM}      (no remote changes)${OFF}"
+    else
+        ok "${BOLD}[3/5]${OFF} Pulling latest changes from git..."
+        local current_branch
+        current_branch="$(git branch --show-current)"
+
+        if ! git pull --rebase origin "${current_branch}"; then
+            err "Git pull failed!"
+            err "Please resolve conflicts manually and run update again"
+            exit 1
+        fi
+
+        ok "Successfully pulled changes from ${BLU}${current_branch}${OFF}"
+    fi
+    echo ""
+
+    # Step 4: Relink dotfiles
+    if [[ "${DRYRUN}" -eq 1 ]]; then
+        msg "${DIM}[4/5]${OFF} Would create symlinks"
+        DRYRUN=1 do_link
+    else
+        ok "${BOLD}[4/5]${OFF} Creating symlinks..."
+        do_link
+    fi
+    echo ""
+
+    # Step 5: Enable services
+    if [[ "${DRYRUN}" -eq 1 ]]; then
+        msg "${DIM}[5/5]${OFF} Would enable and start all services"
+    else
+        ok "${BOLD}[5/5]${OFF} Enabling and starting services..."
+        services_enable_all
+    fi
+    echo ""
+
+    if [[ "${DRYRUN}" -eq 1 ]]; then
+        cat <<EOF
+${YLW}╔═══════════════════════════════════════════════════════════╗
+║             Dry-run Complete (no changes made)            ║
+╚═══════════════════════════════════════════════════════════╝${OFF}
+
+Run ${BLU}workstation update${OFF} without -n to apply changes.
+EOF
+    else
+        cat <<EOF
+${GRN}╔═══════════════════════════════════════════════════════════╗
+║                Update Complete! 🎉                        ║
+╚═══════════════════════════════════════════════════════════╝${OFF}
+
+${BOLD}Your dotfiles are now up to date!${OFF}
+
+${DIM}Check status:${OFF}
+  • ${BLU}workstation dotfiles status${OFF}  - verify symlinks
+  • ${BLU}workstation services status${OFF}  - check services
+
+${DIM}Recent changes:${OFF}
+EOF
+        git log -5 --oneline --decorate
+    fi
+}
+
+
 # Main command router
 cmd="${1:-}"
 shift || true
@@ -489,6 +629,12 @@ case "${cmd}" in
     # Setup command
     setup)
         do_setup
+        ;;
+
+    # Update command
+    update)
+        parse_args "$@"
+        do_update
         ;;
 
     # Dotfiles commands
