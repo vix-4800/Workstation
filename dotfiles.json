@@ -2,25 +2,14 @@
     "$schema": "./dotfiles.schema.json",
     "mappings": [
         {
-            "source": "config/.aliases",
+            "source": "config/shell/aliases",
             "target": "$HOME/.aliases",
             "comment": "General aliases for all shells"
         },
         {
-            "source": "config/.prettierrc",
-            "target": "$HOME/.prettierrc"
-        },
-        {
-            "source": "config/.prettierignore",
-            "target": "$HOME/.prettierignore"
-        },
-        {
-            "source": "config/.shellcheckrc",
-            "target": "$HOME/.shellcheckrc"
-        },
-        {
             "source": ".editorconfig",
-            "target": "$HOME/.editorconfig"
+            "target": "$HOME/.editorconfig",
+            "comment": "EditorConfig for consistent coding styles"
         },
         {
             "source": "config/.profile",
@@ -77,6 +66,21 @@
         {
             "source": "tools/php/pint",
             "target": "$HOME/.config/pint"
+        },
+        {
+            "source": "tools/prettier/.prettierrc",
+            "target": "$HOME/.prettierrc",
+            "comment": "Prettier code formatter configuration"
+        },
+        {
+            "source": "tools/prettier/.prettierignore",
+            "target": "$HOME/.prettierignore",
+            "comment": "Prettier ignore patterns"
+        },
+        {
+            "source": "tools/shellcheck/.shellcheckrc",
+            "target": "$HOME/.shellcheckrc",
+            "comment": "ShellCheck configuration"
         },
         {
             "source": "tools/markdown/markdownlint",
