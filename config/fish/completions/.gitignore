@@ -9,3 +9,5 @@
 !php-cs-fixer.fish
 !phpstan.fish
 !rector.fish
+
+!mypy.fish
