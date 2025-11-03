@@ -11,3 +11,4 @@
 !rector.fish
 
 !mypy.fish
+!flake8.fish
