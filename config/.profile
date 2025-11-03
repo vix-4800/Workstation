@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # ~/.profile
 # This file is sourced by all POSIX-compatible shells
 
