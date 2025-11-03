@@ -93,6 +93,11 @@
             "comment": "yamllint configuration"
         },
         {
+            "source": "tools/docker/hadolint.yaml",
+            "target": "$HOME/.config/hadolint.yaml",
+            "comment": "Hadolint Dockerfile linter configuration"
+        },
+        {
             "source": "config/sway",
             "target": "$HOME/.config/sway"
         },
