@@ -84,7 +84,13 @@
         },
         {
             "source": "tools/markdown/markdownlint",
-            "target": "$HOME/.config/markdownlint"
+            "target": "$HOME/.config/markdownlint",
+            "comment": "markdownlint configuration"
+        },
+        {
+            "source": "tools/yaml/yamllint.yml",
+            "target": "$HOME/.config/yamllint/config",
+            "comment": "yamllint configuration"
         },
         {
             "source": "config/sway",
