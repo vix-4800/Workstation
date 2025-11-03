@@ -12,3 +12,4 @@
 
 !mypy.fish
 !flake8.fish
+!black.fish
