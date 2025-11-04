@@ -86,6 +86,9 @@ global.listchars = icons.misc.list_chars
 
 global.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
+global.maxmempattern = 5000
+global.synmaxcol = 300
+
 -- Diagnostic configuration
 vim.diagnostic.enable = true
 vim.diagnostic.config({
