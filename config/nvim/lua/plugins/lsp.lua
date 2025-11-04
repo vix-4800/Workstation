@@ -167,10 +167,16 @@ return {
         settings = {
           python = {
             analysis = {
-              typeCheckingMode = "basic",
+              typeCheckingMode = "strict",
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+              diagnosticMode = "workspace",
+              autoImportCompletions = true,
               inlayHints = {
                 variableTypes = true,
                 functionReturnTypes = true,
+                parameterTypes = true,
+                callArgumentNames = true,
               },
             },
           },
