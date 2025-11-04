@@ -59,16 +59,17 @@ global.mouse = "a" -- Enable mouse support
 
 -- Indentation
 global.expandtab = true -- Use spaces instead of tabs
-global.shiftwidth = 2 -- Indent width
-global.tabstop = 2 -- Tab width
-global.softtabstop = 2 -- Soft tab width
+global.shiftwidth = 4 -- Indent width
+global.tabstop = 4 -- Tab width
+global.softtabstop = 4 -- Soft tab width
+global.smarttab = true -- Smart tab handling
 
 global.backup = false -- Don't create backup files
 global.writebackup = false -- Don't create backup files
 global.swapfile = false -- Don't use swapfiles
 
-global.spell = true -- Enable spell checking
-global.spelllang = "en" -- Set spellcheck language to English
+global.spell = false -- Disable spell checking by default (enable per filetype if needed)
+global.spelllang = { "en", "ru" } -- Set spellcheck languages
 
 -- Nerd font support
 vim.g.have_nerd_font = true
