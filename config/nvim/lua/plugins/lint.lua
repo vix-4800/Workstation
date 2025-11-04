@@ -15,8 +15,53 @@ return {
       yaml = { "yamllint" },
       python = { "ruff" },
       sh = { "shellcheck" },
-      -- lua = { "luacheck" },
-      dotenv = { "dotenv-linter" },
+      bash = { "shellcheck" },
+      dotenv = { "dotenv_linter" },
+    }
+
+    -- Configure shellcheck to use custom config
+    lint.linters.shellcheck.args = {
+      "--format=json",
+      "--rcfile=" .. vim.fn.expand("~/.shellcheckrc"),
+      "-",
+    }
+
+    -- Configure yamllint to use custom config
+    lint.linters.yamllint.args = {
+      "--format",
+      "parsable",
+      "--config-file=" .. vim.fn.expand("~/.config/yamllint.yml"),
+      "-",
+    }
+
+    -- Configure hadolint to use custom config
+    lint.linters.hadolint.args = {
+      "--config",
+      vim.fn.expand("~/.config/hadolint.yaml"),
+      "--format",
+      "json",
+      "-",
+    }
+
+    -- Configure markdownlint to use custom config
+    lint.linters.markdownlint.args = {
+      "--config",
+      vim.fn.expand("~/.config/markdownlint/.markdownlint.jsonc"),
+      "--json",
+      "--stdin",
+    }
+
+    -- Configure ruff to use custom config
+    lint.linters.ruff.args = {
+      "check",
+      "--config=" .. vim.fn.expand("~/.config/ruff/pyproject.toml"),
+      "--force-exclude",
+      "--quiet",
+      "--stdin-filename",
+      vim.api.nvim_buf_get_name(0),
+      "--output-format",
+      "json",
+      "-",
     }
 
     -- Configure phpstan to use custom config
@@ -48,11 +93,10 @@ return {
     }
 
     -- Dotenv-linter configuration
-    lint.linters["dotenv-linter"] = {
+    lint.linters["dotenv_linter"] = {
       cmd = "dotenv-linter",
       stdin = false,
       args = { "check", "--format", "json", "$FILENAME" },
-      -- stream = "stdout",
       stream = "stderr",
       ignore_exitcode = true,
       parser = function(output)

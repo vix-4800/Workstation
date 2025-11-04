@@ -27,7 +27,7 @@ return {
     formatters_by_ft = {
       lua = { "stylua" },
       php = { "php_cs_fixer" },
-      python = { "isort", "black" },
+      python = { "ruff_format", "ruff_organize_imports" },
       javascript = { "prettierd", "prettier", stop_after_first = true },
       typescript = { "prettierd", "prettier", stop_after_first = true },
       vue = { "prettierd", "prettier", stop_after_first = true },
@@ -38,6 +38,7 @@ return {
       yaml = { "yamlfmt" },
       markdown = { "prettierd", "prettier", stop_after_first = true },
       sh = { "shfmt" },
+      bash = { "shfmt" },
     },
     formatters = {
       php_cs_fixer = {
@@ -56,6 +57,34 @@ return {
           vim.fn.expand("~/.prettierrc"),
           "--stdin-filepath",
           "$FILENAME",
+        },
+        stdin = true,
+      },
+      shfmt = {
+        prepend_args = { "-i", "2", "-ci" },
+      },
+      ruff_format = {
+        command = "ruff",
+        args = {
+          "format",
+          "--config=" .. vim.fn.expand("~/.config/ruff/pyproject.toml"),
+          "--stdin-filename",
+          "$FILENAME",
+          "-",
+        },
+        stdin = true,
+      },
+      ruff_organize_imports = {
+        command = "ruff",
+        args = {
+          "check",
+          "--select",
+          "I",
+          "--fix",
+          "--config=" .. vim.fn.expand("~/.config/ruff/pyproject.toml"),
+          "--stdin-filename",
+          "$FILENAME",
+          "-",
         },
         stdin = true,
       },
