@@ -139,8 +139,58 @@ return {
               "zlib",
             },
             files = {
-              maxSize = 5000000,
+              maxSize = 10000000,
+              exclude = {
+                "**/mariadb/**",
+                "**/meili_data/**",
+                "**/logs/**",
+                "**/tools/**",
+                "**/src/www/**",
+                "**/cache/**",
+                "**/tests/**",
+                "**/node_modules/**",
+                "**/vendor/**",
+              },
             },
+            environment = {
+              shortOpenTag = false,
+            },
+            diagnostics = {
+              enable = true,
+              run = "onType", -- onSave or onType
+              typeErrors = true,
+              undefinedTypes = true,
+              undefinedFunctions = true,
+              undefinedMethods = true,
+              undefinedProperties = true,
+              undefinedVariables = true,
+              undefinedConstants = true,
+              undefinedClassConstants = true,
+              duplicateSymbols = true,
+              argumentCount = true,
+              deprecated = true,
+              languageConstraints = true,
+              implementationErrors = true,
+              unusedSymbols = true,
+            },
+            completion = {
+              insertUseDeclaration = true,
+              fullyQualifyGlobalConstantsAndFunctions = false,
+              suggestObjectOperatorStaticMethods = false,
+            },
+            format = {
+              enable = false, -- Use php-cs-fixer instead
+            },
+            phpdoc = {
+              useFullyQualifiedNames = false,
+            },
+            rename = {
+              exclude = {
+                "**/vendor/**",
+                "**/node_modules/**",
+              },
+            },
+            maxMemory = 4096,
           },
         },
       })
