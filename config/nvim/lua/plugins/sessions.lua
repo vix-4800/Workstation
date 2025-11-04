@@ -21,5 +21,7 @@ return {
       theme_conf = { border = true },
       previewer = false,
     },
+
+    bypass_save_filetypes = { "alpha" },
   },
 }
