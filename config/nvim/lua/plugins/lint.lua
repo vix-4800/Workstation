@@ -13,7 +13,7 @@ return {
       dockerfile = { "hadolint" },
       json = { "jsonlint" },
       yaml = { "yamllint" },
-      python = { "pylint", "flake8" },
+      python = { "ruff" },
       sh = { "shellcheck" },
       -- lua = { "luacheck" },
       dotenv = { "dotenv-linter" },

@@ -39,8 +39,6 @@ return {
         -- │ Formatters                                              │
         -- ╰─────────────────────────────────────────────────────────╯
         "stylua", -- Lua
-        "black", -- Python
-        "isort", -- Python imports
         "prettier", -- JS/TS/JSON/CSS/HTML/MD
         -- "prettierd", -- JS/TS/JSON/CSS/HTML/MD
         "shfmt", -- Shell scripts
@@ -51,8 +49,7 @@ return {
         -- │ Linters                                                 │
         -- ╰─────────────────────────────────────────────────────────╯
         "shellcheck", -- Bash
-        "pylint", -- Python
-        "flake8", -- Python
+        "ruff", -- Python
         "yamllint", -- YAML
         "jsonlint", -- JSON
         "markdownlint", -- Markdown
