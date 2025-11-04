@@ -1,3 +1,5 @@
+local configs = require("config.linter-configs")
+
 return {
   "mfussenegger/nvim-lint",
   event = { "BufReadPost", "BufNewFile" },
@@ -22,7 +24,7 @@ return {
     -- Configure shellcheck to use custom config
     lint.linters.shellcheck.args = {
       "--format=json",
-      "--rcfile=" .. vim.fn.expand("~/.shellcheckrc"),
+      "--rcfile=" .. configs.getConfig("shellcheck"),
       "-",
     }
 
@@ -30,14 +32,14 @@ return {
     lint.linters.yamllint.args = {
       "--format",
       "parsable",
-      "--config-file=" .. vim.fn.expand("~/.config/yamllint.yml"),
+      "--config-file=" .. configs.getConfig("yamllint"),
       "-",
     }
 
     -- Configure hadolint to use custom config
     lint.linters.hadolint.args = {
       "--config",
-      vim.fn.expand("~/.config/hadolint.yaml"),
+      configs.getConfig("hadolint"),
       "--format",
       "json",
       "-",
@@ -46,7 +48,7 @@ return {
     -- Configure markdownlint to use custom config
     lint.linters.markdownlint.args = {
       "--config",
-      vim.fn.expand("~/.config/markdownlint/.markdownlint.jsonc"),
+      configs.getConfig("markdownlint"),
       "--json",
       "--stdin",
     }
@@ -54,7 +56,7 @@ return {
     -- Configure ruff to use custom config
     lint.linters.ruff.args = {
       "check",
-      "--config=" .. vim.fn.expand("~/.config/ruff/pyproject.toml"),
+      "--config=" .. configs.getConfig("ruff"),
       "--force-exclude",
       "--quiet",
       "--stdin-filename",
@@ -66,11 +68,13 @@ return {
 
     -- Configure phpstan to use custom config
     lint.linters.phpstan = lint.linters.phpstan or {}
+    lint.linters.phpstan.cmd = vim.fn.expand("~/.config/composer/vendor/bin/phpstan")
     lint.linters.phpstan.args = {
       "analyse",
       "--error-format=json",
       "--no-progress",
-      "--configuration=" .. vim.fn.expand("~/.config/phpstan/phpstan.neon"),
+      "--memory-limit=2G",
+      "--configuration=" .. configs.getConfig("phpstan"),
       function()
         return vim.api.nvim_buf_get_name(0)
       end,
@@ -79,8 +83,13 @@ return {
     -- Configure phpcs to use custom config
     lint.linters.phpcs.cmd = vim.fn.expand("~/.config/composer/vendor/bin/phpcs")
     lint.linters.phpcs.args = {
-      "--standard=" .. vim.fn.expand("~/.config/phpcs/phpcs.xml"),
+      "--standard=" .. configs.getConfig("phpcs"),
       "--report=json",
+      "--colors",
+      "--ignore=*/vendor/*",
+      "--parallel=4",
+      "--no-cache",
+      "--extensions=php",
       "-q",
       function()
         return vim.api.nvim_buf_get_name(0)

@@ -1,3 +1,5 @@
+local configs = require("config.linter-configs")
+
 return {
   "stevearc/conform.nvim",
   event = { "BufWritePre" },
@@ -45,7 +47,7 @@ return {
         command = "php-cs-fixer",
         args = {
           "fix",
-          "--config=" .. vim.fn.expand("~/.config/php-cs-fixer/php-cs-fixer.php"),
+          "--config=" .. configs.getConfig("php_cs_fixer"),
           "$FILENAME",
         },
         stdin = false,
@@ -54,7 +56,7 @@ return {
         command = "prettier",
         args = {
           "--config",
-          vim.fn.expand("~/.prettierrc"),
+          configs.getConfig("prettier"),
           "--stdin-filepath",
           "$FILENAME",
         },
@@ -67,7 +69,7 @@ return {
         command = "ruff",
         args = {
           "format",
-          "--config=" .. vim.fn.expand("~/.config/ruff/pyproject.toml"),
+          "--config=" .. configs.getConfig("ruff"),
           "--stdin-filename",
           "$FILENAME",
           "-",
@@ -81,7 +83,7 @@ return {
           "--select",
           "I",
           "--fix",
-          "--config=" .. vim.fn.expand("~/.config/ruff/pyproject.toml"),
+          "--config=" .. configs.getConfig("ruff"),
           "--stdin-filename",
           "$FILENAME",
           "-",
