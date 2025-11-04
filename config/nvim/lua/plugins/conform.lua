@@ -41,6 +41,7 @@ return {
       markdown = { "prettierd", "prettier", stop_after_first = true },
       sh = { "shfmt" },
       bash = { "shfmt" },
+      xml = {}, -- Use LSP formatter (lemminx)
     },
     formatters = {
       php_cs_fixer = {

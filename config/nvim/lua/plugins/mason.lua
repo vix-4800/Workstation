@@ -31,6 +31,7 @@ return {
         "json-lsp", -- JSON
         "html-lsp", -- HTML
         "css-lsp", -- CSS
+        "lemminx", -- XML
         "dockerfile-language-server", -- Docker
         "docker-compose-language-service", -- Docker Compose
         "marksman", -- Markdown

@@ -289,6 +289,33 @@ return {
       -- CSS
       vim.lsp.config("cssls", { capabilities = capabilities })
 
+      -- XML
+      vim.lsp.config("lemminx", {
+        capabilities = capabilities,
+        settings = {
+          xml = {
+            format = {
+              enabled = true,
+              splitAttributes = false,
+              joinCDATALines = false,
+              joinCommentLines = false,
+              joinContentLines = false,
+              spaceBeforeEmptyCloseTag = true,
+              preservedNewlines = 2,
+            },
+            validation = {
+              enabled = true,
+              schema = {
+                enabled = true,
+              },
+            },
+            completion = {
+              autoCloseTags = true,
+            },
+          },
+        },
+      })
+
       -- Docker
       vim.lsp.config("dockerls", { capabilities = capabilities })
       vim.lsp.config("docker_compose_language_service", { capabilities = capabilities })
@@ -307,6 +334,7 @@ return {
       vim.lsp.enable("yamlls")
       vim.lsp.enable("html")
       vim.lsp.enable("cssls")
+      vim.lsp.enable("lemminx")
       vim.lsp.enable("dockerls")
       vim.lsp.enable("docker_compose_language_service")
       vim.lsp.enable("marksman")
