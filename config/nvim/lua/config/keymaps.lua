@@ -32,8 +32,9 @@ vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
 
 -- Quick save and quit
-vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
-vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "[Q]uit" })
+-- vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
+vim.keymap.set("n", "<leader>wa", "<cmd>wa<CR>", { desc = "[W]rite [A]ll buffers" })
+vim.keymap.set("n", "<leader>Q", "<cmd>qa<CR>", { desc = "[Q]uit all" })
 
 -- Buffer navigation
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
@@ -45,5 +46,21 @@ vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to down window" })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to up window" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+-- Window management
+vim.keymap.set("n", "<leader>wv", "<cmd>vsplit<cr>", { desc = "[W]indow [V]ertical split" })
+vim.keymap.set("n", "<leader>wh", "<cmd>split<cr>", { desc = "[W]indow [H]orizontal split" })
+vim.keymap.set("n", "<leader>wq", "<cmd>q<cr>", { desc = "[W]indow [Q]uit" })
+vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "[W]indow [=] Equal size" })
+
+-- Diagnostics navigation
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float, { desc = "[D]iagnostic [F]loat" })
+vim.keymap.set("n", "<leader>dl", "<cmd>Telescope diagnostics<cr>", { desc = "[D]iagnostic [L]ist" })
+
+-- Quick access to config
+vim.keymap.set("n", "<leader>vc", "<cmd>e $MYVIMRC<cr>", { desc = "Edit [V]im [C]onfig" })
+vim.keymap.set("n", "<leader>vr", "<cmd>source $MYVIMRC<cr>", { desc = "[V]im [R]eload config" })
 
 vim.keymap.set("n", "<leader>tl", "<cmd>ToggleLinting<CR>", { desc = "[T]oggle [L]inting" })

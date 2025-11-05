@@ -9,9 +9,12 @@ return {
       { "<leader>cp", group = "[C]ode Tools - PHP" },
       { "<leader>t", group = "[T]oggle" },
       { "<leader>r", group = "[R]eplace" },
-      { "<leader>d", group = "[D]ocument/Diagnostics" },
+      { "<leader>d", group = "[D]iagnostic/Debug" },
       { "<leader>a", group = "[A]I Tools" },
       { "<leader>b", group = "[B]uffer" },
+      { "<leader>w", group = "[W]indow" },
+      { "<leader>q", group = "[Q]uit/Session" },
+      { "<leader>v", group = "[V]im Config" },
     },
     delay = 0,
     icons = {
