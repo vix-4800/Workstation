@@ -1,5 +1,8 @@
 parameters:
-    level: 5
+    parallel:
+        maximumNumberOfProcesses: 8
+
+    level: 6
 
     # Default paths - can be overridden in project-specific config
     paths:
@@ -11,3 +14,23 @@ parameters:
         - storage/*
         - bootstrap/cache/*
         - public/build/*
+        - tests/_support/*
+
+    checkMissingCallableSignature: true
+    checkUninitializedProperties: true
+    checkExplicitMixed: true
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+
+    reportUnmatchedIgnoredErrors: true
+    reportMaybesInMethodSignatures: true
+    reportStaticMethodSignatures: true
+
+    inferPrivatePropertyTypeFromConstructor: true
+
+    treatPhpDocTypesAsCertain: false
+
+includes:
+    # - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    # - vendor/phpstan/phpstan-strict-rules/rules.neon
