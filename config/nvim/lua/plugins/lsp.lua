@@ -364,6 +364,7 @@ return {
           end,
         },
       },
+      { "giuxtaposition/blink-cmp-copilot",}
     },
     version = "1.*",
 
@@ -402,12 +403,18 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+        default = { "lsp", "path", "snippets", "buffer", "lazydev", "copilot" },
         providers = {
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",
             score_offset = 100,
+          },
+          copilot = {
+            name = "copilot",
+            module = "blink-cmp-copilot",
+            score_offset = 100,
+            async = true,
           },
         },
       },
