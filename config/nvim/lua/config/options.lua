@@ -89,6 +89,11 @@ global.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos
 global.maxmempattern = 5000
 global.synmaxcol = 300
 
+global.foldcolumn = "0"
+global.foldlevel = 99
+global.foldlevelstart = 99
+global.foldenable = true
+
 -- Diagnostic configuration
 vim.diagnostic.enable = true
 vim.diagnostic.config({
