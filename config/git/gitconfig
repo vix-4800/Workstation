@@ -1,11 +1,43 @@
 [user]
 	name = Anton Vix
 	email = Gordan.ei@protonmail.ch
+
 [credential "https://github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential
+
 [credential "https://gist.github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential
+
+[core]
+	autocrlf = input
+	untrackedCache = true
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
 [push]
 	autoSetupRemote = true
+	default = current
+
+[fetch]
+	prune = true
+	pruneTags = true
+
+[rebase]
+	autoStash = true
+	autoSquash = true
+
+[diff]
+	algorithm = histogram
+	colorMoved = default
+
+[log]
+	date = relative
+
+[branch]
+	sort = -committerdate
