@@ -1,3 +1,5 @@
+local global = vim.opt
+
 -- vim.cmd([[
 --   highlight Normal guibg=none
 --   highlight NonText guibg=none
@@ -5,7 +7,7 @@
 --   highlight NonText ctermbg=none
 -- ]])
 
-vim.o.termguicolors = true
+global.termguicolors = true
 
 vim.api.nvim_set_hl(0, "LspInlayHint", {
   -- bg = "NONE",
