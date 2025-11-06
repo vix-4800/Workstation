@@ -118,15 +118,6 @@
     <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace" />
 
     <!-- ===== FUNCTIONS AND METHODS ===== -->
-    <rule ref="PSR12.Functions.ReturnTypeDeclaration" />
-    <rule ref="PSR12.Functions.NullableTypeDeclaration" />
-    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
-        <properties>
-            <property name="equalsSpacing" value="1" />
-            <property name="requiredSpacesAfterOpen" value="0" />
-            <property name="requiredSpacesBeforeClose" value="0" />
-        </properties>
-    </rule>
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration">
         <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/config/*</exclude-pattern>
@@ -157,8 +148,6 @@
                 <element key="dump" value="null" />
                 <element key="print_r" value="null" />
                 <element key="var_export" value="null" />
-                <element key="print" value="null" />
-                <element key="echo" value="null" />
             </property>
         </properties>
         <exclude-pattern>*/migrations/*</exclude-pattern>
@@ -235,9 +224,7 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing" />
     <rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing" />
-    <rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator" />
     <rule ref="Generic.Formatting.SpaceAfterCast" />
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces">
         <properties>
@@ -372,6 +359,7 @@
         <properties>
             <property name="lineLimit" value="120" />
             <property name="absoluteLineLimit" value="0" />
+            <property name="ignoreComments" value="true" />
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference" />
