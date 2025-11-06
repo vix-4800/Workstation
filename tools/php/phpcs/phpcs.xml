@@ -62,11 +62,15 @@
         <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/tests/*</exclude-pattern>
         <type>warning</type>
+
+        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation" />
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
         <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/tests/*</exclude-pattern>
         <type>warning</type>
+
+        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.UselessAnnotation" />
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue">
         <type>warning</type>
@@ -277,7 +281,6 @@
             </property>
         </properties>
     </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation" />
     <rule ref="Squiz.Commenting.FunctionComment">
         <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/tests/*</exclude-pattern>
