@@ -61,6 +61,10 @@
             "target": "$HOME/.config/pint"
         },
         {
+            "source": "tools/php/phpmd",
+            "target": "$HOME/.config/phpmd"
+        },
+        {
             "source": "tools/prettier/.prettierrc",
             "target": "$HOME/.prettierrc",
             "comment": "Prettier code formatter configuration"
