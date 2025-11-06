@@ -545,17 +545,7 @@ EOF
     fi
     echo ""
 
-    # Step 2: Unlink dotfiles
-    if [[ "${DRYRUN}" -eq 1 ]]; then
-        msg "${DIM}[2/5]${OFF} Would remove symlinks"
-        DRYRUN=1 do_unlink
-    else
-        ok "${BOLD}[2/5]${OFF} Removing symlinks..."
-        do_unlink
-    fi
-    echo ""
-
-    # Step 3: Git pull
+    # Step 2: Git pull
     if [[ "${DRYRUN}" -eq 1 ]]; then
         msg "${DIM}[3/5]${OFF} Would pull from git (currently on branch: $(git branch --show-current))"
         msg "${DIM}      Remote commits:${OFF}"
@@ -572,6 +562,16 @@ EOF
         fi
 
         ok "Successfully pulled changes from ${BLU}${current_branch}${OFF}"
+    fi
+    echo ""
+
+    # Step 3: Unlink dotfiles
+    if [[ "${DRYRUN}" -eq 1 ]]; then
+        msg "${DIM}[2/5]${OFF} Would remove symlinks"
+        DRYRUN=1 do_unlink
+    else
+        ok "${BOLD}[2/5]${OFF} Removing symlinks..."
+        do_unlink
     fi
     echo ""
 
