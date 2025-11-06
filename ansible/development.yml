@@ -23,8 +23,7 @@
         state: present
       loop:
         - pre-commit
-        - black
-        - flake8
+        - ruff
         - mypy
       failed_when: false  # Optional tools, don't fail if they can't be installed
       changed_when: "'installed package' in result.stdout"
