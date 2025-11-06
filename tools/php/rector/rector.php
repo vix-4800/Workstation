@@ -71,7 +71,6 @@ return RectorConfig::configure()
     ->withNoDiffs()
     ->withPreparedSets(
         earlyReturn: true,
-        strictBooleans: true,
         privatization: true,
         codingStyle: true,
     )
