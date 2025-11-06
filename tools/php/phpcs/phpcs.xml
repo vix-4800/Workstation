@@ -239,9 +239,15 @@
         <type>warning</type>
     </rule>
     <rule ref="Generic.Formatting.SpaceAfterCast" />
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
-    <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
-    <rule ref="Generic.Files.EndFileNewline" />
+    <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces">
+        <properties>
+            <property name="ignoreSpacesBeforeAssignment" value="false" />
+            <property name="ignoreSpacesInAnnotation" value="true" />
+            <property name="ignoreSpacesInComment" value="true" />
+            <property name="ignoreSpacesInParameters" value="false" />
+            <property name="ignoreSpacesInMatch" value="false" />
+        </properties>
+    </rule>
 
     <!-- ===== PHP CONTROL STRUCTURES AND SECURITY ===== -->
     <rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
@@ -302,6 +308,10 @@
         <exclude name="Squiz.Commenting.FunctionComment.ThrowsNoFullStop" />
         <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows" />
         <exclude name="Squiz.Commenting.FunctionComment.IncorrectThrowsTag" />
+        <exclude name="Squiz.Commenting.FunctionComment.ParamCommentNotCapital" />
+        <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
+        <exclude name="Squiz.Commenting.FunctionComment.ThrowsNotCapital" />
+        <exclude name="Squiz.Commenting.FunctionComment.ThrowsNoFullStop" />
     </rule>
     <rule ref="Squiz.Commenting.ClassComment">
         <exclude-pattern>*/migrations/*</exclude-pattern>
@@ -315,18 +325,6 @@
     </rule>
     <rule ref="Squiz.Commenting.DocCommentAlignment" />
     <rule ref="Squiz.Commenting.VariableComment" />
-    <rule ref="Squiz.Commenting.FunctionComment.ParamCommentNotCapital">
-        <severity>0</severity>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionComment.ParamCommentFullStop">
-        <severity>0</severity>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionComment.ThrowsNotCapital">
-        <severity>0</severity>
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionComment.ThrowsNoFullStop">
-        <severity>0</severity>
-    </rule>
 
     <!-- ===== METRICS AND COMPLEXITY ===== -->
     <rule ref="Generic.Metrics.CyclomaticComplexity">
@@ -343,7 +341,6 @@
     </rule>
 
     <!-- ===== NAMING ===== -->
-    <rule ref="Generic.NamingConventions.UpperCaseConstantName" />
     <rule ref="Squiz.NamingConventions.ValidVariableName">
         <exclude name="Squiz.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
         <exclude name="Squiz.NamingConventions.ValidVariableName.ContainsNumbers" />
