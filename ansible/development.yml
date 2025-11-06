@@ -45,6 +45,7 @@
           phpstan/phpstan
           friendsofphp/php-cs-fixer
           rector/rector
+          phpmd/phpmd
           slevomat/coding-standard
       register: composer_install
       changed_when: "'Nothing to install' not in composer_install.stdout"
