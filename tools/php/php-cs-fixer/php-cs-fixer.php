@@ -233,7 +233,7 @@ return (new Config())
         'indentation_type' => true, // Uses spaces for indentation
         'use_arrow_functions' => true, // Use arrow functions where possible (potentially unsafe)
         'static_lambda' => true,
-        'final_public_method_for_abstract_class' => true,
+        // 'final_public_method_for_abstract_class' => true,
         'no_mixed_echo_print' => ['use' => 'echo'],
         'heredoc_to_nowdoc' => true, // Replaces heredoc on nowdoc where possible
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
