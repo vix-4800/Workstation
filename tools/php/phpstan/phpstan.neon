@@ -2,7 +2,7 @@ parameters:
     parallel:
         maximumNumberOfProcesses: 8
 
-    level: 6
+    level: 7
 
     # Default paths - can be overridden in project-specific config
     paths:
@@ -22,14 +22,14 @@ parameters:
     checkExplicitMixedMissingReturn: true
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true
+    inferPrivatePropertyTypeFromConstructor: true
+    treatPhpDocTypesAsCertain: false
 
     reportUnmatchedIgnoredErrors: true
     reportMaybesInMethodSignatures: true
     reportStaticMethodSignatures: true
 
-    inferPrivatePropertyTypeFromConstructor: true
-
-    treatPhpDocTypesAsCertain: false
+    checkMissingVarTagTypehint: true
 
 includes:
     # - vendor/phpstan/phpstan-deprecation-rules/rules.neon
