@@ -6,6 +6,7 @@ use PhpCsFixer\Config;
 
 return (new Config())
     ->setRiskyAllowed(true)
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setRules([
         // ─────────────────────────────────────────────────────────────
         // Base preset
