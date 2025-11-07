@@ -68,7 +68,6 @@ return RectorConfig::configure()
     ->withTypeCoverageLevel(2) // Type coverage level: 0 — no requirement for full type coverage
     ->withDeadCodeLevel(2) // Dead code detection level: 0 — do not analyze dead code
     ->withCodeQualityLevel(3) // Code quality improvement level: 0 — do not apply globally
-    ->withNoDiffs()
     ->withPreparedSets(
         earlyReturn: true,
         privatization: true,
