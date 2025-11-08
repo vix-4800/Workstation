@@ -42,6 +42,8 @@
           composer global require --no-interaction
           squizlabs/php_codesniffer
           phpstan/phpstan
+          phpstan/phpstan-strict-rules
+          phpstan/phpstan-deprecation-rules
           friendsofphp/php-cs-fixer
           rector/rector
           phpmd/phpmd

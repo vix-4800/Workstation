@@ -1,3 +1,8 @@
+includes:
+    - /home/vix/.config/composer/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - /home/vix/.config/composer/vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - /home/vix/.config/composer/vendor/phpstan/phpstan-strict-rules/rules.neon
+
 parameters:
     parallel:
         maximumNumberOfProcesses: 8
@@ -30,7 +35,3 @@ parameters:
     reportStaticMethodSignatures: true
 
     checkMissingVarTagTypehint: true
-
-includes:
-    # - vendor/phpstan/phpstan-deprecation-rules/rules.neon
-    # - vendor/phpstan/phpstan-strict-rules/rules.neon
