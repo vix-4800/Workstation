@@ -1,7 +1,7 @@
 includes:
-    - /home/vix/.config/composer/vendor/phpstan/phpstan/conf/bleedingEdge.neon
-    - /home/vix/.config/composer/vendor/phpstan/phpstan-deprecation-rules/rules.neon
-    - /home/vix/.config/composer/vendor/phpstan/phpstan-strict-rules/rules.neon
+    - %currentWorkingDirectory%/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - %currentWorkingDirectory%/vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - %currentWorkingDirectory%/vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
     parallel:
@@ -9,17 +9,13 @@ parameters:
 
     level: 7
 
-    # Default paths - can be overridden in project-specific config
-    paths:
-        - .
-
     excludePaths:
         - vendor/*
         - node_modules/*
         - storage/*
         - bootstrap/cache/*
         - public/build/*
-        - tests/_support/*
+        - tests/*
 
     checkMissingCallableSignature: true
     checkUninitializedProperties: true
