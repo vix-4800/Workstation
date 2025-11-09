@@ -3,10 +3,13 @@
 declare(strict_types=1);
 
 use PhpCsFixer\Config;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 return (new Config())
     ->setRiskyAllowed(true)
-    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
+    ->setParallelConfig(ParallelConfigFactory::detect())
+    ->setUsingCache(false)
+    ->setUnsupportedPhpVersionAllowed(true)
     ->setRules([
         // ─────────────────────────────────────────────────────────────
         // Base preset
@@ -135,7 +138,6 @@ return (new Config())
         'is_null' => true, // Replaces is_null($var) expression with null === $var
         'types_spaces' => ['space' => 'none'], // Consistent spacing in types
         'short_scalar_cast' => true,
-        'single_line_empty_body' => true, // Ensures single line empty body
         'no_useless_concat_operator' => true, // Removes unnecessary concatenation of strings
         'no_unneeded_control_parentheses' => [
             'statements' => ['break', 'clone', 'continue', 'echo_print', 'return', 'switch_case', 'yield'],
@@ -240,5 +242,4 @@ return (new Config())
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
-    ])
-    ->setUsingCache(false);
+    ]);
