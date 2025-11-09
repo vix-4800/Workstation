@@ -9,12 +9,10 @@
     <arg name="extensions" value="php" />
     <arg name="colors" />
     <arg value="p" />
-    <arg name="basepath" value="." />
 
     <config name="encoding" value="utf-8" />
     <config name="tabWidth" value="4" />
 
-    <file>./</file>
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/runtime/*</exclude-pattern>
