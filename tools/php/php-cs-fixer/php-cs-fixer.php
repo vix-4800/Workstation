@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+use App\PhpCsFixer\Fixers\MagicClassConstantFixer;
+
+require_once __DIR__ . '/Fixers/MagicClassConstantFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setUsingCache(false)
     ->setUnsupportedPhpVersionAllowed(true)
+    ->registerCustomFixers([
+        new MagicClassConstantFixer(),
+    ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
         // Base preset
@@ -54,7 +60,7 @@ return (new Config())
         'phpdoc_separation' => true, // Ensures separation between different types of tags
         'phpdoc_trim' => true, // Trims PHPDoc comments
         'phpdoc_trim_consecutive_blank_line_separation' => true, // Trims blank line separation in PHPDoc comments
-        'no_superfluous_phpdoc_tags' => true, // Removes unnecessary PHPDoc tags
+        // 'no_superfluous_phpdoc_tags' => true, // Removes unnecessary PHPDoc tags
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'alpha',
@@ -100,7 +106,7 @@ return (new Config())
         'array_syntax' => ['syntax' => 'short'], // Uses [] instead of array()
         'list_syntax' => ['syntax' => 'short'], // Uses [] instead of list()
         'trim_array_spaces' => true, // Trims spaces inside array brackets
-        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters', 'match']], // Trailing comma in multiline arrays
+        // 'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters', 'match']], // Trailing comma in multiline arrays
         'no_trailing_comma_in_singleline' => true, // No trailing comma in single-line arrays
         'whitespace_after_comma_in_array' => true, // Ensures whitespace after commas in arrays
         'no_whitespace_before_comma_in_array' => true, // No whitespace before commas in arrays
@@ -170,15 +176,15 @@ return (new Config())
             'method' => 'one',
             'trait_import' => 'none',
         ]], // Enforces separation between class attributes
-        'ordered_class_elements' => [
-            'order' => [
-                'use_trait',
-                'constant_public', 'constant_protected', 'constant_private',
-                'property_public', 'property_protected', 'property_private',
-                'construct',
-                'method_public', 'method_protected', 'method_private',
-            ],
-        ], // Enforces order of class elements
+        // 'ordered_class_elements' => [
+        //     'order' => [
+        //         'use_trait',
+        //         'constant_public', 'constant_protected', 'constant_private',
+        //         'property_public', 'property_protected', 'property_private',
+        //         'construct',
+        //         'method_public', 'method_protected', 'method_private',
+        //     ],
+        // ], // Enforces order of class elements
         'single_class_element_per_statement' => ['elements' => ['const', 'property']], // Enforces single class element per statement
         'single_trait_insert_per_statement' => true,
 
@@ -242,4 +248,5 @@ return (new Config())
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
+        'App/magic_class_constant' => true, // Replaces __CLASS__ with self::class
     ]);
