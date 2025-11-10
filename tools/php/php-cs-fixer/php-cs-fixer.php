@@ -131,7 +131,7 @@ return (new Config())
         'explicit_string_variable' => true, // Use {$var} instead of $var in strings
         'no_empty_statement' => true, // Removes empty statements
         'blank_line_before_statement' => [
-            'statements' => ['return', 'throw', 'continue', 'break', 'try'],
+            'statements' => ['return', 'throw', 'continue', 'break', 'try', 'foreach', 'if', 'while', 'switch'],
         ], // Requires a blank line before statements (return, throw, continue)
         'single_space_around_construct' => true, // Ensures single space around constructs
         'simplified_if_return' => true, // Simplifies if return statements
