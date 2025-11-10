@@ -6,6 +6,8 @@ includes:
 parameters:
     parallel:
         maximumNumberOfProcesses: 8
+        jobSize: 20
+        processTimeout: 600.0
 
     level: 8
 
@@ -17,17 +19,52 @@ parameters:
         - public/build/*
         - tests/*
 
+    # Vague typehints
     checkMissingCallableSignature: true
+
+    # Property checks
     checkUninitializedProperties: true
-    checkExplicitMixed: true
+    checkDynamicProperties: true
+
+    # Mixed type checks
+    checkImplicitMixed: true
     checkExplicitMixedMissingReturn: true
+
+    # Case sensitivity checks
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true
+
+    # Type inference
     inferPrivatePropertyTypeFromConstructor: true
     treatPhpDocTypesAsCertain: false
 
+    # Return type checks
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+
+    # Error reporting
     reportUnmatchedIgnoredErrors: true
     reportMaybesInMethodSignatures: true
+    reportMaybesInPropertyPhpDocTypes: true
     reportStaticMethodSignatures: true
+    reportWrongPhpDocTypeInVarTag: true
+    reportAnyTypeWideningInVarTag: true
 
+    # Variable scoping (stricter analysis)
+    polluteScopeWithLoopInitialAssignments: false
+    polluteScopeWithAlwaysIterableForeach: false
+
+    # PHPDoc checks
     checkMissingVarTagTypehint: true
+
+    # Array offset checks
+    reportPossiblyNonexistentGeneralArrayOffset: true
+    reportPossiblyNonexistentConstantArrayOffset: true
+
+    # Benevolent union types
+    checkBenevolentUnionTypes: true
+
+    # Conditional checks
+    reportAlwaysTrueInLastCondition: true
+
+    # Function purity
+    rememberPossiblyImpureFunctionValues: true
