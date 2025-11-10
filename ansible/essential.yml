@@ -19,6 +19,8 @@
           - ffmpeg
           - man
           - wget
+          - tree
+          - htop
         state: present
 
     - name: 'Install modern CLI tools'
