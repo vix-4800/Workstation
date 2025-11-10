@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
-use App\PhpCsFixer\Fixers\MagicClassConstantFixer;
+use App\PhpCsFixer\Fixers\ModernMagicConstantsFixer;
 
-require_once __DIR__ . '/Fixers/MagicClassConstantFixer.php';
+require_once __DIR__ . '/Fixers/ModernMagicConstantsFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
@@ -14,7 +14,7 @@ return (new Config())
     ->setUsingCache(false)
     ->setUnsupportedPhpVersionAllowed(true)
     ->registerCustomFixers([
-        new MagicClassConstantFixer(),
+        new ModernMagicConstantsFixer(),
     ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
@@ -248,5 +248,5 @@ return (new Config())
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
-        'App/magic_class_constant' => true, // Replaces __CLASS__ with self::class
+        'App/modern_magic_constants' => true, // Replaces __CLASS__ and __TRAIT__ with self::class
     ]);
