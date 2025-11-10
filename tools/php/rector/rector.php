@@ -48,6 +48,8 @@ use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
+use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -101,6 +103,7 @@ return RectorConfig::configure()
         AddParamTypeDeclarationRector::class, // Adds parameter type declaration where missing
         AddPropertyTypeDeclarationRector::class, // Adds property type declaration where missing
         AddMethodCallBasedStrictParamTypeRector::class, // Adds strict parameter type based on method calls
+        DisallowedEmptyRuleFixerRector::class, // Disallow usage of empty()
 
         // Remove dead code
         RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
@@ -127,6 +130,8 @@ return RectorConfig::configure()
         // Code style
         InlineIfToExplicitIfRector::class,
         LogicalToBooleanRector::class,
+
+        ExplicitNullableParamTypeRector::class,
 
         // Custom code quality rules
         ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
