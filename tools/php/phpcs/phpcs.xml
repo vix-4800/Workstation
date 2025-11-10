@@ -364,4 +364,14 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference" />
+
+    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion" />
+    <rule ref="SlevomatCodingStandard.Classes.ForbiddenPublicProperty">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature">
+        <properties>
+            <property name="maxLineLength" value="120" />
+        </properties>
+    </rule>
 </ruleset>
