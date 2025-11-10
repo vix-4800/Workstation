@@ -7,7 +7,7 @@ parameters:
     parallel:
         maximumNumberOfProcesses: 8
 
-    level: 7
+    level: 8
 
     excludePaths:
         - vendor/*
