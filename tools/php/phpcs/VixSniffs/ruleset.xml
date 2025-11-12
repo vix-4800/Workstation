@@ -3,8 +3,12 @@
     name="VixSniffs">
     <description>Custom coding standard sniffs</description>
 
-    <!-- Register the custom sniffs directory -->
+    <!-- Register the custom sniffs -->
     <rule ref="VixSniffs.Functions.DisallowIsNull">
+        <type>warning</type>
+    </rule>
+
+    <rule ref="VixSniffs.Functions.DisallowEmpty">
         <type>warning</type>
     </rule>
 </ruleset>
