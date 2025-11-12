@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CustomSniffs\Sniffs\Functions;
+namespace VixSniffs\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;

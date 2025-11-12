@@ -21,7 +21,7 @@
     <exclude-pattern>*/photos/*</exclude-pattern>
 
     <!-- ===== CUSTOM SNIFFS ===== -->
-    <rule ref="./CustomSniffs/ruleset.xml" />
+    <rule ref="./VixSniffs/ruleset.xml" />
 
     <!-- ===== CORE ===== -->
     <rule ref="PSR12" />
