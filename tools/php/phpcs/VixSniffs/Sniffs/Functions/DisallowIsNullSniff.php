@@ -31,7 +31,7 @@ class DisallowIsNullSniff implements Sniff
         $token = $tokens[$stackPtr];
 
         // Check if the string is "is_null"
-        if (strtolower($token['content']) !== 'is_null') {
+        if (mb_strtolower((string) $token['content']) !== 'is_null') {
             return;
         }
 
@@ -41,7 +41,7 @@ class DisallowIsNullSniff implements Sniff
         if ($prevToken !== false) {
             $prevTokenCode = $tokens[$prevToken]['code'];
 
-            if ($prevTokenCode === T_OBJECT_OPERATOR || $prevTokenCode === T_DOUBLE_COLON) {
+            if (in_array($prevTokenCode, [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
                 // This is a method call like $obj->is_null() or Class::is_null()
                 return;
             }

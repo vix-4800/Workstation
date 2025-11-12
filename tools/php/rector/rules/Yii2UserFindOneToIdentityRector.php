@@ -42,6 +42,7 @@ final class Yii2UserFindOneToIdentityRector extends AbstractRector
         }
 
         $args = $node->getArgs();
+
         if (count($args) !== 1) {
             return null;
         }
@@ -92,6 +93,7 @@ final class Yii2UserFindOneToIdentityRector extends AbstractRector
     {
         if ($expr instanceof Array_ && count($expr->items) === 1) {
             $item = $expr->items[0];
+
             if ($item && $item->value && $this->isYiiUserIdPropertyFetch($item->value)) {
                 return true;
             }

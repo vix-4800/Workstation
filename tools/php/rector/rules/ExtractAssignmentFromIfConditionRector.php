@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BinaryOp\Equal;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -147,6 +147,7 @@ if (is_array($items)) {
         $funcCall = $booleanNot->expr;
 
         $assignment = $this->extractAssignmentFromFuncCall($funcCall);
+
         if ($assignment === null) {
             return null;
         }
@@ -166,6 +167,7 @@ if (is_array($items)) {
     private function handleFuncCallCondition(If_ $node, FuncCall $funcCall): ?array
     {
         $assignment = $this->extractAssignmentFromFuncCall($funcCall);
+
         if ($assignment === null) {
             return null;
         }
@@ -245,12 +247,15 @@ if (is_array($items)) {
         if ($originalOp instanceof Identical) {
             return new Identical($left, $right);
         }
+
         if ($originalOp instanceof NotIdentical) {
             return new NotIdentical($left, $right);
         }
+
         if ($originalOp instanceof Equal) {
             return new Equal($left, $right);
         }
+
         if ($originalOp instanceof NotEqual) {
             return new NotEqual($left, $right);
         }

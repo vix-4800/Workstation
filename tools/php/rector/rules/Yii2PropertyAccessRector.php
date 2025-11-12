@@ -66,6 +66,7 @@ final class Yii2PropertyAccessRector extends AbstractRector
         }
 
         $propertyFetch = $node->var;
+
         if (!$this->isName($propertyFetch->name, 'user')) {
             return null;
         }
@@ -76,6 +77,7 @@ final class Yii2PropertyAccessRector extends AbstractRector
         }
 
         $staticPropertyFetch = $propertyFetch->var;
+
         if (!$staticPropertyFetch->class instanceof Name) {
             return null;
         }
@@ -90,6 +92,7 @@ final class Yii2PropertyAccessRector extends AbstractRector
 
         // Определяем, какое свойство должно быть вместо метода
         $newPropertyName = null;
+
         if ($this->isName($node->name, 'getId')) {
             $newPropertyName = 'id';
         } elseif ($this->isName($node->name, 'getIdentity')) {

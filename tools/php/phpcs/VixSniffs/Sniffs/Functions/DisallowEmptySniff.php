@@ -25,7 +25,7 @@ class DisallowEmptySniff implements Sniff
      */
     public function process(File $phpcsFile, int $stackPtr): void
     {
-        $warning = 'Usage of empty() is discouraged; use explicit checks (=== null, === \'\', === [], etc.) instead. '
+        $warning = "Usage of empty() is discouraged; use explicit checks (=== null, === '', === [], etc.) instead. "
             . 'empty() has confusing behavior: empty(0), empty("0"), empty(false) all return true.';
 
         $phpcsFile->addWarning($warning, $stackPtr, 'Found');

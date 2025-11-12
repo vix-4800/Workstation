@@ -60,6 +60,7 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
         }
 
         $methodName = $node->name->toString();
+
         if (!in_array($methodName, ['one', 'all'], true)) {
             return null;
         }
@@ -84,6 +85,7 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
 
         // Ensure the base call is a static ::find()
         $findCall = $whereCall->var;
+
         if (
             !($findCall instanceof StaticCall) ||
             !($findCall->name instanceof Identifier) ||

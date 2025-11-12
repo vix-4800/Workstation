@@ -44,16 +44,19 @@ final class Yii2FindAllIdShortcutRector extends AbstractRector
         }
 
         $firstArg = $node->args[0];
+
         if (!$firstArg->value instanceof Array_) {
             return null;
         }
 
         $array = $firstArg->value;
+
         if (count($array->items) !== 1) {
             return null;
         }
 
         $firstItem = $array->items[0];
+
         if (!$firstItem instanceof ArrayItem) {
             return null;
         }

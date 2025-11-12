@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Custom\Rules;
 
-use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -114,6 +114,6 @@ final class Yii2UseExistsInsteadOfOneNotNullRector extends AbstractRector
             return false;
         }
 
-        return strtolower($node->name->toString()) === 'null';
+        return mb_strtolower($node->name->toString()) === 'null';
     }
 }

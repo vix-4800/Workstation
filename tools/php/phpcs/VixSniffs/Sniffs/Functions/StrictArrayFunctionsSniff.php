@@ -15,7 +15,7 @@ class StrictArrayFunctionsSniff implements Sniff
     /**
      * Array functions that should use strict comparison.
      */
-    private const FUNCTIONS = [
+    private const array FUNCTIONS = [
         'in_array' => 3,        // 3rd parameter
         'array_search' => 3,    // 3rd parameter
         'array_keys' => 3,      // 3rd parameter (for filtering)
@@ -36,7 +36,7 @@ class StrictArrayFunctionsSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
         $token = $tokens[$stackPtr];
-        $functionName = strtolower($token['content']);
+        $functionName = mb_strtolower((string) $token['content']);
 
         // Check if this is one of the functions we care about
         if (!isset(self::FUNCTIONS[$functionName])) {
@@ -56,7 +56,7 @@ class StrictArrayFunctionsSniff implements Sniff
         if ($prevToken !== false) {
             $prevTokenCode = $tokens[$prevToken]['code'];
 
-            if ($prevTokenCode === T_OBJECT_OPERATOR || $prevTokenCode === T_DOUBLE_COLON) {
+            if (in_array($prevTokenCode, [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
                 return;
             }
         }
@@ -86,7 +86,7 @@ class StrictArrayFunctionsSniff implements Sniff
         $strictParamToken = $this->findNthParameter($phpcsFile, $openParen, $closeParen, $requiredParamPosition);
 
         if ($strictParamToken !== null) {
-            $strictValue = strtolower($tokens[$strictParamToken]['content']);
+            $strictValue = mb_strtolower((string) $tokens[$strictParamToken]['content']);
 
             if ($strictValue === 'false') {
                 $warning = sprintf(
@@ -112,14 +112,14 @@ class StrictArrayFunctionsSniff implements Sniff
         for ($i = $openParen + 1; $i < $closeParen; $i++) {
             $code = $tokens[$i]['code'];
 
-            if ($code === T_OPEN_PARENTHESIS || $code === T_OPEN_SQUARE_BRACKET) {
+            if (in_array($code, [T_OPEN_PARENTHESIS, T_OPEN_SQUARE_BRACKET], true)) {
                 $depth++;
                 $inParameter = true;
 
                 continue;
             }
 
-            if ($code === T_CLOSE_PARENTHESIS || $code === T_CLOSE_SQUARE_BRACKET) {
+            if (in_array($code, [T_CLOSE_PARENTHESIS, T_CLOSE_SQUARE_BRACKET], true)) {
                 $depth--;
 
                 continue;
@@ -158,13 +158,13 @@ class StrictArrayFunctionsSniff implements Sniff
         for ($i = $openParen + 1; $i < $closeParen; $i++) {
             $code = $tokens[$i]['code'];
 
-            if ($code === T_OPEN_PARENTHESIS || $code === T_OPEN_SQUARE_BRACKET) {
+            if (in_array($code, [T_OPEN_PARENTHESIS, T_OPEN_SQUARE_BRACKET], true)) {
                 $depth++;
 
                 continue;
             }
 
-            if ($code === T_CLOSE_PARENTHESIS || $code === T_CLOSE_SQUARE_BRACKET) {
+            if (in_array($code, [T_CLOSE_PARENTHESIS, T_CLOSE_SQUARE_BRACKET], true)) {
                 $depth--;
 
                 continue;

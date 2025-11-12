@@ -54,6 +54,7 @@ final class Yii2DeleteAllShortcutRector extends AbstractRector
 
         // Ensure it's called after ->where(...)
         $whereCall = $node->var;
+
         if (
             !($whereCall instanceof MethodCall) ||
             !($whereCall->name instanceof Identifier) ||
@@ -64,6 +65,7 @@ final class Yii2DeleteAllShortcutRector extends AbstractRector
 
         // Ensure the base call is a static call to ::find()
         $findCall = $whereCall->var;
+
         if (
             !($findCall instanceof StaticCall) ||
             !($findCall->name instanceof Identifier) ||

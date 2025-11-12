@@ -51,7 +51,8 @@ final class Yii2FindOneIdShortcutRector extends AbstractRector
     /**
      * Performs the transformation for matching StaticCall nodes.
      *
-     * @param  StaticCall      $node
+     * @param StaticCall $node
+     *
      * @return StaticCall|null
      */
     public function refactor(Node $node): ?Node

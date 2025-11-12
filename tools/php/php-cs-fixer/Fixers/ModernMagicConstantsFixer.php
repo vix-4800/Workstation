@@ -79,8 +79,11 @@ final class ModernMagicConstantsFixer extends AbstractFixer
      */
     public function isCandidate(Tokens $tokens): bool
     {
-        return $tokens->isTokenKindFound(T_CLASS_C)
-            || $tokens->isTokenKindFound(T_TRAIT_C);
+        if ($tokens->isTokenKindFound(T_CLASS_C)) {
+            return true;
+        }
+
+        return $tokens->isTokenKindFound(T_TRAIT_C);
     }
 
     /**
@@ -97,12 +100,14 @@ final class ModernMagicConstantsFixer extends AbstractFixer
             // Replace __CLASS__ with self::class
             if ($token->isGivenKind(T_CLASS_C)) {
                 $this->replaceWithSelfClass($tokens, $index);
+
                 continue;
             }
 
             // Replace __TRAIT__ with self::class
             if ($token->isGivenKind(T_TRAIT_C)) {
                 $this->replaceWithSelfClass($tokens, $index);
+
                 continue;
             }
         }

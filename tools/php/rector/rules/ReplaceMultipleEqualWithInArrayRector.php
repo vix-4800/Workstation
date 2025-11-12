@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Custom\Rules;
 
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -12,6 +11,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -101,9 +101,11 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
         }
 
         $arrayItems = [];
+
         foreach ($values as $value) {
             $arrayItems[] = new ArrayItem($value);
         }
+
         $valuesArray = new Array_($arrayItems);
 
         return new FuncCall(
