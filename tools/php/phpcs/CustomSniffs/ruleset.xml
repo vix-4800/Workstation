@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    name="CustomSniffs">
+    <description>Custom coding standard sniffs</description>
+
+    <!-- Register the custom sniffs directory -->
+    <rule ref="CustomSniffs.Functions.DisallowIsNull">
+        <type>warning</type>
+    </rule>
+</ruleset>

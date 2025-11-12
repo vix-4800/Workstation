@@ -20,6 +20,9 @@
     <exclude-pattern>*/files/*</exclude-pattern>
     <exclude-pattern>*/photos/*</exclude-pattern>
 
+    <!-- ===== CUSTOM SNIFFS ===== -->
+    <rule ref="./CustomSniffs/ruleset.xml" />
+
     <!-- ===== CORE ===== -->
     <rule ref="PSR12" />
 
