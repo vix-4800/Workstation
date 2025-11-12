@@ -37,6 +37,7 @@
     </rule>
 
     <!-- ===== TYPE HINTS ===== -->
+    <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints" />
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>
             <property name="spacesCountAroundEqualsSign" value="0" />
@@ -310,12 +311,20 @@
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/environments/*</exclude-pattern>
         <type>warning</type>
+
+        <!-- <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" /> -->
     </rule>
     <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration">
         <exclude-pattern>*/views/*</exclude-pattern>
     </rule>
     <rule ref="Squiz.Commenting.DocCommentAlignment" />
     <rule ref="Squiz.Commenting.VariableComment" />
+    <rule ref="Generic.Commenting.DocComment.MissingShort">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+        <exclude-pattern>*/tests/*</exclude-pattern>
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <exclude-pattern>*/environments/*</exclude-pattern>
+    </rule>
 
     <!-- ===== METRICS AND COMPLEXITY ===== -->
     <rule ref="Generic.Metrics.CyclomaticComplexity">
