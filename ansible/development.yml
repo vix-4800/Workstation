@@ -49,6 +49,25 @@
       changed_when: "'Nothing to install' not in composer_install.stdout"
       ignore_errors: true
 
+    - name: 'Get current PHPCS installed_paths'
+      become: false
+      ansible.builtin.command:
+        cmd: phpcs --config-show installed_paths
+      register: phpcs_installed_paths
+      changed_when: false
+      failed_when: false
+
+    - name: 'Set PHPCS installed_paths with custom sniffs'
+      become: false
+      ansible.builtin.command:
+        cmd: >
+          phpcs --config-set installed_paths
+          {{ lookup('env', 'HOME') }}/.config/composer/vendor/slevomat/coding-standard,{{ lookup('env', 'HOME') }}/.config/phpcs/CustomSniffs
+      when: >
+        phpcs_installed_paths.rc != 0 or
+        '.config/phpcs/CustomSniffs' not in phpcs_installed_paths.stdout
+      changed_when: true
+
     - name: 'Ensure Composer global bin directory is in PATH'
       become: false
       ansible.builtin.lineinfile:
