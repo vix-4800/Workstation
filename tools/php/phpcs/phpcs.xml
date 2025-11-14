@@ -214,9 +214,9 @@
     <rule ref="SlevomatCodingStandard.Classes.ParentCallSpacing">
         <properties>
             <property name="linesCountBefore" value="1" />
-            <property name="linesCountBeforeFirst" value="1" />
+            <property name="linesCountBeforeFirst" value="0" />
             <property name="linesCountAfter" value="1" />
-            <property name="linesCountAfterLast" value="1" />
+            <property name="linesCountAfterLast" value="0" />
         </properties>
         <type>warning</type>
     </rule>
