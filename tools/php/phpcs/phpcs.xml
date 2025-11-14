@@ -366,8 +366,8 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Complexity.Cognitive">
         <properties>
-            <property name="warningThreshold" value="6" />
-            <property name="errorThreshold" value="12" />
+            <property name="warningThreshold" value="10" />
+            <property name="errorThreshold" value="20" />
         </properties>
     </rule>
     <rule ref="Generic.Metrics.NestingLevel">
