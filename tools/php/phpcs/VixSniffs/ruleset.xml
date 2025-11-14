@@ -8,10 +8,6 @@
         <type>warning</type>
     </rule>
 
-    <rule ref="VixSniffs.Functions.StrictArrayFunctions">
-        <type>warning</type>
-    </rule>
-
     <rule ref="VixSniffs.ControlStructures.DisallowThrowInTernary">
         <type>error</type>
     </rule>
