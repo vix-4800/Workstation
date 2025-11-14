@@ -38,6 +38,9 @@
 
     <!-- ===== TYPE HINTS ===== -->
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints" />
+    <rule ref="SlevomatCodingStandard.TypeHints.ClassConstantTypeHint">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>
             <property name="spacesCountAroundEqualsSign" value="0" />
@@ -67,7 +70,9 @@
 
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation" />
     </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition" />
+    <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
         <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/tests/*</exclude-pattern>
@@ -99,14 +104,18 @@
         </properties>
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Classes.RequireSelfReference" />
+    <rule ref="SlevomatCodingStandard.Classes.RequireSelfReference">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
         <properties>
             <property name="searchAnnotations" value="true" />
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine" />
-    <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse" />
+    <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
         <properties>
             <property name="psr12Compatible" value="true" />
@@ -139,6 +148,7 @@
         <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/environments/*</exclude-pattern>
+        <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">
         <properties>
@@ -149,8 +159,12 @@
         </properties>
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty" />
+    <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias" />
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall">
         <exclude-pattern>*/migrations/*</exclude-pattern>
@@ -180,11 +194,15 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison" />
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator">
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn" />
+    <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator">
         <type>warning</type>
     </rule>
@@ -415,8 +433,12 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference" />
 
-    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion" />
-    <rule ref="SlevomatCodingStandard.Classes.RequireAbstractOrFinal" />
+    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.RequireAbstractOrFinal">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Classes.EnumCaseSpacing">
         <properties>
             <property name="minLinesCountBeforeWithComment" value="1" />
@@ -433,8 +455,14 @@
         <properties>
             <property name="maxLineLength" value="120" />
         </properties>
+        <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition" />
+    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Classes.ConstantSpacing">
         <properties>
             <property name="minLinesCountBeforeWithComment" value="1" />
@@ -477,7 +505,9 @@
         </properties>
         <severity>0</severity>
     </rule>
-    <rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement" />
+    <rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration" />
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments">
         <properties>
@@ -492,8 +522,12 @@
         </properties>
     </rule>
     <rule
-        ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowTrailingMultiLineTernaryOperator" />
+        ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch">
+        <type>warning</type>
+    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowTrailingMultiLineTernaryOperator">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
         <properties>
             <property name="linesCountBefore" value="1" />
@@ -503,7 +537,9 @@
         </properties>
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Functions.StaticClosure" />
+    <rule ref="SlevomatCodingStandard.Functions.StaticClosure">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Functions.StrictCall" />
     <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure" />
     <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator">
@@ -513,5 +549,7 @@
             <property name="minDigitsAfterDecimalPoint" value="5" />
         </properties>
     </rule>
-    <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable" />
+    <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable">
+        <type>warning</type>
+    </rule>
 </ruleset>
