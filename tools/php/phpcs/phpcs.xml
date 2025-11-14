@@ -9,6 +9,7 @@
     <arg name="extensions" value="php" />
     <arg name="colors" />
     <arg value="p" />
+    <arg value="q" />
 
     <config name="encoding" value="utf-8" />
     <config name="tabWidth" value="4" />
