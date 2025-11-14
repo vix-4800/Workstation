@@ -152,13 +152,15 @@
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction" />
     <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty" />
     <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias" />
-    <!-- <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall">
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall">
         <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/environments/*</exclude-pattern>
         <exclude-pattern>*/views/*</exclude-pattern>
+
         <type>warning</type>
-    </rule> -->
+        <severity>0</severity>
+    </rule>
     <rule ref="Generic.PHP.ForbiddenFunctions">
         <properties>
             <property name="forbiddenFunctions" type="array">
@@ -232,11 +234,13 @@
 
     <!-- ===== ARRAYS ===== -->
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
-    <!-- <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma">
+    <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma">
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/environments/*</exclude-pattern>
         <exclude-pattern>*/migrations/*</exclude-pattern>
-    </rule> -->
+
+        <severity>0</severity>
+    </rule>
 
     <!-- ===== OPERATORS AND WHITESPACE ===== -->
     <rule ref="Squiz.WhiteSpace.OperatorSpacing">
@@ -271,9 +275,10 @@
     <rule ref="Generic.PHP.NoSilencedErrors" />
 
     <!-- ===== COMMENTS AND DOCUMENTATION ===== -->
-    <!-- <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment">
+    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment">
         <type>warning</type>
-    </rule> -->
+        <severity>0</severity>
+    </rule>
     <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment" />
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
         <properties>
@@ -468,6 +473,7 @@
                 <element value="magic methods" />
             </property>
         </properties>
+        <severity>0</severity>
     </rule>
     <rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement" />
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration" />
