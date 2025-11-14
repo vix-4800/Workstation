@@ -347,7 +347,9 @@
         <exclude-pattern>*/views/*</exclude-pattern>
     </rule>
     <rule ref="Squiz.Commenting.DocCommentAlignment" />
-    <rule ref="Squiz.Commenting.VariableComment" />
+    <rule ref="Squiz.Commenting.VariableComment">
+        <exclude name="Squiz.Commenting.VariableComment.IncorrectVarType" />
+    </rule>
     <rule ref="Generic.Commenting.DocComment.MissingShort">
         <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/tests/*</exclude-pattern>
