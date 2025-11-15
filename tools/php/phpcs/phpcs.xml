@@ -551,6 +551,10 @@
         <type>warning</type>
     </rule>
 
+    <rule ref="DevStrict.Yii2.DisallowResponseFormatAssignment" />
+    <rule ref="DevStrict.Yii2.PreferActiveRecordShortcuts" />
+    <rule ref="DevStrict.Yii2.PreferExistsOverCount" />
+
     <rule ref="DevStrict.Functions.DisallowIsNull" />
     <rule ref="DevStrict.Functions.DisallowCompact" />
     <rule ref="DevStrict.ControlStructures.DisallowThrowInTernary" />
