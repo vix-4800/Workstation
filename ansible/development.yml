@@ -45,6 +45,7 @@
           rector/rector
           phpmd/phpmd
           slevomat/coding-standard
+          devstrict/phpcs:dev-main
       register: composer_install
       changed_when: "'Nothing to install' not in composer_install.stdout"
       ignore_errors: true

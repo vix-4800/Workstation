@@ -21,9 +21,6 @@
     <exclude-pattern>*/files/*</exclude-pattern>
     <exclude-pattern>*/photos/*</exclude-pattern>
 
-    <!-- ===== CUSTOM SNIFFS ===== -->
-    <rule ref="./VixSniffs/ruleset.xml" />
-
     <!-- ===== CORE ===== -->
     <rule ref="PSR12" />
 
@@ -553,4 +550,9 @@
     <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable">
         <type>warning</type>
     </rule>
+
+    <rule ref="DevStrict.Functions.DisallowIsNull" />
+    <rule ref="DevStrict.Functions.DisallowCompact" />
+    <rule ref="DevStrict.ControlStructures.DisallowThrowInTernary" />
+    <rule ref="DevStrict.ControlStructures.UseInArray" />
 </ruleset>
