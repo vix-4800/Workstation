@@ -2,20 +2,14 @@
 
 declare(strict_types=1);
 
-use App\PhpCsFixer\Fixers\ModernMagicConstantsFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
-
-require_once __DIR__ . '/Fixers/ModernMagicConstantsFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setUsingCache(false)
     ->setUnsupportedPhpVersionAllowed(true)
-    ->registerCustomFixers([
-        new ModernMagicConstantsFixer(),
-    ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
         // Base preset
@@ -248,6 +242,5 @@ return (new Config())
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
-        'App/modern_magic_constants' => true, // Replaces __CLASS__ and __TRAIT__ with self::class
         'no_useless_sprintf' => true, // Removes useless sprintf calls
     ]);
