@@ -559,4 +559,7 @@
     <rule ref="DevStrict.Functions.DisallowCompact" />
     <rule ref="DevStrict.ControlStructures.DisallowThrowInTernary" />
     <rule ref="DevStrict.ControlStructures.UseInArray" />
+    <rule ref="DevStrict.ControlStructures.DisallowCountInLoop" />
+    <rule ref="DevStrict.Functions.DisallowCastFunctions" />
+    <rule ref="DevStrict.ControlStructures.DisallowGotoStatement" />
 </ruleset>
