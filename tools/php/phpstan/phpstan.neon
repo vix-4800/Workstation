@@ -9,7 +9,7 @@ parameters:
         jobSize: 20
         processTimeout: 600.0
 
-    level: 8
+    level: max
 
     excludePaths:
         - vendor/*
