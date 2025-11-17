@@ -38,6 +38,7 @@ use Rector\Custom\Rules\Yii2FindAllIdShortcutRector;
 use Rector\Custom\Rules\Yii2FindOneFindAllShortcutRector;
 use Rector\Custom\Rules\Yii2FindOneIdShortcutRector;
 use Rector\Custom\Rules\Yii2PropertyAccessRector;
+use Rector\Custom\Rules\Yii2UseExistsInsteadOfCountRector;
 use Rector\Custom\Rules\Yii2UseExistsInsteadOfOneNotNullRector;
 use Rector\Custom\Rules\Yii2UserFindOneToIdentityRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
@@ -142,4 +143,5 @@ return RectorConfig::configure()
         Yii2FindOneIdShortcutRector::class, // Simplify findOne operations by ID
         Yii2UserFindOneToIdentityRector::class, // Replace User::findOne() with identity access patterns
         Yii2UseExistsInsteadOfOneNotNullRector::class, // Replace ->one() !== null with ->exists()
+        Yii2UseExistsInsteadOfCountRector::class, // Replace ->count() > 0 with ->exists()
     ]);
