@@ -58,6 +58,7 @@ return {
         "dotenv-linter", -- .env files
         "phpstan",
         "phpcs",
+        "phpmd",
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Other Tools                                             │

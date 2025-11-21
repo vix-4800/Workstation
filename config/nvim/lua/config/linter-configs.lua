@@ -16,6 +16,7 @@ M.configs = {
   php_cs_fixer = vim.fn.expand("~/.config/php-cs-fixer/php-cs-fixer.php"),
   phpstan = vim.fn.expand("~/.config/phpstan/phpstan.neon"),
   phpcs = vim.fn.expand("~/.config/phpcs/phpcs.xml"),
+  phpmd = vim.fn.expand("~/.config/phpmd/phpmd.xml"),
   rector = vim.fn.expand("~/.config/rector/rector.php"),
   pint = vim.fn.expand("~/.config/pint/pint.json"),
 

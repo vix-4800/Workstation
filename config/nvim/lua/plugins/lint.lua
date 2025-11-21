@@ -11,7 +11,7 @@ return {
 
     lint.linters_by_ft = {
       markdown = { "markdownlint" },
-      php = { "phpstan", "phpcs" },
+      php = { "phpstan", "phpcs", "phpmd" },
       dockerfile = { "hadolint" },
       json = { "jsonlint" },
       yaml = { "yamllint" },
@@ -100,6 +100,18 @@ return {
     lint.linters.phpcs.env = {
       PHP_CS_FIXER_IGNORE_ENV = "1",
     }
+
+    -- Configure phpmd to use custom config
+    lint.linters.phpmd = lint.linters.phpmd or {}
+    lint.linters.phpmd.cmd = vim.fn.expand("~/.config/composer/vendor/bin/phpmd")
+    lint.linters.phpmd.args = {
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
+      "json",
+      configs.getConfig("phpmd"),
+    }
+    lint.linters.phpmd.stdin = false
 
     -- Dotenv-linter configuration
     lint.linters["dotenv_linter"] = {
