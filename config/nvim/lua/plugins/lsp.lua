@@ -149,7 +149,6 @@ return {
                 "**/cache/**",
                 "**/tests/**",
                 "**/node_modules/**",
-                "**/vendor/**",
               },
             },
             environment = {
@@ -157,7 +156,7 @@ return {
             },
             diagnostics = {
               enable = true,
-              run = "onType", -- onSave or onType
+              run = "onSave", -- onSave or onType
               typeErrors = true,
               undefinedTypes = true,
               undefinedFunctions = true,
@@ -172,11 +171,14 @@ return {
               languageConstraints = true,
               implementationErrors = true,
               unusedSymbols = true,
+              relaxedTypeCheck = false,
             },
             completion = {
               insertUseDeclaration = true,
               fullyQualifyGlobalConstantsAndFunctions = false,
               suggestObjectOperatorStaticMethods = false,
+              maxItems = 50,
+              triggerParameterHints = true,
             },
             format = {
               enable = false, -- Use php-cs-fixer instead
@@ -190,7 +192,18 @@ return {
                 "**/node_modules/**",
               },
             },
+            trace = {
+              server = "verbose",
+            },
+            telemetry = {
+              enabled = false,
+            },
             maxMemory = 4096,
+            inlayHints = {
+              returnTypes = true,
+              parameterNames = true,
+              parameterTypes = true,
+            },
           },
         },
       })
