@@ -59,6 +59,7 @@ return {
         "phpstan",
         "phpcs",
         "phpmd",
+        "semgrep", -- Multi-language security scanner
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Other Tools                                             │

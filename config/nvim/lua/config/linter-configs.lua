@@ -20,6 +20,10 @@ M.configs = {
   rector = vim.fn.expand("~/.config/rector/rector.php"),
   pint = vim.fn.expand("~/.config/pint/pint.json"),
 
+  -- Multi-language
+  semgrep = vim.fn.expand("~/.config/semgrep/semgrep.yml"),
+  semgrep_ignore = vim.fn.expand("~/.config/semgrep/.semgrepignore"),
+
   -- Python
   ruff = vim.fn.expand("~/.config/ruff/pyproject.toml"),
 
