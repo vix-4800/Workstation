@@ -1,0 +1,50 @@
+# Semgrep Ignore Patterns
+# Exclude common directories and files that don't need security scanning
+
+# Dependencies
+vendor/
+node_modules/
+bower_components/
+
+# Build artifacts
+build/
+dist/
+out/
+*.min.js
+*.min.css
+
+# Caches
+.cache/
+*.cache
+cache/
+storage/
+bootstrap/cache/
+
+# Tests (optional - comment out if you want to scan tests)
+tests/
+test/
+__tests__/
+*.test.php
+*.spec.php
+
+# Database migrations (usually auto-generated)
+database/migrations/
+
+# IDE helpers and generated files
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Version control
+.git/
+.svn/
+
+# Documentation
+docs/
+*.md
+README
