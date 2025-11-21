@@ -5,9 +5,7 @@ includes:
 
 parameters:
     parallel:
-        maximumNumberOfProcesses: 8
-        jobSize: 20
-        processTimeout: 600.0
+        processTimeout: 900.0
 
     level: max
 
@@ -68,3 +66,16 @@ parameters:
 
     # Function purity
     rememberPossiblyImpureFunctionValues: true
+
+    checkStrictPrintfPlaceholderTypes: true
+
+    exceptions:
+        implicitThrows: true
+        # uncheckedExceptionRegexes
+        # uncheckedExceptionClasses
+        # checkedExceptionRegexes
+        # checkedExceptionClasses
+        reportUncheckedExceptionDeadCatch: true
+        check:
+            missingCheckedExceptionInThrows: true
+            tooWideThrowType: true
