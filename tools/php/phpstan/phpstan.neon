@@ -83,7 +83,7 @@ parameters:
             - LengthException
             - OutOfRangeException
 
-            # PHP Native Errors - ошибки типизации и значений
+            # PHP Native Errors
             - Error
             - TypeError
             - ValueError
