@@ -13,15 +13,18 @@ return {
             vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
 
-          map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-          map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-          map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
           map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-          map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-          map("<leader>cs", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[C]ode [S]ymbols")
+
+          -- LSP Actions
           map("K", vim.lsp.buf.hover, "Hover Documentation")
+          map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ctions")
+          map("<leader>cas", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[C]ode [S]ymbols")
+          map("<leader>cad", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+          map("<leader>caD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+          map("<leader>caR", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+          map("<leader>caI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+          map("<leader>caY", require("telescope.builtin").lsp_type_definitions, "[G]oto T[y]pe Definition")
+          map("<leader>car", vim.lsp.buf.rename, "[L]SP [R]ename")
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
@@ -251,7 +254,6 @@ return {
           client.server_capabilities.referencesProvider = false
           client.server_capabilities.documentSymbolProvider = false
           client.server_capabilities.codeLensProvider = false
-          client.server_capabilities.documentHighlightProvider = false
         end,
       })
 
