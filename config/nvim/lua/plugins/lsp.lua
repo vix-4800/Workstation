@@ -60,7 +60,7 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
 
-      -- PHP (Intelephense)
+      -- PHP (Intelephense) - Primary LSP
       vim.lsp.config("intelephense", {
         capabilities = capabilities,
         settings = {
@@ -208,6 +208,53 @@ return {
         },
       })
 
+      -- PHP (PHPActor) - Refactoring & Code Actions
+      vim.lsp.config("phpactor", {
+        capabilities = vim.tbl_deep_extend("force", capabilities, {
+          textDocument = {
+            completion = {
+              completionItem = {
+                snippetSupport = false,
+              },
+            },
+            hover = { dynamicRegistration = false },
+            signatureHelp = { dynamicRegistration = false },
+            references = { dynamicRegistration = false },
+            definition = { dynamicRegistration = false },
+            documentSymbol = { dynamicRegistration = false },
+            codeLens = { dynamicRegistration = false },
+          },
+        }),
+        init_options = {
+          ["language_server_phpstan.enabled"] = false,
+          ["language_server_psalm.enabled"] = false,
+          ["language_server.diagnostics_on_update"] = false,
+          ["language_server.diagnostics_on_open"] = false,
+          ["language_server.diagnostics_on_save"] = false,
+          ["completion_worse.completor.class_member.enabled"] = false,
+          ["completion_worse.completor.local_variable.enabled"] = false,
+          ["completion_worse.completor.declared_function.enabled"] = false,
+          ["completion_worse.completor.declared_constant.enabled"] = false,
+          ["completion_worse.completor.declared_class.enabled"] = false,
+        },
+        handlers = {
+          ["textDocument/publishDiagnostics"] = function() end,
+          ["textDocument/hover"] = function() end,
+          ["textDocument/signatureHelp"] = function() end,
+          ["textDocument/completion"] = function() end,
+        },
+        on_attach = function(client, bufnr)
+          client.server_capabilities.completionProvider = false
+          client.server_capabilities.hoverProvider = false
+          client.server_capabilities.signatureHelpProvider = false
+          client.server_capabilities.definitionProvider = false
+          client.server_capabilities.referencesProvider = false
+          client.server_capabilities.documentSymbolProvider = false
+          client.server_capabilities.codeLensProvider = false
+          client.server_capabilities.documentHighlightProvider = false
+        end,
+      })
+
       -- Lua
       vim.lsp.config("lua_ls", {
         capabilities = capabilities,
@@ -338,6 +385,7 @@ return {
 
       -- Enable LSP servers
       vim.lsp.enable("intelephense")
+      vim.lsp.enable("phpactor")
       vim.lsp.enable("lua_ls")
       vim.lsp.enable("pyright")
       vim.lsp.enable("ts_ls")
