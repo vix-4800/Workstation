@@ -68,13 +68,28 @@ parameters:
     rememberPossiblyImpureFunctionValues: true
 
     checkStrictPrintfPlaceholderTypes: true
+    checkMissingOverrideMethodAttribute: false
+    polluteScopeWithBlock: false
 
     exceptions:
-        implicitThrows: true
-        # uncheckedExceptionRegexes
-        # uncheckedExceptionClasses
-        # checkedExceptionRegexes
-        # checkedExceptionClasses
+        implicitThrows: false
+
+        uncheckedExceptionClasses:
+            - LogicException
+            - BadFunctionCallException
+            - BadMethodCallException
+            - DomainException
+            - InvalidArgumentException
+            - LengthException
+            - OutOfRangeException
+
+            # PHP Native Errors - ошибки типизации и значений
+            - Error
+            - TypeError
+            - ValueError
+            - ArithmeticError
+            - DivisionByZeroError
+            - UnhandledMatchError
         reportUncheckedExceptionDeadCatch: true
         check:
             missingCheckedExceptionInThrows: true
