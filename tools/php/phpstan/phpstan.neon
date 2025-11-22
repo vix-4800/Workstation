@@ -1,96 +1,100 @@
 includes:
-    - /home/vix/.config/composer/vendor/phpstan/phpstan/conf/bleedingEdge.neon
-    - /home/vix/.config/composer/vendor/phpstan/phpstan-deprecation-rules/rules.neon
-    - /home/vix/.config/composer/vendor/phpstan/phpstan-strict-rules/rules.neon
+  - /home/vix/.config/composer/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+  - /home/vix/.config/composer/vendor/phpstan/phpstan-deprecation-rules/rules.neon
+  - /home/vix/.config/composer/vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
-    parallel:
-        processTimeout: 900.0
+  parallel:
+    processTimeout: 900.0
 
-    level: max
+  level: max
 
-    excludePaths:
-        - vendor/*
-        - node_modules/*
-        - storage/*
-        - bootstrap/cache/*
-        - public/build/*
-        - tests/*
+  dynamicConstantNames:
+    - YII_ENV
+    - YII_DEBUG
 
-    # Vague typehints
-    checkMissingCallableSignature: true
+  excludePaths:
+    - vendor/*
+    - node_modules/*
+    - storage/*
+    - bootstrap/cache/*
+    - public/build/*
+    - tests/*
 
-    # Property checks
-    checkUninitializedProperties: true
-    checkDynamicProperties: true
+  # Vague typehints
+  checkMissingCallableSignature: true
 
-    # Mixed type checks
-    checkImplicitMixed: true
-    checkExplicitMixedMissingReturn: true
+  # Property checks
+  checkUninitializedProperties: true
+  checkDynamicProperties: true
 
-    # Case sensitivity checks
-    checkFunctionNameCase: true
-    checkInternalClassCaseSensitivity: true
+  # Mixed type checks
+  checkImplicitMixed: true
+  checkExplicitMixedMissingReturn: true
 
-    # Type inference
-    inferPrivatePropertyTypeFromConstructor: true
-    treatPhpDocTypesAsCertain: false
+  # Case sensitivity checks
+  checkFunctionNameCase: true
+  checkInternalClassCaseSensitivity: true
 
-    # Return type checks
-    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+  # Type inference
+  inferPrivatePropertyTypeFromConstructor: true
+  treatPhpDocTypesAsCertain: false
 
-    # Error reporting
-    reportUnmatchedIgnoredErrors: true
-    reportMaybesInMethodSignatures: true
-    reportMaybesInPropertyPhpDocTypes: true
-    reportStaticMethodSignatures: true
-    reportWrongPhpDocTypeInVarTag: true
-    reportAnyTypeWideningInVarTag: true
+  # Return type checks
+  checkTooWideReturnTypesInProtectedAndPublicMethods: true
 
-    # Variable scoping (stricter analysis)
-    polluteScopeWithLoopInitialAssignments: false
-    polluteScopeWithAlwaysIterableForeach: false
+  # Error reporting
+  reportUnmatchedIgnoredErrors: true
+  reportMaybesInMethodSignatures: true
+  reportMaybesInPropertyPhpDocTypes: true
+  reportStaticMethodSignatures: true
+  reportWrongPhpDocTypeInVarTag: true
+  reportAnyTypeWideningInVarTag: true
 
-    # PHPDoc checks
-    checkMissingVarTagTypehint: true
+  # Variable scoping (stricter analysis)
+  polluteScopeWithLoopInitialAssignments: false
+  polluteScopeWithAlwaysIterableForeach: false
 
-    # Array offset checks
-    reportPossiblyNonexistentGeneralArrayOffset: true
-    reportPossiblyNonexistentConstantArrayOffset: true
+  # PHPDoc checks
+  checkMissingVarTagTypehint: true
 
-    # Benevolent union types
-    checkBenevolentUnionTypes: true
+  # Array offset checks
+  reportPossiblyNonexistentGeneralArrayOffset: true
+  reportPossiblyNonexistentConstantArrayOffset: true
 
-    # Conditional checks
-    reportAlwaysTrueInLastCondition: true
+  # Benevolent union types
+  checkBenevolentUnionTypes: true
 
-    # Function purity
-    rememberPossiblyImpureFunctionValues: true
+  # Conditional checks
+  reportAlwaysTrueInLastCondition: true
 
-    checkStrictPrintfPlaceholderTypes: true
-    checkMissingOverrideMethodAttribute: false
-    polluteScopeWithBlock: false
+  # Function purity
+  rememberPossiblyImpureFunctionValues: true
 
-    exceptions:
-        implicitThrows: false
+  checkStrictPrintfPlaceholderTypes: true
+  checkMissingOverrideMethodAttribute: false
+  polluteScopeWithBlock: false
 
-        uncheckedExceptionClasses:
-            - LogicException
-            - BadFunctionCallException
-            - BadMethodCallException
-            - DomainException
-            - InvalidArgumentException
-            - LengthException
-            - OutOfRangeException
+  exceptions:
+    implicitThrows: false
 
-            # PHP Native Errors
-            - Error
-            - TypeError
-            - ValueError
-            - ArithmeticError
-            - DivisionByZeroError
-            - UnhandledMatchError
-        reportUncheckedExceptionDeadCatch: true
-        check:
-            missingCheckedExceptionInThrows: true
-            tooWideThrowType: true
+    uncheckedExceptionClasses:
+      - LogicException
+      - BadFunctionCallException
+      - BadMethodCallException
+      - DomainException
+      - InvalidArgumentException
+      - LengthException
+      - OutOfRangeException
+
+      # PHP Native Errors
+      - Error
+      - TypeError
+      - ValueError
+      - ArithmeticError
+      - DivisionByZeroError
+      - UnhandledMatchError
+    reportUncheckedExceptionDeadCatch: true
+    check:
+      missingCheckedExceptionInThrows: true
+      tooWideThrowType: true
