@@ -156,7 +156,7 @@ return {
             },
             diagnostics = {
               enable = true,
-              run = "onSave", -- onSave or onType
+              run = "onType", -- onSave or onType
               typeErrors = true,
               undefinedTypes = true,
               undefinedFunctions = true,
