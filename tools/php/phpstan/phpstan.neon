@@ -1,7 +1,5 @@
 includes:
-  - /home/vix/.config/composer/vendor/phpstan/phpstan/conf/bleedingEdge.neon
-  - /home/vix/.config/composer/vendor/phpstan/phpstan-deprecation-rules/rules.neon
-  - /home/vix/.config/composer/vendor/phpstan/phpstan-strict-rules/rules.neon
+  - phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
   parallel:

@@ -37,13 +37,14 @@
       ansible.builtin.command:
         cmd: >
           composer global require --no-interaction
-          squizlabs/php_codesniffer
           phpstan/phpstan
+          phpstan/extension-installer
           phpstan/phpstan-strict-rules
           phpstan/phpstan-deprecation-rules
           friendsofphp/php-cs-fixer
           rector/rector
           phpmd/phpmd
+          squizlabs/php_codesniffer
           slevomat/coding-standard
           devstrict/phpcs:dev-main
       register: composer_install
