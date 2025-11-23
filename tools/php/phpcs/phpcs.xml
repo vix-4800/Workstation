@@ -26,12 +26,15 @@
 
     <!-- ===== BASE ===== -->
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
-        <exclude-pattern>*/migrations/m\d{6}_\d{6}_.+\.php$</exclude-pattern>
+        <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/tests/*</exclude-pattern>
         <exclude-pattern>*/helpers.php$</exclude-pattern>
     </rule>
     <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">
-        <exclude-pattern>*/migrations/m\d{6}_\d{6}_.+\.php$</exclude-pattern>
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+    </rule>
+    <rule ref="Squiz.Classes.ValidClassName.NotPascalCase">
+        <exclude-pattern>*/migrations/*</exclude-pattern>
     </rule>
 
     <!-- ===== TYPE HINTS ===== -->
@@ -181,8 +184,11 @@
                 <element key="dump" value="null" />
                 <element key="print_r" value="null" />
                 <element key="var_export" value="null" />
-                <element key="is_null" value="null" />
+                <element key="compact" value="null" />
                 <element key="eval" value="null" />
+                <element key="assert" value="null" />
+                <element key="extract" value="null" />
+                <element key="is_null" value="null" />
             </property>
         </properties>
         <exclude-pattern>*/migrations/*</exclude-pattern>
@@ -556,9 +562,8 @@
     <rule ref="DevStrict.Yii2.DisallowResponseFormatAssignment" />
     <rule ref="DevStrict.Yii2.PreferActiveRecordShortcuts" />
     <rule ref="DevStrict.Yii2.PreferExistsOverCount" />
+    <rule ref="DevStrict.Yii2.PreferIsGuestOverUserIdCheck" />
 
-    <rule ref="DevStrict.Functions.DisallowIsNull" />
-    <rule ref="DevStrict.Functions.DisallowCompact" />
     <rule ref="DevStrict.ControlStructures.DisallowThrowInTernary" />
     <rule ref="DevStrict.ControlStructures.UseInArray" />
     <rule ref="DevStrict.ControlStructures.DisallowCountInLoop" />
