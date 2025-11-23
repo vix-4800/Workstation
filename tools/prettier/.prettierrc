@@ -1,47 +1,46 @@
 {
-  "useTabs": false,
-  "semi": true,
-  "tabWidth": 2,
-  "singleQuote": true,
-  "printWidth": 100,
-  "arrowParens": "always",
-  "trailingComma": "es5",
-  "bracketSpacing": true,
-  "bracketSameLine": true,
-  "htmlWhitespaceSensitivity": "css",
-  "proseWrap": "preserve",
-  "quoteProps": "as-needed",
-  "endOfLine": "lf",
-  "embeddedLanguageFormatting": "auto",
-  "singleAttributePerLine": false,
-  "vueIndentScriptAndStyle": false,
-  "overrides": [
-    {
-      "files": ["*.json", "*.jsonc"],
-      "options": {
-        "trailingComma": "none",
-        "tabWidth": 4
-      }
-    },
-    {
-      "files": "*.md",
-      "options": {
-        "proseWrap": "always",
-        "printWidth": 120
-      }
-    },
-    {
-      "files": ["*.yml", "*.yaml"],
-      "options": {
-        "tabWidth": 2,
-        "singleQuote": false
-      }
-    },
-    {
-      "files": "*.toml",
-      "options": {
-        "tabWidth": 2
-      }
-    }
-  ]
+    "useTabs": false,
+    "semi": true,
+    "tabWidth": 4,
+    "singleQuote": true,
+    "printWidth": 100,
+    "arrowParens": "always",
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "bracketSameLine": true,
+    "htmlWhitespaceSensitivity": "css",
+    "proseWrap": "preserve",
+    "quoteProps": "as-needed",
+    "endOfLine": "lf",
+    "embeddedLanguageFormatting": "auto",
+    "singleAttributePerLine": false,
+    "vueIndentScriptAndStyle": false,
+    "overrides": [
+        {
+            "files": ["*.json", "*.jsonc"],
+            "options": {
+                "trailingComma": "none"
+            }
+        },
+        {
+            "files": "*.md",
+            "options": {
+                "proseWrap": "always",
+                "printWidth": 120
+            }
+        },
+        {
+            "files": ["*.yml", "*.yaml"],
+            "options": {
+                "tabWidth": 2,
+                "singleQuote": false
+            }
+        },
+        {
+            "files": "*.toml",
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
 }
