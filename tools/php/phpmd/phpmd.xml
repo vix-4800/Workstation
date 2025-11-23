@@ -12,6 +12,7 @@
 
     <!-- Custom exclusions for specific patterns -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/migrations/*</exclude-pattern>
     <exclude-pattern>*/cache/*</exclude-pattern>
     <exclude-pattern>*/storage/*</exclude-pattern>
     <exclude-pattern>*/bootstrap/cache/*</exclude-pattern>
