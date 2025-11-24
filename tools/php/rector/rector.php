@@ -55,12 +55,37 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
+use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
+use RectorLaravel\Rector\ArrayDimFetch\EnvVariableToEnvHelperRector;
+use RectorLaravel\Rector\ArrayDimFetch\RequestVariablesToRequestFacadeRector;
+use RectorLaravel\Rector\ArrayDimFetch\ServerVariableToRequestFacadeRector;
+use RectorLaravel\Rector\ArrayDimFetch\SessionVariableToSessionFacadeRector;
+use RectorLaravel\Rector\Empty_\EmptyToBlankAndFilledFuncRector;
+use RectorLaravel\Rector\Expr\AppEnvironmentComparisonToParameterRector;
+use RectorLaravel\Rector\FuncCall\FactoryFuncCallToStaticCallRector;
+use RectorLaravel\Rector\FuncCall\NotFilledBlankFuncCallToBlankFilledFuncCallRector;
+use RectorLaravel\Rector\FuncCall\NowFuncWithStartOfDayMethodCallToTodayFuncRector;
+use RectorLaravel\Rector\FuncCall\RemoveDumpDataDeadCodeRector;
+use RectorLaravel\Rector\FuncCall\ThrowIfAndThrowUnlessExceptionsToUseClassStringRector;
+use RectorLaravel\Rector\If_\AbortIfRector;
+use RectorLaravel\Rector\If_\ThrowIfRector;
+use RectorLaravel\Rector\MethodCall\AssertStatusToAssertMethodRector;
+use RectorLaravel\Rector\MethodCall\EloquentOrderByToLatestOrOldestRector;
+use RectorLaravel\Rector\MethodCall\EloquentWhereRelationTypeHintingParameterRector;
+use RectorLaravel\Rector\MethodCall\EloquentWhereTypeHintClosureParameterRector;
+use RectorLaravel\Rector\MethodCall\RedirectBackToBackHelperRector;
+use RectorLaravel\Rector\MethodCall\RedirectRouteToToRouteHelperRector;
+use RectorLaravel\Rector\MethodCall\ResponseHelperCallToJsonResponseRector;
+use RectorLaravel\Rector\MethodCall\ValidationRuleArrayStringValueToArrayRector;
+use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
+use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
+use RectorLaravel\Set\LaravelSetProvider;
 
 return RectorConfig::configure()
     ->withRootFiles()
@@ -71,21 +96,55 @@ return RectorConfig::configure()
         'runtime',
         'tests',
         '*.blade.php',
+        'tests',
+        '_ide_helper.php',
+        '_ide_helper_models.php',
+        'bootstrap/cache',
     ])
     ->withPhpSets(php83: true)
+    ->withSetProviders(LaravelSetProvider::class)
+    ->withComposerBased(laravel: true)
     ->withTypeCoverageLevel(2) // Type coverage level: 0 — no requirement for full type coverage
     ->withDeadCodeLevel(2) // Dead code detection level: 0 — do not analyze dead code
     ->withCodeQualityLevel(3) // Code quality improvement level: 0 — do not apply globally
     ->withPreparedSets(
-        earlyReturn: true,
-        privatization: true,
         codingStyle: true,
+        privatization: true,
+        rectorPreset: true,
+        earlyReturn: true,
     )
-    ->withImportNames(removeUnusedImports: true) // Import use-statements and remove unused ones
+    ->withImportNames(removeUnusedImports: true)
+    ->withAttributesSets()
     ->withSkip([
-        EncapsedStringsToSprintfRector::class
+        EncapsedStringsToSprintfRector::class,
+        PrivatizeFinalClassPropertyRector::class,
     ])
     ->withRules([
+        // Laravel specific refactorings
+        AbortIfRector::class,
+        ThrowIfRector::class,
+        RemoveDumpDataDeadCodeRector::class,
+        EmptyToBlankAndFilledFuncRector::class,
+        AssertStatusToAssertMethodRector::class,
+        EloquentOrderByToLatestOrOldestRector::class,
+        EloquentWhereRelationTypeHintingParameterRector::class,
+        EloquentWhereTypeHintClosureParameterRector::class,
+        ResponseHelperCallToJsonResponseRector::class,
+        AppEnvironmentComparisonToParameterRector::class,
+        ValidationRuleArrayStringValueToArrayRector::class,
+        NotFilledBlankFuncCallToBlankFilledFuncCallRector::class,
+        RedirectRouteToToRouteHelperRector::class,
+        RedirectBackToBackHelperRector::class,
+        FactoryFuncCallToStaticCallRector::class,
+        NowFuncWithStartOfDayMethodCallToTodayFuncRector::class,
+        ThrowIfAndThrowUnlessExceptionsToUseClassStringRector::class,
+        RequestStaticValidateToInjectRector::class,
+        EloquentMagicMethodToQueryBuilderRector::class,
+        SessionVariableToSessionFacadeRector::class,
+        ServerVariableToRequestFacadeRector::class,
+        EnvVariableToEnvHelperRector::class,
+        RequestVariablesToRequestFacadeRector::class,
+
         // Simplifying conditions
         SimplifyBoolIdenticalTrueRector::class, // Replaces $a === true with just $a
         SimplifyIfReturnBoolRector::class, // Simplifies if-statements that return true/false
