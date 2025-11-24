@@ -69,7 +69,7 @@ return (new Config())
         'phpdoc_var_without_name' => true, // Allows var annotations without a variable name
         'single_line_comment_spacing' => true, // Ensures single line spacing for comments
         'comment_to_phpdoc' => true, // Converts single-line comments to PHPDoc
-        'no_empty_comment' => true, // Removes empty comments
+        // 'no_empty_comment' => true, // Removes empty comments
         'no_empty_phpdoc' => true, // Removes empty PHPDoc blocks
         'header_comment' => ['header' => ''], // Removes header comments
         'no_blank_lines_after_phpdoc' => true, // Removes blank lines after PHPDoc
@@ -100,7 +100,7 @@ return (new Config())
         'array_syntax' => ['syntax' => 'short'], // Uses [] instead of array()
         'list_syntax' => ['syntax' => 'short'], // Uses [] instead of list()
         'trim_array_spaces' => true, // Trims spaces inside array brackets
-        // 'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters', 'match']], // Trailing comma in multiline arrays
+        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters', 'match']], // Trailing comma in multiline arrays
         'no_trailing_comma_in_singleline' => true, // No trailing comma in single-line arrays
         'whitespace_after_comma_in_array' => true, // Ensures whitespace after commas in arrays
         'no_whitespace_before_comma_in_array' => true, // No whitespace before commas in arrays
@@ -168,7 +168,7 @@ return (new Config())
             'const' => 'one',
             'property' => 'one',
             'method' => 'one',
-            'trait_import' => 'none',
+            'trait_import' => 'one',
         ]], // Enforces separation between class attributes
         'ordered_class_elements' => [
             'order' => [
@@ -213,7 +213,7 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────────────────
         'phpdoc_to_param_type' => true, // Converts PHPDoc @param to type hints
         'phpdoc_to_return_type' => true, // Converts PHPDoc @return to return type declarations
-        'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
+        // 'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
         'declare_strict_types' => true, // Force strict types declaration in all files.
         'strict_comparison' => true, // Uses === and !== instead of == and !=
         'strict_param' => true, // Enforces strict parameter types
@@ -236,7 +236,7 @@ return (new Config())
         'indentation_type' => true, // Uses spaces for indentation
         'use_arrow_functions' => true, // Use arrow functions where possible (potentially unsafe)
         'static_lambda' => true,
-        // 'final_public_method_for_abstract_class' => true,
+        'final_public_method_for_abstract_class' => true,
         'no_mixed_echo_print' => ['use' => 'echo'],
         'heredoc_to_nowdoc' => true, // Replaces heredoc on nowdoc where possible
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
