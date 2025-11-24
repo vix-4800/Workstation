@@ -43,6 +43,7 @@
           phpstan/phpstan-deprecation-rules
           friendsofphp/php-cs-fixer
           rector/rector
+          driftingly/rector-laravel
           phpmd/phpmd
           squizlabs/php_codesniffer
           slevomat/coding-standard
