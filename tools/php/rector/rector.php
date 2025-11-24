@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 $rulesDir = __DIR__ . '/rules';
 $ruleFiles = glob("{$rulesDir}/*.php");
-foreach ($ruleFiles as $ruleFile) {
-    require_once $ruleFile;
+
+if ($ruleFiles !== false) {
+    foreach ($ruleFiles as $ruleFile) {
+        if (!file_exists($ruleFile) || !is_readable($ruleFile)) {
+            continue;
+        }
+
+        require_once $ruleFile;
+    }
 }
 
 use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
