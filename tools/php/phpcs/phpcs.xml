@@ -541,4 +541,24 @@
     <rule ref="DevStrict.ControlStructures.DisallowCountInLoop" />
     <rule ref="DevStrict.Functions.DisallowCastFunctions" />
     <rule ref="DevStrict.ControlStructures.DisallowGotoStatement" />
+    <rule ref="DevStrict.Attributes.ForbiddenAttributes">
+        <properties>
+            <property name="forbiddenAttributes" type="array">
+                <element value="ArrayShape" />
+                <element value="PhpStorm\Attributes\ArrayShape" />
+
+                <element value="ExpectedValues" />
+                <element value="PhpStorm\Attributes\ExpectedValues" />
+
+                <element value="Pure" />
+                <element value="PhpStorm\Attributes\Pure" />
+
+                <element value="LanguageLevelTypeAware" />
+                <element value="PhpStorm\Attributes\LanguageLevelTypeAware" />
+
+                <element value="NoReturn" />
+                <element value="PhpStorm\Attributes\NoReturn" />
+            </property>
+        </properties>
+    </rule>
 </ruleset>
