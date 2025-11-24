@@ -15,27 +15,29 @@
     <config name="tabWidth" value="4" />
 
     <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/bootstrap/cache/*</exclude-pattern>
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/runtime/*</exclude-pattern>
     <exclude-pattern>*/tests/*</exclude-pattern>
     <exclude-pattern>*/files/*</exclude-pattern>
     <exclude-pattern>*/photos/*</exclude-pattern>
+    <exclude-pattern>*/storage/*</exclude-pattern>
+    <exclude-pattern>*/logs/*</exclude-pattern>
+    <exclude-pattern>*/rules/*</exclude-pattern>
+    <exclude-pattern>_ide_helper.php</exclude-pattern>
+    <exclude-pattern>_ide_helper_models.php</exclude-pattern>
+    <exclude-pattern>*/migrations/*</exclude-pattern>
+    <exclude-pattern>*/environments/*</exclude-pattern>
+    <exclude-pattern>*/*.blade.php</exclude-pattern>
 
     <!-- ===== CORE ===== -->
     <rule ref="PSR12" />
 
     <!-- ===== BASE ===== -->
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
         <exclude-pattern>*/helpers.php$</exclude-pattern>
     </rule>
-    <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-    </rule>
-    <rule ref="Squiz.Classes.ValidClassName.NotPascalCase">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-    </rule>
+    <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps" />
 
     <!-- ===== TYPE HINTS ===== -->
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints" />
@@ -50,23 +52,13 @@
             <property name="declareOnFirstLine" value="false" />
         </properties>
         <exclude-pattern>*/config/*</exclude-pattern>
-        <exclude-pattern>*/environments/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/yii$</exclude-pattern>
-        <exclude-pattern>*/yii_test$</exclude-pattern>
-        <exclude-pattern>*/init$</exclude-pattern>
         <exclude-pattern>*/helpers.php$</exclude-pattern>
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
         <type>warning</type>
 
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation" />
@@ -75,8 +67,6 @@
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
         <type>warning</type>
 
         <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.UselessAnnotation" />
@@ -88,8 +78,6 @@
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
         <type>warning</type>
     </rule>
 
@@ -146,9 +134,7 @@
 
     <!-- ===== FUNCTIONS AND METHODS ===== -->
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/config/*</exclude-pattern>
-        <exclude-pattern>*/environments/*</exclude-pattern>
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">
@@ -168,9 +154,7 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias" />
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/config/*</exclude-pattern>
-        <exclude-pattern>*/environments/*</exclude-pattern>
         <exclude-pattern>*/views/*</exclude-pattern>
 
         <type>warning</type>
@@ -191,7 +175,6 @@
                 <element key="is_null" value="null" />
             </property>
         </properties>
-        <exclude-pattern>*/migrations/*</exclude-pattern>
         <exclude-pattern>*/console/*</exclude-pattern>
         <exclude-pattern>*/views/*</exclude-pattern>
     </rule>
@@ -260,8 +243,6 @@
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma">
         <exclude-pattern>*/config/*</exclude-pattern>
-        <exclude-pattern>*/environments/*</exclude-pattern>
-        <exclude-pattern>*/migrations/*</exclude-pattern>
 
         <severity>0</severity>
     </rule>
@@ -303,7 +284,7 @@
         <type>warning</type>
         <severity>0</severity>
     </rule>
-    <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment" />
+    <!-- <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment" /> -->
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
         <properties>
             <property name="linesCountBetweenDescriptionAndAnnotations" value="1" />
@@ -337,10 +318,7 @@
         </properties>
     </rule>
     <rule ref="Squiz.Commenting.FunctionComment">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
         <exclude-pattern>*/config/*</exclude-pattern>
-        <exclude-pattern>*/environments/*</exclude-pattern>
         <type>warning</type>
 
         <exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName" />
@@ -359,13 +337,10 @@
         <exclude name="Squiz.Commenting.FunctionComment.ThrowsNoFullStop" />
     </rule>
     <rule ref="Squiz.Commenting.ClassComment">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
         <exclude-pattern>*/config/*</exclude-pattern>
-        <exclude-pattern>*/environments/*</exclude-pattern>
         <type>warning</type>
 
-        <!-- <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" /> -->
+        <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" />
     </rule>
     <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration">
         <exclude-pattern>*/views/*</exclude-pattern>
@@ -375,10 +350,7 @@
         <exclude name="Squiz.Commenting.VariableComment.IncorrectVarType" />
     </rule>
     <rule ref="Generic.Commenting.DocComment.MissingShort">
-        <exclude-pattern>*/migrations/*</exclude-pattern>
-        <exclude-pattern>*/tests/*</exclude-pattern>
         <exclude-pattern>*/config/*</exclude-pattern>
-        <exclude-pattern>*/environments/*</exclude-pattern>
     </rule>
 
     <!-- ===== METRICS AND COMPLEXITY ===== -->
