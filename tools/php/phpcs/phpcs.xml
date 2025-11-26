@@ -292,7 +292,6 @@
             <property name="linesCountAfterLastContent" value="0" />
         </properties>
     </rule>
-    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments" />
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
         <properties>
             <property name="forbiddenAnnotations" type="array">
@@ -490,12 +489,11 @@
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments">
         <properties>
             <property name="forbiddenCommentPatterns" type="array">
-                <element value="/\*\s*Constructor\s*\*/" />
-                <element value="/\*\s*Class\s*\*/" />
-                <element value="/\*\s*Enum\s*\*/" />
-                <element value="/\*\s*Interface\s*\*/" />
-                <element value="/\*\s*Trait\s*\*/" />
-                <element value="/\*\s*Created by PhpStorm\s*\*/" />
+                <element
+                    value="/^\s*(Enum|Class|Interface|Trait|Service|DTO|Model|Controller)\s*$/i" />
+                <element value="/^\s*PHP\s+Version\s+\d+(\.\d+)*\s*$/i" />
+                <element value="/^\s*\S+\.php\s*$/" />
+                <element value="/^\s*Created by \w+\s*$/i" />
             </property>
         </properties>
     </rule>
