@@ -559,4 +559,30 @@
             </property>
         </properties>
     </rule>
+
+    <rule ref="Generic.Arrays.ArrayIndent">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule>
+    <rule ref="Generic.PHP.DeprecatedFunctions" />
+    <rule ref="Generic.NamingConventions.ConstructorName" />
+    <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement" />
+    <rule ref="Generic.CodeAnalysis.JumbledIncrementer" />
+    <rule ref="Squiz.PHP.NonExecutableCode" />
+    <rule ref="Squiz.Scope.StaticThisUsage" />
+    <rule ref="Generic.Commenting.Todo.CommentFound">
+        <message>TODO with no description found</message>
+    </rule>
+    <rule ref="Generic.Commenting.Todo.TaskFound">
+        <message>Please review this TODO comment: %s</message>
+    </rule>
+    <rule ref="Generic.Commenting.Fixme.CommentFound">
+        <message>FIXME with no description found</message>
+    </rule>
+    <rule ref="Generic.Commenting.Fixme.TaskFound">
+        <message>Please review this FIXME comment: %s</message>
+    </rule>
+    <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier" />
+    <rule ref="Generic.CodeAnalysis.UselessOverridingMethod" />
 </ruleset>
