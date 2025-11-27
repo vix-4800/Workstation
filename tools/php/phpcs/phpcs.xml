@@ -543,6 +543,9 @@
     <rule ref="DevStrict.ControlStructures.DisallowCountInLoop" />
     <rule ref="DevStrict.Functions.DisallowCastFunctions" />
     <rule ref="DevStrict.ControlStructures.DisallowGotoStatement" />
+    <rule ref="DevStrict.Objects.DisallowVariableStaticProperty" />
+    <rule ref="DevStrict.Formatting.MethodChainingIndentation" />
+    <rule ref="DevStrict.Formatting.MethodChainingPerLine" />
     <rule ref="DevStrict.Attributes.ForbiddenAttributes">
         <properties>
             <property name="forbiddenAttributes" type="array">
