@@ -31,10 +31,6 @@ vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 -- Delete without copying into register
 vim.keymap.set({ "n", "v" }, "x", '"_x', { desc = "Delete without yanking" })
 
--- Quick save and quit
--- vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "[W]rite file" })
-vim.keymap.set("n", "<leader>wa", "<cmd>wa<CR>", { desc = "[W]rite [A]ll buffers" })
-vim.keymap.set("n", "<leader>Q", "<cmd>qa<CR>", { desc = "[Q]uit all" })
 
 -- Buffer navigation
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
@@ -48,9 +44,14 @@ vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to up window" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 
 -- Window management
+vim.keymap.set("n", "<leader>ws", "<cmd>w<CR>", { desc = "[W]indow [S]ave" })
+vim.keymap.set("n", "<leader>wS", "<cmd>wa<CR>", { desc = "[W]indow Save all" })
+vim.keymap.set("n", "<leader>wq", "<cmd>confirm q<CR>", { desc = "[W]indow [Q]uit (confirm)" })
+vim.keymap.set("n", "<leader>wQ", "<cmd>qa!<CR>", { desc = "[W]indow [Q]uit without saving" })
+vim.keymap.set("n", "<leader>wx", "<cmd>wq<CR>", { desc = "[W]indow Save & e[X]it" })
+vim.keymap.set("n", "<leader>wX", "<cmd>xa<CR>", { desc = "[W]indow Save & e[X]it all" })
 vim.keymap.set("n", "<leader>wv", "<cmd>vsplit<cr>", { desc = "[W]indow [V]ertical split" })
 vim.keymap.set("n", "<leader>wh", "<cmd>split<cr>", { desc = "[W]indow [H]orizontal split" })
-vim.keymap.set("n", "<leader>wq", "<cmd>q<cr>", { desc = "[W]indow [Q]uit" })
 vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "[W]indow [=] Equal size" })
 
 -- Diagnostics navigation
