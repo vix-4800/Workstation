@@ -42,3 +42,28 @@ complete -c php -n '__fish_seen_subcommand_from artisan' -l ansi -d 'Force ANSI 
 complete -c php -n '__fish_seen_subcommand_from artisan' -l no-ansi -d 'Disable ANSI output'
 complete -c php -n '__fish_seen_subcommand_from artisan' -l no-interaction -s n -d 'No interactive questions'
 complete -c php -n '__fish_seen_subcommand_from artisan' -l env -d Environment
+
+# Yii 2 Framework completions for `php yii`
+set -l __fish_yii_commands \
+    asset asset/compress asset/template \
+    cache cache/flush cache/flush-all cache/flush-schema cache/index \
+    fixture fixture/load fixture/unload \
+    gii gii/controller gii/crud gii/extension gii/form gii/index gii/model gii/module \
+    help help/index help/list help/list-action-options help/usage \
+    message message/config message/config-template message/extract \
+    migrate migrate/create migrate/down migrate/fresh migrate/history \
+    migrate/mark migrate/new migrate/redo migrate/to migrate/up \
+    queue queue/clear queue/exec queue/info queue/listen queue/remove queue/run \
+    serve serve/index
+
+# Offer `yii` as the primary php subcommand.
+complete -c php -n __fish_use_subcommand -a yii -d 'Yii 2 Framework CLI'
+complete -c php -n '__fish_seen_subcommand_from yii' -f
+complete -c php -n '__fish_seen_subcommand_from yii' -a "$__fish_yii_commands"
+
+# Global Yii options shared by every command.
+complete -c php -n '__fish_seen_subcommand_from yii' -l help -s h -d 'Display help'
+complete -c php -n '__fish_seen_subcommand_from yii' -l version -s v -d 'Display version'
+complete -c php -n '__fish_seen_subcommand_from yii' -l color -d 'Enable ANSI colors'
+complete -c php -n '__fish_seen_subcommand_from yii' -l interactive -d 'Enable interactive mode'
+complete -c php -n '__fish_seen_subcommand_from yii' -l silent-exit-on-exception -d 'Silent exit on exception'
