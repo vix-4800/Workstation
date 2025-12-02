@@ -14,6 +14,7 @@
           - make
           - less
           - unzip
+          - unrar
           - gcc
           - udiskie
           - ffmpeg
