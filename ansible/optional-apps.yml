@@ -18,6 +18,14 @@
           - zathura
           - zathura-pdf-mupdf
           - thunar
+          - thunar-archive-plugin
+          - thunar-media-tags-plugin
+          - thunar-shares-plugin
+          - thunar-vcs-plugin
+          - gvfs
+          - gvfs-mtp
+          - gvfs-smb
+          - gvfs-nfs
           - feh
           - trash-cli
         state: present
