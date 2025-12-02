@@ -164,19 +164,28 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────────────────
         // Class & members layout
         // ─────────────────────────────────────────────────────────────────────────
-        'class_attributes_separation' => ['elements' => [
-            'const' => 'one',
-            'property' => 'one',
-            'method' => 'one',
-            'trait_import' => 'one',
-        ]], // Enforces separation between class attributes
+        'class_attributes_separation' => [
+            'elements' => [
+                'trait_import' => 'one',
+                'case' => 'one',
+                'const' => 'one',
+                'property' => 'one',
+                'method' => 'one',
+            ],
+        ], // Enforces separation between class attributes
         'ordered_class_elements' => [
             'order' => [
                 'use_trait',
-                'constant_public', 'constant_protected', 'constant_private',
-                'property_public', 'property_protected', 'property_private',
+                'case',
+                'constant',
+                'property',
                 'construct',
-                'method_public', 'method_protected', 'method_private',
+                'destruct',
+
+                // Methods
+                'method_public',
+                'method_protected',
+                'method_private',
             ],
         ], // Enforces order of class elements
         'single_class_element_per_statement' => ['elements' => ['const', 'property']], // Enforces single class element per statement
