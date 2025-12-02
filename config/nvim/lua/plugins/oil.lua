@@ -28,7 +28,7 @@ return {
         wrap = true,
         signcolumn = "yes:2",
       },
-      watch_for_changes = false,
+      watch_for_changes = true,
       columns = {
         "icon",
         -- "permissions",
