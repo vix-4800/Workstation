@@ -170,9 +170,10 @@
                 <element key="var_export" value="null" />
                 <element key="compact" value="null" />
                 <element key="eval" value="null" />
-                <element key="assert" value="null" />
                 <element key="extract" value="null" />
                 <element key="is_null" value="null" />
+                <element key="call_user_func" value="null" />
+                <!-- <element key="assert" value="null" /> -->
             </property>
         </properties>
         <exclude-pattern>*/console/*</exclude-pattern>
@@ -494,7 +495,7 @@
         <properties>
             <property name="forbiddenCommentPatterns" type="array">
                 <element
-                    value="/^\s*(Enum|Class|Interface|Trait|Service|DTO|Model|Controller)\s*$/i" />
+                    value="/^\s*(Enum|Class|Interface|Trait|Service|DTO|Model|Controller|File)\s*$/i" />
                 <element value="/^\s*PHP\s+Version\s+\d+(\.\d+)*\s*$/i" />
                 <element value="/^\s*\S+\.php\s*$/" />
                 <element value="/^\s*Created by \w+\s*$/i" />
@@ -566,6 +567,8 @@
             </property>
         </properties>
     </rule>
+    <rule ref="DevStrict.Formatting.ConsistentStatementIndentation" />
+    <rule ref="DevStrict.Formatting.DisallowConsecutivePhpTags" />
 
     <rule ref="Generic.Arrays.ArrayIndent">
         <properties>
