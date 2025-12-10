@@ -92,11 +92,12 @@
     <rule ref="rulesets/controversial.xml">
         <!-- Superglobals are sometimes necessary -->
         <exclude name="Superglobals" />
-    </rule>
 
-    <!-- CamelCaseParameterName -->
-    <!-- CamelCaseVariableName -->
-    <!-- CamelCaseMethodName -->
+        <!-- CamelCase naming is already enforced by PHPCS -->
+        <exclude name="CamelCaseParameterName" />
+        <exclude name="CamelCaseVariableName" />
+        <exclude name="CamelCaseMethodName" />
+    </rule>
 
     <!-- Design Rules -->
     <rule ref="rulesets/design.xml/DepthOfInheritance">
