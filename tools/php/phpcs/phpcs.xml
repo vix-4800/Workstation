@@ -534,19 +534,6 @@
         <type>warning</type>
     </rule>
 
-    <rule ref="DevStrict.Yii2.DisallowResponseFormatAssignment" />
-    <rule ref="DevStrict.Yii2.PreferActiveRecordShortcuts" />
-    <rule ref="DevStrict.Yii2.PreferExistsOverCount" />
-    <rule ref="DevStrict.Yii2.PreferIsGuestOverUserIdCheck" />
-
-    <rule ref="DevStrict.ControlStructures.DisallowThrowInTernary" />
-    <rule ref="DevStrict.ControlStructures.UseInArray" />
-    <rule ref="DevStrict.ControlStructures.DisallowCountInLoop" />
-    <rule ref="DevStrict.Functions.DisallowCastFunctions" />
-    <rule ref="DevStrict.ControlStructures.DisallowGotoStatement" />
-    <rule ref="DevStrict.Objects.DisallowVariableStaticProperty" />
-    <rule ref="DevStrict.Formatting.MethodChainingIndentation" />
-    <rule ref="DevStrict.Formatting.MethodChainingPerLine" />
     <rule ref="DevStrict.Attributes.ForbiddenAttributes">
         <properties>
             <property name="forbiddenAttributes" type="array">
@@ -567,8 +554,7 @@
             </property>
         </properties>
     </rule>
-    <rule ref="DevStrict.Formatting.ConsistentStatementIndentation" />
-    <rule ref="DevStrict.Formatting.DisallowConsecutivePhpTags" />
+    <rule ref="DevStrict" />
 
     <rule ref="Generic.Arrays.ArrayIndent">
         <properties>
