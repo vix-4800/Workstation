@@ -87,6 +87,42 @@ use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
 use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use RectorLaravel\Set\LaravelSetProvider;
 
+$laravelRules = [
+    AbortIfRector::class,
+    ThrowIfRector::class,
+    RemoveDumpDataDeadCodeRector::class,
+    EmptyToBlankAndFilledFuncRector::class,
+    AssertStatusToAssertMethodRector::class,
+    EloquentOrderByToLatestOrOldestRector::class,
+    EloquentWhereRelationTypeHintingParameterRector::class,
+    EloquentWhereTypeHintClosureParameterRector::class,
+    ResponseHelperCallToJsonResponseRector::class,
+    AppEnvironmentComparisonToParameterRector::class,
+    ValidationRuleArrayStringValueToArrayRector::class,
+    NotFilledBlankFuncCallToBlankFilledFuncCallRector::class,
+    RedirectRouteToToRouteHelperRector::class,
+    RedirectBackToBackHelperRector::class,
+    FactoryFuncCallToStaticCallRector::class,
+    NowFuncWithStartOfDayMethodCallToTodayFuncRector::class,
+    ThrowIfAndThrowUnlessExceptionsToUseClassStringRector::class,
+    RequestStaticValidateToInjectRector::class,
+    EloquentMagicMethodToQueryBuilderRector::class,
+    SessionVariableToSessionFacadeRector::class,
+    ServerVariableToRequestFacadeRector::class,
+    EnvVariableToEnvHelperRector::class,
+    RequestVariablesToRequestFacadeRector::class,
+];
+
+$yii2Rules = [
+    Yii2PropertyAccessRector::class, // Convert Yii::$app->user->getId() to Yii::$app->user->id
+    Yii2FindAllIdShortcutRector::class, // Optimize findAll queries by ID
+    Yii2FindOneFindAllShortcutRector::class, // Convert findOne/findAll patterns to more efficient forms
+    Yii2FindOneIdShortcutRector::class, // Simplify findOne operations by ID
+    Yii2UserFindOneToIdentityRector::class, // Replace User::findOne() with identity access patterns
+    Yii2UseExistsInsteadOfOneNotNullRector::class, // Replace ->one() !== null with ->exists()
+    Yii2UseExistsInsteadOfCountRector::class, // Replace ->count() > 0 with ->exists()
+];
+
 return RectorConfig::configure()
     ->withRootFiles()
     ->withParallel()
@@ -121,29 +157,10 @@ return RectorConfig::configure()
     ])
     ->withRules([
         // Laravel specific refactorings
-        AbortIfRector::class,
-        ThrowIfRector::class,
-        RemoveDumpDataDeadCodeRector::class,
-        EmptyToBlankAndFilledFuncRector::class,
-        AssertStatusToAssertMethodRector::class,
-        EloquentOrderByToLatestOrOldestRector::class,
-        EloquentWhereRelationTypeHintingParameterRector::class,
-        EloquentWhereTypeHintClosureParameterRector::class,
-        ResponseHelperCallToJsonResponseRector::class,
-        AppEnvironmentComparisonToParameterRector::class,
-        ValidationRuleArrayStringValueToArrayRector::class,
-        NotFilledBlankFuncCallToBlankFilledFuncCallRector::class,
-        RedirectRouteToToRouteHelperRector::class,
-        RedirectBackToBackHelperRector::class,
-        FactoryFuncCallToStaticCallRector::class,
-        NowFuncWithStartOfDayMethodCallToTodayFuncRector::class,
-        ThrowIfAndThrowUnlessExceptionsToUseClassStringRector::class,
-        RequestStaticValidateToInjectRector::class,
-        EloquentMagicMethodToQueryBuilderRector::class,
-        SessionVariableToSessionFacadeRector::class,
-        ServerVariableToRequestFacadeRector::class,
-        EnvVariableToEnvHelperRector::class,
-        RequestVariablesToRequestFacadeRector::class,
+        ...$laravelRules,
+
+        // Yii2 specific refactorings
+        ...$yii2Rules,
 
         // Simplifying conditions
         SimplifyBoolIdenticalTrueRector::class, // Replaces $a === true with just $a
@@ -201,13 +218,4 @@ return RectorConfig::configure()
         // Custom code quality rules
         ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
         ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
-
-        // Custom Yii2 rules - Improve readability and modernize Yii2 code patterns
-        Yii2PropertyAccessRector::class, // Convert Yii::$app->user->getId() to Yii::$app->user->id
-        Yii2FindAllIdShortcutRector::class, // Optimize findAll queries by ID
-        Yii2FindOneFindAllShortcutRector::class, // Convert findOne/findAll patterns to more efficient forms
-        Yii2FindOneIdShortcutRector::class, // Simplify findOne operations by ID
-        Yii2UserFindOneToIdentityRector::class, // Replace User::findOne() with identity access patterns
-        Yii2UseExistsInsteadOfOneNotNullRector::class, // Replace ->one() !== null with ->exists()
-        Yii2UseExistsInsteadOfCountRector::class, // Replace ->count() > 0 with ->exists()
     ]);
