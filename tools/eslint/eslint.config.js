@@ -1,19 +1,12 @@
-/**
- * ESLint Strict Configuration
- * Modern flat config format with comprehensive rules for code quality
- * @see https://eslint.org/docs/latest/use/configure/configuration-files
- */
-
 import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
 export default [
-    // ─────────────────────────────────────────────────────────────
-    // Global ignores
-    // ─────────────────────────────────────────────────────────────
     {
         ignores: [
             '**/node_modules/**',
             '**/dist/**',
+            '**/out/**',
             '**/build/**',
             '**/.git/**',
             '**/coverage/**',
@@ -21,15 +14,8 @@ export default [
             '**/vendor/**',
         ],
     },
-
-    // ─────────────────────────────────────────────────────────────
-    // Recommended base config
-    // ─────────────────────────────────────────────────────────────
     js.configs.recommended,
-
-    // ─────────────────────────────────────────────────────────────
-    // Main configuration
-    // ─────────────────────────────────────────────────────────────
+    ...tseslint.configs.recommended,
     {
         name: 'strict-javascript',
         files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
@@ -300,7 +286,6 @@ export default [
                     memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
                 },
             ],
-            'sort-keys': ['warn', 'asc', { caseSensitive: true, natural: true }],
             'sort-vars': ['warn', { ignoreCase: false }],
             'spaced-comment': ['error', 'always', { exceptions: ['-', '+', '*'] }],
             strict: ['error', 'global'],
@@ -419,30 +404,30 @@ export default [
             'yield-star-spacing': ['error', 'after'],
         },
     },
-
-    // ─────────────────────────────────────────────────────────────
-    // Test files with relaxed rules
-    // ─────────────────────────────────────────────────────────────
     {
-        name: 'test-files',
-        files: ['**/*.test.js', '**/*.spec.js', '**/test/**/*.js', '**/tests/**/*.js'],
+        name: 'typescript-overrides',
+        files: ['**/*.ts'],
         rules: {
-            'no-console': 'off',
-            'no-magic-numbers': 'off',
-            'max-lines-per-function': 'off',
-            'max-statements': 'off',
-            'no-undefined': 'off',
-        },
-    },
+            'no-undef': 'off',
+            'no-unused-vars': 'off',
+            'no-shadow': 'off',
+            'no-use-before-define': 'off',
+            'no-dupe-class-members': 'off',
+            'no-useless-constructor': 'off',
+            strict: 'off',
 
-    // ─────────────────────────────────────────────────────────────
-    // Configuration files
-    // ─────────────────────────────────────────────────────────────
-    {
-        name: 'config-files',
-        files: ['**/*.config.js', '**/.*rc.js'],
-        rules: {
-            'no-console': 'off',
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    vars: 'all',
+                    args: 'after-used',
+                    ignoreRestSiblings: false,
+                    argsIgnorePattern: '^_',
+                    caughtErrors: 'all',
+                },
+            ],
+            '@typescript-eslint/no-shadow': ['error', { builtinGlobals: true, hoist: 'all' }],
+            '@typescript-eslint/no-use-before-define': ['error', { functions: false, classes: true, variables: true }],
         },
     },
 ];
