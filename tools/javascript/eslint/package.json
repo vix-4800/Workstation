@@ -1,0 +1,13 @@
+{
+    "name": "eslint-config",
+    "version": "1.0.0",
+    "description": "Global ESLint configuration",
+    "type": "module",
+    "private": true,
+    "dependencies": {
+        "@eslint/js": "^9.39.2",
+        "eslint": "^9.39.2",
+        "typescript-eslint": "^8.49.0",
+        "typescript": "^5.7.2"
+    }
+}

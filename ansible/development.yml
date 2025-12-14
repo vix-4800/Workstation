@@ -83,4 +83,14 @@
         # Commit linting
         - '@commitlint/cli'
         - '@commitlint/config-conventional'
+
+        # ESLint (globally for CLI usage)
+        - 'eslint'
+      failed_when: false
+
+    - name: 'Install ESLint config dependencies locally'
+      become: false
+      community.general.npm:
+        path: "{{ playbook_dir }}/../tools/javascript/eslint"
+        state: present
       failed_when: false
