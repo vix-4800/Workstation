@@ -15,17 +15,6 @@ export default [
         ],
     },
     js.configs.recommended,
-    ...tseslint.configs.recommended,
-    ...tseslint.configs.strictTypeChecked,
-    ...tseslint.configs.stylisticTypeChecked,
-    {
-        languageOptions: {
-            parserOptions: {
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
-            },
-        },
-    },
     {
         name: 'strict-javascript',
         files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
@@ -414,9 +403,28 @@ export default [
             'yield-star-spacing': ['error', 'after'],
         },
     },
+    // TypeScript configurations (only for TypeScript files)
+    ...tseslint.configs.recommended.map((config) => ({
+        ...config,
+        files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+    })),
+    ...tseslint.configs.strictTypeChecked.map((config) => ({
+        ...config,
+        files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+    })),
+    ...tseslint.configs.stylisticTypeChecked.map((config) => ({
+        ...config,
+        files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+    })),
     {
         name: 'typescript-overrides',
         files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
         rules: {
             // ─────────────────────────────────────────────────────────────
             // Disable base ESLint rules that conflict with TypeScript
