@@ -89,7 +89,7 @@
             "comment": "Commitlint configuration for conventional commits"
         },
         {
-            "source": "tools/eslint",
+            "source": "tools/javascript/eslint",
             "target": "$HOME/.config/eslint",
             "comment": "ESLint strict configuration for JavaScript"
         },
