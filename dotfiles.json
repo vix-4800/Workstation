@@ -65,10 +65,6 @@
             "target": "$HOME/.config/phpmd"
         },
         {
-            "source": "tools/semgrep",
-            "target": "$HOME/.config/semgrep"
-        },
-        {
             "source": "tools/prettier/.prettierrc",
             "target": "$HOME/.prettierrc",
             "comment": "Prettier code formatter configuration"

@@ -11,16 +11,16 @@ return {
 
     lint.linters_by_ft = {
       markdown = { "markdownlint" },
-      php = { "phpstan", "phpcs", "phpmd", "semgrep" },
+      php = { "phpstan", "phpcs", "phpmd" },
       dockerfile = { "hadolint" },
       json = { "jsonlint" },
       yaml = { "yamllint" },
-      python = { "ruff", "semgrep" },
+      python = { "ruff" },
       sh = { "shellcheck" },
       bash = { "shellcheck" },
       dotenv = { "dotenv_linter" },
-      javascript = { "semgrep" },
-      typescript = { "semgrep" },
+      javascript = {},
+      typescript = {},
     }
 
     -- Configure shellcheck to use custom config
@@ -114,61 +114,6 @@ return {
       configs.getConfig("phpmd"),
     }
     lint.linters.phpmd.stdin = false
-
-    -- Configure semgrep for security scanning
-    lint.linters.semgrep = {
-      cmd = "semgrep",
-      stdin = false,
-      args = {
-        "scan",
-        "--config=" .. configs.getConfig("semgrep"),
-        "--json",
-        "--quiet",
-        "--no-git-ignore",
-        "--exclude-rule",
-        "generic.secrets",
-        function()
-          return vim.api.nvim_buf_get_name(0)
-        end,
-      },
-      stream = "stdout",
-      ignore_exitcode = true,
-      parser = function(output, bufnr)
-        local diagnostics = {}
-        local ok, decoded = pcall(vim.json.decode, output)
-
-        if not ok or not decoded or not decoded.results then
-          return diagnostics
-        end
-
-        for _, result in ipairs(decoded.results) do
-          local severity = vim.diagnostic.severity.WARN
-
-          if result.extra and result.extra.severity then
-            if result.extra.severity == "ERROR" then
-              severity = vim.diagnostic.severity.ERROR
-            elseif result.extra.severity == "WARNING" then
-              severity = vim.diagnostic.severity.WARN
-            elseif result.extra.severity == "INFO" then
-              severity = vim.diagnostic.severity.INFO
-            end
-          end
-
-          table.insert(diagnostics, {
-            lnum = (result.start.line or 1) - 1,
-            col = (result.start.col or 1) - 1,
-            end_lnum = (result["end"].line or result.start.line) - 1,
-            end_col = (result["end"].col or result.start.col) - 1,
-            message = result.extra.message or result.check_id,
-            severity = severity,
-            source = "semgrep",
-            code = result.check_id,
-          })
-        end
-
-        return diagnostics
-      end,
-    }
 
     -- Dotenv-linter configuration
     lint.linters["dotenv_linter"] = {
