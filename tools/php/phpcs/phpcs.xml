@@ -386,6 +386,9 @@
 
     <!-- ===== EXCEPTIONS ===== -->
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch" />
+    <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch">
+        <type>warning</type>
+    </rule>
 
     <!-- ===== CODE ANALYSIS ===== -->
     <rule ref="Generic.CodeAnalysis.AssignmentInCondition">
