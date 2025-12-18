@@ -15,6 +15,8 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -74,6 +76,10 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
         $comparisons = $this->collectComparisons($node);
 
         if (count($comparisons) < 2) {
+            return null;
+        }
+
+        if (count($comparisons) === 2 && $this->isSimpleNullOrEmptyCheck($comparisons)) {
             return null;
         }
 
@@ -187,6 +193,80 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
 
         if ($node1 instanceof Variable && $node2 instanceof Variable) {
             return $node1->name === $node2->name;
+        }
+
+        return false;
+    }
+
+    /**
+     * Проверяет, является ли конструкция простой проверкой на null/пустую строку
+     * Такие конструкции обычно получаются после рефакторинга empty() и выглядят лучше в оригинальной форме
+     * Примеры:
+     * - $var === null || $var === ''
+     * - $var === '' || $var === null
+     * - $var === null || $var === 0
+     * - $var === false || $var === null
+     *
+     * @param array<Identical|Equal> $comparisons
+     */
+    private function isSimpleNullOrEmptyCheck(array $comparisons): bool
+    {
+        if (count($comparisons) !== 2) {
+            return false;
+        }
+
+        $values = [];
+        foreach ($comparisons as $comparison) {
+            if ($comparison->left instanceof Variable) {
+                $values[] = $comparison->right;
+            } elseif ($comparison->right instanceof Variable) {
+                $values[] = $comparison->left;
+            } else {
+                return false;
+            }
+        }
+
+        return $this->containsOnlySimpleValues($values);
+    }
+
+    /**
+     * Проверяет, содержит ли массив только "простые" значения для сравнения
+     * Простые значения: null, пустая строка, false, true, 0
+     *
+     * @param array<Node> $values
+     */
+    private function containsOnlySimpleValues(array $values): bool
+    {
+        $simpleValueCount = 0;
+
+        foreach ($values as $value) {
+            if ($this->isSimpleValue($value)) {
+                $simpleValueCount++;
+            }
+        }
+
+        return $simpleValueCount === count($values);
+    }
+
+    /**
+     * Проверяет, является ли значение "простым" (null, '', false, true, 0)
+     */
+    private function isSimpleValue(Node $value): bool
+    {
+        if ($value instanceof ConstFetch && $value->name->toString() === 'null') {
+            return true;
+        }
+
+        if ($value instanceof ConstFetch && in_array($value->name->toString(), ['true', 'false'], true)) {
+            return true;
+        }
+
+        if ($value instanceof String_ && $value->value === '') {
+            return true;
+        }
+
+        if ($value instanceof LNumber && $value->value === 0) {
+            return true;
         }
 
         return false;
