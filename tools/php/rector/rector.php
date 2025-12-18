@@ -37,7 +37,6 @@ use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescing
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
-use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
 use Rector\Custom\Rules\ReplaceMultipleEqualWithInArrayRector;
@@ -60,7 +59,6 @@ use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
-use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
@@ -156,10 +154,6 @@ return RectorConfig::configure()
     )
     ->withImportNames(removeUnusedImports: true)
     ->withAttributesSets()
-    ->withSkip([
-        EncapsedStringsToSprintfRector::class,
-        PrivatizeFinalClassPropertyRector::class,
-    ])
     ->withRules([
         // Laravel specific refactorings
         ...$laravelRules,
