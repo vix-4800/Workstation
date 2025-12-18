@@ -12,6 +12,7 @@
 
     <config name="encoding" value="utf-8" />
     <config name="tabWidth" value="4" />
+    <config name="testVersion" value="8.3-" />
 
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/bootstrap/cache/*</exclude-pattern>
@@ -32,6 +33,7 @@
     <!-- ===== CORE ===== -->
     <rule ref="PSR12" />
     <rule ref="DevStrict" />
+    <rule ref="PHPCompatibility" />
 
     <!-- ===== BASE ===== -->
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">

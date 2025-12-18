@@ -48,6 +48,7 @@
           squizlabs/php_codesniffer
           slevomat/coding-standard
           devstrict/phpcs:dev-main
+          phpcompatibility/php-compatibility:"^10.0.0@dev"
       register: composer_install
       changed_when: "'Nothing to install' not in composer_install.stdout"
       ignore_errors: true
