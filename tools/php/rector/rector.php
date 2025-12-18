@@ -51,9 +51,14 @@ use Rector\Custom\Rules\Yii2UserFindOneToIdentityRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
+use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
+use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
+use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
+use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
 use Rector\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
@@ -175,6 +180,7 @@ return RectorConfig::configure()
         UnusedForeachValueToArrayKeysRector::class,
         SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
         UnnecessaryTernaryExpressionRector::class, // Removes redundant ternary expressions
+        ContinueToBreakInSwitchRector::class,
 
         // Safety and strong typing
         AddReturnTypeDeclarationRector::class,
@@ -186,6 +192,7 @@ return RectorConfig::configure()
         AddPropertyTypeDeclarationRector::class, // Adds property type declaration where missing
         AddMethodCallBasedStrictParamTypeRector::class, // Adds strict parameter type based on method calls
         DisallowedEmptyRuleFixerRector::class, // Disallow usage of empty()
+        JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
 
         // Remove dead code
         RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
@@ -201,6 +208,8 @@ return RectorConfig::configure()
         ArrayKeyExistsTernaryThenValueToCoalescingRector::class, // Replaces array_key_exists checks in ternary conditions with null coalescing
         SimplifyTautologyTernaryRector::class, // Simplifies tautological ternary expressions
         JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
+        AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
+        DeprecatedAnnotationToDeprecatedAttributeRector::class, // Converts @deprecated annotations to #[Deprecated] attributes
 
         // Arrays
         ChangeArrayPushToArrayAssignRector::class,
@@ -208,6 +217,7 @@ return RectorConfig::configure()
         // Strings
         SimplifyStrposLowerRector::class,
         SimplifyRegexPatternRector::class,
+        MbStrContainsRector::class,
 
         // Code style
         InlineIfToExplicitIfRector::class,
