@@ -247,7 +247,6 @@ return (new Config())
         'static_lambda' => true,
         'final_public_method_for_abstract_class' => true,
         'no_mixed_echo_print' => ['use' => 'echo'],
-        'heredoc_to_nowdoc' => true, // Replaces heredoc on nowdoc where possible
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
