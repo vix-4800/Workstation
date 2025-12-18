@@ -533,9 +533,6 @@
     </rule>
 
     <!-- ===== CODE ANALYSIS ===== -->
-    <rule ref="Generic.CodeAnalysis.AssignmentInCondition">
-        <type>warning</type>
-    </rule>
     <rule ref="Generic.CodeAnalysis.EmptyStatement" />
     <rule ref="SlevomatCodingStandard.Variables.UnusedVariable" />
     <rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
