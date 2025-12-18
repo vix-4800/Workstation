@@ -38,9 +38,7 @@
 
     <!-- ===== TYPE HINTS ===== -->
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints" />
-    <rule ref="SlevomatCodingStandard.TypeHints.ClassConstantTypeHint">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ClassConstantTypeHint" />
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>
             <property name="spacesCountAroundEqualsSign" value="0" />
@@ -50,7 +48,6 @@
         </properties>
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/helpers.php$</exclude-pattern>
-        <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax">
         <type>warning</type>
@@ -72,12 +69,9 @@
         </properties>
     </rule>
 
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint" />
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing" />
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
-        <type>warning</type>
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation" />
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing" />
@@ -85,12 +79,9 @@
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
-        <type>warning</type>
         <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.UselessAnnotation" />
     </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue" />
     <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint">
         <type>warning</type>
     </rule>
@@ -154,11 +145,14 @@
     </rule>
 
     <!-- ===== OPERATORS ===== -->
-    <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators" />
     <rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing" />
-    <rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing" />
+    <rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing">
+        <type>warning</type>
+        <properties>
+            <property name="spacesCountAfterOperator" value="0" />
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator" />
 
     <!-- ===== NAMESPACES AND IMPORTS ===== -->
@@ -383,6 +377,7 @@
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.PHP.ShortList" />
+    <rule ref="SlevomatCodingStandard.PHP.TypeCast" />
     <rule ref="SlevomatCodingStandard.PHP.UselessSemicolon" />
     <rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces">
         <properties>
@@ -408,7 +403,9 @@
     </rule>
 
     <!-- ===== PHP SECURITY AND BEST PRACTICES ===== -->
-    <rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
+    <rule ref="SlevomatCodingStandard.PHP.UselessParentheses">
+        <type>warning</type>
+    </rule>
     <rule ref="Generic.PHP.NoSilencedErrors">
         <type>error</type>
     </rule>
@@ -555,9 +552,7 @@
         <exclude-pattern>index.php</exclude-pattern>
         <exclude-pattern>**/init*.php</exclude-pattern>
     </rule>
-    <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable" />
     <rule ref="Generic.PHP.DeprecatedFunctions" />
     <rule ref="Generic.NamingConventions.ConstructorName" />
     <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement" />
@@ -570,10 +565,6 @@
     <!-- ===== NUMBERS ===== -->
     <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator">
         <type>warning</type>
-        <properties>
-            <property name="minDigitsBeforeDecimalPoint" value="5" />
-            <property name="minDigitsAfterDecimalPoint" value="5" />
-        </properties>
     </rule>
 
     <!-- ===== DEVSTRICT ATTRIBUTES ===== -->
