@@ -95,7 +95,6 @@
             <property name="checkIfConditions" value="true" />
         </properties>
     </rule>
-    </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition">
         <properties>
             <property name="ignoreAssignmentsInsideFunctionCalls" value="false" />
