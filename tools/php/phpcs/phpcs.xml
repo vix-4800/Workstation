@@ -6,7 +6,6 @@
 
     <!-- ===== GENERAL ===== -->
     <arg name="parallel" value="8" />
-    <arg name="extensions" value="php" />
     <arg name="colors" />
     <arg value="p" />
     <arg value="q" />
@@ -32,6 +31,7 @@
 
     <!-- ===== CORE ===== -->
     <rule ref="PSR12" />
+    <rule ref="DevStrict" />
 
     <!-- ===== BASE ===== -->
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
@@ -557,7 +557,6 @@
             </property>
         </properties>
     </rule>
-    <rule ref="DevStrict" />
 
     <rule ref="Generic.Arrays.ArrayIndent">
         <properties>
