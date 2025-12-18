@@ -102,15 +102,23 @@
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator">
         <type>warning</type>
+        <properties>
+            <property name="checkIfConditions" value="true" />
+        </properties>
+    </rule>
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition">
         <properties>
             <property name="ignoreAssignmentsInsideFunctionCalls" value="false" />
         </properties>
-        <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses" />
-
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireSingleLineCondition">
+        <properties>
+            <property name="maxLineLength" value="120" />
+            <property name="alwaysForSimpleConditions" value="true" />
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
         <type>warning</type>
     </rule>
@@ -203,9 +211,7 @@
         </properties>
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Classes.RequireSelfReference">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.RequireSelfReference" />
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing">
         <properties>
             <property name="linesCountBetweenMembers" value="1" />
@@ -249,18 +255,15 @@
         <type>warning</type>
         <severity>0</severity>
     </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility" />
     <rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature">
         <properties>
             <property name="maxLineLength" value="120" />
         </properties>
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition">
-        <type>warning</type>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition" />
+    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition" />
     <rule ref="SlevomatCodingStandard.Classes.ConstantSpacing">
         <properties>
             <property name="minLinesCountBeforeWithComment" value="1" />
@@ -270,6 +273,9 @@
         </properties>
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.Classes.MethodSpacing">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassLength">
         <properties>
             <property name="maxLinesLength" value="500" />
@@ -277,6 +283,14 @@
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants" />
+
+    <!-- ===== ENUMS ===== -->
+    <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing">
+        <properties>
+            <property name="spacesCountBeforeColon" value="0" />
+            <property name="spacesCountBeforeType" value="1" />
+        </properties>
+    </rule>
 
     <!-- ===== ATTRIBUTES (PHP 8+) ===== -->
     <rule ref="SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing" />
@@ -297,9 +311,7 @@
         </properties>
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction" />
     <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty">
         <type>warning</type>
     </rule>
@@ -312,6 +324,7 @@
     <rule ref="SlevomatCodingStandard.Functions.StaticClosure">
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction" />
     <rule ref="SlevomatCodingStandard.Functions.StrictCall" />
     <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure" />
     <rule ref="SlevomatCodingStandard.Functions.UnusedParameter" />
@@ -352,6 +365,7 @@
     <rule ref="SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace">
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking" />
 
     <!-- ===== WHITESPACE AND FORMATTING ===== -->
     <rule ref="Squiz.WhiteSpace.OperatorSpacing">
@@ -398,9 +412,7 @@
     <rule ref="Generic.PHP.NoSilencedErrors">
         <type>error</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Variables.DisallowVariableVariable">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Variables.DisallowVariableVariable" />
     <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion">
         <type>warning</type>
     </rule>
