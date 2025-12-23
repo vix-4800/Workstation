@@ -140,7 +140,8 @@ return RectorConfig::configure()
     ])
     ->withPhpLevel(PhpVersion::PHP_83)
     ->withPhpSets(php83: true)
-    ->withComposerBased(laravel: true)
+    // ->withSetProviders(LaravelSetProvider::class)
+    // ->withComposerBased(laravel: true)
     ->withTypeCoverageLevel(2)
     ->withDeadCodeLevel(2)
     ->withCodeQualityLevel(3)
@@ -157,7 +158,7 @@ return RectorConfig::configure()
     ->withStrictTypes()
     ->withRules([
         // Laravel specific refactorings
-        ...$laravelRules,
+        // ...$laravelRules,
 
         // Yii2 specific refactorings
         ...$yii2Rules,
