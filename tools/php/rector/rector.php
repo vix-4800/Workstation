@@ -76,6 +76,9 @@ use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
 use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use RectorLaravel\Set\LaravelSetProvider;
 
+$laravelRulesEnabled = false;
+$yii2RulesEnabled = false;
+
 $rulesDir = __DIR__ . '/rules';
 $ruleFiles = glob("{$rulesDir}/*.php");
 
@@ -125,8 +128,9 @@ $yii2Rules = [
     Yii2UseExistsInsteadOfCountRector::class, // Replace ->count() > 0 with ->exists()
 ];
 
-return RectorConfig::configure()
+$config = RectorConfig::configure()
     ->withRootFiles()
+    ->withFluentCallNewLine()
     ->withParallel()
     ->withSkip([
         'vendor',
@@ -139,8 +143,6 @@ return RectorConfig::configure()
         'bootstrap/cache',
     ])
     ->withPhpSets(php83: true)
-    // ->withSetProviders(LaravelSetProvider::class)
-    // ->withComposerBased(laravel: true)
     ->withTypeCoverageLevel(2)
     ->withDeadCodeLevel(2)
     ->withCodeQualityLevel(3)
@@ -152,72 +154,84 @@ return RectorConfig::configure()
     )
     ->withImportNames(removeUnusedImports: true)
     ->withAttributesSets()
-    ->withMemoryLimit('2G')
-    ->withRules([
-        // Laravel specific refactorings
-        // ...$laravelRules,
+    ->withMemoryLimit('2G');
 
-        // Yii2 specific refactorings
-        ...$yii2Rules,
+$rules = [
+    // Simplifying conditions
+    SimplifyBoolIdenticalTrueRector::class, // Replaces $a === true with just $a
+    SimplifyIfReturnBoolRector::class, // Simplifies if-statements that return true/false
+    SimplifyConditionsRector::class,
+    CombineIfRector::class,
+    ShortenElseIfRector::class,
+    SimplifyDeMorganBinaryRector::class,
 
-        // Simplifying conditions
-        SimplifyBoolIdenticalTrueRector::class, // Replaces $a === true with just $a
-        SimplifyIfReturnBoolRector::class, // Simplifies if-statements that return true/false
-        SimplifyConditionsRector::class,
-        CombineIfRector::class,
-        ShortenElseIfRector::class,
-        SimplifyDeMorganBinaryRector::class,
+    // Code optimization
+    SimplifyUselessVariableRector::class,
+    UnusedForeachValueToArrayKeysRector::class,
+    SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
+    UnnecessaryTernaryExpressionRector::class, // Removes redundant ternary expressions
+    ContinueToBreakInSwitchRector::class,
 
-        // Code optimization
-        SimplifyUselessVariableRector::class,
-        UnusedForeachValueToArrayKeysRector::class,
-        SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
-        UnnecessaryTernaryExpressionRector::class, // Removes redundant ternary expressions
-        ContinueToBreakInSwitchRector::class,
+    // Safety and strong typing
+    AddReturnTypeDeclarationRector::class,
+    UseIdenticalOverEqualWithSameTypeRector::class,
+    CompleteDynamicPropertiesRector::class,
+    // IssetOnPropertyObjectToPropertyExistsRector::class,
+    AddVoidReturnTypeWhereNoReturnRector::class, // Adds void return type where no return is present
+    AddParamTypeDeclarationRector::class, // Adds parameter type declaration where missing
+    AddPropertyTypeDeclarationRector::class, // Adds property type declaration where missing
+    AddMethodCallBasedStrictParamTypeRector::class, // Adds strict parameter type based on method calls
+    DisallowedEmptyRuleFixerRector::class, // Disallow usage of empty()
+    JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
 
-        // Safety and strong typing
-        AddReturnTypeDeclarationRector::class,
-        UseIdenticalOverEqualWithSameTypeRector::class,
-        CompleteDynamicPropertiesRector::class,
-        // IssetOnPropertyObjectToPropertyExistsRector::class,
-        AddVoidReturnTypeWhereNoReturnRector::class, // Adds void return type where no return is present
-        AddParamTypeDeclarationRector::class, // Adds parameter type declaration where missing
-        AddPropertyTypeDeclarationRector::class, // Adds property type declaration where missing
-        AddMethodCallBasedStrictParamTypeRector::class, // Adds strict parameter type based on method calls
-        DisallowedEmptyRuleFixerRector::class, // Disallow usage of empty()
-        JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
+    // Remove dead code
+    RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
+    RemoveUnusedPrivatePropertyRector::class, // Removes unused private properties
+    RemoveConcatAutocastRector::class,
 
-        // Remove dead code
-        RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
-        RemoveUnusedPrivatePropertyRector::class, // Removes unused private properties
-        RemoveConcatAutocastRector::class,
+    // Modern PHP constructs and functions
+    StringClassNameToClassConstantRector::class, // Replaces string class names with ClassName::class
+    ClassPropertyAssignToConstructorPromotionRector::class, // Promotes class property assignments to constructor parameters
+    SingularSwitchToIfRector::class, // Replaces singular switch statements with if-statements
+    ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class, // Replaces consecutive null compares with null coalesce
+    TernaryEmptyArrayArrayDimFetchToCoalesceRector::class, // Replaces empty array checks in ternary conditions with null coalescing
+    ArrayKeyExistsTernaryThenValueToCoalescingRector::class, // Replaces array_key_exists checks in ternary conditions with null coalescing
+    SimplifyTautologyTernaryRector::class, // Simplifies tautological ternary expressions
+    AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
+    DeprecatedAnnotationToDeprecatedAttributeRector::class, // Converts @deprecated annotations to #[Deprecated] attributes
 
-        // Modern PHP constructs and functions
-        StringClassNameToClassConstantRector::class, // Replaces string class names with ClassName::class
-        ClassPropertyAssignToConstructorPromotionRector::class, // Promotes class property assignments to constructor parameters
-        SingularSwitchToIfRector::class, // Replaces singular switch statements with if-statements
-        ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class, // Replaces consecutive null compares with null coalesce
-        TernaryEmptyArrayArrayDimFetchToCoalesceRector::class, // Replaces empty array checks in ternary conditions with null coalescing
-        ArrayKeyExistsTernaryThenValueToCoalescingRector::class, // Replaces array_key_exists checks in ternary conditions with null coalescing
-        SimplifyTautologyTernaryRector::class, // Simplifies tautological ternary expressions
-        AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
-        DeprecatedAnnotationToDeprecatedAttributeRector::class, // Converts @deprecated annotations to #[Deprecated] attributes
+    // Arrays
+    ChangeArrayPushToArrayAssignRector::class,
 
-        // Arrays
-        ChangeArrayPushToArrayAssignRector::class,
+    // Strings
+    SimplifyStrposLowerRector::class,
+    SimplifyRegexPatternRector::class,
+    MbStrContainsRector::class,
 
-        // Strings
-        SimplifyStrposLowerRector::class,
-        SimplifyRegexPatternRector::class,
-        MbStrContainsRector::class,
+    // Code style
+    InlineIfToExplicitIfRector::class,
+    LogicalToBooleanRector::class,
 
-        // Code style
-        InlineIfToExplicitIfRector::class,
-        LogicalToBooleanRector::class,
+    ExplicitNullableParamTypeRector::class,
 
-        ExplicitNullableParamTypeRector::class,
+    // Custom code quality rules
+    ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
+    ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
+];
 
-        // Custom code quality rules
-        ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
-        ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
-    ]);
+if ($laravelRulesEnabled) {
+    foreach ($laravelRules as $laravelRule) {
+        $rules[] = $laravelRule;
+    }
+
+    $config->withSetProviders(LaravelSetProvider::class)
+        ->withComposerBased(laravel: true);
+}
+
+if ($yii2RulesEnabled) {
+    foreach ($yii2Rules as $yii2Rule) {
+        $rules[] = $yii2Rule;
+    }
+}
+
+return $config->withRules($rules);
