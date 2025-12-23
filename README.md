@@ -99,7 +99,7 @@ After running `workstation dotfiles link`, the script is available globally from
 
 ### Applications
 
-- **Firefox** - Web browser
+- **Brave** - Web browser
 - **Discord** - Chat (with BetterDiscord)
 - **Telegram Desktop** - Messenger
 - **Spotify** - Music streaming

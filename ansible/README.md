@@ -33,7 +33,7 @@ ansible-playbook ansible/main.yml --ask-become-pass
 - **locale.yml** - Localization, timezone
 - **multimedia.yml** - Codecs and libraries
 - **development.yml** - PHP, Python, Go + dev tools
-- **optional-apps.yml** - Firefox, Discord, Telegram, Spotify, VLC, Obsidian, Visual Studio Code
+- **optional-apps.yml** - Brave, Discord, Telegram, Spotify, VLC, Obsidian, Visual Studio Code
 
 ### Applications (`apps/`)
 
