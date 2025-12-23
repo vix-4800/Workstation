@@ -153,8 +153,6 @@ return RectorConfig::configure()
     ->withImportNames(removeUnusedImports: true)
     ->withAttributesSets()
     ->withMemoryLimit('2G')
-    ->withNaming()
-    ->withStrictTypes()
     ->withRules([
         // Laravel specific refactorings
         // ...$laravelRules,
