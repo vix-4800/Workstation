@@ -2,19 +2,6 @@
 
 declare(strict_types=1);
 
-$rulesDir = __DIR__ . '/rules';
-$ruleFiles = glob("{$rulesDir}/*.php");
-
-if ($ruleFiles !== false) {
-    foreach ($ruleFiles as $ruleFile) {
-        if (!file_exists($ruleFile) || !is_readable($ruleFile)) {
-            continue;
-        }
-
-        require_once $ruleFile;
-    }
-}
-
 use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
@@ -89,6 +76,19 @@ use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
 use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use RectorLaravel\Set\LaravelSetProvider;
 
+$rulesDir = __DIR__ . '/rules';
+$ruleFiles = glob("{$rulesDir}/*.php");
+
+if ($ruleFiles !== false) {
+    foreach ($ruleFiles as $ruleFile) {
+        if (!file_exists($ruleFile) || !is_readable($ruleFile)) {
+            continue;
+        }
+
+        require_once $ruleFile;
+    }
+}
+
 $laravelRules = [
     AbortIfRector::class,
     ThrowIfRector::class,
@@ -138,7 +138,6 @@ return RectorConfig::configure()
         '_ide_helper_models.php',
         'bootstrap/cache',
     ])
-    ->withPhpLevel(PhpVersion::PHP_83)
     ->withPhpSets(php83: true)
     // ->withSetProviders(LaravelSetProvider::class)
     // ->withComposerBased(laravel: true)
