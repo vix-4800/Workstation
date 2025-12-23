@@ -134,17 +134,16 @@ return RectorConfig::configure()
         'runtime',
         'tests',
         '*.blade.php',
-        'tests',
         '_ide_helper.php',
         '_ide_helper_models.php',
         'bootstrap/cache',
     ])
+    ->withPhpLevel(PhpVersion::PHP_83)
     ->withPhpSets(php83: true)
-    ->withSetProviders(LaravelSetProvider::class)
     ->withComposerBased(laravel: true)
-    ->withTypeCoverageLevel(2) // Type coverage level: 0 — no requirement for full type coverage
-    ->withDeadCodeLevel(2) // Dead code detection level: 0 — do not analyze dead code
-    ->withCodeQualityLevel(3) // Code quality improvement level: 0 — do not apply globally
+    ->withTypeCoverageLevel(2)
+    ->withDeadCodeLevel(2)
+    ->withCodeQualityLevel(3)
     ->withPreparedSets(
         codingStyle: true,
         privatization: true,
@@ -153,6 +152,9 @@ return RectorConfig::configure()
     )
     ->withImportNames(removeUnusedImports: true)
     ->withAttributesSets()
+    ->withMemoryLimit('2G')
+    ->withNaming()
+    ->withStrictTypes()
     ->withRules([
         // Laravel specific refactorings
         ...$laravelRules,
