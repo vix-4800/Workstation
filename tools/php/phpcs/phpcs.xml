@@ -47,9 +47,6 @@
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/helpers.php$</exclude-pattern>
     </rule>
-    <rule ref="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax">
-        <type>warning</type>
-    </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.UnionTypeHintFormat">
         <properties>
             <property name="enable" value="true" />
