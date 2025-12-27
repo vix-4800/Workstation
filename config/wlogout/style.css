@@ -1,57 +1,57 @@
 * {
-  font-family: 'JetBrainsMono Nerd Font';
-  background-image: none;
-  box-shadow: none;
-  transition: all 0.2s ease;
+    font-family: 'JetBrainsMono Nerd Font';
+    background-image: none;
+    box-shadow: none;
+    transition: all 0.2s ease;
 }
 
 window {
-  background-color: rgba(30, 30, 46, 0.95);
+    background-color: rgba(30, 30, 46, 0.95);
 }
 
 button {
-  border-radius: 12.6px;
-  border-color: #b4befe;
-  text-decoration-color: #cdd6f4;
-  color: #cdd6f4;
-  background-color: #181825;
-  border-style: solid;
-  border-width: 1px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 25%;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.6), inset 0 0 0 1px #313244;
-  margin: 10px;
+    border-radius: 12.6px;
+    border-color: #b4befe;
+    text-decoration-color: #cdd6f4;
+    color: #cdd6f4;
+    background-color: #181825;
+    border-style: solid;
+    border-width: 1px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25%;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.6), inset 0 0 0 1px #313244;
+    margin: 10px;
 }
 
 button:focus,
 button:active,
 button:hover {
-  background-color: #45475a;
-  box-shadow: 0 0 8px 0 rgba(180, 190, 254, 0.3), inset 0 0 0 1px #b4befe;
-  outline-style: none;
+    background-color: #45475a;
+    box-shadow: 0 0 8px 0 rgba(180, 190, 254, 0.3), inset 0 0 0 1px #b4befe;
+    outline-style: none;
 }
 
 #lock {
-  background-image: url('/home/vix/.config/wlogout/icons/lock.svg');
+    background-image: url('icons/lock.svg');
 }
 
 #logout {
-  background-image: url('/home/vix/.config/wlogout/icons/logout.svg');
+    background-image: url('icons/logout.svg');
 }
 
 #suspend {
-  background-image: url('/home/vix/.config/wlogout/icons/suspend.svg');
+    background-image: url('icons/suspend.svg');
 }
 
 #hibernate {
-  background-image: url('/home/vix/.config/wlogout/icons/hibernate.svg');
+    background-image: url('icons/hibernate.svg');
 }
 
 #shutdown {
-  background-image: url('/home/vix/.config/wlogout/icons/shutdown.svg');
+    background-image: url('icons/shutdown.svg');
 }
 
 #reboot {
-  background-image: url('/home/vix/.config/wlogout/icons/reboot.svg');
+    background-image: url('icons/reboot.svg');
 }
