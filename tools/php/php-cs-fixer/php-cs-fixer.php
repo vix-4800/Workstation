@@ -63,6 +63,7 @@ return (new Config())
         'phpdoc_no_alias_tag' => true, // Removes PHPDoc alias tags
         'phpdoc_no_package' => true, // Removes PHPDoc package tags
         'phpdoc_no_useless_inheritdoc' => true, // Removes useless PHPDoc inheritdoc tags
+        'phpdoc_no_empty_return' => true, // Removes empty @return tags
         'phpdoc_single_line_var_spacing' => true, // Ensures single line spacing for var tags
         'phpdoc_types' => true, // Normalizes PHPDoc types
         'phpdoc_var_annotation_correct_order' => true, // Ensures correct order of var annotations
@@ -72,6 +73,8 @@ return (new Config())
         'no_empty_phpdoc' => true, // Removes empty PHPDoc blocks
         'header_comment' => ['header' => ''], // Removes header comments
         'no_blank_lines_after_phpdoc' => true, // Removes blank lines after PHPDoc
+        'multiline_comment_opening_closing' => true, // Ensures proper opening and closing of multiline comments
+        // 'phpdoc_add_missing_param_annotation' => ['only_untyped' => false], // Adds missing @param annotations in PHPDoc
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
@@ -111,7 +114,20 @@ return (new Config())
         'yoda_style' => false, // Disables Yoda conditions
         'concat_space' => ['spacing' => 'one'],
         'binary_operator_spaces' => ['default' => 'single_space'],
-        'no_extra_blank_lines' => true, // Removes extra blank lines
+        'no_extra_blank_lines' => ['tokens' => [
+            'extra',
+            'break',
+            'continue',
+            'return',
+            'throw',
+            'use',
+            'curly_brace_block',
+            'parenthesis_brace_block',
+            'square_brace_block',
+            'switch',
+            'case',
+            'default',
+        ]], // Removes extra blank lines
         'no_trailing_whitespace' => true, // Removes trailing whitespace
         'no_whitespace_in_blank_line' => true, // No spaces on empty lines
         'single_quote' => true, // Converts double quotes to single quotes
@@ -123,7 +139,25 @@ return (new Config())
         'explicit_string_variable' => true, // Use {$var} instead of $var in strings
         'no_empty_statement' => true, // Removes empty statements
         'blank_line_before_statement' => [
-            'statements' => ['return', 'throw', 'continue', 'break', 'try', 'foreach', 'if', 'while', 'switch'],
+            'statements' => [
+                'break',
+                'continue',
+                'declare',
+                'do',
+                'exit',
+                'for',
+                'foreach',
+                'if',
+                'include',
+                'include_once',
+                'require',
+                'require_once',
+                'return',
+                'switch',
+                'throw',
+                'try',
+                'while',
+            ],
         ], // Requires a blank line before statements (return, throw, continue)
         'single_space_around_construct' => true, // Ensures single space around constructs
         'simplified_if_return' => true, // Simplifies if return statements
@@ -138,7 +172,15 @@ return (new Config())
         'short_scalar_cast' => true,
         'no_useless_concat_operator' => true, // Removes unnecessary concatenation of strings
         'no_unneeded_control_parentheses' => [
-            'statements' => ['break', 'clone', 'continue', 'echo_print', 'return', 'switch_case', 'yield'],
+            'statements' => [
+                'break',
+                'clone',
+                'continue',
+                'echo_print',
+                'return',
+                'switch_case',
+                'yield'
+            ],
         ], // Removes unneeded control parentheses
         'clean_namespace' => true, // Removes unused use statements
         'no_unneeded_braces' => true, // Removes unneeded braces
@@ -146,6 +188,7 @@ return (new Config())
         'simple_to_complex_string_variable' => true, // Uses complex variable interpolation {$var} instead of simple $var in strings
         'string_length_to_empty' => true, // Replaces strlen($str) === 0 with $str === ''
         'no_unreachable_default_argument_value' => true, // Removes unreachable default argument values
+        'octal_notation' => true, // Uses 0o prefix for octal numbers
 
         // ─────────────────────────────────────────────────────────────────────────
         // File / opening tags / namespaces
@@ -195,7 +238,7 @@ return (new Config())
         'method_argument_space' => [
             'on_multiline' => 'ensure_fully_multiline',
             'after_heredoc' => true,
-            'attribute_placement' => 'ignore',
+            'attribute_placement' => 'same_line',
             'keep_multiple_spaces_after_comma' => false,
         ], // Ensures fully multiline arguments
         'return_type_declaration' => ['space_before' => 'none'],
@@ -249,4 +292,6 @@ return (new Config())
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
         'no_useless_sprintf' => true, // Removes useless sprintf calls
+        'switch_case_semicolon_to_colon' => true, // Replaces semicolons with colons in switch cases
+        'operator_linebreak' => true, // Ensures operators are at the beginning of the line in multiline expressions
     ]);
