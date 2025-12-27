@@ -33,7 +33,7 @@
     <rule ref="PSR12" />
     <rule ref="PHPCompatibility" />
     <rule ref="DevStrict">
-        <!-- <exclude name="DevStrict.Yii2" /> -->
+        <exclude name="DevStrict.Yii2" />
         <!-- <exclude name="DevStrict.Laravel" /> -->
     </rule>
 
