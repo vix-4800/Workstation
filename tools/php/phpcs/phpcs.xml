@@ -488,11 +488,6 @@
         <exclude name="Squiz.Commenting.FunctionComment.ParamCommentNotCapital" />
         <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
     </rule>
-    <rule ref="Squiz.Commenting.ClassComment">
-        <exclude-pattern>*/config/*</exclude-pattern>
-        <type>warning</type>
-        <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" />
-    </rule>
     <rule ref="Squiz.Commenting.DocCommentAlignment" />
     <rule ref="Squiz.Commenting.VariableComment">
         <exclude name="Squiz.Commenting.VariableComment.IncorrectVarType" />
