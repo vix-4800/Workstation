@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use CustomFixer\BlankLineAfterStatementFixer;
 use CustomFixer\NumericLiteralSeparatorFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 require_once __DIR__ . '/Fixer/NumericLiteralSeparatorFixer.php';
+require_once __DIR__ . '/Fixer/BlankLineAfterStatementFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
@@ -15,6 +17,7 @@ return (new Config())
     ->setUnsupportedPhpVersionAllowed(true)
     ->registerCustomFixers([
         new NumericLiteralSeparatorFixer(),
+        new BlankLineAfterStatementFixer(),
     ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
@@ -289,6 +292,17 @@ return (new Config())
         // Custom fixers
         // ─────────────────────────────────────────────────────────────────────────
         'CustomFixer/numeric_literal_separator' => ['min_digits' => 5],
+        'CustomFixer/blank_line_after_statement' => [
+            'statements' => [
+                'if',
+                'do',
+                'while',
+                'for',
+                'foreach',
+                'switch',
+                'try',
+            ],
+        ],
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
