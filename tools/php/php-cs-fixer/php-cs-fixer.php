@@ -69,7 +69,6 @@ return (new Config())
         'phpdoc_var_without_name' => true, // Allows var annotations without a variable name
         'single_line_comment_spacing' => true, // Ensures single line spacing for comments
         'comment_to_phpdoc' => true, // Converts single-line comments to PHPDoc
-        // 'no_empty_comment' => true, // Removes empty comments
         'no_empty_phpdoc' => true, // Removes empty PHPDoc blocks
         'header_comment' => ['header' => ''], // Removes header comments
         'no_blank_lines_after_phpdoc' => true, // Removes blank lines after PHPDoc
@@ -100,7 +99,6 @@ return (new Config())
         'array_syntax' => ['syntax' => 'short'], // Uses [] instead of array()
         'list_syntax' => ['syntax' => 'short'], // Uses [] instead of list()
         'trim_array_spaces' => true, // Trims spaces inside array brackets
-        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters', 'match']], // Trailing comma in multiline arrays
         'no_trailing_comma_in_singleline' => true, // No trailing comma in single-line arrays
         'whitespace_after_comma_in_array' => true, // Ensures whitespace after commas in arrays
         'no_whitespace_before_comma_in_array' => true, // No whitespace before commas in arrays
@@ -222,7 +220,7 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────────────────
         'phpdoc_to_param_type' => true, // Converts PHPDoc @param to type hints
         'phpdoc_to_return_type' => true, // Converts PHPDoc @return to return type declarations
-        // 'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
+        'phpdoc_to_property_type' => true, // Converts PHPDoc @var to property type declarations
         'declare_strict_types' => true, // Force strict types declaration in all files.
         'strict_comparison' => true, // Uses === and !== instead of == and !=
         'strict_param' => true, // Enforces strict parameter types
@@ -236,7 +234,7 @@ return (new Config())
         'random_api_migration' => true, // Replaces deprecated random number generation functions with modern ones
         'visibility_required' => ['elements' => ['property', 'method', 'const']], // Enforces visibility for all class properties and methods
         'self_accessor' => true, // Enforces the use of self:: for accessing static properties and methods
-        // 'mb_str_functions' => true, // Enforces the use of mb_str_* functions for multibyte string operations
+        'mb_str_functions' => true, // Enforces the use of mb_str_* functions for multibyte string operations
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
