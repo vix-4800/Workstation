@@ -2,8 +2,9 @@
 Description=Posture check every 45 minutes
 
 [Timer]
-OnBootSec=45min
-OnUnitActiveSec=45min
+OnBootSec=40min
+OnUnitActiveSec=40min
+RandomizedDelaySec=10min
 Persistent=false
 
 [Install]

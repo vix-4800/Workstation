@@ -2,8 +2,9 @@
 Description=Water drinking reminder every hour
 
 [Timer]
-OnBootSec=60min
-OnUnitActiveSec=60min
+OnBootSec=55min
+OnUnitActiveSec=55min
+RandomizedDelaySec=10min
 Persistent=false
 
 [Install]

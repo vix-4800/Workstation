@@ -2,8 +2,9 @@
 Description=Break reminder every 1.5 hours
 
 [Timer]
-OnBootSec=90min
-OnUnitActiveSec=90min
+OnBootSec=85min
+OnUnitActiveSec=85min
+RandomizedDelaySec=15min
 Persistent=false
 
 [Install]
