@@ -1,6 +1,6 @@
 [user]
-	name = Anton Vix
-	email = Gordan.ei@protonmail.ch
+	name = Your Name
+	email = your.email@example.com
 
 [credential "https://github.com"]
 	helper =
