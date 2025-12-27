@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
+use CustomFixer\NumericLiteralSeparatorFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+
+require_once __DIR__ . '/Fixer/NumericLiteralSeparatorFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setUsingCache(false)
     ->setUnsupportedPhpVersionAllowed(true)
+    ->registerCustomFixers([
+        new NumericLiteralSeparatorFixer(),
+    ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
         // Base preset
@@ -278,6 +284,11 @@ return (new Config())
         'visibility_required' => ['elements' => ['property', 'method', 'const']], // Enforces visibility for all class properties and methods
         'self_accessor' => true, // Enforces the use of self:: for accessing static properties and methods
         'mb_str_functions' => true, // Enforces the use of mb_str_* functions for multibyte string operations
+
+        // ─────────────────────────────────────────────────────────────────────────
+        // Custom fixers
+        // ─────────────────────────────────────────────────────────────────────────
+        'CustomFixer/numeric_literal_separator' => ['min_digits' => 5],
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
