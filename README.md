@@ -155,3 +155,39 @@ After running `workstation dotfiles link`, the script is available globally from
   - Plymouth boot screen
   - Greetd/ReGreet
   - Cursor theme
+
+## Configuration Structure
+
+- `config/` - Application configurations
+- `bin/` - Executable scripts
+- `ansible/` - Ansible playbooks for system provisioning
+- `systemd/user/` - User systemd services and timers
+- `tools/` - Development tool configurations (PHP, Python, JS, etc.)
+- `themes/` - Plymouth and GRUB themes
+- `wallpapers/` - Wallpaper collection
+- `dotfiles.json` - Symlink mapping configuration
+
+## Customization
+
+### Adding New Dotfiles
+
+1. Place your config file in the appropriate directory under `config/`
+2. Add a mapping entry to [dotfiles.json](dotfiles.json)
+3. Run `workstation dotfiles link` to create the symlink
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Catppuccin](https://github.com/catppuccin/catppuccin) - Color scheme
+- [Sway](https://swaywm.org/) - Wayland compositor
+- All the amazing open-source projects that make this configuration possible
+
+## Related Resources
+
+- [Arch Linux Wiki](https://wiki.archlinux.org/)
+- [Sway Documentation](https://github.com/swaywm/sway/wiki)
+- [Waybar Examples](https://github.com/Alexays/Waybar/wiki/Examples)
+- [r/unixporn](https://reddit.com/r/unixporn) - Desktop customization showcase
