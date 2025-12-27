@@ -76,9 +76,9 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
 
         // Ensure the previous call is ->where(...)
         if (
-            !($whereCall instanceof MethodCall) ||
-            !($whereCall->name instanceof Identifier) ||
-            $whereCall->name->toString() !== 'where'
+            !($whereCall instanceof MethodCall)
+            || !($whereCall->name instanceof Identifier)
+            || $whereCall->name->toString() !== 'where'
         ) {
             return null;
         }
@@ -87,9 +87,9 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
         $findCall = $whereCall->var;
 
         if (
-            !($findCall instanceof StaticCall) ||
-            !($findCall->name instanceof Identifier) ||
-            $findCall->name->toString() !== 'find'
+            !($findCall instanceof StaticCall)
+            || !($findCall->name instanceof Identifier)
+            || $findCall->name->toString() !== 'find'
         ) {
             return null;
         }

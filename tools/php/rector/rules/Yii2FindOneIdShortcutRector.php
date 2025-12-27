@@ -64,8 +64,8 @@ final class Yii2FindOneIdShortcutRector extends AbstractRector
 
         // Ensure there is exactly one argument and it is an array
         if (
-            count($node->args) !== 1 ||
-            !$node->args[0]->value instanceof Array_
+            count($node->args) !== 1
+            || !$node->args[0]->value instanceof Array_
         ) {
             return null;
         }

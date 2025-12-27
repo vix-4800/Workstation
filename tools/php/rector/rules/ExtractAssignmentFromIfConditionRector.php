@@ -236,10 +236,10 @@ if (is_array($items)) {
 
     private function isSupportedComparison(BinaryOp $binaryOp): bool
     {
-        return $binaryOp instanceof Identical ||
-               $binaryOp instanceof NotIdentical ||
-               $binaryOp instanceof Equal ||
-               $binaryOp instanceof NotEqual;
+        return $binaryOp instanceof Identical
+            || $binaryOp instanceof NotIdentical
+            || $binaryOp instanceof Equal
+            || $binaryOp instanceof NotEqual;
     }
 
     private function createBinaryOp(BinaryOp $originalOp, Node $left, Node $right): BinaryOp

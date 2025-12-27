@@ -91,11 +91,13 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
                 if ($isStrict === false) {
                     $isMixed = true;
                 }
+
                 $isStrict = true;
             } elseif ($comparison instanceof Equal) {
                 if ($isStrict === true) {
                     $isMixed = true;
                 }
+
                 $isStrict = false;
             } else {
                 return null;
@@ -156,7 +158,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
     /**
      * Рекурсивно собирает все Identical и Equal сравнения из цепочки BooleanOr
      *
-     * @return array<Identical|Equal>
+     * @return array<Equal|Identical>
      */
     private function collectComparisons(Node $node): array
     {
@@ -207,7 +209,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
      * - $var === null || $var === 0
      * - $var === false || $var === null
      *
-     * @param array<Identical|Equal> $comparisons
+     * @param array<Equal|Identical> $comparisons
      */
     private function isSimpleNullOrEmptyCheck(array $comparisons): bool
     {
@@ -216,6 +218,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
         }
 
         $values = [];
+
         foreach ($comparisons as $comparison) {
             if ($comparison->left instanceof Variable) {
                 $values[] = $comparison->right;
@@ -265,10 +268,6 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
             return true;
         }
 
-        if ($value instanceof LNumber && $value->value === 0) {
-            return true;
-        }
-
-        return false;
+        return (bool) ($value instanceof LNumber && $value->value === 0);
     }
 }
