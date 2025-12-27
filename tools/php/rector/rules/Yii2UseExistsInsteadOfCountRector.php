@@ -90,12 +90,10 @@ final class Yii2UseExistsInsteadOfCountRector extends AbstractRector
         $methodCall = null;
         $numberValue = null;
 
-        // Check if count() is on the left side
         if ($this->isMethodCallCount($node->left) && $this->isNumber($node->right)) {
             $methodCall = $node->left;
             $numberValue = $node->right;
         } elseif ($this->isNumber($node->left) && $this->isMethodCallCount($node->right)) {
-            // Check if count() is on the right side
             $methodCall = $node->right;
             $numberValue = $node->left;
         }
@@ -158,17 +156,11 @@ final class Yii2UseExistsInsteadOfCountRector extends AbstractRector
     private function shouldNegateExists(Node $node, int $number): ?bool
     {
         return match (true) {
-            // count() > 0 or 0 < count() -> exists()
             $node instanceof Greater && $number === 0 => false,
-            // count() >= 1 or 1 <= count() -> exists()
             $node instanceof GreaterOrEqual && $number === 1 => false,
-            // count() < 1 or 1 > count() -> !exists()
             $node instanceof Smaller && $number === 1 => true,
-            // count() <= 0 or 0 >= count() -> !exists()
             $node instanceof SmallerOrEqual && $number === 0 => true,
-            // count() != 0 or count() !== 0 -> exists()
             ($node instanceof NotEqual || $node instanceof NotIdentical) && $number === 0 => false,
-            // count() == 0 or count() === 0 -> !exists()
             ($node instanceof Equal || $node instanceof Identical) && $number === 0 => true,
             default => null,
         };

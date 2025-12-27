@@ -54,7 +54,6 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        // Check for ->one() or ->all()
         if (!($node->name instanceof Identifier)) {
             return null;
         }
@@ -65,16 +64,12 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
             return null;
         }
 
-        // Get the previous method call (should be ->where(...))
         $whereCall = $node->var;
 
-        // Skip transformation if there's a ->limit() call
-        // because findOne/findAll don't apply limit internally
         if ($whereCall instanceof MethodCall && $whereCall->name instanceof Identifier && $whereCall->name->toString() === 'limit') {
             return null;
         }
 
-        // Ensure the previous call is ->where(...)
         if (
             !($whereCall instanceof MethodCall)
             || !($whereCall->name instanceof Identifier)
@@ -83,7 +78,6 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
             return null;
         }
 
-        // Ensure the base call is a static ::find()
         $findCall = $whereCall->var;
 
         if (
@@ -94,7 +88,6 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
             return null;
         }
 
-        // Determine the appropriate static method to replace with
         $newMethod = $methodName === 'one' ? 'findOne' : 'findAll';
 
         return new StaticCall(

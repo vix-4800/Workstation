@@ -49,12 +49,10 @@ final class Yii2UserFindOneToIdentityRector extends AbstractRector
 
         $value = $args[0]->value;
 
-        // User::findOne(Yii::$app->user->id)
         if ($this->isYiiUserIdPropertyFetch($value)) {
             return $this->createYiiUserIdentityPropertyFetch();
         }
 
-        // User::findOne([Yii::$app->user->id])
         if ($this->isArrayOfSingleYiiUserId($value)) {
             return $this->createYiiUserIdentityPropertyFetch();
         }
