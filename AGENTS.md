@@ -1,3 +1,10 @@
+---
+prompt: |
+    You are an AI assistant helping with a dotfiles repository for Arch Linux with Sway (Wayland) desktop environment.
+
+    Follow these project-specific guidelines and conventions when working with this codebase.
+---
+
 # Dotfiles Repository - AI Agent Instructions
 
 ## Architecture Overview
