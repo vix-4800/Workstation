@@ -1,41 +1,41 @@
 @import 'mocha.css';
 
 * {
-  font-family: 'JetBrainsMono Nerd Font';
-  font-size: 17px;
-  min-height: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'JetBrainsMono Nerd Font';
+    font-size: 17px;
+    min-height: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #waybar {
-  background: transparent;
-  color: @text;
-  margin: 5px 5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: transparent;
+    color: @text;
+    margin: 5px 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 #workspaces {
-  border-radius: 1rem;
-  margin: 5px;
-  background-color: @surface0;
-  margin-left: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    margin: 5px;
+    background-color: @surface0;
+    margin-left: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 #workspaces button {
-  color: @lavender;
-  border-radius: 1rem;
-  padding: 0.4rem;
+    color: @lavender;
+    border-radius: 1rem;
+    padding: 0.4rem;
 }
 
 #workspaces button.active {
-  color: @sky;
-  border-radius: 1rem;
+    color: @sky;
+    border-radius: 1rem;
 }
 
 #workspaces button:hover {
-  color: @sapphire;
-  border-radius: 1rem;
+    color: @sapphire;
+    border-radius: 1rem;
 }
 
 #tray,
@@ -52,11 +52,11 @@
 #custom-docker,
 #custom-notification,
 #custom-microphone {
-  background-color: @surface0;
-  padding: 0.5rem 1rem;
-  margin: 5px 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+    background-color: @surface0;
+    padding: 0.5rem 1rem;
+    margin: 5px 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
 }
 
 /* Hover effects for interactive elements */
@@ -74,116 +74,116 @@
 #custom-docker:hover,
 #custom-notification:hover,
 #custom-microphone:hover {
-  background-color: @surface1;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    background-color: @surface1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 #clock,
 #custom-calendar {
-  color: @blue;
-  border-radius: 1rem;
-  margin-right: 1rem;
+    color: @blue;
+    border-radius: 1rem;
+    margin-right: 1rem;
 }
 
 #battery {
-  color: @green;
+    color: @green;
 }
 
 #battery.charging {
-  color: @teal;
+    color: @teal;
 }
 
 #battery.warning:not(.charging) {
-  color: @red;
+    color: @red;
 }
 
 #pulseaudio {
-  color: @sky;
-  border-radius: 1rem 0px 0px 1rem;
-  margin-left: 1rem;
+    color: @sky;
+    border-radius: 1rem 0px 0px 1rem;
+    margin-left: 1rem;
 }
 
 #pulseaudio.muted {
-  color: @red;
+    color: @red;
 }
 
 #custom-microphone {
-  color: @peach;
-  border-radius: 0px 1rem 1rem 0px;
-  margin-right: 1rem;
-  padding-right: 1.5rem;
+    color: @peach;
+    border-radius: 0px 1rem 1rem 0px;
+    margin-right: 1rem;
+    padding-right: 1.5rem;
 }
 
 #custom-microphone.muted {
-  color: @red;
+    color: @red;
 }
 
 #tray {
-  border-radius: 1rem;
+    border-radius: 1rem;
 }
 
 #network {
-  color: @yellow;
+    color: @yellow;
 }
 
 #bluetooth {
-  color: @sapphire;
-  border-radius: 0 1rem 1rem 0;
+    color: @sapphire;
+    border-radius: 0 1rem 1rem 0;
 }
 
 #language {
-  color: @peach;
-  border-radius: 0 1rem 1rem 0;
-  margin-right: 1rem;
+    color: @peach;
+    border-radius: 0 1rem 1rem 0;
+    margin-right: 1rem;
 }
 
 #custom-vpn {
-  border-radius: 1rem 0 0 1rem;
+    border-radius: 1rem 0 0 1rem;
 }
 
 #custom-vpn.connected {
-  color: @green;
+    color: @green;
 }
 
 #custom-vpn.disconnected {
-  color: @red;
+    color: @red;
 }
 
 #custom-docker {
-  color: @blue;
-  border-radius: 1rem;
-  margin-right: 1rem;
+    color: @blue;
+    border-radius: 1rem;
+    margin-right: 1rem;
 }
 
 #custom-docker.running {
-  color: @sky;
+    color: @sky;
 }
 
 #custom-docker.stopped {
-  color: @gray;
+    color: @gray;
 }
 
 #custom-notification {
-  color: @yellow;
-  border-radius: 1rem;
-  margin-right: 1rem;
+    color: @yellow;
+    border-radius: 1rem;
+    margin-right: 1rem;
 }
 
 #custom-resources {
-  color: @blue;
-  border-radius: 1rem 0 0 1rem;
+    color: @blue;
+    border-radius: 1rem 0 0 1rem;
 }
 
 #custom-resources.warning {
-  color: @peach;
+    color: @peach;
 }
 
 #custom-resources.critical {
-  color: @red;
+    color: @red;
 }
 
 #custom-weather {
-  color: @sky;
-  border-radius: 1rem;
-  margin-left: 1rem;
+    color: @sky;
+    border-radius: 1rem;
+    margin-left: 1rem;
 }

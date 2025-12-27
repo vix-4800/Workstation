@@ -2,137 +2,137 @@
 
 /* === Window Styling === */
 window {
-  border-radius: 12px;
+    border-radius: 12px;
 }
 
 /* === Scrollbars === */
 scrollbar {
-  background-color: transparent;
+    background-color: transparent;
 }
 
 scrollbar > range > trough {
-  background: transparent;
+    background: transparent;
 }
 
 scrollbar > range > trough > slider {
-  min-width: 8px;
-  min-height: 8px;
-  border-radius: 8px;
-  background-color: alpha(#cdd6f4, 0.3);
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 8px;
+    background-color: alpha(#cdd6f4, 0.3);
 }
 
 scrollbar > range > trough > slider:hover {
-  background-color: alpha(#cdd6f4, 0.5);
+    background-color: alpha(#cdd6f4, 0.5);
 }
 
 scrollbar > range > trough > slider:active {
-  background-color: #b4befe;
+    background-color: #b4befe;
 }
 
 /* === Tooltips === */
 tooltip {
-  border-radius: 8px;
-  padding: 6px 10px;
-  background-color: #313244;
-  color: #cdd6f4;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 6px 10px;
+    background-color: #313244;
+    color: #cdd6f4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* === Selection === */
 selection {
-  background-color: #b4befe;
-  color: #1e1e2e;
+    background-color: #b4befe;
+    color: #1e1e2e;
 }
 
 /* === Focus === */
 :focus-visible {
-  outline-color: #b4befe;
-  outline-style: solid;
-  outline-width: 2px;
-  outline-offset: -2px;
+    outline-color: #b4befe;
+    outline-style: solid;
+    outline-width: 2px;
+    outline-offset: -2px;
 }
 
 /* === Sidebar === */
 .sidebar {
-  background-color: #1e1e2e;
+    background-color: #1e1e2e;
 }
 
 /* === Popover === */
 popover > contents {
-  border-radius: 12px;
-  padding: 4px;
+    border-radius: 12px;
+    padding: 4px;
 }
 
 /* === Menu === */
 menu {
-  border-radius: 8px;
-  padding: 4px;
+    border-radius: 8px;
+    padding: 4px;
 }
 
 /* === Notebook === */
 notebook > header > tabs > tab {
-  border-radius: 8px 8px 0 0;
-  padding: 8px 16px;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 16px;
 }
 
 /* === Buttons === */
 button {
-  border-radius: 6px;
+    border-radius: 6px;
 }
 
 button.suggested-action {
-  background-color: #b4befe;
-  color: #1e1e2e;
+    background-color: #b4befe;
+    color: #1e1e2e;
 }
 
 button.destructive-action {
-  background-color: #f38ba8;
-  color: #1e1e2e;
+    background-color: #f38ba8;
+    color: #1e1e2e;
 }
 
 /* === Entry === */
 entry {
-  border-radius: 6px;
+    border-radius: 6px;
 }
 
 /* === Switch === */
 switch {
-  border-radius: 12px;
+    border-radius: 12px;
 }
 
 switch > slider {
-  border-radius: 50%;
+    border-radius: 50%;
 }
 
 /* === Progress bar === */
 progressbar > trough {
-  border-radius: 4px;
+    border-radius: 4px;
 }
 
 progressbar > trough > progress {
-  border-radius: 4px;
-  background-color: #b4befe;
+    border-radius: 4px;
+    background-color: #b4befe;
 }
 
 /* === Level bar === */
 levelbar > trough {
-  border-radius: 4px;
+    border-radius: 4px;
 }
 
 levelbar > trough > block {
-  border-radius: 4px;
+    border-radius: 4px;
 }
 
 /* === Cards and Views === */
 .card {
-  border-radius: 12px;
+    border-radius: 12px;
 }
 
 .view {
-  border-radius: 8px;
+    border-radius: 8px;
 }
 
 /* === Header bar === */
 headerbar {
-  border-radius: 12px 12px 0 0;
+    border-radius: 12px 12px 0 0;
 }

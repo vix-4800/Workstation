@@ -52,126 +52,126 @@
 @define-color crust-rgb  rgb(17, 17, 27);
 
 * {
-  font-family: 'JetBrainsMono Nerd Font';
-  font-size: 14px;
-  transition: all 0.2s ease;
+    font-family: 'JetBrainsMono Nerd Font';
+    font-size: 14px;
+    transition: all 0.2s ease;
 }
 
 /* Window */
 window {
-  margin: 0px;
-  padding: 10px;
-  border: none;
-  border-radius: 12.6px;
-  background-color: rgba(30, 30, 46, 0.95);
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px @surface1;
-  animation: slideIn 0.35s ease-in-out both;
+    margin: 0px;
+    padding: 10px;
+    border: none;
+    border-radius: 12.6px;
+    background-color: rgba(30, 30, 46, 0.95);
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px @surface1;
+    animation: slideIn 0.35s ease-in-out both;
 }
 
 /* Slide In */
 @keyframes slideIn {
-  0% {
-    opacity: 0;
-  }
+    0% {
+        opacity: 0;
+    }
 
-  100% {
-    opacity: 1;
-  }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Inner Box */
 #inner-box {
-  margin: 5px;
-  padding: 10px;
-  border: none;
-  background-color: transparent;
-  animation: fadeIn 0.5s ease-in-out both;
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    animation: fadeIn 0.5s ease-in-out both;
 }
 
 /* Fade In */
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
+    0% {
+        opacity: 0;
+    }
 
-  100% {
-    opacity: 1;
-  }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Outer Box */
 #outer-box {
-  margin: 5px;
-  padding: 20px 5px;
-  border: none;
-  background-color: transparent;
+    margin: 5px;
+    padding: 20px 5px;
+    border: none;
+    background-color: transparent;
 }
 
 /* Scroll */
 #scroll {
-  margin: 0px;
-  padding: 10px;
-  border: none;
-  background-color: transparent;
+    margin: 0px;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
 }
 
 /* Input */
 #input {
-  margin: 5px 20px;
-  padding: 10px;
-  border: none;
-  border-radius: 12.6px;
-  color: @text;
-  background-color: @surface0;
-  box-shadow: inset 0 0 0 1px @surface1;
-  animation: fadeIn 0.5s ease-in-out both;
+    margin: 5px 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 12.6px;
+    color: @text;
+    background-color: @surface0;
+    box-shadow: inset 0 0 0 1px @surface1;
+    animation: fadeIn 0.5s ease-in-out both;
 }
 
 #input image {
-  border: none;
-  color: @red;
+    border: none;
+    color: @red;
 }
 
 #input * {
-  outline: 4px solid @red!important;
+    outline: 4px solid @red!important;
 }
 
 /* Text */
 #text {
-  margin: 5px;
-  border: none;
-  color: @text;
-  animation: fadeIn 0.5s ease-in-out both;
+    margin: 5px;
+    border: none;
+    color: @text;
+    animation: fadeIn 0.5s ease-in-out both;
 }
 
 #entry {
-  background-color: transparent;
-  margin: 5px 8px;
-  padding: 10px 15px;
-  border-radius: 7px;
-  transition: all 0.2s ease;
+    background-color: transparent;
+    margin: 5px 8px;
+    padding: 10px 15px;
+    border-radius: 7px;
+    transition: all 0.2s ease;
 }
 
 #entry arrow {
-  border: none;
-  color: @lavender;
+    border: none;
+    color: @lavender;
 }
 
 /* Entry hover effect */
 #entry:hover {
-  background-color: @surface0;
+    background-color: @surface0;
 }
 
 /* Selected Entry */
 #entry:selected {
-  background-color: @surface1;
-  box-shadow: inset 0 0 0 1px @lavender;
+    background-color: @surface1;
+    box-shadow: inset 0 0 0 1px @lavender;
 }
 
 #entry:selected #text {
-  color: @mauve;
+    color: @mauve;
 }
 
 #entry:drop(active) {
-  background-color: @lavender!important;
+    background-color: @lavender!important;
 }
