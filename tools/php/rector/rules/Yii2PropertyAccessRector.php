@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * Рефакторинг Yii2 кода для улучшения читабельности:
+ * Refactoring Yii2 code to improve readability:
  * - Yii::$app->user->getId() → Yii::$app->user->id
  * - Yii::$app->user->getIdentity() → Yii::$app->user->identity
  */

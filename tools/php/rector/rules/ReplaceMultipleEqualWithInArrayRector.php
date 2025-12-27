@@ -156,7 +156,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
     }
 
     /**
-     * Рекурсивно собирает все Identical и Equal сравнения из цепочки BooleanOr
+     * Recursively collects all Identical and Equal comparisons from BooleanOr chain
      *
      * @return array<Equal|Identical>
      */
@@ -177,7 +177,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
     }
 
     /**
-     * Простое сравнение узлов - для простых переменных должно работать
+     * Simple node comparison - should work for simple variables
      */
     private function areNodesEqual(?Node $node1, ?Node $node2): bool
     {
@@ -201,9 +201,9 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
     }
 
     /**
-     * Проверяет, является ли конструкция простой проверкой на null/пустую строку
-     * Такие конструкции обычно получаются после рефакторинга empty() и выглядят лучше в оригинальной форме
-     * Примеры:
+     * Checks if the construct is a simple null/empty string check
+     * Such constructs usually appear after refactoring empty() and look better in the original form
+     * Examples:
      * - $var === null || $var === ''
      * - $var === '' || $var === null
      * - $var === null || $var === 0
@@ -233,8 +233,8 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
     }
 
     /**
-     * Проверяет, содержит ли массив только "простые" значения для сравнения
-     * Простые значения: null, пустая строка, false, true, 0
+     * Checks if the array contains only "simple" values for comparison
+     * Simple values: null, empty string, false, true, 0
      *
      * @param array<Node> $values
      */
@@ -252,7 +252,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
     }
 
     /**
-     * Проверяет, является ли значение "простым" (null, '', false, true, 0)
+     * Checks if the value is "simple" (null, '', false, true, 0)
      */
     private function isSimpleValue(Node $value): bool
     {
