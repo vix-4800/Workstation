@@ -12,6 +12,15 @@
       changed_when: false
       failed_when: false
 
+    - name: 'Install base icon packages'
+      community.general.pacman:
+        name:
+          - papirus-icon-theme
+          - adwaita-icon-theme
+          - breeze-icons
+          - hicolor-icon-theme
+        state: present
+
     - name: 'Install icon themes from AUR'
       kewlfft.aur.aur:
         use: yay
