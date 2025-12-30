@@ -1,0 +1,190 @@
+#!/usr/bin/env bash
+# Display Sway keybindings help in a styled window
+
+set -euo pipefail
+
+# Colors (Catppuccin Mocha)
+readonly ROSEWATER="#f5e0dc"
+readonly FLAMINGO="#f2cdcd"
+readonly PINK="#f5c2e7"
+readonly MAUVE="#cba6f7"
+readonly RED="#f38ba8"
+readonly MAROON="#eba0ac"
+readonly PEACH="#fab387"
+readonly YELLOW="#f9e2af"
+readonly GREEN="#a6e3a1"
+readonly TEAL="#94e2d5"
+readonly SKY="#89dceb"
+readonly SAPPHIRE="#74c7ec"
+readonly BLUE="#89b4fa"
+readonly LAVENDER="#b4befe"
+readonly TEXT="#cdd6f4"
+readonly SUBTEXT1="#bac2de"
+readonly SUBTEXT0="#a6adc8"
+readonly OVERLAY2="#9399b2"
+readonly OVERLAY1="#7f849c"
+readonly OVERLAY0="#6c7086"
+readonly SURFACE2="#585b70"
+readonly SURFACE1="#45475a"
+readonly SURFACE0="#313244"
+readonly BASE="#1e1e2e"
+readonly MANTLE="#181825"
+readonly CRUST="#11111b"
+
+# Help content with Pango markup (for yad/wofi)
+generate_help_markup() {
+    cat << 'EOF'
+<span foreground="#cba6f7" size="xx-large" weight="bold">Sway Keybindings</span>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Basic Actions ━━━</span>
+<tt><span foreground="#89b4fa">Mod + Enter</span>       <span foreground="#a6adc8">Open terminal</span></tt>
+<tt><span foreground="#89b4fa">Mod + Space</span>       <span foreground="#a6adc8">Application launcher</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + S</span>   <span foreground="#a6adc8">Search menu</span></tt>
+<tt><span foreground="#89b4fa">Mod + Q</span>           <span foreground="#a6adc8">Kill window</span></tt>
+<tt><span foreground="#89b4fa">Mod + L</span>           <span foreground="#a6adc8">Lock screen</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + C</span>   <span foreground="#a6adc8">Reload Sway config</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + Q</span>   <span foreground="#a6adc8">Power/logout menu</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ File Management ━━━</span>
+<tt><span foreground="#89b4fa">Mod + Shift + F</span>   <span foreground="#a6adc8">Open file manager (Thunar)</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + A</span>   <span foreground="#a6adc8">Desktop menu (quick actions)</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Wallpapers & Display ━━━</span>
+<tt><span foreground="#89b4fa">Mod + W</span>           <span foreground="#a6adc8">Wallpaper manager (Waypaper)</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + D</span>   <span foreground="#a6adc8">Display settings (wdisplays)</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Clipboard & Notifications ━━━</span>
+<tt><span foreground="#89b4fa">Mod + V</span>           <span foreground="#a6adc8">Clipboard history</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + V</span>   <span foreground="#a6adc8">Clear clipboard history</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + N</span>   <span foreground="#a6adc8">Toggle notification center</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Screenshots ━━━</span>
+<tt><span foreground="#89b4fa">Print</span>             <span foreground="#a6adc8">Full screen screenshot</span></tt>
+<tt><span foreground="#89b4fa">Mod + Print</span>       <span foreground="#a6adc8">Area screenshot (save)</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + Print</span> <span foreground="#a6adc8">Area screenshot (clipboard)</span></tt>
+<tt><span foreground="#89b4fa">Ctrl + Print</span>      <span foreground="#a6adc8">Area screenshot (edit with Swappy)</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Workspaces ━━━</span>
+<tt><span foreground="#89b4fa">Mod + 1-9,0</span>       <span foreground="#a6adc8">Switch to workspace</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + 1-9,0</span> <span foreground="#a6adc8">Move window to workspace</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Window Management ━━━</span>
+<tt><span foreground="#89b4fa">Mod + F</span>           <span foreground="#a6adc8">Toggle fullscreen</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + Space</span> <span foreground="#a6adc8">Toggle floating</span></tt>
+<tt><span foreground="#89b4fa">Mod + R</span>           <span foreground="#a6adc8">Resize mode</span></tt>
+<tt><span foreground="#89b4fa">Mod + A</span>           <span foreground="#a6adc8">Focus parent</span></tt>
+<tt><span foreground="#89b4fa">Mod + Arrow keys</span>  <span foreground="#a6adc8">Focus direction</span></tt>
+<tt><span foreground="#89b4fa">Mod + Shift + Arrows</span> <span foreground="#a6adc8">Move window</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Scratchpad ━━━</span>
+<tt><span foreground="#89b4fa">Mod + Shift + -</span>   <span foreground="#a6adc8">Move to scratchpad</span></tt>
+<tt><span foreground="#89b4fa">Mod + -</span>           <span foreground="#a6adc8">Show/hide scratchpad</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Media & Volume ━━━</span>
+<tt><span foreground="#89b4fa">XF86AudioRaise/Lower</span> <span foreground="#a6adc8">Volume up/down</span></tt>
+<tt><span foreground="#89b4fa">XF86AudioMute</span>    <span foreground="#a6adc8">Mute/unmute</span></tt>
+<tt><span foreground="#89b4fa">XF86AudioMicMute</span> <span foreground="#a6adc8">Microphone mute toggle</span></tt>
+<tt><span foreground="#89b4fa">XF86AudioPlay</span>    <span foreground="#a6adc8">Play/pause media</span></tt>
+<tt><span foreground="#89b4fa">XF86AudioNext/Prev</span> <span foreground="#a6adc8">Next/previous track</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ Brightness ━━━</span>
+<tt><span foreground="#89b4fa">XF86MonBrightnessUp/Down</span> <span foreground="#a6adc8">Brightness up/down</span></tt>
+
+<span foreground="#f5c2e7" size="large" weight="bold">━━━ System ━━━</span>
+<tt><span foreground="#89b4fa">Mod + Shift + B</span>   <span foreground="#a6adc8">Restart Waybar</span></tt>
+<tt><span foreground="#89b4fa">Caps Lock (release)</span> <span foreground="#a6adc8">Caps Lock indicator</span></tt>
+
+<span foreground="#94e2d5" size="small" style="italic">Tip: Mod = Super/Windows key</span>
+EOF
+}
+
+# Plain text version for zenity
+generate_help_plain() {
+    cat << 'EOF'
+═══════════════════════════════════════
+        SWAY KEYBINDINGS REFERENCE
+═══════════════════════════════════════
+
+━━━ Basic Actions ━━━
+Mod + Enter         Open terminal
+Mod + Space         Application launcher
+Mod + Shift + S     Search menu
+Mod + Q             Kill window
+Mod + L             Lock screen
+Mod + Shift + C     Reload Sway config
+Mod + Shift + Q     Power/logout menu
+Mod + Shift + H     Show this help
+
+━━━ File Management ━━━
+Mod + Shift + F     Open file manager (Thunar)
+Mod + Shift + A     Desktop menu (quick actions)
+
+━━━ Wallpapers & Display ━━━
+Mod + W             Wallpaper manager (Waypaper)
+Mod + Shift + D     Display settings (wdisplays)
+
+━━━ Clipboard & Notifications ━━━
+Mod + V             Clipboard history
+Mod + Shift + V     Clear clipboard history
+Mod + Shift + N     Toggle notification center
+
+━━━ Screenshots ━━━
+Print               Full screen screenshot
+Mod + Print         Area screenshot (save)
+Mod + Shift + Print Area screenshot (clipboard)
+Ctrl + Print        Area screenshot (edit with Swappy)
+
+━━━ Workspaces ━━━
+Mod + 1-9,0         Switch to workspace
+Mod + Shift + 1-9,0 Move window to workspace
+
+━━━ Window Management ━━━
+Mod + F             Toggle fullscreen
+Mod + Shift + Space Toggle floating
+Mod + R             Resize mode
+Mod + A             Focus parent
+Mod + Arrow keys    Focus direction
+Mod + Shift + Arrows Move window
+
+━━━ Scratchpad ━━━
+Mod + Shift + -     Move to scratchpad
+Mod + -             Show/hide scratchpad
+
+━━━ Media & Volume ━━━
+XF86AudioRaise/Lower Volume up/down
+XF86AudioMute       Mute/unmute
+XF86AudioMicMute    Microphone mute toggle
+XF86AudioPlay       Play/pause media
+XF86AudioNext/Prev  Next/previous track
+
+━━━ Brightness ━━━
+XF86MonBrightnessUp/Down Brightness up/down
+
+━━━ System ━━━
+Mod + Shift + B     Restart Waybar
+Caps Lock (release) Caps Lock indicator
+
+───────────────────────────────────────
+Tip: Mod = Super/Windows key
+───────────────────────────────────────
+EOF
+}
+
+# Display help using zenity (primary) or wofi (fallback)
+if command -v zenity &> /dev/null; then
+    generate_help_plain | zenity \
+        --text-info \
+        --title="Sway Keybindings" \
+        --width=700 \
+        --height=900 \
+        --font="JetBrainsMono Nerd Font 11" &
+else
+    # Fallback to wofi with markup support
+    generate_help_markup | wofi \
+        --show dmenu \
+        --prompt "Sway Keybindings" \
+        --width 50% \
+        --height 80% \
+        --location center \
+        --allow-markup
+fi

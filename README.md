@@ -54,6 +54,7 @@ After running `workstation dotfiles link`, the script is available globally from
 
 - **Wofi** - Application launcher
 - **Search Menu** - Fast file & directory search - `$mod+Shift+s`
+- **Keybindings Help** - Visual reference for shortcuts - `$mod+Shift+h`
 - **Cliphist** - Clipboard manager
 - **Wdisplays** - Display configuration GUI
 - **Waypaper** - Wallpaper selector

@@ -206,6 +206,11 @@
             "comment": "Desktop application search menu script"
         },
         {
+            "source": "bin/sway-help",
+            "target": "$HOME/.local/bin/sway-help",
+            "comment": "Sway keybindings help viewer"
+        },
+        {
             "source": "config/user-dirs.dirs",
             "target": "$HOME/.config/user-dirs.dirs",
             "comment": "XDG user directories configuration"
