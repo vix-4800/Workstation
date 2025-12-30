@@ -29,6 +29,7 @@
           - gvfs-nfs
           - feh
           - trash-cli
+          - zenity
         state: present
 
     - name: 'Check if yay is installed'
