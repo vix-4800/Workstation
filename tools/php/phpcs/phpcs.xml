@@ -284,7 +284,11 @@
     </rule>
 
     <!-- ===== ATTRIBUTES (PHP 8+) ===== -->
-    <rule ref="SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing" />
+    <rule ref="SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing">
+        <properties>
+            <property name="allowOnSameLine" value="true" />
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment" />
     <rule ref="SlevomatCodingStandard.Attributes.DisallowMultipleAttributesPerLine" />
     <rule ref="DevStrict.Attributes.ForbiddenAttributes">
