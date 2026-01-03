@@ -53,6 +53,7 @@
           - swaylock-effects
           - wlogout
           - autotiling
+          - swaysettings
         state: present
       when: yay_check.rc == 0
       become: true
