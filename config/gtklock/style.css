@@ -28,12 +28,9 @@
 @define-color mantle #181825;
 @define-color crust #11111b;
 
-/* Main Window */
+/* Main Window - background set by media-background module */
 window {
-    background-image: url('DYNAMIC_BACKGROUND_PLACEHOLDER');
-    background-size: cover;
-    background-position: center;
-    background-color: alpha(@base, 0.95);
+    background-color: @base;
 }
 
 /* Background Blur Effect */
