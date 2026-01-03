@@ -220,10 +220,46 @@ static void load_album_art(struct Window *ctx) {
     g_free(uri);
 }
 
+static void load_album_art_from_metadata(struct Window *ctx, GVariant *metadata) {
+    if (!metadata) {
+        load_album_art(ctx);
+        return;
+    }
+
+    GVariant *art_url_variant = g_variant_lookup_value(metadata, "mpris:artUrl", G_VARIANT_TYPE_STRING);
+    if (!art_url_variant) {
+        load_fallback(ctx);
+        return;
+    }
+
+    const gchar *uri = g_variant_get_string(art_url_variant, NULL);
+    if (!uri || uri[0] == '\0') {
+        g_variant_unref(art_url_variant);
+        load_fallback(ctx);
+        return;
+    }
+
+    const char *scheme = g_uri_peek_scheme(uri);
+
+    if (g_strcmp0("file", scheme) == 0) {
+        GFile *file = g_file_new_for_uri(uri);
+        g_file_read_async(file, G_PRIORITY_DEFAULT, NULL, file_read_callback, ctx);
+        g_object_unref(file);
+    } else if (g_strcmp0("http", scheme) == 0 || g_strcmp0("https", scheme) == 0) {
+        SoupMessage *msg = soup_message_new(SOUP_METHOD_GET, uri);
+        soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, NULL, http_callback, ctx);
+        g_object_unref(msg);
+    } else {
+        load_fallback(ctx);
+    }
+
+    g_variant_unref(art_url_variant);
+}
+
 static void on_metadata_changed(PlayerctlPlayer *player, GVariant *metadata, gpointer user_data) {
     struct GtkLock *gtklock = user_data;
     if (gtklock->focused_window) {
-        load_album_art(gtklock->focused_window);
+        load_album_art_from_metadata(gtklock->focused_window, metadata);
     }
 }
 
