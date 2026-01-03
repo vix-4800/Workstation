@@ -215,6 +215,11 @@
             "comment": "Sway keybindings help viewer"
         },
         {
+            "source": "bin/set-media-bg",
+            "target": "$HOME/.local/bin/set-media-bg",
+            "comment": "Set GTKLock background to current media album art"
+        },
+        {
             "source": "config/user-dirs.dirs",
             "target": "$HOME/.config/user-dirs.dirs",
             "comment": "XDG user directories configuration"

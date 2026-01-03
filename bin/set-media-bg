@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# Set GTKLock background to current media album art
+
+set -euo pipefail
+
+# Configuration
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/gtklock"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/gtklock"
+STYLE_FILE="$CONFIG_DIR/style.css"
+FALLBACK_BG="$CONFIG_DIR/fallback-bg.jpg"
+
+# Ensure cache directory exists
+mkdir -p "$CACHE_DIR"
+
+# Function to get album art URL
+get_album_art() {
+    playerctl metadata mpris:artUrl 2>/dev/null || echo ""
+}
+
+# Function to download and save album art
+download_album_art() {
+    local art_url="$1"
+    local output_file="$CACHE_DIR/current-album-art.jpg"
+
+    if [[ -z "$art_url" ]]; then
+        return 1
+    fi
+
+    # Handle file:// URLs
+    if [[ "$art_url" == file://* ]]; then
+        local file_path="${art_url#file://}"
+        cp "$file_path" "$output_file" 2>/dev/null || return 1
+    # Handle http/https URLs
+    elif [[ "$art_url" == http* ]]; then
+        curl -sf "$art_url" -o "$output_file" || return 1
+    else
+        return 1
+    fi
+
+    echo "$output_file"
+}
+
+# Function to update CSS with background image
+update_css() {
+    local bg_image="$1"
+
+    if [[ ! -f "$STYLE_FILE" ]]; then
+        echo "Error: No style.css found!" >&2
+        return 1
+    fi
+
+    # Update background-image line in style.css
+    sed -i "s|background-image: url('.*');|background-image: url('$bg_image');|" "$STYLE_FILE"
+}
+
+# Main logic
+main() {
+    # Get album art URL
+    local art_url
+    art_url=$(get_album_art)
+
+    if [[ -z "$art_url" ]]; then
+        # No media playing, use fallback or default
+        if [[ -f "$FALLBACK_BG" ]]; then
+            update_css "$FALLBACK_BG"
+        fi
+        exit 0
+    fi
+
+    # Download album art
+    local bg_file
+    if bg_file=$(download_album_art "$art_url"); then
+        update_css "$bg_file"
+    else
+        # Failed to get album art, use fallback
+        if [[ -f "$FALLBACK_BG" ]]; then
+            update_css "$FALLBACK_BG"
+        fi
+    fi
+}
+
+main "$@"

@@ -30,6 +30,9 @@
 
 /* Main Window */
 window {
+    background-image: url('DYNAMIC_BACKGROUND_PLACEHOLDER');
+    background-size: cover;
+    background-position: center;
     background-color: alpha(@base, 0.95);
 }
 
@@ -147,9 +150,9 @@ window {
 }
 
 #playerctl-album-art {
-    border-radius: 8px;
-    margin: 10px;
-    box-shadow: 0 4px 15px alpha(@crust, 0.5);
+    opacity: 0;
+    min-width: 0;
+    min-height: 0;
 }
 
 #playerctl-title {
