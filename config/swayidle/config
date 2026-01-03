@@ -4,6 +4,6 @@
 # before-sleep 'swaylock --grace 2 --indicator-idle-visible'
 
 # Gtklock
-timeout 600 'gtklock -d'
+timeout 600 'gtklock'
 timeout 1500 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
-before-sleep 'gtklock -d'
+before-sleep 'gtklock'
