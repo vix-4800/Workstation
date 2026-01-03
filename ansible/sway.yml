@@ -24,6 +24,7 @@
           # - wlsunset
           # - kanshi
           # - wf-recorder
+          - gtklock
         state: present
 
     - name: 'Check if yay is installed'
