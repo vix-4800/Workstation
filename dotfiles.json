@@ -173,6 +173,10 @@
             "target": "$HOME/.config/gtk-4.0"
         },
         {
+            "source": "config/gtklock",
+            "target": "$HOME/.config/gtklock"
+        },
+        {
             "source": "wallpapers",
             "target": "$HOME/Pictures/Wallpapers"
         },
