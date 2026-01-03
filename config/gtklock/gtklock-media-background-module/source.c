@@ -28,12 +28,74 @@ PlayerctlPlayerManager *player_manager = NULL;
 PlayerctlPlayer *current_player = NULL;
 SoupSession *soup_session = NULL;
 
+// Configuration options with defaults
 static gchar *fallback_image = NULL;
+static gchar *background_color = NULL;
+static gchar *opacity_str = NULL;
+static gint blur_radius = 0;
+static gboolean enable_background_image = TRUE;
+static gboolean darken = FALSE;
+static gchar *darken_amount_str = NULL;
+static gboolean hide_playerctl_art = TRUE;
+static gchar *background_size = NULL;
+static gchar *background_position = NULL;
+
+// Parsed values
+static gdouble opacity = 1.0;
+static gdouble darken_amount = 0.5;
 
 GOptionEntry module_entries[] = {
-    { "fallback-image", 0, 0, G_OPTION_ARG_STRING, &fallback_image, "Path to fallback image when no media playing", NULL },
+    { "fallback-image", 0, 0, G_OPTION_ARG_STRING, &fallback_image,
+      "Path to fallback image when no media playing", NULL },
+    { "background-color", 0, 0, G_OPTION_ARG_STRING, &background_color,
+      "Background color when no image (CSS color, e.g. '#1e1e2e' or '@base')", NULL },
+    { "opacity", 0, 0, G_OPTION_ARG_STRING, &opacity_str,
+      "Background image opacity (0.0-1.0, default: 1.0)", NULL },
+    { "blur-radius", 0, 0, G_OPTION_ARG_INT, &blur_radius,
+      "Background blur radius in pixels (0-50, default: 0, requires GTK 3.24.38+)", NULL },
+    { "enable-background-image", 0, 0, G_OPTION_ARG_NONE, &enable_background_image,
+      "Enable album art as background (default: true)", NULL },
+    { "no-background-image", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &enable_background_image,
+      "Disable album art background, use solid color only", NULL },
+    { "darken", 0, 0, G_OPTION_ARG_NONE, &darken,
+      "Apply dark overlay on background for better readability", NULL },
+    { "darken-amount", 0, 0, G_OPTION_ARG_STRING, &darken_amount_str,
+      "Darkness level of overlay (0.0-1.0, default: 0.5)", NULL },
+    { "hide-playerctl-art", 0, 0, G_OPTION_ARG_NONE, &hide_playerctl_art,
+      "Hide album art in playerctl module (default: true)", NULL },
+    { "show-playerctl-art", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &hide_playerctl_art,
+      "Show album art in playerctl module alongside background", NULL },
+    { "background-size", 0, 0, G_OPTION_ARG_STRING, &background_size,
+      "CSS background-size ('cover', 'contain', 'auto', default: 'cover')", NULL },
+    { "background-position", 0, 0, G_OPTION_ARG_STRING, &background_position,
+      "CSS background-position (default: 'center')", NULL },
     { NULL },
 };
+
+static gdouble parse_double(const gchar *str, gdouble default_val, gdouble min, gdouble max) {
+    if (!str || str[0] == '\0') return default_val;
+
+    gchar *endptr = NULL;
+    gdouble val = g_ascii_strtod(str, &endptr);
+
+    if (endptr == str) return default_val;
+    if (val < min) return min;
+    if (val > max) return max;
+
+    return val;
+}
+
+static void validate_config(void) {
+    opacity = parse_double(opacity_str, 1.0, 0.0, 1.0);
+    darken_amount = parse_double(darken_amount_str, 0.5, 0.0, 1.0);
+
+    if (blur_radius < 0) blur_radius = 0;
+    if (blur_radius > 50) blur_radius = 50;
+
+    if (!background_size) background_size = g_strdup("cover");
+    if (!background_position) background_position = g_strdup("center");
+    if (!background_color) background_color = g_strdup("@base");
+}
 
 static gchar *get_cache_path(void) {
     const gchar *cache_dir = g_get_user_cache_dir();
@@ -44,30 +106,64 @@ static gchar *get_cache_path(void) {
     return path;
 }
 
+static gchar *build_background_css(const gchar *image_path) {
+    GString *css = g_string_new("window { ");
+
+    if (image_path && enable_background_image && g_file_test(image_path, G_FILE_TEST_EXISTS)) {
+        g_string_append_printf(css, "background-image: ");
+
+        // Build gradient overlay if darken is enabled
+        if (darken) {
+            g_string_append_printf(css,
+                "linear-gradient(rgba(0, 0, 0, %.2f), rgba(0, 0, 0, %.2f)), ",
+                darken_amount, darken_amount);
+        }
+
+        g_string_append_printf(css, "url('file://%s'); ", image_path);
+        g_string_append_printf(css, "background-size: %s; ", background_size);
+        g_string_append_printf(css, "background-position: %s; ", background_position);
+        g_string_append(css, "background-repeat: no-repeat; ");
+
+        if (opacity < 1.0) {
+            g_string_append_printf(css, "opacity: %.2f; ", opacity);
+        }
+
+        // GTK CSS filter for blur (GTK 3.24.38+)
+        if (blur_radius > 0) {
+            g_string_append_printf(css, "-gtk-icon-filter: blur(%dpx); ", blur_radius);
+        }
+    } else {
+        g_string_append_printf(css, "background-color: %s; ", background_color);
+    }
+
+    g_string_append(css, "} ");
+
+    // Hide playerctl album art if configured
+    if (hide_playerctl_art) {
+        g_string_append(css,
+            "#playerctl-album-art { opacity: 0; min-width: 0; min-height: 0; } ");
+    }
+
+    gchar *result = g_string_free(css, FALSE);
+    return result;
+}
+
 static void update_background_css(struct Window *ctx, const gchar *image_path) {
     if (!ctx || !MEDIA_BG(ctx)) return;
 
     GtkCssProvider *provider = MEDIA_BG(ctx)->css_provider;
     if (!provider) return;
 
-    gchar *css_data;
-    if (image_path && g_file_test(image_path, G_FILE_TEST_EXISTS)) {
-        css_data = g_strdup_printf(
-            "window { "
-            "  background-image: url('file://%s'); "
-            "  background-size: cover; "
-            "  background-position: center; "
-            "  background-repeat: no-repeat; "
-            "}"
-            "#playerctl-album-art { opacity: 0; min-width: 0; min-height: 0; }",
-            image_path);
-    } else {
-        css_data = g_strdup(
-            "window { background-color: @base; }"
-            "#playerctl-album-art { opacity: 0; min-width: 0; min-height: 0; }");
+    gchar *css_data = build_background_css(image_path);
+
+    GError *error = NULL;
+    gtk_css_provider_load_from_data(provider, css_data, -1, &error);
+
+    if (error != NULL) {
+        g_warning("media-background: Failed to load CSS: %s", error->message);
+        g_error_free(error);
     }
 
-    gtk_css_provider_load_from_data(provider, css_data, -1, NULL);
     g_free(css_data);
 }
 
@@ -311,11 +407,26 @@ void g_module_unload(GModule *m) {
         soup_session = NULL;
     }
     current_player = NULL;
+
+    g_free(fallback_image);
+    g_free(background_color);
+    g_free(background_size);
+    g_free(background_position);
+    g_free(opacity_str);
+    g_free(darken_amount_str);
+    fallback_image = NULL;
+    background_color = NULL;
+    background_size = NULL;
+    background_position = NULL;
+    opacity_str = NULL;
+    darken_amount_str = NULL;
 }
 
 void on_activation(struct GtkLock *gtklock, int id) {
     self_id = id;
     global_gtklock = gtklock;
+
+    validate_config();
 
     soup_session = soup_session_new();
 
