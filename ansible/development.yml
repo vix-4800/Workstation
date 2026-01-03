@@ -14,6 +14,8 @@
           - python-pip
           - python-pipx
           - go
+          - meson
+          - ninja
         state: present
 
     - name: 'Install Python development tools via pipx'
