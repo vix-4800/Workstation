@@ -25,6 +25,8 @@
           # - kanshi
           # - wf-recorder
           - gtklock
+          - gtklock-playerctl-module
+          - gtklock-userinfo-module
         state: present
 
     - name: 'Check if yay is installed'
