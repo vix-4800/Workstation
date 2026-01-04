@@ -14,20 +14,19 @@ Custom gtklock module that sets the current media album art as the lock screen b
 
 ## Configuration Options
 
-| Option | Type | Default | Description |
-| ------ | ---- | ------- | ----------- |
-| `fallback-image` | string | none | Path to fallback image when no media playing |
-| `background-color` | string | `@base` | Background color when no image (CSS color) |
-| `opacity` | double | `1.0` | Background image opacity (0.0-1.0) |
-| `blur-radius` | int | `0` | Background blur in pixels (0-50, GTK 3.24.38+) |
-| `enable-background-image` | bool | `true` | Enable album art as background |
-| `no-background-image` | flag | - | Disable album art, use solid color only |
-| `darken` | bool | `false` | Apply dark overlay for better readability |
-| `darken-amount` | double | `0.5` | Darkness level of overlay (0.0-1.0) |
-| `hide-playerctl-art` | bool | `true` | Hide album art in playerctl module |
-| `show-playerctl-art` | flag | - | Show album art in playerctl module |
-| `background-size` | string | `cover` | CSS background-size property |
-| `background-position` | string | `center` | CSS background-position property |
+| Option                    | Type   | Default  | Description                                                 |
+| ------------------------- | ------ | -------- | ----------------------------------------------------------- |
+| `fallback-image`          | string | none     | Path to fallback image when no media playing                |
+| `background-color`        | string | `@base`  | Background color when no image (CSS color)                  |
+| `opacity`                 | string | `1.0`    | Background image opacity (0.0-1.0), affects only background |
+| `enable-background-image` | bool   | `true`   | Enable album art as background                              |
+| `no-background-image`     | flag   | -        | Disable album art, use solid color only                     |
+| `darken`                  | bool   | `false`  | Apply dark overlay for better readability                   |
+| `darken-amount`           | string | `0.5`    | Darkness level of overlay (0.0-1.0)                         |
+| `hide-playerctl-art`      | bool   | `true`   | Hide album art in playerctl module                          |
+| `show-playerctl-art`      | flag   | -        | Show album art in playerctl module                          |
+| `background-size`         | string | `cover`  | CSS background-size property                                |
+| `background-position`     | string | `center` | CSS background-position property                            |
 
 ## Build & Install
 

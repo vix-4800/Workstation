@@ -32,7 +32,6 @@ SoupSession *soup_session = NULL;
 static gchar *fallback_image = NULL;
 static gchar *background_color = NULL;
 static gchar *opacity_str = NULL;
-static gint blur_radius = 0;
 static gboolean enable_background_image = TRUE;
 static gboolean darken = FALSE;
 static gchar *darken_amount_str = NULL;
@@ -51,8 +50,6 @@ GOptionEntry module_entries[] = {
       "Background color when no image (CSS color, e.g. '#1e1e2e' or '@base')", NULL },
     { "opacity", 0, 0, G_OPTION_ARG_STRING, &opacity_str,
       "Background image opacity (0.0-1.0, default: 1.0)", NULL },
-    { "blur-radius", 0, 0, G_OPTION_ARG_INT, &blur_radius,
-      "Background blur radius in pixels (0-50, default: 0, requires GTK 3.24.38+)", NULL },
     { "enable-background-image", 0, 0, G_OPTION_ARG_NONE, &enable_background_image,
       "Enable album art as background (default: true)", NULL },
     { "no-background-image", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &enable_background_image,
@@ -89,9 +86,6 @@ static void validate_config(void) {
     opacity = parse_double(opacity_str, 1.0, 0.0, 1.0);
     darken_amount = parse_double(darken_amount_str, 0.5, 0.0, 1.0);
 
-    if (blur_radius < 0) blur_radius = 0;
-    if (blur_radius > 50) blur_radius = 50;
-
     if (!background_size) background_size = g_strdup("cover");
     if (!background_position) background_position = g_strdup("center");
     if (!background_color) background_color = g_strdup("@base");
@@ -112,26 +106,32 @@ static gchar *build_background_css(const gchar *image_path) {
     if (image_path && enable_background_image && g_file_test(image_path, G_FILE_TEST_EXISTS)) {
         g_string_append_printf(css, "background-image: ");
 
-        // Build gradient overlay if darken is enabled
+        // Calculate combined overlay: darken + opacity fade to background color
+        // opacity < 1.0 means we blend the image with background color
+        // darken means we add a dark overlay
+        gdouble overlay_alpha = 0.0;
+
         if (darken) {
+            overlay_alpha = darken_amount;
+        }
+
+        // If opacity < 1.0, increase overlay to simulate transparency
+        // (blending image toward background color)
+        if (opacity < 1.0) {
+            gdouble fade = 1.0 - opacity;
+            overlay_alpha = overlay_alpha + fade * (1.0 - overlay_alpha);
+        }
+
+        if (overlay_alpha > 0.0) {
             g_string_append_printf(css,
                 "linear-gradient(rgba(0, 0, 0, %.2f), rgba(0, 0, 0, %.2f)), ",
-                darken_amount, darken_amount);
+                overlay_alpha, overlay_alpha);
         }
 
         g_string_append_printf(css, "url('file://%s'); ", image_path);
         g_string_append_printf(css, "background-size: %s; ", background_size);
         g_string_append_printf(css, "background-position: %s; ", background_position);
         g_string_append(css, "background-repeat: no-repeat; ");
-
-        if (opacity < 1.0) {
-            g_string_append_printf(css, "opacity: %.2f; ", opacity);
-        }
-
-        // GTK CSS filter for blur (GTK 3.24.38+)
-        if (blur_radius > 0) {
-            g_string_append_printf(css, "-gtk-icon-filter: blur(%dpx); ", blur_radius);
-        }
     } else {
         g_string_append_printf(css, "background-color: %s; ", background_color);
     }
