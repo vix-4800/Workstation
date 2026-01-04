@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # ~/.aliases
 # Common aliases for all shells
 
@@ -50,6 +51,7 @@ fi
 
 # ======= Wayland-specific aliases =======
 # Only for wayland sessions
+# shellcheck disable=SC2154
 if [[ "${XDG_SESSION_TYPE}" = "wayland" ]]; then
     if command -v code >/dev/null 2>&1; then
         alias code='code --ozone-platform=wayland'
