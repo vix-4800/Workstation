@@ -161,7 +161,6 @@ XF86AudioNext/Prev  Next/previous track
 XF86MonBrightnessUp/Down Brightness up/down
 
 ━━━ System ━━━
-Mod + X             Open Sway settings menu
 Mod + Shift + B     Restart Waybar
 Caps Lock (release) Caps Lock indicator
 
