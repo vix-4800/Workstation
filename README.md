@@ -38,7 +38,7 @@ After running `workstation dotfiles link`, the script is available globally from
 - **Waybar** - Status bar with custom scripts
 - **Greetd + ReGreet** - Display manager (login screen)
 - **Plymouth** - Boot splash screen
-- **Swaylock Effects** - Screen locker
+- **GTKLock** - Screen locker
 - **Swayidle** - Idle management and auto-lock
 - **Wlogout** - Logout/power menu
 - **Swaybg** - Wallpaper setter
