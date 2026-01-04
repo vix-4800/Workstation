@@ -368,7 +368,10 @@ static void on_playback_status(PlayerctlPlayer *player, PlayerctlPlaybackStatus 
 
 static void on_player_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayer *player, gpointer user_data) {
     struct GtkLock *gtklock = user_data;
-    current_player = player;
+
+    if (current_player) return;
+
+    current_player = g_object_ref(player);
 
     g_signal_connect(player, "metadata", G_CALLBACK(on_metadata_changed), gtklock);
     g_signal_connect(player, "playback-status", G_CALLBACK(on_playback_status), gtklock);
@@ -380,7 +383,11 @@ static void on_player_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayer 
 
 static void on_player_vanished(PlayerctlPlayerManager *manager, PlayerctlPlayer *player, gpointer user_data) {
     struct GtkLock *gtklock = user_data;
-    current_player = NULL;
+
+    if (current_player == player) {
+        g_object_unref(current_player);
+        current_player = NULL;
+    }
 
     if (gtklock->focused_window) {
         load_fallback(gtklock->focused_window);
@@ -388,16 +395,30 @@ static void on_player_vanished(PlayerctlPlayerManager *manager, PlayerctlPlayer 
 }
 
 static void on_name_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayerName *name, gpointer user_data) {
+    (void)user_data;
+
     if (current_player) return;
 
-    current_player = playerctl_player_new_from_name(name, NULL);
-    if (current_player) {
-        playerctl_player_manager_manage_player(player_manager, current_player);
-        g_object_unref(current_player);
+    GError *error = NULL;
+    PlayerctlPlayer *player = playerctl_player_new_from_name(name, &error);
+
+    if (error != NULL) {
+        g_warning("media-background: Failed to create player: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    if (player) {
+        playerctl_player_manager_manage_player(player_manager, player);
+        g_object_unref(player);
     }
 }
 
 void g_module_unload(GModule *m) {
+    if (current_player) {
+        g_object_unref(current_player);
+        current_player = NULL;
+    }
     if (player_manager) {
         g_object_unref(player_manager);
         player_manager = NULL;
@@ -406,7 +427,6 @@ void g_module_unload(GModule *m) {
         g_object_unref(soup_session);
         soup_session = NULL;
     }
-    current_player = NULL;
 
     g_free(fallback_image);
     g_free(background_color);
@@ -441,16 +461,16 @@ void on_activation(struct GtkLock *gtklock, int id) {
 
     g_signal_connect(player_manager, "player-appeared", G_CALLBACK(on_player_appeared), gtklock);
     g_signal_connect(player_manager, "player-vanished", G_CALLBACK(on_player_vanished), gtklock);
-    g_signal_connect(player_manager, "name-appeared", G_CALLBACK(on_name_appeared), NULL);
+    g_signal_connect(player_manager, "name-appeared", G_CALLBACK(on_name_appeared), gtklock);
 
     GList *available_players = NULL;
     g_object_get(player_manager, "player-names", &available_players, NULL);
     if (available_players) {
         PlayerctlPlayerName *name = available_players->data;
-        current_player = playerctl_player_new_from_name(name, NULL);
-        if (current_player) {
-            playerctl_player_manager_manage_player(player_manager, current_player);
-            g_object_unref(current_player);
+        PlayerctlPlayer *player = playerctl_player_new_from_name(name, NULL);
+        if (player) {
+            playerctl_player_manager_manage_player(player_manager, player);
+            g_object_unref(player);
         }
     }
 }
