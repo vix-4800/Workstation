@@ -77,11 +77,10 @@
       changed_when: false
       failed_when: false
 
-    - name: 'Remove standard sway/swaylock before installing enhanced versions'
+    - name: 'Remove standard sway before installing enhanced versions'
       community.general.pacman:
         name:
           - sway
-          - swaylock
         state: absent
       failed_when: false  # Packages may not be installed
       when: yay_check.rc == 0
@@ -91,7 +90,6 @@
         use: yay
         name:
           - swayfx
-          - swaylock-effects
           - wlogout
           - autotiling
         state: present

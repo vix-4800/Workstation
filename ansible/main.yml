@@ -99,7 +99,7 @@
           6. Check SwayFX config at ~/.config/sway/config
 
           Installed:
-          - SwayFX + Swaylock Effects + wlogout
+          - SwayFX + GTKLock + wlogout
           - Greetd + ReGreet (display manager)
           - Plymouth boot splash screen
           - Visual Studio Code

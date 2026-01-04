@@ -23,7 +23,7 @@ ansible-playbook ansible/main.yml --ask-become-pass
 - **network.yml** - NetworkManager, openssh, openssl, WireGuard
 - **audio.yml** - PipeWire, WirePlumber, pavucontrol
 - **fonts.yml** - JetBrains Mono Nerd Font, Font Awesome
-- **sway.yml** - SwayFX, Swaylock Effects, Waybar, wofi, wlogout
+- **sway.yml** - SwayFX, GTKLock, Waybar, wofi, wlogout
 - **plymouth.yml** - Plymouth boot splash screen
 - **display-managers/greetd.yml** - Greetd + ReGreet display manager
 - **docker.yml** - Docker and docker-compose

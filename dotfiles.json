@@ -113,10 +113,6 @@
             "target": "$HOME/.config/swaync"
         },
         {
-            "source": "config/swaylock",
-            "target": "$HOME/.config/swaylock"
-        },
-        {
             "source": "config/waybar",
             "target": "$HOME/.config/waybar"
         },

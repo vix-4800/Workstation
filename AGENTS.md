@@ -140,7 +140,7 @@ When adding new tool configs, check if Catppuccin theme exists for it.
 - **Display manager**: Greetd + ReGreet (configured in `ansible/display-managers/greetd.yml`)
 - **Notifications**: SwayNC (`config/swaync/`)
 - **Status bar**: Waybar with custom scripts in `config/waybar/scripts/`
-- **Lock screen**: Swaylock Effects (config in `config/swaylock/`)
+- **Lock screen**: GTKLock (config in `config/gtklock/`)
 - **Boot splash**: Plymouth with Catppuccin theme (`themes/plymouth/`)
 
 ## Common Gotchas
