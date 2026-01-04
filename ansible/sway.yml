@@ -27,6 +27,11 @@
           - gtklock
           - gtklock-playerctl-module
           - gtklock-userinfo-module
+          - tumbler  # Thumbnail service for SwaySettings
+          - libgepub  # Tumbler: EPUB thumbnails
+          - poppler-glib  # Tumbler: PDF thumbnails
+          - libgsf  # Tumbler: ODF thumbnails
+          - libopenraw  # Tumbler: RAW image thumbnails
         state: present
 
     - name: 'Install gtklock-media-background-module build dependencies'
@@ -94,3 +99,11 @@
       when: yay_check.rc == 0
       become: true
       become_user: aur_builder
+
+    - name: 'Enable tumbler daemon for thumbnail generation'
+      ansible.builtin.systemd:
+        name: tumblerd.service
+        enabled: false  # D-Bus activated service, doesn't need to be enabled
+        scope: user
+      become: false
+      failed_when: false
