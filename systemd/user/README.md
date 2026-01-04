@@ -15,6 +15,10 @@ Services managed via dotfiles symlinks to `~/.config/systemd/user/`.
 - **batsignal.service** - Battery notification service (laptops)
 - **gpu-fan-control.service** - NVIDIA GPU fan control (desktops only, auto-detects)
 
+### Dotfiles Maintenance
+
+- **dotfiles-update-check.timer** - Every 60 min: check for dotfiles repository updates on GitHub
+
 ## Structure
 
 ```text

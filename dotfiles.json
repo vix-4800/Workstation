@@ -211,6 +211,11 @@
             "comment": "Sway keybindings help viewer"
         },
         {
+            "source": "bin/check-dotfiles-updates",
+            "target": "$HOME/.local/bin/check-dotfiles-updates",
+            "comment": "Check for dotfiles repository updates on GitHub"
+        },
+        {
             "source": "config/user-dirs.dirs",
             "target": "$HOME/.config/user-dirs.dirs",
             "comment": "XDG user directories configuration"
