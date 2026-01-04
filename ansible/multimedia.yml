@@ -31,8 +31,7 @@
           - gst-plugins-bad
           - gst-plugins-ugly
           - libdvdnav
-          - fuse-exfat
+          - exfatprogs
           - libdvdcss
           - libdvdread
-          - exfat-utils
         state: present
