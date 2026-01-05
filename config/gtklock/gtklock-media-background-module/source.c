@@ -29,10 +29,7 @@ PlayerctlPlayer *current_player = NULL;
 SoupSession *soup_session = NULL;
 
 // Configuration options with defaults
-static gchar *fallback_image = NULL;
-static gchar *background_color = NULL;
 static gchar *opacity_str = NULL;
-static gboolean enable_background_image = TRUE;
 static gboolean darken = FALSE;
 static gchar *darken_amount_str = NULL;
 static gboolean hide_playerctl_art = TRUE;
@@ -44,18 +41,10 @@ static gdouble opacity = 1.0;
 static gdouble darken_amount = 0.5;
 
 GOptionEntry module_entries[] = {
-    { "fallback-image", 0, 0, G_OPTION_ARG_STRING, &fallback_image,
-      "Path to fallback image when no media playing", NULL },
-    { "background-color", 0, 0, G_OPTION_ARG_STRING, &background_color,
-      "Background color when no image (CSS color, e.g. '#1e1e2e' or '@base')", NULL },
     { "opacity", 0, 0, G_OPTION_ARG_STRING, &opacity_str,
-      "Background image opacity (0.0-1.0, default: 1.0)", NULL },
-    { "enable-background-image", 0, 0, G_OPTION_ARG_NONE, &enable_background_image,
-      "Enable album art as background (default: true)", NULL },
-    { "no-background-image", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &enable_background_image,
-      "Disable album art background, use solid color only", NULL },
+      "Album art opacity (0.0-1.0, default: 1.0)", NULL },
     { "darken", 0, 0, G_OPTION_ARG_NONE, &darken,
-      "Apply dark overlay on background for better readability", NULL },
+      "Apply dark overlay on album art for better readability", NULL },
     { "darken-amount", 0, 0, G_OPTION_ARG_STRING, &darken_amount_str,
       "Darkness level of overlay (0.0-1.0, default: 0.5)", NULL },
     { "hide-playerctl-art", 0, 0, G_OPTION_ARG_NONE, &hide_playerctl_art,
@@ -88,7 +77,6 @@ static void validate_config(void) {
 
     if (!background_size) background_size = g_strdup("cover");
     if (!background_position) background_position = g_strdup("center");
-    if (!background_color) background_color = g_strdup("@base");
 }
 
 static gchar *get_cache_path(void) {
@@ -101,14 +89,14 @@ static gchar *get_cache_path(void) {
 }
 
 static gchar *build_background_css(const gchar *image_path) {
-    GString *css = g_string_new("window { ");
+    GString *css = g_string_new("");
 
-    if (image_path && enable_background_image && g_file_test(image_path, G_FILE_TEST_EXISTS)) {
-        g_string_append_printf(css, "background-image: ");
+    // Only set window background when we have album art
+    // Otherwise let style.css handle the default background
+    if (image_path && g_file_test(image_path, G_FILE_TEST_EXISTS)) {
+        g_string_append(css, "window { background-image: ");
 
-        // Calculate combined overlay: darken + opacity fade to background color
-        // opacity < 1.0 means we blend the image with background color
-        // darken means we add a dark overlay
+        // Calculate overlay for darken effect
         gdouble overlay_alpha = 0.0;
 
         if (darken) {
@@ -116,7 +104,6 @@ static gchar *build_background_css(const gchar *image_path) {
         }
 
         // If opacity < 1.0, increase overlay to simulate transparency
-        // (blending image toward background color)
         if (opacity < 1.0) {
             gdouble fade = 1.0 - opacity;
             overlay_alpha = overlay_alpha + fade * (1.0 - overlay_alpha);
@@ -131,12 +118,8 @@ static gchar *build_background_css(const gchar *image_path) {
         g_string_append_printf(css, "url('file://%s'); ", image_path);
         g_string_append_printf(css, "background-size: %s; ", background_size);
         g_string_append_printf(css, "background-position: %s; ", background_position);
-        g_string_append(css, "background-repeat: no-repeat; ");
-    } else {
-        g_string_append_printf(css, "background-color: %s; ", background_color);
+        g_string_append(css, "background-repeat: no-repeat; } ");
     }
-
-    g_string_append(css, "} ");
 
     // Hide playerctl album art if configured
     if (hide_playerctl_art) {
@@ -270,11 +253,8 @@ static void http_callback(GObject *source_object, GAsyncResult *res, gpointer us
 }
 
 static void load_fallback(struct Window *ctx) {
-    if (fallback_image && g_file_test(fallback_image, G_FILE_TEST_EXISTS)) {
-        on_image_saved(fallback_image, ctx);
-    } else {
-        update_background_css(ctx, NULL);
-    }
+    // Clear album art, let style.css show default background
+    update_background_css(ctx, NULL);
 }
 
 static void load_album_art(struct Window *ctx) {
@@ -362,7 +342,12 @@ static void on_metadata_changed(PlayerctlPlayer *player, GVariant *metadata, gpo
 static void on_playback_status(PlayerctlPlayer *player, PlayerctlPlaybackStatus status, gpointer user_data) {
     struct GtkLock *gtklock = user_data;
     if (gtklock->focused_window) {
-        load_album_art(gtklock->focused_window);
+        // When stopped, clear album art; otherwise try to load it
+        if (status == PLAYERCTL_PLAYBACK_STATUS_STOPPED) {
+            load_fallback(gtklock->focused_window);
+        } else {
+            load_album_art(gtklock->focused_window);
+        }
     }
 }
 
@@ -428,14 +413,10 @@ void g_module_unload(GModule *m) {
         soup_session = NULL;
     }
 
-    g_free(fallback_image);
-    g_free(background_color);
     g_free(background_size);
     g_free(background_position);
     g_free(opacity_str);
     g_free(darken_amount_str);
-    fallback_image = NULL;
-    background_color = NULL;
     background_size = NULL;
     background_position = NULL;
     opacity_str = NULL;
@@ -481,10 +462,11 @@ void on_window_create(struct GtkLock *gtklock, struct Window *ctx) {
     MEDIA_BG(ctx)->css_provider = gtk_css_provider_new();
     MEDIA_BG(ctx)->current_art_path = NULL;
 
+    // Use USER priority (800) to override style.css (APPLICATION = 600)
     gtk_style_context_add_provider_for_screen(
         gdk_screen_get_default(),
         GTK_STYLE_PROVIDER(MEDIA_BG(ctx)->css_provider),
-        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     load_album_art(ctx);
 }
