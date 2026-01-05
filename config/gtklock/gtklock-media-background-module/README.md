@@ -4,29 +4,29 @@ Custom gtklock module that sets the current media album art as the lock screen b
 
 ## Features
 
-- **CSS-based background** - Sets background via CSS, doesn't block UI elements
+- **CSS-based background** - Sets background via CSS with high priority, doesn't block UI elements
 - **Automatic updates** - Background changes when track changes
 - **Multiple sources** - Supports local files and HTTP/HTTPS URLs (Spotify, etc.)
-- **Fallback image** - Configurable fallback when no media is playing
+- **Style.css integration** - Uses default background from style.css when no media is playing
 - **Smart caching** - Saves album art to `~/.cache/gtklock/media-bg.jpg`
 - **Hides duplicate art** - Optionally hides playerctl module's album art via CSS
 - **Multi-monitor support** - Works across all displays
 
 ## Configuration Options
 
-| Option                    | Type   | Default  | Description                                                 |
-| ------------------------- | ------ | -------- | ----------------------------------------------------------- |
-| `fallback-image`          | string | none     | Path to fallback image when no media playing                |
-| `background-color`        | string | `@base`  | Background color when no image (CSS color)                  |
-| `opacity`                 | string | `1.0`    | Background image opacity (0.0-1.0), affects only background |
-| `enable-background-image` | bool   | `true`   | Enable album art as background                              |
-| `no-background-image`     | flag   | -        | Disable album art, use solid color only                     |
-| `darken`                  | bool   | `false`  | Apply dark overlay for better readability                   |
-| `darken-amount`           | string | `0.5`    | Darkness level of overlay (0.0-1.0)                         |
-| `hide-playerctl-art`      | bool   | `true`   | Hide album art in playerctl module                          |
-| `show-playerctl-art`      | flag   | -        | Show album art in playerctl module                          |
-| `background-size`         | string | `cover`  | CSS background-size property                                |
-| `background-position`     | string | `center` | CSS background-position property                            |
+| Option                | Type   | Default  | Description                               |
+| --------------------- | ------ | -------- | ----------------------------------------- |
+| `opacity`             | string | `1.0`    | Album art opacity (0.0-1.0)               |
+| `darken`              | bool   | `false`  | Apply dark overlay for better readability |
+| `darken-amount`       | string | `0.5`    | Darkness level of overlay (0.0-1.0)       |
+| `hide-playerctl-art`  | bool   | `true`   | Hide album art in playerctl module        |
+| `show-playerctl-art`  | flag   | -        | Show album art in playerctl module        |
+| `background-size`     | string | `cover`  | CSS background-size property              |
+| `background-position` | string | `center` | CSS background-position property          |
+
+> [!NOTE]
+> When no media is playing, the module doesn't set any window background, allowing your style.css to control the
+> default background image/color.
 
 ## Build & Install
 
@@ -54,20 +54,29 @@ modules=media-background-module;userinfo-module;playerctl-module
 art-size=0  # Hide album art in playerctl (shown as background)
 
 [media-background]
-fallback-image=/path/to/fallback.jpg
-opacity=0.85
+opacity=0.45
 darken=true
-darken-amount=0.4
-background-color=#1e1e2e
+darken-amount=0.5
+```
+
+Set your default background in style.css:
+
+```css
+window {
+    background-image: url('../../Pictures/Wallpapers/your-wallpaper.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: #1e1e2e;
+}
 ```
 
 ### Configuration Examples
 
-**Simple setup (album art as background):**
+**Minimal setup:**
 
 ```ini
 [media-background]
-fallback-image=/home/user/wallpaper.jpg
+# That's it! Default background comes from style.css
 ```
 
 **Dark overlay for readability:**
@@ -78,19 +87,13 @@ darken=true
 darken-amount=0.5
 ```
 
-**Semi-transparent background:**
+**Semi-transparent album art:**
 
 ```ini
 [media-background]
 opacity=0.8
-```
-
-**Solid color only (no album art):**
-
-```ini
-[media-background]
-no-background-image=true
-background-color=#1e1e2e
+darken=true
+darken-amount=0.3
 ```
 
 **Custom background sizing:**
@@ -101,9 +104,15 @@ background-size=contain
 background-position=top center
 ```
 
-## Usage
+## How It Works
 
-The module works automatically - just lock your screen while media is playing!
+The module uses CSS with `GTK_STYLE_PROVIDER_PRIORITY_USER` (highest priority) to override the default background:
+
+- **No music playing** → Module doesn't set window CSS → Your style.css background shows
+- **Music playing** → Module sets album art as background → Overrides style.css background
+- **Music stopped** → Module clears CSS → Back to style.css background
+
+The module automatically detects when tracks change or playback stops and updates accordingly.
 
 ## Update
 
