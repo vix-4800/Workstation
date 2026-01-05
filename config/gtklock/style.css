@@ -30,6 +30,9 @@
 
 /* Main Window - background set by media-background module */
 window {
+    background-image: url("../../Pictures/Wallpapers/forest-1.jpg");
+    background-size: cover;
+    background-position: center;
     background-color: @base;
 }
 
