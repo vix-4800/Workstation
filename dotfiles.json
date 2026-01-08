@@ -219,6 +219,16 @@
             "source": "config/user-dirs.dirs",
             "target": "$HOME/.config/user-dirs.dirs",
             "comment": "XDG user directories configuration"
+        },
+        {
+            "source": "config/pipewire",
+            "target": "$HOME/.config/pipewire",
+            "comment": "PipeWire audio server configuration"
+        },
+        {
+            "source": "config/wireplumber",
+            "target": "$HOME/.config/wireplumber",
+            "comment": "WirePlumber session manager configuration"
         }
     ]
 }
