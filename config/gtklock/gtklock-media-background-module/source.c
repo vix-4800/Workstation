@@ -15,6 +15,8 @@
 struct media_background {
     GtkCssProvider *css_provider;
     gchar *current_art_path;
+    GCancellable *cancellable;
+    gboolean is_valid;
 };
 
 const gchar module_name[] = "media-background";
@@ -132,7 +134,7 @@ static gchar *build_background_css(const gchar *image_path) {
 }
 
 static void update_background_css(struct Window *ctx, const gchar *image_path) {
-    if (!ctx || !MEDIA_BG(ctx)) return;
+    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) return;
 
     GtkCssProvider *provider = MEDIA_BG(ctx)->css_provider;
     if (!provider) return;
@@ -151,7 +153,7 @@ static void update_background_css(struct Window *ctx, const gchar *image_path) {
 }
 
 static void on_image_saved(const gchar *path, struct Window *ctx) {
-    if (!ctx || !MEDIA_BG(ctx)) return;
+    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) return;
 
     g_free(MEDIA_BG(ctx)->current_art_path);
     MEDIA_BG(ctx)->current_art_path = g_strdup(path);
@@ -160,16 +162,23 @@ static void on_image_saved(const gchar *path, struct Window *ctx) {
 }
 
 static void file_read_callback(GObject *source_object, GAsyncResult *res, gpointer user_data) {
+    struct Window *ctx = user_data;
     GError *error = NULL;
     GFileInputStream *input_stream = g_file_read_finish(G_FILE(source_object), res, &error);
 
     if (error != NULL) {
-        g_warning("media-background: Failed to read file: %s", error->message);
+        if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+            g_warning("media-background: Failed to read file: %s", error->message);
+        }
         g_error_free(error);
         return;
     }
 
-    struct Window *ctx = user_data;
+    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) {
+        g_object_unref(input_stream);
+        return;
+    }
+
     gchar *cache_path = get_cache_path();
 
     GFile *cache_file = g_file_new_for_path(cache_path);
@@ -207,16 +216,23 @@ static void file_read_callback(GObject *source_object, GAsyncResult *res, gpoint
 }
 
 static void http_callback(GObject *source_object, GAsyncResult *res, gpointer user_data) {
+    struct Window *ctx = user_data;
     GError *error = NULL;
     GInputStream *stream = soup_session_send_finish(SOUP_SESSION(source_object), res, &error);
 
     if (error != NULL) {
-        g_warning("media-background: HTTP request failed: %s", error->message);
+        if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+            g_warning("media-background: HTTP request failed: %s", error->message);
+        }
         g_error_free(error);
         return;
     }
 
-    struct Window *ctx = user_data;
+    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) {
+        g_object_unref(stream);
+        return;
+    }
+
     gchar *cache_path = get_cache_path();
 
     GFile *cache_file = g_file_new_for_path(cache_path);
@@ -258,10 +274,19 @@ static void load_fallback(struct Window *ctx) {
 }
 
 static void load_album_art(struct Window *ctx) {
+    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) return;
+
     if (!current_player) {
         load_fallback(ctx);
         return;
     }
+
+    // Cancel any pending async operations
+    if (MEDIA_BG(ctx)->cancellable) {
+        g_cancellable_cancel(MEDIA_BG(ctx)->cancellable);
+        g_object_unref(MEDIA_BG(ctx)->cancellable);
+    }
+    MEDIA_BG(ctx)->cancellable = g_cancellable_new();
 
     GError *error = NULL;
     gchar *uri = playerctl_player_print_metadata_prop(current_player, "mpris:artUrl", &error);
@@ -283,11 +308,11 @@ static void load_album_art(struct Window *ctx) {
 
     if (g_strcmp0("file", scheme) == 0) {
         GFile *file = g_file_new_for_uri(uri);
-        g_file_read_async(file, G_PRIORITY_DEFAULT, NULL, file_read_callback, ctx);
+        g_file_read_async(file, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, file_read_callback, ctx);
         g_object_unref(file);
     } else if (g_strcmp0("http", scheme) == 0 || g_strcmp0("https", scheme) == 0) {
         SoupMessage *msg = soup_message_new(SOUP_METHOD_GET, uri);
-        soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, NULL, http_callback, ctx);
+        soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, http_callback, ctx);
         g_object_unref(msg);
     } else {
         load_fallback(ctx);
@@ -297,10 +322,19 @@ static void load_album_art(struct Window *ctx) {
 }
 
 static void load_album_art_from_metadata(struct Window *ctx, GVariant *metadata) {
+    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) return;
+
     if (!metadata) {
         load_album_art(ctx);
         return;
     }
+
+    // Cancel any pending async operations
+    if (MEDIA_BG(ctx)->cancellable) {
+        g_cancellable_cancel(MEDIA_BG(ctx)->cancellable);
+        g_object_unref(MEDIA_BG(ctx)->cancellable);
+    }
+    MEDIA_BG(ctx)->cancellable = g_cancellable_new();
 
     GVariant *art_url_variant = g_variant_lookup_value(metadata, "mpris:artUrl", G_VARIANT_TYPE_STRING);
     if (!art_url_variant) {
@@ -319,11 +353,11 @@ static void load_album_art_from_metadata(struct Window *ctx, GVariant *metadata)
 
     if (g_strcmp0("file", scheme) == 0) {
         GFile *file = g_file_new_for_uri(uri);
-        g_file_read_async(file, G_PRIORITY_DEFAULT, NULL, file_read_callback, ctx);
+        g_file_read_async(file, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, file_read_callback, ctx);
         g_object_unref(file);
     } else if (g_strcmp0("http", scheme) == 0 || g_strcmp0("https", scheme) == 0) {
         SoupMessage *msg = soup_message_new(SOUP_METHOD_GET, uri);
-        soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, NULL, http_callback, ctx);
+        soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, http_callback, ctx);
         g_object_unref(msg);
     } else {
         load_fallback(ctx);
@@ -461,6 +495,8 @@ void on_window_create(struct GtkLock *gtklock, struct Window *ctx) {
 
     MEDIA_BG(ctx)->css_provider = gtk_css_provider_new();
     MEDIA_BG(ctx)->current_art_path = NULL;
+    MEDIA_BG(ctx)->cancellable = NULL;
+    MEDIA_BG(ctx)->is_valid = TRUE;
 
     // Use USER priority (800) to override style.css (APPLICATION = 600)
     gtk_style_context_add_provider_for_screen(
@@ -479,6 +515,16 @@ void on_focus_change(struct GtkLock *gtklock, struct Window *win, struct Window 
 
 void on_window_destroy(struct GtkLock *gtklock, struct Window *ctx) {
     if (MEDIA_BG(ctx)) {
+        // Mark as invalid first to prevent callbacks from using this context
+        MEDIA_BG(ctx)->is_valid = FALSE;
+
+        // Cancel any pending async operations
+        if (MEDIA_BG(ctx)->cancellable) {
+            g_cancellable_cancel(MEDIA_BG(ctx)->cancellable);
+            g_object_unref(MEDIA_BG(ctx)->cancellable);
+            MEDIA_BG(ctx)->cancellable = NULL;
+        }
+
         if (MEDIA_BG(ctx)->css_provider) {
             gtk_style_context_remove_provider_for_screen(
                 gdk_screen_get_default(),
