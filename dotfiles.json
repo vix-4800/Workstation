@@ -2,6 +2,11 @@
     "$schema": "./dotfiles.schema.json",
     "mappings": [
         {
+            "source": "avatar.jpg",
+            "target": "$HOME/.face",
+            "comment": "User avatar"
+        },
+        {
             "source": "config/shell/aliases",
             "target": "$HOME/.aliases",
             "comment": "General aliases for all shells"
