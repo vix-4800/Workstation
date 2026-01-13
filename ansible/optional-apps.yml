@@ -7,6 +7,7 @@
       become: true
       community.general.pacman:
         name:
+          - firefox
           - discord
           - telegram-desktop
           - vlc
@@ -42,7 +43,6 @@
       kewlfft.aur.aur:
         use: yay
         name:
-          - brave-bin
           - spotify
           - catppuccin-gtk-theme-mocha
           - wdisplays

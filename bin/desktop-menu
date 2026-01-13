@@ -37,7 +37,7 @@ case "${selected}" in
         thunar &
         ;;
     "🌐 Browser")
-        brave &
+        firefox &
         ;;
     "💻 Terminal")
         alacritty &
