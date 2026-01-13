@@ -20,10 +20,6 @@ if command -v bat >/dev/null
     alias cat='bat --style=auto'
 end
 
-if command -v pacman >/dev/null 2>&1
-    alias system-cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
-end
-
 # Only for wayland
 if test "$XDG_SESSION_TYPE" = wayland
     alias code "code --ozone-platform=wayland"
@@ -36,3 +32,7 @@ alias install='sudo pacman -S'
 alias remove='sudo pacman -Rns'
 alias search='pacman -Ss'
 alias arch='workstation'
+
+if command -v pacman >/dev/null 2>&1
+    alias system-cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
+end
