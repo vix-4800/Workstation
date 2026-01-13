@@ -3,7 +3,7 @@
 # Custom calendar module for waybar with enhanced tooltip
 
 # Get current date info
-current_time=$(date +"%H:%M")
+current_time=$(date +"%I:%M %p")
 current_date=$(date +"%e %B")
 current_day=$(date +"%d")
 current_month=$(date +"%B %Y")

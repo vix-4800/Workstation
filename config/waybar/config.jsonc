@@ -67,7 +67,7 @@
   "clock": {
     "timezone": "Europe/Saratov",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "format": "  {:%H:%M | %e %B}",
+    "format": "  {:%I:%M %p | %e %B}",
     "format-alt": "  {:%d/%m/%Y}",
     "calendar": {
       "mode": "month",
