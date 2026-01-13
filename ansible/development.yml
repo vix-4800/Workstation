@@ -79,3 +79,20 @@
         - '@commitlint/cli'
         - '@commitlint/config-conventional'
       failed_when: false
+
+    - name: 'Check if yay is installed'
+      ansible.builtin.command:
+        cmd: which yay
+      register: yay_check
+      changed_when: false
+      failed_when: false
+
+    - name: 'Install Postman'
+      kewlfft.aur.aur:
+        use: yay
+        name:
+          - postman-bin
+        state: present
+      when: yay_check.rc == 0
+      become: true
+      become_user: aur_builder
