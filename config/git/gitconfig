@@ -13,6 +13,8 @@
 [core]
 	autocrlf = input
 	untrackedCache = true
+	preloadIndex = true
+	fscache = true
 
 [init]
 	defaultBranch = main
@@ -27,6 +29,7 @@
 [fetch]
 	prune = true
 	pruneTags = true
+	writeCommitGraph = true
 
 [rebase]
 	autoStash = true
@@ -41,3 +44,18 @@
 
 [branch]
 	sort = -committerdate
+
+[http]
+	postBuffer = 524288000
+	lowSpeedLimit = 1000
+	lowSpeedTime = 60
+
+[pack]
+	threads = 0
+	windowMemory = 256m
+
+[feature]
+	manyFiles = true
+
+[gc]
+	auto = 256
