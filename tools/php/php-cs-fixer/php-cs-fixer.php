@@ -83,7 +83,7 @@ return (new Config())
         'header_comment' => ['header' => ''], // Removes header comments
         'no_blank_lines_after_phpdoc' => true, // Removes blank lines after PHPDoc
         'multiline_comment_opening_closing' => true, // Ensures proper opening and closing of multiline comments
-        // 'phpdoc_add_missing_param_annotation' => ['only_untyped' => false], // Adds missing @param annotations in PHPDoc
+        'phpdoc_add_missing_param_annotation' => ['only_untyped' => false], // Adds missing @param annotations in PHPDoc
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
