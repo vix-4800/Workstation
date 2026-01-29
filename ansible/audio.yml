@@ -12,6 +12,7 @@
           - pavucontrol
           - pipewire-pulse
           - wireplumber
+          - alsa-utils
         state: present
 
     - name: 'Enable PipeWire services for user'
