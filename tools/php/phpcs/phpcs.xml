@@ -335,7 +335,9 @@
     <rule ref="SlevomatCodingStandard.Functions.StaticClosure">
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction" />
+    <rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Functions.StrictCall" />
     <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure" />
     <rule ref="SlevomatCodingStandard.Functions.UnusedParameter" />
