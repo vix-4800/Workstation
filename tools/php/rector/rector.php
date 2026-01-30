@@ -34,9 +34,12 @@ use Rector\Custom\Rules\Yii2PropertyAccessRector;
 use Rector\Custom\Rules\Yii2UseExistsInsteadOfCountRector;
 use Rector\Custom\Rules\Yii2UseExistsInsteadOfOneNotNullRector;
 use Rector\Custom\Rules\Yii2UserFindOneToIdentityRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
+use Rector\DeadCode\Rector\If_\RemoveDeadIfBlockRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
+use Rector\DeadCode\Rector\Stmt\RemoveNextSameValueConditionRector;
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
@@ -45,12 +48,15 @@ use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
+use Rector\Privatization\Rector\ClassConst\PrivatizeFinalClassConstantRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector;
 use RectorLaravel\Rector\ArrayDimFetch\EnvVariableToEnvHelperRector;
 use RectorLaravel\Rector\ArrayDimFetch\RequestVariablesToRequestFacadeRector;
 use RectorLaravel\Rector\ArrayDimFetch\ServerVariableToRequestFacadeRector;
@@ -171,6 +177,7 @@ $rules = [
     SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
     UnnecessaryTernaryExpressionRector::class, // Removes redundant ternary expressions
     ContinueToBreakInSwitchRector::class,
+    RemoveNextSameValueConditionRector::class,
 
     // Safety and strong typing
     AddReturnTypeDeclarationRector::class,
@@ -183,11 +190,16 @@ $rules = [
     AddMethodCallBasedStrictParamTypeRector::class, // Adds strict parameter type based on method calls
     DisallowedEmptyRuleFixerRector::class, // Disallow usage of empty()
     JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
+    AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
+    PrivatizeFinalClassConstantRector::class,
+    TypedStaticPropertyInBehatContextRector::class,
 
     // Remove dead code
     RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
     RemoveUnusedPrivatePropertyRector::class, // Removes unused private properties
     RemoveConcatAutocastRector::class,
+    RemoveDeadIfBlockRector::class,
+    RemoveParentDelegatingConstructorRector::class,
 
     // Modern PHP constructs and functions
     StringClassNameToClassConstantRector::class, // Replaces string class names with ClassName::class
