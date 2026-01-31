@@ -3,12 +3,14 @@
 declare(strict_types=1);
 
 use CustomFixer\BlankLineAfterStatementFixer;
+use CustomFixer\NoYodaComparisonFixer;
 use CustomFixer\NumericLiteralSeparatorFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 require_once __DIR__ . '/Fixer/NumericLiteralSeparatorFixer.php';
 require_once __DIR__ . '/Fixer/BlankLineAfterStatementFixer.php';
+require_once __DIR__ . '/Fixer/NoYodaComparisonFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
@@ -18,6 +20,7 @@ return (new Config())
     ->registerCustomFixers([
         new NumericLiteralSeparatorFixer(),
         new BlankLineAfterStatementFixer(),
+        new NoYodaComparisonFixer(),
     ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
@@ -303,6 +306,7 @@ return (new Config())
                 'try',
             ],
         ],
+        'CustomFixer/no_yoda_comparison' => true, // Converts Yoda-style comparisons to standard style
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
