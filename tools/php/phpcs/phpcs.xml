@@ -331,9 +331,7 @@
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction" />
-    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty" />
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall">
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/views/*</exclude-pattern>
