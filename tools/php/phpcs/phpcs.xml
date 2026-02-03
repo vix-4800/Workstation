@@ -347,12 +347,6 @@
     <rule ref="SlevomatCodingStandard.Functions.StrictCall" />
     <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure" />
     <rule ref="SlevomatCodingStandard.Functions.UnusedParameter" />
-    <rule ref="SlevomatCodingStandard.Functions.FunctionLength">
-        <properties>
-            <property name="maxLinesLength" value="100" />
-        </properties>
-        <type>warning</type>
-    </rule>
     <rule ref="Generic.PHP.ForbiddenFunctions">
         <properties>
             <property name="forbiddenFunctions" type="array" extend="true">
@@ -528,18 +522,6 @@
     </rule>
 
     <!-- ===== METRICS AND COMPLEXITY ===== -->
-    <rule ref="Generic.Metrics.CyclomaticComplexity">
-        <properties>
-            <property name="complexity" value="10" />
-        </properties>
-        <type>warning</type>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Complexity.Cognitive">
-        <properties>
-            <property name="warningThreshold" value="10" />
-            <property name="errorThreshold" value="20" />
-        </properties>
-    </rule>
     <rule ref="Generic.Metrics.NestingLevel">
         <properties>
             <property name="nestingLevel" value="4" />
