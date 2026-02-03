@@ -582,6 +582,10 @@
     <!-- ===== NUMBERS ===== -->
     <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator">
         <type>warning</type>
+        <properties>
+            <property name="minDigitsBeforeDecimalPoint" value="5" />
+            <property name="minDigitsAfterDecimalPoint" value="5" />
+        </properties>
     </rule>
 
     <!-- ===== TODO/FIXME TRACKING ===== -->
