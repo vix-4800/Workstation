@@ -111,6 +111,7 @@
             <property name="maxLineLength" value="120" />
             <property name="alwaysForSimpleConditions" value="true" />
         </properties>
+        <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
         <type>warning</type>
