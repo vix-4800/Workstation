@@ -463,7 +463,6 @@
                 <element value="@license" />
                 <element value="@version" />
                 <element value="@link" />
-                <element value="@since" />
                 <element value="@access" />
                 <element value="@static" />
                 <element value="@final" />
