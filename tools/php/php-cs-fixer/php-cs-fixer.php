@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CustomFixer\BlankLineAfterStatementFixer;
+use CustomFixer\IssetCoalesceFixer;
 use CustomFixer\NoYodaComparisonFixer;
 use CustomFixer\NumericLiteralSeparatorFixer;
 use PhpCsFixer\Config;
@@ -11,6 +12,7 @@ use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 require_once __DIR__ . '/Fixer/NumericLiteralSeparatorFixer.php';
 require_once __DIR__ . '/Fixer/BlankLineAfterStatementFixer.php';
 require_once __DIR__ . '/Fixer/NoYodaComparisonFixer.php';
+require_once __DIR__ . '/Fixer/IssetCoalesceFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
@@ -21,6 +23,7 @@ return (new Config())
         new NumericLiteralSeparatorFixer(),
         new BlankLineAfterStatementFixer(),
         new NoYodaComparisonFixer(),
+        new IssetCoalesceFixer(),
     ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
@@ -300,6 +303,7 @@ return (new Config())
             ],
         ],
         'CustomFixer/no_yoda_comparison' => true, // Converts Yoda-style comparisons to standard style
+        'CustomFixer/isset_coalesce' => true, // Simplifies (... ?? null) !== null to isset(...)
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
