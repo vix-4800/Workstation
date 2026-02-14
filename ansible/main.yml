@@ -59,8 +59,6 @@
   import_playbook: optional-apps.yml
 
 # Applications
-- name: 'Install Spicetify for Spotify'
-  import_playbook: apps/spicetify.yml
 - name: 'Install Waypaper wallpaper selector'
   import_playbook: apps/waypaper.yml
 

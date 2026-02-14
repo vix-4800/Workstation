@@ -37,5 +37,4 @@ ansible-playbook ansible/main.yml --ask-become-pass
 
 ### Applications (`apps/`)
 
-- **apps/spicetify.yml** - Spicetify CLI, Marketplace, and Spotify permissions
 - **apps/waypaper.yml** - Waypaper wallpaper manager
