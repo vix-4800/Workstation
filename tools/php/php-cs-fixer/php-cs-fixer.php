@@ -31,6 +31,7 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────
         // Modern PHP & Performance optimizations
         // ─────────────────────────────────────────────────────────────
+        'psr_autoloading' => true, // Enforces PSR-4 autoloading standards
         'date_time_immutable' => true, // Prefers DateTimeImmutable over DateTime for safety
         'dir_constant' => true, // Replaces dirname(__FILE__) with __DIR__ (faster)
         'function_to_constant' => true, // Replaces functions with constants where possible (phpversion() → PHP_VERSION)
@@ -43,6 +44,8 @@ return (new Config())
         'implode_call' => true, // Normalizes implode calls (correct parameter order)
         'magic_constant_casing' => true, // Normalizes magic constant casing (__FILE__, __DIR__)
         'magic_method_casing' => true, // Normalizes magic method casing (__construct, __toString)
+        'native_function_casing' => true, // Normalizes native function casing
+        'native_type_declaration_casing' => true, // Normalizes native type declaration casing (int, string, etc.)
         'no_binary_string' => true, // Removes b prefix from strings (for compatibility)
         'no_homoglyph_names' => true, // Forbids using homoglyphs in names
         'no_short_bool_cast' => true, // Forbids short boolean casting (!!)
@@ -95,7 +98,7 @@ return (new Config())
             'imports_order' => ['class', 'function', 'const'],
             'sort_algorithm' => 'alpha',
         ], // Orders imports: class, function, const
-        'single_import_per_statement' => true, // Each import must be on a separate line
+        'single_import_per_statement' => ['group_to_single_imports' => true], // Each import must be on a separate line
         'global_namespace_import' => [
             'import_classes' => true,
             'import_functions' => true,
@@ -104,12 +107,11 @@ return (new Config())
         'no_unneeded_import_alias' => true,
         'no_unused_imports' => true, // Removes unused imports
         'fully_qualified_strict_types' => ['import_symbols' => true], // Removes the leading part of fully qualified symbol references if a given symbol is imported
-        'single_line_after_imports' => true, // Ensures a single blank line after import statements
-        'no_leading_import_slash' => true, // Removes leading slashes in use statements
 
         // ─────────────────────────────────────────────────────────────────────────
         // Arrays & collections
         // ─────────────────────────────────────────────────────────────────────────
+        'array_push' => true, // Replaces array_push() with [] for adding elements to arrays
         'array_indentation' => true, // Indentation within arrays
         'array_syntax' => ['syntax' => 'short'], // Uses [] instead of array()
         'list_syntax' => ['syntax' => 'short'], // Uses [] instead of list()
@@ -140,12 +142,8 @@ return (new Config())
             'case',
             'default',
         ]], // Removes extra blank lines
-        'no_trailing_whitespace' => true, // Removes trailing whitespace
-        'no_whitespace_in_blank_line' => true, // No spaces on empty lines
         'single_quote' => true, // Converts double quotes to single quotes
-        'line_ending' => true, // Unifies line endings
-        'single_blank_line_at_eof' => true, // Only one blank line at the end of file
-        'cast_spaces' => ['space' => 'single'], // Consistent spacing in casts
+        'cast_spaces' => true, // Consistent spacing in casts
         'combine_consecutive_issets' => true, // Combines isset($a) && isset($b)
         'combine_consecutive_unsets' => true, // Combines unset($a); unset($b);
         'explicit_string_variable' => true, // Use {$var} instead of $var in strings
@@ -176,12 +174,8 @@ return (new Config())
         'simplified_null_return' => true, // Simplifies null return statements
         'return_assignment' => true, // Simplifies return assignments
         'nullable_type_declaration' => ['syntax' => 'question_mark'], // Uses ? for nullable types
-        'statement_indentation' => [
-            'stick_comment_to_next_continuous_control_statement' => true,
-        ], // Ensures consistent indentation for statements
         'is_null' => true, // Replaces is_null($var) expression with null === $var
         'types_spaces' => ['space' => 'none'], // Consistent spacing in types
-        'short_scalar_cast' => true,
         'no_useless_concat_operator' => true, // Removes unnecessary concatenation of strings
         'no_unneeded_control_parentheses' => [
             'statements' => [
@@ -200,19 +194,21 @@ return (new Config())
         'simple_to_complex_string_variable' => true, // Uses complex variable interpolation {$var} instead of simple $var in strings
         'string_length_to_empty' => true, // Replaces strlen($str) === 0 with $str === ''
         'no_unreachable_default_argument_value' => true, // Removes unreachable default argument values
-        'octal_notation' => true, // Uses 0o prefix for octal numbers
 
         // ─────────────────────────────────────────────────────────────────────────
         // File / opening tags / namespaces
         // ─────────────────────────────────────────────────────────────────────────
-        'full_opening_tag' => true, // Requires full opening tag (<?php)
-        'blank_line_after_namespace' => true, // Requires a blank line after the namespace declaration
-        'blank_lines_before_namespace' => true, // Requires blank lines before the namespace declaration
-        'blank_line_after_opening_tag' => true, // Requires a blank line after the opening <?php tag
         'semicolon_after_instruction' => true, // Requires a semicolon after each instruction
-        'no_closing_tag' => true, // Removes closing PHP tags
         'include' => true, // File path should not be placed within parentheses
         'echo_tag_syntax' => ['format' => 'short'],
+        'class_reference_name_casing' => true, // Normalizes class reference name casing
+
+        // -────────────────────────────────────────────────────────────────────────
+        // Attributes
+        // ─────────────────────────────────────────────────────────────────────────
+        'attribute_block_no_spaces' => true, // Removes spaces between attribute blocks
+        'attribute_empty_parentheses' => true, // Removes empty parentheses from attributes
+        'ordered_attributes' => true, // Orders attributes alphabetically
 
         // ─────────────────────────────────────────────────────────────────────────
         // Class & members layout
@@ -236,9 +232,9 @@ return (new Config())
                 'destruct',
 
                 // Methods
-                'method_public',
-                'method_protected',
-                'method_private',
+                // 'method_public',
+                // 'method_protected',
+                // 'method_private',
             ],
         ], // Enforces order of class elements
         'single_class_element_per_statement' => ['elements' => ['const', 'property']], // Enforces single class element per statement
@@ -253,17 +249,14 @@ return (new Config())
             'attribute_placement' => 'same_line',
             'keep_multiple_spaces_after_comma' => false,
         ], // Ensures fully multiline arguments
-        'return_type_declaration' => ['space_before' => 'none'],
         'nullable_type_declaration_for_default_null_value' => true,
         'new_with_braces' => true,
-        'function_declaration' => ['closure_function_spacing' => 'one'], // Ensures one space after the function keyword
+        'unary_operator_spaces' => true, // Ensures consistent spacing for unary operators
 
         // ─────────────────────────────────────────────────────────────────────────
         // Chaining, ternaries and comparisons
         // ─────────────────────────────────────────────────────────────────────────
         'method_chaining_indentation' => true, // Ensures method chaining is properly indented
-        'elseif' => true,
-        'control_structure_continuation_position' => true,
         'no_useless_else' => true, // Removes useless else statements
         'no_useless_return' => true, // Removes useless return statements in void functions
         'ternary_to_null_coalescing' => true, // Converts ternary to null coalescing (?: → ??)
@@ -312,15 +305,14 @@ return (new Config())
         // Misc
         // ─────────────────────────────────────────────────────────────────────────
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'], // Prevents newline before ;
-        'indentation_type' => true, // Uses spaces for indentation
-        'use_arrow_functions' => true, // Use arrow functions where possible (potentially unsafe)
+        'use_arrow_functions' => true, // Use arrow functions where possible
         'static_lambda' => true,
         'final_public_method_for_abstract_class' => true,
-        'no_mixed_echo_print' => ['use' => 'echo'],
+        'no_mixed_echo_print' => true, // Disallows using both echo and print in the same file
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
         'no_useless_sprintf' => true, // Removes useless sprintf calls
-        'switch_case_semicolon_to_colon' => true, // Replaces semicolons with colons in switch cases
         'operator_linebreak' => true, // Ensures operators are at the beginning of the line in multiline expressions
+        'integer_literal_case' => true, // Normalizes integer literal casing (0x1A → 0x1a)
     ]);
