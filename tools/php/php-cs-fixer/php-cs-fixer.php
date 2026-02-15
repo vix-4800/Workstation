@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use CustomFixer\BlankLineAfterStatementFixer;
+use CustomFixer\CatchExceptionToThrowableFixer;
 use CustomFixer\IssetCoalesceFixer;
 use CustomFixer\NoYodaComparisonFixer;
 use CustomFixer\NumericLiteralSeparatorFixer;
@@ -13,6 +14,7 @@ require_once __DIR__ . '/Fixer/NumericLiteralSeparatorFixer.php';
 require_once __DIR__ . '/Fixer/BlankLineAfterStatementFixer.php';
 require_once __DIR__ . '/Fixer/NoYodaComparisonFixer.php';
 require_once __DIR__ . '/Fixer/IssetCoalesceFixer.php';
+require_once __DIR__ . '/Fixer/CatchExceptionToThrowableFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
@@ -24,6 +26,7 @@ return (new Config())
         new BlankLineAfterStatementFixer(),
         new NoYodaComparisonFixer(),
         new IssetCoalesceFixer(),
+        new CatchExceptionToThrowableFixer(),
     ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
@@ -304,6 +307,7 @@ return (new Config())
         ],
         'CustomFixer/no_yoda_comparison' => true, // Converts Yoda-style comparisons to standard style
         'CustomFixer/isset_coalesce' => true, // Simplifies (... ?? null) !== null to isset(...)
+        'CustomFixer/catch_exception_to_throwable' => true, // Replaces Exception catches with Throwable
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
