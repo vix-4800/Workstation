@@ -42,6 +42,14 @@ static gchar *background_position = NULL;
 static gdouble opacity = 1.0;
 static gdouble darken_amount = 0.5;
 
+// Signal handler IDs for safe disconnection during teardown
+static gulong metadata_handler_id = 0;
+static gulong playback_handler_id = 0;
+static gulong player_appeared_handler_id = 0;
+static gulong player_vanished_handler_id = 0;
+static gulong name_appeared_handler_id = 0;
+static gboolean is_active = FALSE;
+
 GOptionEntry module_entries[] = {
     { "opacity", 0, 0, G_OPTION_ARG_STRING, &opacity_str,
       "Album art opacity (0.0-1.0, default: 1.0)", NULL },
@@ -59,6 +67,37 @@ GOptionEntry module_entries[] = {
       "CSS background-position (default: 'center')", NULL },
     { NULL },
 };
+
+static void disconnect_player_signals(void) {
+    if (current_player) {
+        if (metadata_handler_id > 0) {
+            g_signal_handler_disconnect(current_player, metadata_handler_id);
+            metadata_handler_id = 0;
+        }
+        if (playback_handler_id > 0) {
+            g_signal_handler_disconnect(current_player, playback_handler_id);
+            playback_handler_id = 0;
+        }
+    }
+}
+
+static void disconnect_all_signals(void) {
+    disconnect_player_signals();
+    if (player_manager) {
+        if (player_appeared_handler_id > 0) {
+            g_signal_handler_disconnect(player_manager, player_appeared_handler_id);
+            player_appeared_handler_id = 0;
+        }
+        if (player_vanished_handler_id > 0) {
+            g_signal_handler_disconnect(player_manager, player_vanished_handler_id);
+            player_vanished_handler_id = 0;
+        }
+        if (name_appeared_handler_id > 0) {
+            g_signal_handler_disconnect(player_manager, name_appeared_handler_id);
+            name_appeared_handler_id = 0;
+        }
+    }
+}
 
 static gdouble parse_double(const gchar *str, gdouble default_val, gdouble min, gdouble max) {
     if (!str || str[0] == '\0') return default_val;
@@ -174,7 +213,7 @@ static void file_read_callback(GObject *source_object, GAsyncResult *res, gpoint
         return;
     }
 
-    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) {
+    if (!is_active || !ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) {
         g_object_unref(input_stream);
         return;
     }
@@ -228,7 +267,7 @@ static void http_callback(GObject *source_object, GAsyncResult *res, gpointer us
         return;
     }
 
-    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) {
+    if (!is_active || !ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) {
         g_object_unref(stream);
         return;
     }
@@ -367,6 +406,7 @@ static void load_album_art_from_metadata(struct Window *ctx, GVariant *metadata)
 }
 
 static void on_metadata_changed(PlayerctlPlayer *player, GVariant *metadata, gpointer user_data) {
+    if (!is_active) return;
     struct GtkLock *gtklock = user_data;
     if (gtklock->focused_window) {
         load_album_art_from_metadata(gtklock->focused_window, metadata);
@@ -374,6 +414,7 @@ static void on_metadata_changed(PlayerctlPlayer *player, GVariant *metadata, gpo
 }
 
 static void on_playback_status(PlayerctlPlayer *player, PlayerctlPlaybackStatus status, gpointer user_data) {
+    if (!is_active) return;
     struct GtkLock *gtklock = user_data;
     if (gtklock->focused_window) {
         // When stopped, clear album art; otherwise try to load it
@@ -386,14 +427,17 @@ static void on_playback_status(PlayerctlPlayer *player, PlayerctlPlaybackStatus 
 }
 
 static void on_player_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayer *player, gpointer user_data) {
+    if (!is_active) return;
     struct GtkLock *gtklock = user_data;
 
     if (current_player) return;
 
     current_player = g_object_ref(player);
 
-    g_signal_connect(player, "metadata", G_CALLBACK(on_metadata_changed), gtklock);
-    g_signal_connect(player, "playback-status", G_CALLBACK(on_playback_status), gtklock);
+    metadata_handler_id = g_signal_connect(player, "metadata",
+        G_CALLBACK(on_metadata_changed), gtklock);
+    playback_handler_id = g_signal_connect(player, "playback-status",
+        G_CALLBACK(on_playback_status), gtklock);
 
     if (gtklock->focused_window) {
         load_album_art(gtklock->focused_window);
@@ -401,9 +445,11 @@ static void on_player_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayer 
 }
 
 static void on_player_vanished(PlayerctlPlayerManager *manager, PlayerctlPlayer *player, gpointer user_data) {
+    if (!is_active) return;
     struct GtkLock *gtklock = user_data;
 
     if (current_player == player) {
+        disconnect_player_signals();
         g_object_unref(current_player);
         current_player = NULL;
     }
@@ -416,7 +462,7 @@ static void on_player_vanished(PlayerctlPlayerManager *manager, PlayerctlPlayer 
 static void on_name_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayerName *name, gpointer user_data) {
     (void)user_data;
 
-    if (current_player) return;
+    if (!is_active || current_player) return;
 
     GError *error = NULL;
     PlayerctlPlayer *player = playerctl_player_new_from_name(name, &error);
@@ -434,6 +480,9 @@ static void on_name_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayerNam
 }
 
 void g_module_unload(GModule *m) {
+    is_active = FALSE;
+    disconnect_all_signals();
+
     if (current_player) {
         g_object_unref(current_player);
         current_player = NULL;
@@ -463,6 +512,8 @@ void on_activation(struct GtkLock *gtklock, int id) {
 
     validate_config();
 
+    is_active = TRUE;
+
     soup_session = soup_session_new();
 
     GError *error = NULL;
@@ -474,9 +525,12 @@ void on_activation(struct GtkLock *gtklock, int id) {
         return;
     }
 
-    g_signal_connect(player_manager, "player-appeared", G_CALLBACK(on_player_appeared), gtklock);
-    g_signal_connect(player_manager, "player-vanished", G_CALLBACK(on_player_vanished), gtklock);
-    g_signal_connect(player_manager, "name-appeared", G_CALLBACK(on_name_appeared), gtklock);
+    player_appeared_handler_id = g_signal_connect(player_manager, "player-appeared",
+        G_CALLBACK(on_player_appeared), gtklock);
+    player_vanished_handler_id = g_signal_connect(player_manager, "player-vanished",
+        G_CALLBACK(on_player_vanished), gtklock);
+    name_appeared_handler_id = g_signal_connect(player_manager, "name-appeared",
+        G_CALLBACK(on_name_appeared), gtklock);
 
     GList *available_players = NULL;
     g_object_get(player_manager, "player-names", &available_players, NULL);
@@ -508,12 +562,16 @@ void on_window_create(struct GtkLock *gtklock, struct Window *ctx) {
 }
 
 void on_focus_change(struct GtkLock *gtklock, struct Window *win, struct Window *old) {
-    if (win && MODULE_DATA(win)) {
+    if (is_active && win && MODULE_DATA(win)) {
         load_album_art(win);
     }
 }
 
 void on_window_destroy(struct GtkLock *gtklock, struct Window *ctx) {
+    // Disconnect all signal handlers to prevent callbacks accessing freed window data
+    is_active = FALSE;
+    disconnect_all_signals();
+
     if (MEDIA_BG(ctx)) {
         // Mark as invalid first to prevent callbacks from using this context
         MEDIA_BG(ctx)->is_valid = FALSE;
