@@ -37,10 +37,12 @@ static gchar *darken_amount_str = NULL;
 static gboolean hide_playerctl_art = TRUE;
 static gchar *background_size = NULL;
 static gchar *background_position = NULL;
+static gchar *player_filter_str = NULL;
 
 // Parsed values
 static gdouble opacity = 1.0;
 static gdouble darken_amount = 0.5;
+static gchar **allowed_players = NULL;
 
 // Signal handler IDs for safe disconnection during teardown
 static gulong metadata_handler_id = 0;
@@ -65,6 +67,8 @@ GOptionEntry module_entries[] = {
       "CSS background-size ('cover', 'contain', 'auto', default: 'cover')", NULL },
     { "background-position", 0, 0, G_OPTION_ARG_STRING, &background_position,
       "CSS background-position (default: 'center')", NULL },
+    { "player-filter", 0, 0, G_OPTION_ARG_STRING, &player_filter_str,
+      "Comma-separated list of allowed player names (e.g. 'spotify,mpv')", NULL },
     { NULL },
 };
 
@@ -99,6 +103,20 @@ static void disconnect_all_signals(void) {
     }
 }
 
+static gboolean is_player_allowed(const gchar *player_name) {
+    if (!allowed_players) return TRUE;
+
+    gchar *name_lower = g_ascii_strdown(player_name, -1);
+    for (gint i = 0; allowed_players[i] != NULL; i++) {
+        if (g_strcmp0(name_lower, allowed_players[i]) == 0) {
+            g_free(name_lower);
+            return TRUE;
+        }
+    }
+    g_free(name_lower);
+    return FALSE;
+}
+
 static gdouble parse_double(const gchar *str, gdouble default_val, gdouble min, gdouble max) {
     if (!str || str[0] == '\0') return default_val;
 
@@ -118,6 +136,16 @@ static void validate_config(void) {
 
     if (!background_size) background_size = g_strdup("cover");
     if (!background_position) background_position = g_strdup("center");
+
+    if (player_filter_str && player_filter_str[0] != '\0') {
+        allowed_players = g_strsplit(player_filter_str, ",", -1);
+        for (gint i = 0; allowed_players[i] != NULL; i++) {
+            gchar *stripped = g_strstrip(allowed_players[i]);
+            gchar *lower = g_ascii_strdown(stripped, -1);
+            g_free(allowed_players[i]);
+            allowed_players[i] = lower;
+        }
+    }
 }
 
 static gchar *get_cache_path(void) {
@@ -432,6 +460,14 @@ static void on_player_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayer 
 
     if (current_player) return;
 
+    gchar *name = NULL;
+    g_object_get(player, "player-name", &name, NULL);
+    if (name && !is_player_allowed(name)) {
+        g_free(name);
+        return;
+    }
+    g_free(name);
+
     current_player = g_object_ref(player);
 
     metadata_handler_id = g_signal_connect(player, "metadata",
@@ -463,6 +499,8 @@ static void on_name_appeared(PlayerctlPlayerManager *manager, PlayerctlPlayerNam
     (void)user_data;
 
     if (!is_active || current_player) return;
+
+    if (name->name && !is_player_allowed(name->name)) return;
 
     GError *error = NULL;
     PlayerctlPlayer *player = playerctl_player_new_from_name(name, &error);
@@ -500,10 +538,14 @@ void g_module_unload(GModule *m) {
     g_free(background_position);
     g_free(opacity_str);
     g_free(darken_amount_str);
+    g_free(player_filter_str);
+    g_strfreev(allowed_players);
     background_size = NULL;
     background_position = NULL;
     opacity_str = NULL;
     darken_amount_str = NULL;
+    player_filter_str = NULL;
+    allowed_players = NULL;
 }
 
 void on_activation(struct GtkLock *gtklock, int id) {
