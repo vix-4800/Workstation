@@ -4,16 +4,43 @@
   gather_facts: false
   become: true
   vars:
-    gpu_type: hybrid # nvidia | amd | intel | hybrid | none
+    gpu_type: nvidia # nvidia | amd | intel | hybrid | none
   tasks:
-    - name: 'Install NVIDIA drivers'
+    - name: 'Install NVIDIA drivers (open kernel modules)'
       community.general.pacman:
         name:
-          - nvidia
+          - nvidia-open
           - nvidia-utils
           - nvidia-settings
         state: present
       when: gpu_type == 'nvidia'
+
+    - name: 'Configure NVIDIA DRM modesetting (required for Wayland)'
+      ansible.builtin.copy:
+        dest: /etc/modprobe.d/nvidia.conf
+        content: |
+          options nvidia-drm modeset=1 fbdev=1
+        owner: root
+        group: root
+        mode: '0644'
+      when: gpu_type == 'nvidia'
+      notify: Regenerate initramfs
+
+    - name: 'Configure early NVIDIA module loading in initramfs'
+      ansible.builtin.lineinfile:
+        path: /etc/mkinitcpio.conf
+        regexp: '^MODULES='
+        line: 'MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)'
+      when: gpu_type == 'nvidia'
+      notify: Regenerate initramfs
+
+    - name: 'Remove conflicting kms hook from initramfs (conflicts with early Nvidia loading)'
+      ansible.builtin.replace:
+        path: /etc/mkinitcpio.conf
+        regexp: '(\bHOOKS=\([^)]*) kms( [^)]*\))'
+        replace: '\1\2'
+      when: gpu_type == 'nvidia'
+      notify: Regenerate initramfs
 
     - name: 'Install AMD drivers'
       community.general.pacman:
@@ -32,3 +59,8 @@
           - mesa
         state: present
       when: gpu_type == 'intel' or gpu_type == 'hybrid'
+
+  handlers:
+    - name: Regenerate initramfs
+      ansible.builtin.command: mkinitcpio -P
+      changed_when: true
