@@ -46,7 +46,7 @@ final class BlankLineAfterStatementFixer extends AbstractFixer implements Config
 
     public function configure(array $configuration): void
     {
-        if ([] === $configuration) {
+        if ($configuration === []) {
             $configuration = $this->getConfigurationDefinition()->resolve([]);
         }
 
@@ -105,7 +105,7 @@ final class BlankLineAfterStatementFixer extends AbstractFixer implements Config
 
             $endIndex = $this->findStatementEnd($tokens, $index);
 
-            if (null === $endIndex) {
+            if ($endIndex === null) {
                 continue;
             }
 
@@ -124,13 +124,13 @@ final class BlankLineAfterStatementFixer extends AbstractFixer implements Config
         if ($token->isGivenKind(T_DO)) {
             $blockEnd = $this->findBlockEnd($tokens, $startIndex);
 
-            if (null === $blockEnd) {
+            if ($blockEnd === null) {
                 return null;
             }
 
             $whileIndex = $tokens->getNextMeaningfulToken($blockEnd);
 
-            if (null === $whileIndex || !$tokens[$whileIndex]->isGivenKind(T_WHILE)) {
+            if ($whileIndex === null || !$tokens[$whileIndex]->isGivenKind(T_WHILE)) {
                 return $blockEnd;
             }
 
@@ -151,7 +151,7 @@ final class BlankLineAfterStatementFixer extends AbstractFixer implements Config
     {
         $openBraceIndex = $tokens->getNextTokenOfKind($startIndex, ['{']);
 
-        if (null === $openBraceIndex) {
+        if ($openBraceIndex === null) {
             return $tokens->getNextTokenOfKind($startIndex, [';']);
         }
 
@@ -159,7 +159,7 @@ final class BlankLineAfterStatementFixer extends AbstractFixer implements Config
 
         $nextMeaningful = $tokens->getNextMeaningfulToken($closeBraceIndex);
 
-        if (null !== $nextMeaningful) {
+        if ($nextMeaningful !== null) {
             $nextToken = $tokens[$nextMeaningful];
 
             if ($nextToken->isGivenKind([T_ELSE, T_ELSEIF, T_CATCH, T_FINALLY])) {
@@ -186,7 +186,7 @@ final class BlankLineAfterStatementFixer extends AbstractFixer implements Config
 
         $nextMeaningfulIndex = $tokens->getNextMeaningfulToken($index);
 
-        if (null === $nextMeaningfulIndex) {
+        if ($nextMeaningfulIndex === null) {
             return;
         }
 

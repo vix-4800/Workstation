@@ -59,7 +59,7 @@ final class RemoveUnusedForeachKeyFixer extends AbstractFixer
     {
         $openParen = $tokens->getNextMeaningfulToken($foreachIndex);
 
-        if (null === $openParen || !$tokens[$openParen]->equals('(')) {
+        if ($openParen === null || !$tokens[$openParen]->equals('(')) {
             return;
         }
 
@@ -67,43 +67,50 @@ final class RemoveUnusedForeachKeyFixer extends AbstractFixer
 
         // Find T_AS inside the foreach parentheses
         $asIndex = null;
+
         for ($i = $openParen + 1; $i < $closeParen; ++$i) {
             if ($tokens[$i]->isGivenKind(T_AS)) {
                 $asIndex = $i;
+
                 break;
             }
         }
 
-        if (null === $asIndex) {
+        if ($asIndex === null) {
             return;
         }
 
         // Find T_DOUBLE_ARROW between T_AS and close paren (at paren depth 0)
         $doubleArrowIndex = null;
         $depth = 0;
+
         for ($i = $asIndex + 1; $i < $closeParen; ++$i) {
             if ($tokens[$i]->equals('(') || $tokens[$i]->equals('[')) {
                 ++$depth;
+
                 continue;
             }
 
             if ($tokens[$i]->equals(')') || $tokens[$i]->equals(']')) {
                 --$depth;
+
                 continue;
             }
 
             if ($depth === 0 && $tokens[$i]->isGivenKind(T_DOUBLE_ARROW)) {
                 $doubleArrowIndex = $i;
+
                 break;
             }
         }
 
-        if (null === $doubleArrowIndex) {
+        if ($doubleArrowIndex === null) {
             return;
         }
 
         // Collect meaningful tokens between T_AS and T_DOUBLE_ARROW — must be exactly one T_VARIABLE
         $keyTokens = [];
+
         for ($i = $asIndex + 1; $i < $doubleArrowIndex; ++$i) {
             if (!$tokens[$i]->isWhitespace() && !$tokens[$i]->isComment()) {
                 $keyTokens[] = $i;
@@ -120,7 +127,7 @@ final class RemoveUnusedForeachKeyFixer extends AbstractFixer
         // Find the foreach body
         $openBrace = $tokens->getNextMeaningfulToken($closeParen);
 
-        if (null === $openBrace || !$tokens[$openBrace]->equals('{')) {
+        if ($openBrace === null || !$tokens[$openBrace]->equals('{')) {
             return;
         }
 

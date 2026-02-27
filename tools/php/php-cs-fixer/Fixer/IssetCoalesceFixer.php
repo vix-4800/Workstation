@@ -62,19 +62,21 @@ final class IssetCoalesceFixer extends AbstractFixer
         $leftEnd = $tokens->getPrevMeaningfulToken($operatorIndex);
         $rightStart = $tokens->getNextMeaningfulToken($operatorIndex);
 
-        if (null === $leftEnd || null === $rightStart) {
+        if ($leftEnd === null || $rightStart === null) {
             return;
         }
 
         // Try pattern 1: (... ?? null) !== null or (... ?? null) === null
         if ($this->isNull($tokens, $rightStart)) {
             $this->tryReplaceCoalesceWithIsset($tokens, $operatorIndex, $leftEnd, true);
+
             return;
         }
 
         // Try pattern 2: null !== (... ?? null) or null === (... ?? null)
         if ($this->isNull($tokens, $leftEnd)) {
             $this->tryReplaceCoalesceWithIsset($tokens, $operatorIndex, $rightStart, false);
+
             return;
         }
     }
@@ -92,13 +94,15 @@ final class IssetCoalesceFixer extends AbstractFixer
 
         // Find matching opening parenthesis
         $parenStart = $this->findMatchingOpenParenthesis($tokens, $coalesceEndIndex);
-        if (null === $parenStart) {
+
+        if ($parenStart === null) {
             return;
         }
 
         // Parse the content inside parentheses to find coalesce operator
         $coalesceInfo = $this->parseCoalesceExpression($tokens, $parenStart, $coalesceEndIndex);
-        if (null === $coalesceInfo) {
+
+        if ($coalesceInfo === null) {
             return;
         }
 
@@ -132,12 +136,14 @@ final class IssetCoalesceFixer extends AbstractFixer
     private function findMatchingOpenParenthesis(Tokens $tokens, int $closeIndex): ?int
     {
         $depth = 1;
+
         for ($i = $closeIndex - 1; $i >= 0; --$i) {
             if ($tokens[$i]->equals(')')) {
                 ++$depth;
             } elseif ($tokens[$i]->equals('(')) {
                 --$depth;
-                if (0 === $depth) {
+
+                if ($depth === 0) {
                     return $i;
                 }
             }
@@ -157,13 +163,14 @@ final class IssetCoalesceFixer extends AbstractFixer
                 ++$depth;
             } elseif ($tokens[$i]->equals(')') || $tokens[$i]->equals(']') || $tokens[$i]->equals('}')) {
                 --$depth;
-            } elseif (0 === $depth && $tokens[$i]->isGivenKind(T_COALESCE)) {
+            } elseif ($depth === 0 && $tokens[$i]->isGivenKind(T_COALESCE)) {
                 $coalesceIndex = $i;
+
                 break;
             }
         }
 
-        if (null === $coalesceIndex) {
+        if ($coalesceIndex === null) {
             return null;
         }
 
@@ -174,7 +181,7 @@ final class IssetCoalesceFixer extends AbstractFixer
         // Find start of fallback (right of ??)
         $fallbackStart = $tokens->getNextMeaningfulToken($coalesceIndex);
 
-        if (null === $exprStart || null === $exprEnd || null === $fallbackStart) {
+        if ($exprStart === null || $exprEnd === null || $fallbackStart === null) {
             return null;
         }
 
@@ -194,7 +201,7 @@ final class IssetCoalesceFixer extends AbstractFixer
             return false;
         }
 
-        return 'null' === strtolower($token->getContent());
+        return mb_strtolower($token->getContent()) === 'null';
     }
 
     private function isSafeForIsset(Tokens $tokens, int $start, int $end): bool
@@ -203,6 +210,7 @@ final class IssetCoalesceFixer extends AbstractFixer
         // It does NOT work with: function calls, operators, literals, etc.
 
         $meaningfulTokens = [];
+
         for ($i = $start; $i <= $end; ++$i) {
             if (!$tokens[$i]->isWhitespace() && !$tokens[$i]->isComment()) {
                 $meaningfulTokens[] = $i;
@@ -215,6 +223,7 @@ final class IssetCoalesceFixer extends AbstractFixer
 
         // First token should be a variable
         $firstToken = $tokens[$meaningfulTokens[0]];
+
         if (!$firstToken->isGivenKind(T_VARIABLE)) {
             return false;
         }
@@ -236,14 +245,17 @@ final class IssetCoalesceFixer extends AbstractFixer
 
             // Check if token is allowed
             $isAllowed = false;
+
             foreach ($allowedKinds as $kind) {
                 if (is_string($kind)) {
                     if ($token->equals($kind)) {
                         $isAllowed = true;
+
                         break;
                     }
                 } elseif ($token->isGivenKind($kind)) {
                     $isAllowed = true;
+
                     break;
                 }
             }
@@ -260,7 +272,8 @@ final class IssetCoalesceFixer extends AbstractFixer
             // Disallow function calls (string followed by opening parenthesis)
             if ($token->isGivenKind(T_STRING)) {
                 $nextMeaningful = $tokens->getNextMeaningfulToken($tokenIndex);
-                if (null !== $nextMeaningful && $tokens[$nextMeaningful]->equals('(')) {
+
+                if ($nextMeaningful !== null && $tokens[$nextMeaningful]->equals('(')) {
                     return false;
                 }
             }
@@ -281,17 +294,20 @@ final class IssetCoalesceFixer extends AbstractFixer
     ): void {
         // Extract the expression tokens
         $exprTokens = [];
+
         for ($i = $exprStart; $i <= $exprEnd; ++$i) {
             $exprTokens[] = clone $tokens[$i];
         }
 
         // Build isset(...) or !isset(...)
         $replacement = [];
+
         if ($needsNegation) {
             $replacement[] = new Token([T_STRING, '!isset']);
         } else {
             $replacement[] = new Token([T_STRING, 'isset']);
         }
+
         $replacement[] = new Token('(');
         $replacement = array_merge($replacement, $exprTokens);
         $replacement[] = new Token(')');

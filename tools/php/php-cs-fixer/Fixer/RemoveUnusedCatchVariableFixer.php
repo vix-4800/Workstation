@@ -59,21 +59,23 @@ final class RemoveUnusedCatchVariableFixer extends AbstractFixer
     {
         $openParen = $tokens->getNextMeaningfulToken($catchIndex);
 
-        if (null === $openParen || !$tokens[$openParen]->equals('(')) {
+        if ($openParen === null || !$tokens[$openParen]->equals('(')) {
             return;
         }
 
         $closeParen = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $openParen);
 
         $variableIndex = null;
+
         for ($i = $openParen + 1; $i < $closeParen; ++$i) {
             if ($tokens[$i]->isGivenKind(T_VARIABLE)) {
                 $variableIndex = $i;
+
                 break;
             }
         }
 
-        if (null === $variableIndex) {
+        if ($variableIndex === null) {
             return;
         }
 
@@ -81,7 +83,7 @@ final class RemoveUnusedCatchVariableFixer extends AbstractFixer
 
         $openBrace = $tokens->getNextMeaningfulToken($closeParen);
 
-        if (null === $openBrace || !$tokens[$openBrace]->equals('{')) {
+        if ($openBrace === null || !$tokens[$openBrace]->equals('{')) {
             return;
         }
 
@@ -97,6 +99,7 @@ final class RemoveUnusedCatchVariableFixer extends AbstractFixer
         for ($i = $variableIndex; $i > $openParen; --$i) {
             if ($tokens[$i]->isGivenKind(T_VARIABLE) || $tokens[$i]->isWhitespace()) {
                 $tokens->clearAt($i);
+
                 continue;
             }
 

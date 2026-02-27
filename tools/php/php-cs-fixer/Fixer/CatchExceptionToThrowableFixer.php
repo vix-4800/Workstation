@@ -32,7 +32,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
             'Replaces Exception with Throwable in catch blocks, including imported aliases to Exception.',
             [
                 new CodeSample(
-                    "<?php\nuse Exception as E;\n\ntry {\n    doWork();\n} catch (Exception|E $e) {\n    report($e);\n}\n"
+                    "<?php\nuse Exception as E;\n\ntry {\n    doWork();\n} catch (Exception|E {$e}) {\n    report({$e});\n}\n"
                 ),
             ],
             'Prefers Throwable catches instead of Exception for broader and consistent handling.'
@@ -68,6 +68,8 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
     }
 
     /**
+     * @param Tokens $tokens
+     *
      * @return array<string, true>
      */
     private function collectExceptionAliases(Tokens $tokens): array
@@ -80,11 +82,13 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
             if ($token->equals('{')) {
                 ++$curlyDepth;
+
                 continue;
             }
 
             if ($token->equals('}')) {
                 $curlyDepth = max(0, $curlyDepth - 1);
+
                 continue;
             }
 
@@ -94,28 +98,32 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
             $statementEnd = $tokens->getNextTokenOfKind($index, [';']);
 
-            if (null === $statementEnd) {
+            if ($statementEnd === null) {
                 continue;
             }
 
             $segmentStart = $tokens->getNextMeaningfulToken($index);
 
-            if (null === $segmentStart || $segmentStart >= $statementEnd) {
+            if ($segmentStart === null || $segmentStart >= $statementEnd) {
                 $index = $statementEnd;
+
                 continue;
             }
 
             if ($tokens[$segmentStart]->isGivenKind([T_FUNCTION, T_CONST])) {
                 $index = $statementEnd;
+
                 continue;
             }
 
             if ($this->hasGroupUseSyntax($tokens, $segmentStart, $statementEnd)) {
                 $index = $statementEnd;
+
                 continue;
             }
 
             $currentStart = $segmentStart;
+
             for ($i = $segmentStart; $i < $statementEnd; ++$i) {
                 if (!$tokens[$i]->equals(',')) {
                     continue;
@@ -145,28 +153,33 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
     /**
      * @param array<string, true> $aliases
+     * @param Tokens              $tokens
+     * @param int                 $start
+     * @param int                 $end
      */
     private function collectAliasFromUseSegment(Tokens $tokens, int $start, int $end, array &$aliases): void
     {
         $firstMeaningful = $this->findNextMeaningfulInRange($tokens, $start, $end);
 
-        if (null === $firstMeaningful) {
+        if ($firstMeaningful === null) {
             return;
         }
 
         $asIndex = null;
+
         for ($i = $firstMeaningful; $i <= $end; ++$i) {
             if ($tokens[$i]->isGivenKind(T_AS)) {
                 $asIndex = $i;
+
                 break;
             }
         }
 
-        $nameEnd = null !== $asIndex
+        $nameEnd = $asIndex !== null
             ? $this->findPrevMeaningfulInRange($tokens, $asIndex - 1, $firstMeaningful)
             : $this->findPrevMeaningfulInRange($tokens, $end, $firstMeaningful);
 
-        if (null === $nameEnd) {
+        if ($nameEnd === null) {
             return;
         }
 
@@ -177,59 +190,62 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
         }
 
         $alias = null;
-        if (null !== $asIndex) {
+
+        if ($asIndex !== null) {
             $aliasIndex = $this->findNextMeaningfulInRange($tokens, $asIndex + 1, $end);
 
-            if (null !== $aliasIndex) {
+            if ($aliasIndex !== null) {
                 $alias = $tokens[$aliasIndex]->getContent();
             }
         }
 
-        if (null === $alias || '' === $alias) {
+        if ($alias === null || $alias === '') {
             $alias = $this->extractShortName($importedName);
         }
 
-        if ('' === $alias) {
+        if ($alias === '') {
             return;
         }
 
-        $aliases[strtolower($alias)] = true;
+        $aliases[mb_strtolower($alias)] = true;
     }
 
     private function fixCatchTypes(Tokens $tokens, int $catchIndex): void
     {
         $openParenthesis = $tokens->getNextMeaningfulToken($catchIndex);
 
-        if (null === $openParenthesis || !$tokens[$openParenthesis]->equals('(')) {
+        if ($openParenthesis === null || !$tokens[$openParenthesis]->equals('(')) {
             return;
         }
 
         $closeParenthesis = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $openParenthesis);
         $firstMeaningful = $tokens->getNextMeaningfulToken($openParenthesis);
 
-        if (null === $firstMeaningful || $firstMeaningful >= $closeParenthesis) {
+        if ($firstMeaningful === null || $firstMeaningful >= $closeParenthesis) {
             return;
         }
 
         $variableIndex = null;
+
         for ($i = $firstMeaningful; $i < $closeParenthesis; ++$i) {
             if ($tokens[$i]->isGivenKind(T_VARIABLE)) {
                 $variableIndex = $i;
+
                 break;
             }
         }
 
-        $typeEnd = null !== $variableIndex
+        $typeEnd = $variableIndex !== null
             ? $this->findPrevMeaningfulInRange($tokens, $variableIndex - 1, $firstMeaningful)
             : $this->findPrevMeaningfulInRange($tokens, $closeParenthesis - 1, $firstMeaningful);
 
-        if (null === $typeEnd || $typeEnd < $firstMeaningful) {
+        if ($typeEnd === null || $typeEnd < $firstMeaningful) {
             return;
         }
 
         $atoms = $this->collectTypeAtoms($tokens, $firstMeaningful, $typeEnd);
 
-        if ([] === $atoms) {
+        if ($atoms === []) {
             return;
         }
 
@@ -241,7 +257,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
             $atomText = $this->readTypeName($tokens, $atom['start'], $atom['end']);
             $normalizedAtom = $this->normalizeTypeName($atomText);
 
-            if ('throwable' !== $normalizedAtom && $this->isExceptionReference($atomText)) {
+            if ($normalizedAtom !== 'throwable' && $this->isExceptionReference($atomText)) {
                 $atomTokens = [new Token([T_STRING, 'Throwable'])];
                 $normalizedAtom = 'throwable';
                 $changed = true;
@@ -252,6 +268,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
             if (isset($seen[$normalizedAtom])) {
                 $changed = true;
+
                 continue;
             }
 
@@ -264,6 +281,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
         }
 
         $flattened = [];
+
         foreach ($replacement as $index => $atomTokens) {
             if ($index > 0) {
                 $flattened[] = new Token('|');
@@ -279,6 +297,10 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
     }
 
     /**
+     * @param Tokens $tokens
+     * @param int    $start
+     * @param int    $end
+     *
      * @return list<array{start: int, end: int}>
      */
     private function collectTypeAtoms(Tokens $tokens, int $start, int $end): array
@@ -295,23 +317,24 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
             }
 
             if ($token->equals('|')) {
-                if (null !== $atomStart && null !== $atomEnd) {
+                if ($atomStart !== null && $atomEnd !== null) {
                     $atoms[] = ['start' => $atomStart, 'end' => $atomEnd];
                 }
 
                 $atomStart = null;
                 $atomEnd = null;
+
                 continue;
             }
 
-            if (null === $atomStart) {
+            if ($atomStart === null) {
                 $atomStart = $i;
             }
 
             $atomEnd = $i;
         }
 
-        if (null !== $atomStart && null !== $atomEnd) {
+        if ($atomStart !== null && $atomEnd !== null) {
             $atoms[] = ['start' => $atomStart, 'end' => $atomEnd];
         }
 
@@ -327,11 +350,13 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
             if ($token->equals('{')) {
                 ++$curlyDepth;
+
                 continue;
             }
 
             if ($token->equals('}')) {
                 $curlyDepth = max(0, $curlyDepth - 1);
+
                 continue;
             }
 
@@ -341,7 +366,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
             $next = $tokens->getNextMeaningfulToken($index);
 
-            if (null === $next) {
+            if ($next === null) {
                 continue;
             }
 
@@ -351,18 +376,19 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
             $semiColon = $tokens->getNextTokenOfKind($index, [';']);
 
-            if (null === $semiColon) {
+            if ($semiColon === null) {
                 continue;
             }
 
             $name = '';
+
             for ($i = $next; $i < $semiColon; ++$i) {
                 if (!$tokens[$i]->isWhitespace() && !$tokens[$i]->isComment()) {
                     $name .= $tokens[$i]->getContent();
                 }
             }
 
-            if ('throwable' === strtolower(trim($name))) {
+            if (mb_strtolower(mb_trim($name)) === 'throwable') {
                 return true;
             }
         }
@@ -384,11 +410,13 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
             if ($token->equals('{')) {
                 ++$curlyDepth;
+
                 continue;
             }
 
             if ($token->equals('}')) {
                 $curlyDepth = max(0, $curlyDepth - 1);
+
                 continue;
             }
 
@@ -397,24 +425,25 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
             }
 
             $next = $tokens->getNextMeaningfulToken($index);
-            if (null !== $next && $tokens[$next]->isGivenKind([T_FUNCTION, T_CONST])) {
+
+            if ($next !== null && $tokens[$next]->isGivenKind([T_FUNCTION, T_CONST])) {
                 continue;
             }
 
             $semiColon = $tokens->getNextTokenOfKind($index, [';']);
 
-            if (null !== $semiColon) {
+            if ($semiColon !== null) {
                 $insertAfter = $semiColon;
                 $index = $semiColon;
             }
         }
 
-        if (null === $insertAfter) {
+        if ($insertAfter === null) {
             for ($index = 0; $index < $tokens->count(); ++$index) {
                 if ($tokens[$index]->isGivenKind(T_NAMESPACE)) {
                     $semiColon = $tokens->getNextTokenOfKind($index, [';']);
 
-                    if (null !== $semiColon) {
+                    if ($semiColon !== null) {
                         $insertAfter = $semiColon;
                     }
 
@@ -423,16 +452,17 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
             }
         }
 
-        if (null === $insertAfter) {
+        if ($insertAfter === null) {
             for ($index = 0; $index < $tokens->count(); ++$index) {
                 if ($tokens[$index]->isGivenKind(T_OPEN_TAG)) {
                     $insertAfter = $index;
+
                     break;
                 }
             }
         }
 
-        if (null === $insertAfter) {
+        if ($insertAfter === null) {
             return;
         }
 
@@ -449,7 +479,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
     {
         $normalized = $this->normalizeTypeName($typeName);
 
-        if ('exception' === $normalized) {
+        if ($normalized === 'exception') {
             return true;
         }
 
@@ -462,22 +492,22 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
     private function isStandardExceptionType(string $typeName): bool
     {
-        return 'exception' === $this->normalizeTypeName($typeName);
+        return $this->normalizeTypeName($typeName) === 'exception';
     }
 
     private function normalizeTypeName(string $typeName): string
     {
-        $name = trim($typeName);
-        $name = ltrim($name, '\\');
+        $name = mb_trim($typeName);
+        $name = mb_ltrim($name, '\\');
 
-        return strtolower($name);
+        return mb_strtolower($name);
     }
 
     private function extractShortName(string $name): string
     {
-        $trimmed = ltrim(trim($name), '\\');
+        $trimmed = mb_ltrim(mb_trim($name), '\\');
 
-        if ('' === $trimmed) {
+        if ($trimmed === '') {
             return '';
         }
 
@@ -504,6 +534,10 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
     }
 
     /**
+     * @param Tokens $tokens
+     * @param int    $start
+     * @param int    $end
+     *
      * @return list<Token>
      */
     private function cloneTokenRange(Tokens $tokens, int $start, int $end): array

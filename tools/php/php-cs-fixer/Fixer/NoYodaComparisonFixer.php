@@ -76,13 +76,13 @@ final class NoYodaComparisonFixer extends AbstractFixer
     {
         $leftEnd = $tokens->getPrevMeaningfulToken($operatorIndex);
 
-        if (null === $leftEnd) {
+        if ($leftEnd === null) {
             return;
         }
 
         $rightStart = $tokens->getNextMeaningfulToken($operatorIndex);
 
-        if (null === $rightStart) {
+        if ($rightStart === null) {
             return;
         }
 
@@ -97,7 +97,7 @@ final class NoYodaComparisonFixer extends AbstractFixer
         $leftStartIndex = $this->findExpressionStart($tokens, $leftEnd);
         $rightEndIndex = $this->findExpressionEnd($tokens, $rightStart);
 
-        if (null === $leftStartIndex || null === $rightEndIndex) {
+        if ($leftStartIndex === null || $rightEndIndex === null) {
             return;
         }
 
@@ -115,7 +115,7 @@ final class NoYodaComparisonFixer extends AbstractFixer
 
         if ($token->isGivenKind(self::LITERAL_TOKEN_KINDS)) {
             if ($token->isGivenKind(T_STRING)) {
-                $content = strtolower($token->getContent());
+                $content = mb_strtolower($token->getContent());
 
                 return in_array($content, ['null', 'true', 'false'], true);
             }
@@ -145,7 +145,7 @@ final class NoYodaComparisonFixer extends AbstractFixer
             $start = $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $index);
             $prev = $tokens->getPrevMeaningfulToken($start);
 
-            if (null !== $prev && $tokens[$prev]->isGivenKind(T_STRING)) {
+            if ($prev !== null && $tokens[$prev]->isGivenKind(T_STRING)) {
                 return $prev;
             }
 
@@ -193,7 +193,7 @@ final class NoYodaComparisonFixer extends AbstractFixer
         while (true) {
             $next = $tokens->getNextMeaningfulToken($current);
 
-            if (null === $next) {
+            if ($next === null) {
                 break;
             }
 
@@ -202,14 +202,14 @@ final class NoYodaComparisonFixer extends AbstractFixer
             if ($nextToken->isGivenKind(T_OBJECT_OPERATOR) || $nextToken->isGivenKind(T_NULLSAFE_OBJECT_OPERATOR)) {
                 $propertyOrMethod = $tokens->getNextMeaningfulToken($next);
 
-                if (null === $propertyOrMethod) {
+                if ($propertyOrMethod === null) {
                     break;
                 }
 
                 $current = $propertyOrMethod;
                 $afterProperty = $tokens->getNextMeaningfulToken($current);
 
-                if (null !== $afterProperty && $tokens[$afterProperty]->equals('(')) {
+                if ($afterProperty !== null && $tokens[$afterProperty]->equals('(')) {
                     $current = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $afterProperty);
                 }
 
@@ -219,14 +219,14 @@ final class NoYodaComparisonFixer extends AbstractFixer
             if ($nextToken->isGivenKind(T_DOUBLE_COLON)) {
                 $methodOrConst = $tokens->getNextMeaningfulToken($next);
 
-                if (null === $methodOrConst) {
+                if ($methodOrConst === null) {
                     break;
                 }
 
                 $current = $methodOrConst;
                 $afterMethod = $tokens->getNextMeaningfulToken($current);
 
-                if (null !== $afterMethod && $tokens[$afterMethod]->equals('(')) {
+                if ($afterMethod !== null && $tokens[$afterMethod]->equals('(')) {
                     $current = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $afterMethod);
                 }
 
@@ -261,7 +261,7 @@ final class NoYodaComparisonFixer extends AbstractFixer
         while (true) {
             $next = $tokens->getNextMeaningfulToken($current);
 
-            if (null === $next) {
+            if ($next === null) {
                 break;
             }
 
@@ -282,7 +282,7 @@ final class NoYodaComparisonFixer extends AbstractFixer
             if ($nextToken->isGivenKind(T_DOUBLE_COLON)) {
                 $methodOrConst = $tokens->getNextMeaningfulToken($next);
 
-                if (null === $methodOrConst) {
+                if ($methodOrConst === null) {
                     break;
                 }
 
@@ -301,14 +301,14 @@ final class NoYodaComparisonFixer extends AbstractFixer
     {
         $current = $tokens->getNextMeaningfulToken($index);
 
-        if (null === $current) {
+        if ($current === null) {
             return $index;
         }
 
         while (true) {
             $next = $tokens->getNextMeaningfulToken($current);
 
-            if (null === $next) {
+            if ($next === null) {
                 break;
             }
 

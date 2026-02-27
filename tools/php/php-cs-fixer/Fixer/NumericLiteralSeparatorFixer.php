@@ -43,7 +43,7 @@ final class NumericLiteralSeparatorFixer extends AbstractFixer implements Config
 
     public function configure(array $configuration): void
     {
-        if ([] === $configuration) {
+        if ($configuration === []) {
             $configuration = $this->getConfigurationDefinition()->resolve([]);
         }
 
