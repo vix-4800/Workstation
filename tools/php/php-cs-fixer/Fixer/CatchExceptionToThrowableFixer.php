@@ -19,6 +19,8 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
      */
     private array $exceptionAliases = [];
 
+    private bool $needsThrowableImport = false;
+
     public function getName(): string
     {
         return 'CustomFixer/catch_exception_to_throwable';
@@ -50,6 +52,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
     protected function applyFix(SplFileInfo $file, Tokens $tokens): void
     {
         $this->exceptionAliases = $this->collectExceptionAliases($tokens);
+        $this->needsThrowableImport = false;
 
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
             if (!$tokens[$index]->isGivenKind(T_CATCH)) {
@@ -57,6 +60,10 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
             }
 
             $this->fixCatchTypes($tokens, $index);
+        }
+
+        if ($this->needsThrowableImport) {
+            $this->addThrowableImportIfNeeded($tokens);
         }
     }
 
@@ -238,6 +245,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
                 $atomTokens = [new Token([T_STRING, 'Throwable'])];
                 $normalizedAtom = 'throwable';
                 $changed = true;
+                $this->needsThrowableImport = true;
             } else {
                 $atomTokens = $this->cloneTokenRange($tokens, $atom['start'], $atom['end']);
             }
@@ -308,6 +316,133 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
         }
 
         return $atoms;
+    }
+
+    private function hasThrowableImport(Tokens $tokens): bool
+    {
+        $curlyDepth = 0;
+
+        for ($index = 0; $index < $tokens->count(); ++$index) {
+            $token = $tokens[$index];
+
+            if ($token->equals('{')) {
+                ++$curlyDepth;
+                continue;
+            }
+
+            if ($token->equals('}')) {
+                $curlyDepth = max(0, $curlyDepth - 1);
+                continue;
+            }
+
+            if ($curlyDepth > 0 || !$token->isGivenKind(T_USE)) {
+                continue;
+            }
+
+            $next = $tokens->getNextMeaningfulToken($index);
+
+            if (null === $next) {
+                continue;
+            }
+
+            if ($tokens[$next]->isGivenKind([T_FUNCTION, T_CONST])) {
+                continue;
+            }
+
+            $semiColon = $tokens->getNextTokenOfKind($index, [';']);
+
+            if (null === $semiColon) {
+                continue;
+            }
+
+            $name = '';
+            for ($i = $next; $i < $semiColon; ++$i) {
+                if (!$tokens[$i]->isWhitespace() && !$tokens[$i]->isComment()) {
+                    $name .= $tokens[$i]->getContent();
+                }
+            }
+
+            if ('throwable' === strtolower(trim($name))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function addThrowableImportIfNeeded(Tokens $tokens): void
+    {
+        if ($this->hasThrowableImport($tokens)) {
+            return;
+        }
+
+        $insertAfter = null;
+        $curlyDepth = 0;
+
+        for ($index = 0; $index < $tokens->count(); ++$index) {
+            $token = $tokens[$index];
+
+            if ($token->equals('{')) {
+                ++$curlyDepth;
+                continue;
+            }
+
+            if ($token->equals('}')) {
+                $curlyDepth = max(0, $curlyDepth - 1);
+                continue;
+            }
+
+            if ($curlyDepth > 0 || !$token->isGivenKind(T_USE)) {
+                continue;
+            }
+
+            $next = $tokens->getNextMeaningfulToken($index);
+            if (null !== $next && $tokens[$next]->isGivenKind([T_FUNCTION, T_CONST])) {
+                continue;
+            }
+
+            $semiColon = $tokens->getNextTokenOfKind($index, [';']);
+
+            if (null !== $semiColon) {
+                $insertAfter = $semiColon;
+                $index = $semiColon;
+            }
+        }
+
+        if (null === $insertAfter) {
+            for ($index = 0; $index < $tokens->count(); ++$index) {
+                if ($tokens[$index]->isGivenKind(T_NAMESPACE)) {
+                    $semiColon = $tokens->getNextTokenOfKind($index, [';']);
+
+                    if (null !== $semiColon) {
+                        $insertAfter = $semiColon;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if (null === $insertAfter) {
+            for ($index = 0; $index < $tokens->count(); ++$index) {
+                if ($tokens[$index]->isGivenKind(T_OPEN_TAG)) {
+                    $insertAfter = $index;
+                    break;
+                }
+            }
+        }
+
+        if (null === $insertAfter) {
+            return;
+        }
+
+        $tokens->insertAt($insertAfter + 1, [
+            new Token([T_WHITESPACE, "\n"]),
+            new Token([T_USE, 'use']),
+            new Token([T_WHITESPACE, ' ']),
+            new Token([T_STRING, 'Throwable']),
+            new Token(';'),
+        ]);
     }
 
     private function isExceptionReference(string $typeName): bool
