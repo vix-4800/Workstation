@@ -239,6 +239,11 @@
         "source": "config/wireplumber",
         "target": "$HOME/.config/wireplumber",
         "comment": "WirePlumber session manager configuration"
+      },
+      {
+        "source": "config/code/code-flags.conf",
+        "target": "$HOME/.config/code-flags.conf",
+        "comment": "VS Code launch flags - enables native Wayland (Ozone) to fix keyboard shortcuts"
       }
     ]
 }
