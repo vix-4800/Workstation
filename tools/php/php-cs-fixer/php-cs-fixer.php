@@ -13,6 +13,7 @@ use CustomFixer\NoYodaComparisonFixer;
 use CustomFixer\NumericLiteralSeparatorFixer;
 use CustomFixer\RemoveUnusedCatchVariableFixer;
 use CustomFixer\RemoveUnusedForeachKeyFixer;
+use CustomFixer\RequireNullSafeOperatorFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
@@ -23,6 +24,7 @@ require_once __DIR__ . '/Fixer/IssetCoalesceFixer.php';
 require_once __DIR__ . '/Fixer/CatchExceptionToThrowableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedCatchVariableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedForeachKeyFixer.php';
+require_once __DIR__ . '/Fixer/RequireNullSafeOperatorFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
@@ -37,6 +39,7 @@ return (new Config())
         new CatchExceptionToThrowableFixer(),
         new RemoveUnusedCatchVariableFixer(),
         new RemoveUnusedForeachKeyFixer(),
+        new RequireNullSafeOperatorFixer(),
     ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
@@ -322,6 +325,7 @@ return (new Config())
         'CustomFixer/catch_exception_to_throwable' => true, // Replaces Exception catches with Throwable
         'CustomFixer/remove_unused_catch_variable' => true, // Removes unused variables in catch blocks (PHP 8.0+ non-capturing catch)
         'CustomFixer/remove_unused_foreach_key' => true, // Removes unused key variables from foreach loops
+        'CustomFixer/require_null_safe_operator' => true, // Converts $x !== null ? $x->method() : null to $x?->method()
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
