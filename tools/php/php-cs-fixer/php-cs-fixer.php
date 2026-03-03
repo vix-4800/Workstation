@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @see https://cs.symfony.com/doc/rules/index.html
+ */
+
 declare(strict_types=1);
 
 use CustomFixer\BlankLineAfterStatementFixer;
@@ -87,6 +91,8 @@ return (new Config())
             'sort_algorithm' => 'alpha',
         ],
         'phpdoc_indent' => true, // Indents PHPDoc comments
+        'phpdoc_list_type' => true, // Normalizes list types in PHPDoc (e.g., array<int> → int[])
+        'phpdoc_line_span' => true, // Changes doc blocks from single to multi line, or reversed.
         'phpdoc_no_alias_tag' => true, // Removes PHPDoc alias tags
         'phpdoc_no_package' => true, // Removes PHPDoc package tags
         'phpdoc_no_useless_inheritdoc' => true, // Removes useless PHPDoc inheritdoc tags
@@ -323,7 +329,9 @@ return (new Config())
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'], // Prevents newline before ;
         'use_arrow_functions' => true, // Use arrow functions where possible
         'static_lambda' => true,
+        'lambda_not_used_import' => true, // Removes unused imports in lambda functions
         'final_public_method_for_abstract_class' => true,
+        'final_class' => true, // Makes classes final if they are not abstract
         'no_mixed_echo_print' => true, // Disallows using both echo and print in the same file
         'modernize_strpos' => true, // Replaces strpos() calls with str_contains() where possible
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
@@ -331,4 +339,5 @@ return (new Config())
         'no_useless_sprintf' => true, // Removes useless sprintf calls
         'operator_linebreak' => true, // Ensures operators are at the beginning of the line in multiline expressions
         'integer_literal_case' => true, // Normalizes integer literal casing (0x1A → 0x1a)
+        'standardize_increment' => true, // Standardizes increment and decrement operators
     ]);
