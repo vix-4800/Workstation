@@ -340,4 +340,6 @@ return (new Config())
         'operator_linebreak' => true, // Ensures operators are at the beginning of the line in multiline expressions
         'integer_literal_case' => true, // Normalizes integer literal casing (0x1A → 0x1a)
         'standardize_increment' => true, // Standardizes increment and decrement operators
+        'long_to_shorthand_operator' => true, // Converts long-form assignment operators to their shorthand versions (e.g., $a = $a + 1 → $a += 1)
+        'single_line_comment_style' => true, // Converts single-line comments to use // instead of #
     ]);
