@@ -19,7 +19,7 @@ use SplFileInfo;
 
 final class NumericLiteralSeparatorFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
-    public $configuration;
+    protected array $configuration = [];
 
     #[Override]
     public function getName(): string

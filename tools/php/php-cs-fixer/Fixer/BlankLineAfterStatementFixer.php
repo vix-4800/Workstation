@@ -23,7 +23,7 @@ final class BlankLineAfterStatementFixer extends AbstractFixer implements Config
     /**
      * @var array<string, mixed>
      */
-    public array $configuration;
+    protected array $configuration = [];
 
     private array $tokenKinds = [];
 
