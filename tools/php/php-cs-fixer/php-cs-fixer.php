@@ -14,6 +14,7 @@ use CustomFixer\NumericLiteralSeparatorFixer;
 use CustomFixer\RemoveUnusedCatchVariableFixer;
 use CustomFixer\RemoveUnusedForeachKeyFixer;
 use CustomFixer\PhpDocOpeningLineFixer;
+use CustomFixer\PhpDocSelfReferenceFixer;
 use CustomFixer\RemoveDocBlockTagsFixer;
 use CustomFixer\RequireNullSafeOperatorFixer;
 use PhpCsFixer\Config;
@@ -27,6 +28,7 @@ require_once __DIR__ . '/Fixer/CatchExceptionToThrowableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedCatchVariableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedForeachKeyFixer.php';
 require_once __DIR__ . '/Fixer/PhpDocOpeningLineFixer.php';
+require_once __DIR__ . '/Fixer/PhpDocSelfReferenceFixer.php';
 require_once __DIR__ . '/Fixer/RequireNullSafeOperatorFixer.php';
 require_once __DIR__ . '/Fixer/RemoveDocBlockTagsFixer.php';
 
@@ -44,6 +46,7 @@ return (new Config())
         new RemoveUnusedCatchVariableFixer(),
         new RemoveUnusedForeachKeyFixer(),
         new PhpDocOpeningLineFixer(),
+        new PhpDocSelfReferenceFixer(),
         new RequireNullSafeOperatorFixer(),
         new RemoveDocBlockTagsFixer(),
     ])
@@ -332,6 +335,8 @@ return (new Config())
         'random_api_migration' => true, // Replaces deprecated random number generation functions with modern ones
         'modifier_keywords' => ['elements' => ['property', 'method', 'const']], // Enforces visibility for all class properties and methods
         'self_accessor' => true, // Enforces the use of self:: for accessing static properties and methods
+        'self_static_accessor' => true, // In final/anonymous classes, replaces static:: with self::
+        'phpdoc_return_self_reference' => true, // Normalises @return $self, @return @this etc. to self/$this
         'mb_str_functions' => true, // Enforces the use of mb_str_* functions for multibyte string operations
 
         // ─────────────────────────────────────────────────────────────────────────
@@ -355,6 +360,7 @@ return (new Config())
         'CustomFixer/remove_unused_catch_variable' => true, // Removes unused variables in catch blocks (PHP 8.0+ non-capturing catch)
         'CustomFixer/remove_unused_foreach_key' => true, // Removes unused key variables from foreach loops
         'CustomFixer/phpdoc_opening_line' => true, // Ensures multi-line PHPDoc /** is on its own line
+        'CustomFixer/phpdoc_self_reference' => true, // Replaces class name with self in PHPDoc @var/@param/@return inside the class
         'CustomFixer/require_null_safe_operator' => true, // Converts $x !== null ? $x->method() : null to $x?->method()
 
         // ─────────────────────────────────────────────────────────────────────────
