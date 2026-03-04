@@ -100,9 +100,11 @@ return (new Config())
         'phpdoc_list_type' => true, // Normalizes list types in PHPDoc (e.g., array<int> → int[])
         'phpdoc_line_span' => true, // Changes doc blocks from single to multi line, or reversed.
         'phpdoc_no_alias_tag' => [
-            'const' => 'var',
-            'type' => 'var',
-            'link' => 'see',
+            'replacements' => [
+                'const' => 'var',
+                'type' => 'var',
+                'link' => 'see',
+            ],
         ], // Removes PHPDoc alias tags
         'CustomFixer/remove_doc_block_tags' => [
             'tags' => [
