@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -14,6 +15,7 @@ use SplFileInfo;
 
 final class IssetCoalesceFixer extends AbstractFixer
 {
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/isset_coalesce';
@@ -37,6 +39,7 @@ final class IssetCoalesceFixer extends AbstractFixer
         return $tokens->isAllTokenKindsFound([T_COALESCE, T_IS_IDENTICAL]);
     }
 
+    #[Override]
     public function getPriority(): int
     {
         // Run after no_yoda_comparison to work with normalized comparisons
@@ -217,7 +220,7 @@ final class IssetCoalesceFixer extends AbstractFixer
             }
         }
 
-        if (empty($meaningfulTokens)) {
+        if ($meaningfulTokens === []) {
             return false;
         }
 
@@ -261,7 +264,7 @@ final class IssetCoalesceFixer extends AbstractFixer
             }
 
             // Allow numeric and string literals only for array/object access
-            if (!$isAllowed && ($token->isGivenKind([T_LNUMBER, T_DNUMBER, T_CONSTANT_ENCAPSED_STRING]))) {
+            if (!$isAllowed && $token->isGivenKind([T_LNUMBER, T_DNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
                 $isAllowed = true;
             }
 

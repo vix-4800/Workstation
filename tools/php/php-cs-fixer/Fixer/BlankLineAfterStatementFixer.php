@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
@@ -19,8 +20,14 @@ use SplFileInfo;
 
 final class BlankLineAfterStatementFixer extends AbstractFixer implements ConfigurableFixerInterface, WhitespacesAwareFixerInterface
 {
+    /**
+     * @var array<string, mixed>
+     */
+    public array $configuration;
+
     private array $tokenKinds = [];
 
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/blank_line_after_statement';
@@ -60,12 +67,13 @@ final class BlankLineAfterStatementFixer extends AbstractFixer implements Config
         return $this->createConfigurationDefinition();
     }
 
+    #[Override]
     public function getPriority(): int
     {
         return -25;
     }
 
-    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
+    private function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('statements', 'List of statements that should be followed by a blank line.'))

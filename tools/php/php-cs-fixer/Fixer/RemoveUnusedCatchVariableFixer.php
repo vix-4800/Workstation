@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -16,6 +17,7 @@ use SplFileInfo;
  */
 final class RemoveUnusedCatchVariableFixer extends AbstractFixer
 {
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/remove_unused_catch_variable';
@@ -39,6 +41,7 @@ final class RemoveUnusedCatchVariableFixer extends AbstractFixer
         return $tokens->isTokenKindFound(T_CATCH);
     }
 
+    #[Override]
     public function getPriority(): int
     {
         return 0;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -22,6 +23,7 @@ use SplFileInfo;
  */
 final class PhpDocSelfReferenceFixer extends AbstractFixer
 {
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/phpdoc_self_reference';
@@ -46,6 +48,7 @@ final class PhpDocSelfReferenceFixer extends AbstractFixer
             && $tokens->isTokenKindFound(T_CLASS);
     }
 
+    #[Override]
     public function getPriority(): int
     {
         return 0;
@@ -56,13 +59,14 @@ final class PhpDocSelfReferenceFixer extends AbstractFixer
         // Build a map of: doc-comment token index → class short name
         // by tracking class context as we walk the token stream.
         $classStack = []; // stack of ['name' => string, 'braceDepth' => int]
-        $braceDepth  = 0;
+        $braceDepth = 0;
 
         for ($i = 0, $count = $tokens->count(); $i < $count; ++$i) {
             $token = $tokens[$i];
 
             if ($token->equals('{')) {
                 ++$braceDepth;
+
                 continue;
             }
 
@@ -83,7 +87,7 @@ final class PhpDocSelfReferenceFixer extends AbstractFixer
 
                 if ($nameIndex !== null && $tokens[$nameIndex]->isGivenKind(T_STRING)) {
                     $classStack[] = [
-                        'name'       => $tokens[$nameIndex]->getContent(),
+                        'name' => $tokens[$nameIndex]->getContent(),
                         'braceDepth' => $braceDepth, // depth at which the '{' will settle
                     ];
                 }
@@ -92,12 +96,16 @@ final class PhpDocSelfReferenceFixer extends AbstractFixer
             }
 
             // Process doc comments only when we're inside a class body
-            if (!$token->isGivenKind(T_DOC_COMMENT) || $classStack === []) {
+            if (!$token->isGivenKind(T_DOC_COMMENT)) {
+                continue;
+            }
+
+            if ($classStack === []) {
                 continue;
             }
 
             $className = end($classStack)['name'];
-            $fixed     = $this->replaceClassNameInDocComment($token->getContent(), $className);
+            $fixed = $this->replaceClassNameInDocComment($token->getContent(), $className);
 
             if ($fixed !== $token->getContent()) {
                 $tokens[$i] = new Token([T_DOC_COMMENT, $fixed]);
@@ -116,7 +124,7 @@ final class PhpDocSelfReferenceFixer extends AbstractFixer
         return preg_replace_callback(
             '/(@(?:var|param|return|property(?:-read|-write)?|throws|type))\s+([^\s*]+)/i',
             static function (array $m) use ($className): string {
-                $tag  = $m[1];
+                $tag = $m[1];
                 $type = $m[2];
 
                 // Word-boundary replacement that skips FQCN tokens (preceded by \)

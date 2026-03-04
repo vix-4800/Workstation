@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -15,7 +16,7 @@ use SplFileInfo;
 
 final class NoYodaComparisonFixer extends AbstractFixer
 {
-    private const COMPARISON_OPERATORS = [
+    private const array COMPARISON_OPERATORS = [
         T_IS_EQUAL,
         T_IS_NOT_EQUAL,
         T_IS_IDENTICAL,
@@ -24,13 +25,14 @@ final class NoYodaComparisonFixer extends AbstractFixer
         T_IS_GREATER_OR_EQUAL,
     ];
 
-    private const LITERAL_TOKEN_KINDS = [
+    private const array LITERAL_TOKEN_KINDS = [
         T_LNUMBER,
         T_DNUMBER,
         T_CONSTANT_ENCAPSED_STRING,
         T_STRING,
     ];
 
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/no_yoda_comparison';
@@ -54,6 +56,7 @@ final class NoYodaComparisonFixer extends AbstractFixer
         return $tokens->isAnyTokenKindsFound(self::COMPARISON_OPERATORS);
     }
 
+    #[Override]
     public function getPriority(): int
     {
         return -10;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
@@ -18,6 +19,9 @@ use SplFileInfo;
 
 final class NumericLiteralSeparatorFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
+    public $configuration;
+
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/numeric_literal_separator';
@@ -38,7 +42,11 @@ final class NumericLiteralSeparatorFixer extends AbstractFixer implements Config
 
     public function isCandidate(Tokens $tokens): bool
     {
-        return $tokens->isTokenKindFound(T_LNUMBER) || $tokens->isTokenKindFound(T_DNUMBER);
+        if ($tokens->isTokenKindFound(T_LNUMBER)) {
+            return true;
+        }
+
+        return $tokens->isTokenKindFound(T_DNUMBER);
     }
 
     public function configure(array $configuration): void
@@ -55,12 +63,13 @@ final class NumericLiteralSeparatorFixer extends AbstractFixer implements Config
         return $this->createConfigurationDefinition();
     }
 
+    #[Override]
     public function getPriority(): int
     {
         return 0;
     }
 
-    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
+    private function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('min_digits', 'Minimum number of digits before applying separator.'))

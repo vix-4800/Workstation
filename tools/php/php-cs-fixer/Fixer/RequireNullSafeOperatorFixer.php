@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -14,6 +15,7 @@ use SplFileInfo;
 
 final class RequireNullSafeOperatorFixer extends AbstractFixer
 {
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/require_null_safe_operator';
@@ -38,6 +40,7 @@ final class RequireNullSafeOperatorFixer extends AbstractFixer
             && $tokens->isTokenKindFound(T_OBJECT_OPERATOR);
     }
 
+    #[Override]
     public function getPriority(): int
     {
         // Run after no_yoda_comparison so conditions are already normalized
@@ -169,7 +172,7 @@ final class RequireNullSafeOperatorFixer extends AbstractFixer
         }
 
         // Trim trailing whitespace tokens from the method chain
-        while (!empty($methodChainTokens) && $methodChainTokens[count($methodChainTokens) - 1]->isWhitespace()) {
+        while ($methodChainTokens !== [] && $methodChainTokens[count($methodChainTokens) - 1]->isWhitespace()) {
             array_pop($methodChainTokens);
         }
 
@@ -191,6 +194,9 @@ final class RequireNullSafeOperatorFixer extends AbstractFixer
      *
      * Tracks bracket depth to skip colons inside (), [], {}, and tracks
      * nested ternary depth to match the correct colon.
+     *
+     * @param Tokens $tokens
+     * @param int    $questionMarkIndex
      */
     private function findTernaryColon(Tokens $tokens, int $questionMarkIndex): ?int
     {
@@ -199,7 +205,11 @@ final class RequireNullSafeOperatorFixer extends AbstractFixer
         for ($i = $questionMarkIndex + 1, $count = $tokens->count(); $i < $count; ++$i) {
             $token = $tokens[$i];
 
-            if ($token->isGivenKind(T_OBJECT_OPERATOR) || $token->isGivenKind(T_NULLSAFE_OBJECT_OPERATOR)) {
+            if ($token->isGivenKind(T_OBJECT_OPERATOR)) {
+                continue;
+            }
+
+            if ($token->isGivenKind(T_NULLSAFE_OBJECT_OPERATOR)) {
                 continue;
             }
 
@@ -236,6 +246,6 @@ final class RequireNullSafeOperatorFixer extends AbstractFixer
 
     private function isNullToken(Token $token): bool
     {
-        return $token->isGivenKind(T_STRING) && strtolower($token->getContent()) === 'null';
+        return $token->isGivenKind(T_STRING) && mb_strtolower($token->getContent()) === 'null';
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -17,6 +18,7 @@ use SplFileInfo;
  */
 final class PhpDocOpeningLineFixer extends AbstractFixer
 {
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/phpdoc_opening_line';
@@ -41,6 +43,7 @@ final class PhpDocOpeningLineFixer extends AbstractFixer
         return $tokens->isTokenKindFound(T_DOC_COMMENT);
     }
 
+    #[Override]
     public function getPriority(): int
     {
         // Run before phpdoc_trim so its output is already clean.
@@ -71,7 +74,7 @@ final class PhpDocOpeningLineFixer extends AbstractFixer
         // Already good: /**\n * desc\n */   → untouched
         // Needs fix:    /** desc\n * ...\n */ → /**\n * desc\n * ...\n */
 
-        $firstNewline = strpos($content, "\n");
+        $firstNewline = mb_strpos($content, "\n");
 
         // No newline → single-line comment, skip.
         if ($firstNewline === false) {
@@ -79,7 +82,7 @@ final class PhpDocOpeningLineFixer extends AbstractFixer
         }
 
         // Extract the part of the opening line after /**.
-        $openingLineContent = substr($content, 3, $firstNewline - 3);
+        $openingLineContent = mb_substr($content, 3, $firstNewline - 3);
 
         // If there is no non-whitespace character on the opening line, it's
         // already correctly formatted (/** is alone on its line).
@@ -87,7 +90,7 @@ final class PhpDocOpeningLineFixer extends AbstractFixer
             return $content;
         }
 
-        $rest = substr($content, $firstNewline);
+        $rest = mb_substr($content, $firstNewline);
 
         // Detect indentation from the first continuation line (e.g. "    * ...")
         // so the new line matches the indentation of the whole block.

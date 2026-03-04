@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -21,6 +22,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
     private bool $needsThrowableImport = false;
 
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/catch_exception_to_throwable';
@@ -44,6 +46,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
         return $tokens->isAnyTokenKindsFound([T_CATCH, T_USE]);
     }
 
+    #[Override]
     public function getPriority(): int
     {
         return 0;
@@ -92,7 +95,11 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
                 continue;
             }
 
-            if ($curlyDepth > 0 || !$token->isGivenKind(T_USE)) {
+            if ($curlyDepth > 0) {
+                continue;
+            }
+
+            if (!$token->isGivenKind(T_USE)) {
                 continue;
             }
 
@@ -152,10 +159,10 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
     }
 
     /**
-     * @param array<string, true> $aliases
      * @param Tokens              $tokens
      * @param int                 $start
      * @param int                 $end
+     * @param array<string, true> $aliases
      */
     private function collectAliasFromUseSegment(Tokens $tokens, int $start, int $end, array &$aliases): void
     {
@@ -312,7 +319,11 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
         for ($i = $start; $i <= $end; ++$i) {
             $token = $tokens[$i];
 
-            if ($token->isWhitespace() || $token->isComment()) {
+            if ($token->isWhitespace()) {
+                continue;
+            }
+
+            if ($token->isComment()) {
                 continue;
             }
 
@@ -360,7 +371,11 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
                 continue;
             }
 
-            if ($curlyDepth > 0 || !$token->isGivenKind(T_USE)) {
+            if ($curlyDepth > 0) {
+                continue;
+            }
+
+            if (!$token->isGivenKind(T_USE)) {
                 continue;
             }
 
@@ -420,7 +435,11 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
                 continue;
             }
 
-            if ($curlyDepth > 0 || !$token->isGivenKind(T_USE)) {
+            if ($curlyDepth > 0) {
+                continue;
+            }
+
+            if (!$token->isGivenKind(T_USE)) {
                 continue;
             }
 
@@ -513,7 +532,7 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
 
         $parts = explode('\\', $trimmed);
 
-        return (string) end($parts);
+        return end($parts);
     }
 
     private function readTypeName(Tokens $tokens, int $start, int $end): string
@@ -523,7 +542,11 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
         for ($i = $start; $i <= $end; ++$i) {
             $token = $tokens[$i];
 
-            if ($token->isWhitespace() || $token->isComment()) {
+            if ($token->isWhitespace()) {
+                continue;
+            }
+
+            if ($token->isComment()) {
                 continue;
             }
 
@@ -547,7 +570,11 @@ final class CatchExceptionToThrowableFixer extends AbstractFixer
         for ($i = $start; $i <= $end; ++$i) {
             $token = $tokens[$i];
 
-            if ($token->isWhitespace() || $token->isComment()) {
+            if ($token->isWhitespace()) {
+                continue;
+            }
+
+            if ($token->isComment()) {
                 continue;
             }
 

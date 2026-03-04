@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CustomFixer;
 
+use Override;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\ConfigurableFixerTrait;
@@ -25,6 +26,7 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
     /** @use ConfigurableFixerTrait<array{tags: list<string>}, array{tags: list<string>}> */
     use ConfigurableFixerTrait;
 
+    #[Override]
     public function getName(): string
     {
         return 'CustomFixer/remove_doc_block_tags';
@@ -39,8 +41,8 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
                     "<?php\n/**\n * My class.\n *\n * @category  Class\n * @package   Crm\n * @author    User <user@example.com>\n * @copyright 2024 Crm\n * @license   MIT License\n * @link      http://example.com/\n */\nclass Foo {}\n"
                 ),
             ],
-            'Removes unwanted PHPDoc tags such as @category, @author, @copyright, etc. ' .
-            'After removal, empty doc blocks are cleaned up by the no_empty_phpdoc fixer.'
+            'Removes unwanted PHPDoc tags such as @category, @author, @copyright, etc. '
+            . 'After removal, empty doc blocks are cleaned up by the no_empty_phpdoc fixer.'
         );
     }
 
@@ -49,6 +51,7 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
         return $tokens->isTokenKindFound(T_DOC_COMMENT);
     }
 
+    #[Override]
     public function getPriority(): int
     {
         // Must run before:
@@ -100,7 +103,7 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
             }
 
             $original = $tokens[$index]->getContent();
-            $fixed    = $this->stripUnwantedTags($original, $tagPattern);
+            $fixed = $this->stripUnwantedTags($original, $tagPattern);
 
             if ($fixed !== $original) {
                 $tokens[$index] = new Token([T_DOC_COMMENT, $fixed]);
@@ -113,25 +116,29 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
      *
      * A continuation line is a doc-comment line that does NOT start with "@" and
      * follows directly after a tag line (used for multi-line tag values).
+     *
+     * @param string $docComment
+     * @param string $tagPattern
      */
     private function stripUnwantedTags(string $docComment, string $tagPattern): string
     {
-        $lines   = explode("\n", $docComment);
-        $result  = [];
+        $lines = explode("\n", $docComment);
+        $result = [];
         $skipping = false;
 
         foreach ($lines as $line) {
-            $trimmed = ltrim($line, " \t");
+            $trimmed = mb_ltrim($line, " \t");
 
             // Detect a doc-comment body line: starts with "* " or is just "*"
             $isDocLine = str_starts_with($trimmed, '*') && !str_starts_with($trimmed, '*/');
 
             if ($isDocLine) {
-                $afterStar = ltrim(substr($trimmed, 1), " \t");
+                $afterStar = mb_ltrim(mb_substr($trimmed, 1), " \t");
 
                 if (preg_match('/^@(?:' . $tagPattern . ')(?:\s|$)/i', $afterStar)) {
                     // This line opens an unwanted tag — skip it and any continuation lines
                     $skipping = true;
+
                     continue;
                 }
 
@@ -147,6 +154,7 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
                         // Blank doc line (only " * ") — stop skipping but drop the blank line;
                         // phpdoc_trim will handle any leftover blanks
                         $skipping = false;
+
                         continue;
                     }
                 }
@@ -158,12 +166,10 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
         }
 
         // Collapse multiple consecutive blank doc lines (" *") into one
-        $joined  = implode("\n", $result);
-        $joined  = (string) preg_replace('/(\n[ \t]*\*[ \t]*)(\n[ \t]*\*[ \t]*)+/', '$1', $joined);
+        $joined = implode("\n", $result);
+        $joined = (string) preg_replace('/(\n[ \t]*\*[ \t]*)(\n[ \t]*\*[ \t]*)+/', '$1', $joined);
 
         // Remove a leading blank line right after "/**"
-        $joined = (string) preg_replace('/^(\/\*\*)(\n[ \t]*\*[ \t]*\n)/', "$1\n", $joined);
-
-        return $joined;
+        return (string) preg_replace('/^(\/\*\*)(\n[ \t]*\*[ \t]*\n)/', "$1\n", $joined);
     }
 }
