@@ -6,6 +6,7 @@ namespace CustomFixer;
 
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
+use PhpCsFixer\Fixer\ConfigurableFixerTrait;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
@@ -21,8 +22,8 @@ use SplFileInfo;
  */
 final class RemoveDocBlockTagsFixer extends AbstractFixer implements ConfigurableFixerInterface
 {
-    /** @var array<string, mixed> */
-    private array $configuration = [];
+    /** @use ConfigurableFixerTrait<array{tags: list<string>}, array{tags: list<string>}> */
+    use ConfigurableFixerTrait;
 
     public function getName(): string
     {
@@ -46,20 +47,6 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(T_DOC_COMMENT);
-    }
-
-    public function configure(array $configuration): void
-    {
-        if ($configuration === []) {
-            $configuration = $this->getConfigurationDefinition()->resolve([]);
-        }
-
-        $this->configuration = $this->getConfigurationDefinition()->resolve($configuration);
-    }
-
-    public function getConfigurationDefinition(): FixerConfigurationResolverInterface
-    {
-        return $this->createConfigurationDefinition();
     }
 
     public function getPriority(): int
