@@ -230,9 +230,12 @@ return (new Config())
                 'clone',
                 'continue',
                 'echo_print',
+                'negative_instanceof',
+                'others',
                 'return',
                 'switch_case',
-                'yield'
+                'yield',
+                'yield_from',
             ],
         ], // Removes unneeded control parentheses
         'clean_namespace' => true, // Removes unused use statements
