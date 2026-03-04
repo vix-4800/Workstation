@@ -74,7 +74,7 @@ return (new Config())
         'no_unset_cast' => true, // Forbids unset casting (deprecated)
         'no_unset_on_property' => true, // Forbids unset on object properties
         'standardize_not_equals' => true, // Standardizes inequality operators (!= → !==)
-        'escape_implicit_backslashes' => true, // Escapes implicit backslashes in strings
+        'string_implicit_backslashes' => true, // Escapes implicit backslashes in strings
         'explicit_indirect_variable' => true, // Uses braces for variable variables
         'logical_operators' => true, // Uses && and || instead of and and or for logical operations
         'non_printable_character' => true, // Removes non-printable characters from code
@@ -294,7 +294,7 @@ return (new Config())
             'keep_multiple_spaces_after_comma' => false,
         ], // Ensures fully multiline arguments
         'nullable_type_declaration_for_default_null_value' => true,
-        'new_with_braces' => true,
+        'new_with_parentheses' => true,
         'unary_operator_spaces' => true, // Ensures consistent spacing for unary operators
 
         // ─────────────────────────────────────────────────────────────────────────
@@ -324,7 +324,7 @@ return (new Config())
         'modernize_types_casting' => true, // Uses (int), (float), (string), (bool) for type casting
         'no_alias_functions' => true, // Disallow the use of alias functions
         'random_api_migration' => true, // Replaces deprecated random number generation functions with modern ones
-        'visibility_required' => ['elements' => ['property', 'method', 'const']], // Enforces visibility for all class properties and methods
+        'modifier_keywords' => ['elements' => ['property', 'method', 'const']], // Enforces visibility for all class properties and methods
         'self_accessor' => true, // Enforces the use of self:: for accessing static properties and methods
         'mb_str_functions' => true, // Enforces the use of mb_str_* functions for multibyte string operations
 
