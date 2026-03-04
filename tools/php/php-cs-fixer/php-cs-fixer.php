@@ -99,7 +99,11 @@ return (new Config())
         'phpdoc_indent' => true, // Indents PHPDoc comments
         'phpdoc_list_type' => true, // Normalizes list types in PHPDoc (e.g., array<int> → int[])
         'phpdoc_line_span' => true, // Changes doc blocks from single to multi line, or reversed.
-        'phpdoc_no_alias_tag' => true, // Removes PHPDoc alias tags
+        'phpdoc_no_alias_tag' => [
+            'const' => 'var',
+            'type' => 'var',
+            'link' => 'see',
+        ], // Removes PHPDoc alias tags
         'CustomFixer/remove_doc_block_tags' => [
             'tags' => [
                 'category',
@@ -125,6 +129,9 @@ return (new Config())
         'no_blank_lines_after_phpdoc' => true, // Removes blank lines after PHPDoc
         'multiline_comment_opening_closing' => true, // Ensures proper opening and closing of multiline comments
         'phpdoc_add_missing_param_annotation' => ['only_untyped' => false], // Adds missing @param annotations in PHPDoc
+        'phpdoc_array_type' => true, // PHPDoc array<T> type must be used instead of T[].
+        'phpdoc_param_order' => true, // Orders @param tags according to method signature
+        'phpdoc_tag_casing' => true, // Fixes casing of PHPDoc tags.
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
