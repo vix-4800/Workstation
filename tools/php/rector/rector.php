@@ -26,6 +26,7 @@ use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\Config\RectorConfig;
+use Rector\Custom\Rules\AddTypedClassConstantRector;
 use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
 use Rector\Custom\Rules\NullableBoolReturnToFalseRector;
 use Rector\Custom\Rules\ReplaceMultipleEqualWithInArrayRector;
@@ -230,6 +231,7 @@ $rules = [
     ExplicitNullableParamTypeRector::class,
 
     // Custom code quality rules
+    AddTypedClassConstantRector::class, // Add explicit type to class constants inferred from scalar literals (PHP 8.3+)
     ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
     NullableBoolReturnToFalseRector::class, // Replace ?bool return type with bool and return null → return false
     ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
