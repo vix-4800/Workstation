@@ -27,6 +27,7 @@ use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRe
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\Config\RectorConfig;
 use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
+use Rector\Custom\Rules\NullableBoolReturnToFalseRector;
 use Rector\Custom\Rules\ReplaceMultipleEqualWithInArrayRector;
 use Rector\Custom\Rules\Yii2FindAllIdShortcutRector;
 use Rector\Custom\Rules\Yii2FindOneFindAllShortcutRector;
@@ -230,6 +231,7 @@ $rules = [
 
     // Custom code quality rules
     ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
+    NullableBoolReturnToFalseRector::class, // Replace ?bool return type with bool and return null → return false
     ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
 ];
 
