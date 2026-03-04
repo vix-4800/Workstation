@@ -10,6 +10,7 @@ use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;
+use Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
@@ -216,6 +217,7 @@ $rules = [
     ChangeArrayPushToArrayAssignRector::class,
 
     // Strings
+    StrlenZeroToIdenticalEmptyStringRector::class, // Replaces strlen($x) === 0 / > 0 with $x === '' / !== ''
     SimplifyStrposLowerRector::class,
     SimplifyRegexPatternRector::class,
     MbStrContainsRector::class,
