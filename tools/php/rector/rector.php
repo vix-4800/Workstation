@@ -43,7 +43,6 @@ use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadIfBlockRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\DeadCode\Rector\Stmt\RemoveNextSameValueConditionRector;
-use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
@@ -51,7 +50,6 @@ use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
-use Rector\Privatization\Rector\ClassConst\PrivatizeFinalClassConstantRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
@@ -179,7 +177,6 @@ $rules = [
     UnusedForeachValueToArrayKeysRector::class,
     SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
     UnnecessaryTernaryExpressionRector::class, // Removes redundant ternary expressions
-    ContinueToBreakInSwitchRector::class,
     RemoveNextSameValueConditionRector::class,
 
     // Safety and strong typing
@@ -194,7 +191,6 @@ $rules = [
     DisallowedEmptyRuleFixerRector::class, // Disallow usage of empty()
     JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
     AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
-    PrivatizeFinalClassConstantRector::class,
     TypedStaticPropertyInBehatContextRector::class,
 
     // Remove dead code
