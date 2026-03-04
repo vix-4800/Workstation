@@ -14,8 +14,8 @@ use PhpCsFixer\Tokenizer\Tokens;
 use SplFileInfo;
 
 /**
- * Replaces the class name with `self` in PHPDoc type annotations (@var, @param,
- * @return, @property, @property-read, @property-write, @throws, @type)
+ * Replaces the class name with `self` in PHPDoc type annotations
+ * (var, param, return, property, property-read, property-write, throws, type)
  * whenever the annotation is inside the definition of that very class.
  *
  * Only exact short-name matches are replaced (word-boundary check).
@@ -38,7 +38,7 @@ final class PhpDocSelfReferenceFixer extends AbstractFixer
                     "<?php\nclass Foo {\n    /** @var Foo */\n    private Foo \$instance;\n}\n"
                 ),
             ],
-            'Only unqualified short names are replaced. FQCNs (\\Foo\\Bar) are kept as-is.'
+            'Only unqualified short names are replaced. FQCNs (\Foo\Bar) are kept as-is.'
         );
     }
 
@@ -129,7 +129,7 @@ final class PhpDocSelfReferenceFixer extends AbstractFixer
 
                 // Word-boundary replacement that skips FQCN tokens (preceded by \)
                 $replaced = preg_replace(
-                    '/(?<![\\\\\w])' . preg_quote($className, '/') . '(?![\w\\\\])/i',
+                    '/(?<![\\\\\w])' . preg_quote($className, '/') . '(?![\w\\\])/i',
                     'self',
                     $type
                 );

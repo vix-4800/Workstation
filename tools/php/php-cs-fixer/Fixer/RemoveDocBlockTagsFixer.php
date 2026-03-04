@@ -167,7 +167,7 @@ final class RemoveDocBlockTagsFixer extends AbstractFixer implements Configurabl
 
         // Collapse multiple consecutive blank doc lines (" *") into one
         $joined = implode("\n", $result);
-        $joined = (string) preg_replace('/(\n[ \t]*\*[ \t]*)(\n[ \t]*\*[ \t]*)+/', '$1', $joined);
+        $joined = (string) preg_replace('/(\n[ \t]*\*[ \t]*)(\n[ \t]*\*[ \t]*(?=\n|$))+/', '$1', $joined);
 
         // Remove a leading blank line right after "/**"
         return (string) preg_replace('/^(\/\*\*)(\n[ \t]*\*[ \t]*\n)/', "$1\n", $joined);
