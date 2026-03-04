@@ -13,6 +13,7 @@ use CustomFixer\NoYodaComparisonFixer;
 use CustomFixer\NumericLiteralSeparatorFixer;
 use CustomFixer\RemoveUnusedCatchVariableFixer;
 use CustomFixer\RemoveUnusedForeachKeyFixer;
+use CustomFixer\RemoveDocBlockTagsFixer;
 use CustomFixer\RequireNullSafeOperatorFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
@@ -25,6 +26,7 @@ require_once __DIR__ . '/Fixer/CatchExceptionToThrowableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedCatchVariableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedForeachKeyFixer.php';
 require_once __DIR__ . '/Fixer/RequireNullSafeOperatorFixer.php';
+require_once __DIR__ . '/Fixer/RemoveDocBlockTagsFixer.php';
 
 return (new Config())
     ->setRiskyAllowed(true)
@@ -40,6 +42,7 @@ return (new Config())
         new RemoveUnusedCatchVariableFixer(),
         new RemoveUnusedForeachKeyFixer(),
         new RequireNullSafeOperatorFixer(),
+        new RemoveDocBlockTagsFixer(),
     ])
     ->setRules([
         // ─────────────────────────────────────────────────────────────
@@ -97,7 +100,18 @@ return (new Config())
         'phpdoc_list_type' => true, // Normalizes list types in PHPDoc (e.g., array<int> → int[])
         'phpdoc_line_span' => true, // Changes doc blocks from single to multi line, or reversed.
         'phpdoc_no_alias_tag' => true, // Removes PHPDoc alias tags
-        'phpdoc_no_package' => true, // Removes PHPDoc package tags
+        'CustomFixer/remove_doc_block_tags' => [
+            'tags' => [
+                'category',
+                'package',
+                'subpackage',
+                'author',
+                'copyright',
+                'license',
+                'link',
+                'version',
+            ],
+        ],
         'phpdoc_no_useless_inheritdoc' => true, // Removes useless PHPDoc inheritdoc tags
         'phpdoc_no_empty_return' => true, // Removes empty @return tags
         'phpdoc_single_line_var_spacing' => true, // Ensures single line spacing for var tags
