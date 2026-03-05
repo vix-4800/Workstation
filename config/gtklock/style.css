@@ -250,3 +250,102 @@ scrollbar slider {
 scrollbar slider:hover {
     background-color: alpha(@overlay1, 0.7);
 }
+
+/* ── Network Module ─────────────────────────────────────────────────────── */
+
+#network-box {
+    background-color: alpha(@surface0, 0.75);
+    border: 1px solid alpha(@overlay0, 0.4);
+    border-radius: 20px;
+    padding: 6px 14px;
+}
+
+#network-icon {
+    color: @subtext1;
+    font-size: 14pt;
+    margin-right: 2px;
+}
+
+#network-label {
+    color: @text;
+    font-size: 10pt;
+    font-weight: 500;
+}
+
+/* Per-connection-type icon tinting */
+.network-wifi #network-icon {
+    color: @green;
+}
+
+.network-ethernet #network-icon {
+    color: @sapphire;
+}
+
+.network-other #network-icon {
+    color: @teal;
+}
+
+.network-none #network-icon {
+    color: @red;
+}
+
+.network-none #network-label {
+    color: @subtext0;
+}
+
+/* ── Battery Module ─────────────────────────────────────────────────────── */
+
+#battery-box {
+    background-color: alpha(@surface0, 0.75);
+    border: 1px solid alpha(@overlay0, 0.4);
+    border-radius: 20px;
+    padding: 6px 14px;
+}
+
+#battery-icon {
+    color: @subtext1;
+    font-size: 14pt;
+    margin-right: 2px;
+}
+
+#battery-label {
+    color: @text;
+    font-size: 10pt;
+    font-weight: 500;
+}
+
+/* Battery state classes */
+.battery-full #battery-icon {
+    color: @green;
+}
+
+.battery-charging #battery-icon {
+    color: @yellow;
+}
+
+.battery-ok #battery-icon {
+    color: @subtext1;
+}
+
+.battery-low #battery-icon {
+    color: @peach;
+}
+
+.battery-low #battery-label {
+    color: @peach;
+}
+
+.battery-critical #battery-icon {
+    color: @red;
+}
+
+.battery-critical #battery-label {
+    color: @red;
+    font-weight: bold;
+}
+
+/* Fade-in for status widgets */
+#network-box,
+#battery-box {
+    animation: fadeIn 0.4s ease-in-out;
+}
