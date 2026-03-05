@@ -1,0 +1,2 @@
+# Ignore actual profile files — they contain sensitive VPN credentials
+*.json
