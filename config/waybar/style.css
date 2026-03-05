@@ -45,7 +45,7 @@
 #custom-resources,
 #battery,
 #pulseaudio,
-#network,
+#custom-network,
 #bluetooth,
 #language,
 #custom-vpn,
@@ -67,7 +67,7 @@
 #custom-resources:hover,
 #battery:hover,
 #pulseaudio:hover,
-#network:hover,
+#custom-network:hover,
 #bluetooth:hover,
 #language:hover,
 #custom-vpn:hover,
@@ -122,8 +122,16 @@
     border-radius: 1rem;
 }
 
-#network {
+#custom-network {
     color: @yellow;
+}
+
+#custom-network.no-internet {
+    color: @peach;
+}
+
+#custom-network.disconnected {
+    color: @red;
 }
 
 #bluetooth {

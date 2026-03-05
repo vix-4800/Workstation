@@ -9,7 +9,7 @@
   "modules-right": [
     "custom/docker",
     "custom/vpn",
-    "network",
+    "custom/network",
     "bluetooth",
     "pulseaudio",
     "custom/microphone",
@@ -28,15 +28,11 @@
     }
   },
 
-  "network": {
-    "format-wifi": "",
-    "format-ethernet": "",
-    "format-disconnected": "⚠",
-    "tooltip-format": "{ifname} via {gwaddr}",
-    "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-    "tooltip-format-ethernet": "{ifname} ",
-    "tooltip-format-disconnected": "Disconnected",
-    "max-length": 50,
+  "custom/network": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 5,
+    "exec": "~/.config/waybar/scripts/network-status",
     "on-click": "~/.config/waybar/scripts/network-menu"
   },
 

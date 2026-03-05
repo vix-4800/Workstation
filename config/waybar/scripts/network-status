@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Detect active connection type via nmcli
+WIFI_DEVICE=$(nmcli -t -f DEVICE,TYPE,STATE device 2>/dev/null | awk -F: '$2=="wifi" && $3=="connected" {print $1; exit}')
+ETH_DEVICE=$(nmcli -t -f DEVICE,TYPE,STATE device 2>/dev/null | awk -F: '$2=="ethernet" && $3=="connected" {print $1; exit}')
+
+if [[ -z "$WIFI_DEVICE" && -z "$ETH_DEVICE" ]]; then
+    echo '{"text": "󰤮", "class": "disconnected", "tooltip": "Disconnected"}'
+    exit 0
+fi
+
+# Build connection info for tooltip
+if [[ -n "$WIFI_DEVICE" ]]; then
+    CONNECTION_TYPE="wifi"
+    ICON=""
+    SSID=$(nmcli -t -f ACTIVE,SSID device wifi 2>/dev/null | awk -F: '$1=="yes" {print $2; exit}')
+    SIGNAL=$(nmcli -t -f ACTIVE,SIGNAL device wifi 2>/dev/null | awk -F: '$1=="yes" {print $2; exit}')
+    CONN_INFO="${SSID} (${SIGNAL}%) "
+else
+    CONNECTION_TYPE="ethernet"
+    ICON="󰈀"
+    CONN_INFO="Ethernet: ${ETH_DEVICE}"
+fi
+
+# Check actual internet connectivity (1-second timeout, single ping)
+if ping -c 1 -W 1 1.1.1.1 &>/dev/null; then
+    echo "{\"text\": \"${ICON}\", \"class\": \"online ${CONNECTION_TYPE}\", \"tooltip\": \"${CONN_INFO}\"}"
+else
+    echo "{\"text\": \"${ICON} \", \"class\": \"no-internet ${CONNECTION_TYPE}\", \"tooltip\": \"${CONN_INFO}— No internet\"}"
+fi
