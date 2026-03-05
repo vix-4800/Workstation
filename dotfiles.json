@@ -211,6 +211,16 @@
       "comment": "Check for global Composer package updates"
     },
     {
+      "source": "bin/vpn",
+      "target": "$HOME/.local/bin/vpn",
+      "comment": "VPN manager for WireGuard and VLESS/sing-box"
+    },
+    {
+      "source": "config/sing-box",
+      "target": "$HOME/.config/sing-box",
+      "comment": "sing-box VPN profiles (actual *.json profiles are gitignored)"
+    },
+    {
       "source": "config/user-dirs.dirs",
       "target": "$HOME/.config/user-dirs.dirs",
       "comment": "XDG user directories configuration"

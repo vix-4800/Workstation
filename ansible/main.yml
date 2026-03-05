@@ -61,6 +61,8 @@
 # Applications
 - name: 'Install Waypaper wallpaper selector'
   import_playbook: apps/waypaper.yml
+- name: 'Install sing-box VPN'
+  import_playbook: apps/sing-box.yml
 
 # Appearance
 - name: 'Install fonts'
