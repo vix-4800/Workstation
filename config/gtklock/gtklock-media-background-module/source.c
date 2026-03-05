@@ -379,8 +379,12 @@ static void load_album_art(struct Window *ctx) {
         g_object_unref(file);
     } else if (g_strcmp0("http", scheme) == 0 || g_strcmp0("https", scheme) == 0) {
         SoupMessage *msg = soup_message_new(SOUP_METHOD_GET, uri);
-        soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, http_callback, ctx);
-        g_object_unref(msg);
+        if (msg) {
+            soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, http_callback, ctx);
+            g_object_unref(msg);
+        } else {
+            load_fallback(ctx);
+        }
     } else {
         load_fallback(ctx);
     }
@@ -424,8 +428,12 @@ static void load_album_art_from_metadata(struct Window *ctx, GVariant *metadata)
         g_object_unref(file);
     } else if (g_strcmp0("http", scheme) == 0 || g_strcmp0("https", scheme) == 0) {
         SoupMessage *msg = soup_message_new(SOUP_METHOD_GET, uri);
-        soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, http_callback, ctx);
-        g_object_unref(msg);
+        if (msg) {
+            soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, http_callback, ctx);
+            g_object_unref(msg);
+        } else {
+            load_fallback(ctx);
+        }
     } else {
         load_fallback(ctx);
     }

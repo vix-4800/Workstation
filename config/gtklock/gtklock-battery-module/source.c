@@ -221,11 +221,8 @@ static void update_window(struct Window *win) {
 
 static gboolean timer_update(gpointer data) {
     (void)data;
-    if (!global_gtklock) return G_SOURCE_REMOVE;
-    for (guint i = 0; i < global_gtklock->windows->len; i++) {
-        struct Window *win = &g_array_index(global_gtklock->windows, struct Window, i);
-        update_window(win);
-    }
+    if (!global_gtklock || !global_gtklock->focused_window) return G_SOURCE_CONTINUE;
+    update_window(global_gtklock->focused_window);
     return G_SOURCE_CONTINUE;
 }
 
@@ -294,6 +291,6 @@ void on_window_destroy(struct GtkLock *gtklock, struct Window *win) {
 
 void on_locked(struct GtkLock *gtklock)                                               { (void)gtklock; }
 void on_output_change(struct GtkLock *gtklock)                                        { (void)gtklock; }
-void on_focus_change(struct GtkLock *gtklock, struct Window *win, struct Window *old) { (void)gtklock; (void)win; (void)old; }
+void on_focus_change(struct GtkLock *gtklock, struct Window *win, struct Window *old) { (void)gtklock; (void)old; if (win) update_window(win); }
 void on_idle_hide(struct GtkLock *gtklock)                                            { (void)gtklock; }
 void on_idle_show(struct GtkLock *gtklock)                                            { (void)gtklock; }
