@@ -128,25 +128,37 @@ resolve_variables() {
 
 read_mappings() {
     require_json
-    jq -r '.mappings[] | "\(.source)\t\(.target)"' "${CONF_JSON}"
+    jq -r '.mappings[] | "\(.source)\t\(.target)\t\(.sudo // false)"' "${CONF_JSON}"
+}
+
+maybe_sudo() {
+    local needs_sudo="$1"
+    shift
+    if [[ "${needs_sudo}" == "true" ]]; then
+        sudo "$@"
+    else
+        "$@"
+    fi
 }
 
 ensure_parent_dir() {
     local path="$1"
+    local needs_sudo="${2:-false}"
     local dir
     dir="$(dirname "${path}")"
-    mkdir -p "${dir}"
+    maybe_sudo "${needs_sudo}" mkdir -p "${dir}"
 }
 
 backup_if_exists() {
     local target="$1"
-    if [[ -e "${target}" ]] && [[ ! -L "${target}" ]]; then
+    local needs_sudo="${2:-false}"
+    if maybe_sudo "${needs_sudo}" test -e "${target}" && ! maybe_sudo "${needs_sudo}" test -L "${target}"; then
         mkdir -p "${BACKUP_DIR}"
         local ts base dest
         ts="$(timestamp)"
         base="$(basename "${target}")"
         dest="${BACKUP_DIR}/${base}.${ts}.bak"
-        mv "${target}" "${dest}"
+        maybe_sudo "${needs_sudo}" mv "${target}" "${dest}"
         ok "Backup ${BOLD}${target}${OFF} ${DIM}->${OFF} ${BLU}${dest}${OFF}"
     fi
 }
@@ -170,7 +182,7 @@ make_absolute_source() {
 
 # Dotfiles commands
 do_link() {
-    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW; do
+    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW NEEDS_SUDO; do
         local SRC TGT
         SRC="$(make_absolute_source "${SRC_RAW}")"
         TGT="$(resolve_variables "${TGT_RAW}")"
@@ -180,13 +192,15 @@ do_link() {
             continue
         fi
 
-        ensure_parent_dir "${TGT}"
+        ensure_parent_dir "${TGT}" "${NEEDS_SUDO}"
 
         if [[ "${DRYRUN}" -eq 1 ]]; then
-            msg "${DIM}DRY-RUN:${OFF} ln -sfn ${BLU}${SRC}${OFF} ${BOLD}${TGT}${OFF}"
+            local prefix=""
+            [[ "${NEEDS_SUDO}" == "true" ]] && prefix="sudo "
+            msg "${DIM}DRY-RUN:${OFF} ${prefix}ln -sfn ${BLU}${SRC}${OFF} ${BOLD}${TGT}${OFF}"
         else
-            backup_if_exists "${TGT}"
-            ln -sfn "${SRC}" "${TGT}"
+            backup_if_exists "${TGT}" "${NEEDS_SUDO}"
+            maybe_sudo "${NEEDS_SUDO}" ln -sfn "${SRC}" "${TGT}"
             ok "Linked: ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${BLU}${SRC}${OFF}"
         fi
     done
@@ -201,15 +215,15 @@ do_link() {
 }
 
 do_unlink() {
-    read_mappings | while IFS=$'\t' read -r _ TGT_RAW; do
+    read_mappings | while IFS=$'\t' read -r _ TGT_RAW NEEDS_SUDO; do
         local TGT
         TGT="$(resolve_variables "${TGT_RAW}")"
 
-        if [[ -L "${TGT}" ]]; then
+        if maybe_sudo "${NEEDS_SUDO}" test -L "${TGT}" 2>/dev/null; then
             if [[ "${DRYRUN}" -eq 1 ]]; then
                 msg "${DIM}DRY-RUN:${OFF} rm ${BOLD}${TGT}${OFF}"
             else
-                rm "${TGT}"
+                maybe_sudo "${NEEDS_SUDO}" rm "${TGT}"
                 ok "Removed symlink: ${BOLD}${TGT}${OFF}"
             fi
         else
@@ -219,19 +233,23 @@ do_unlink() {
 }
 
 do_status() {
-    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW; do
+    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW NEEDS_SUDO; do
         local SRC TGT
         SRC="$(make_absolute_source "${SRC_RAW}")"
         TGT="$(resolve_variables "${TGT_RAW}")"
 
-        if [[ -L "${TGT}" ]] && [[ ! -e "${TGT}" ]]; then
+        local is_link=false is_exists=false
+        maybe_sudo "${NEEDS_SUDO}" test -L "${TGT}" 2>/dev/null && is_link=true || true
+        maybe_sudo "${NEEDS_SUDO}" test -e "${TGT}" 2>/dev/null && is_exists=true || true
+
+        if [[ "${is_link}" == "true" ]] && [[ "${is_exists}" == "false" ]]; then
             echo -e "${RED}💀${OFF} ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${RED}BROKEN LINK${OFF} ${DIM}(source missing: ${SRC})${OFF}"
             continue
         fi
 
-        if [[ -L "${TGT}" ]]; then
+        if [[ "${is_link}" == "true" ]]; then
             local points
-            points="$(readlink "${TGT}")"
+            points="$(maybe_sudo "${NEEDS_SUDO}" readlink "${TGT}")"
 
             case "${points}" in
                 /*) ;;
@@ -247,7 +265,7 @@ do_status() {
             else
                 echo -e "${RED}✗${OFF} ${BOLD}${TGT}${OFF} ${DIM}->${OFF} ${YLW}${points}${OFF} ${RED}(expected ${SRC})${OFF}"
             fi
-        elif [[ -e "${TGT}" ]]; then
+        elif [[ "${is_exists}" == "true" ]]; then
             echo -e "${YLW}⚠${OFF} ${BOLD}${TGT}${OFF} ${DIM}— regular file/folder, not symlink${OFF}"
         else
             echo -e "${DIM}–${OFF} ${BOLD}${TGT}${OFF} ${DIM}— missing${OFF}"

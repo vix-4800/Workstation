@@ -25,6 +25,10 @@
           "comment": {
             "type": "string",
             "description": "Optional comment for this mapping"
+          },
+          "sudo": {
+            "type": "boolean",
+            "description": "Whether to use sudo when creating/removing the symlink (for system paths outside $HOME)"
           }
         },
         "required": ["source", "target"],
