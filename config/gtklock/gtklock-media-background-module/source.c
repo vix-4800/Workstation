@@ -72,35 +72,24 @@ GOptionEntry module_entries[] = {
     { NULL },
 };
 
-static void disconnect_player_signals(void) {
-    if (current_player) {
-        if (metadata_handler_id > 0) {
-            g_signal_handler_disconnect(current_player, metadata_handler_id);
-            metadata_handler_id = 0;
-        }
-        if (playback_handler_id > 0) {
-            g_signal_handler_disconnect(current_player, playback_handler_id);
-            playback_handler_id = 0;
-        }
+static void safe_disconnect(gpointer instance, gulong *handler_id) {
+    if (*handler_id > 0 && instance && G_IS_OBJECT(instance) &&
+        g_signal_handler_is_connected(instance, *handler_id)) {
+        g_signal_handler_disconnect(instance, *handler_id);
     }
+    *handler_id = 0;
+}
+
+static void disconnect_player_signals(void) {
+    safe_disconnect(current_player, &metadata_handler_id);
+    safe_disconnect(current_player, &playback_handler_id);
 }
 
 static void disconnect_all_signals(void) {
     disconnect_player_signals();
-    if (player_manager) {
-        if (player_appeared_handler_id > 0) {
-            g_signal_handler_disconnect(player_manager, player_appeared_handler_id);
-            player_appeared_handler_id = 0;
-        }
-        if (player_vanished_handler_id > 0) {
-            g_signal_handler_disconnect(player_manager, player_vanished_handler_id);
-            player_vanished_handler_id = 0;
-        }
-        if (name_appeared_handler_id > 0) {
-            g_signal_handler_disconnect(player_manager, name_appeared_handler_id);
-            name_appeared_handler_id = 0;
-        }
-    }
+    safe_disconnect(player_manager, &player_appeared_handler_id);
+    safe_disconnect(player_manager, &player_vanished_handler_id);
+    safe_disconnect(player_manager, &name_appeared_handler_id);
 }
 
 static gboolean is_player_allowed(const gchar *player_name) {
@@ -529,18 +518,20 @@ void g_module_unload(GModule *m) {
     is_active = FALSE;
     disconnect_all_signals();
 
-    if (current_player) {
+    if (current_player && G_IS_OBJECT(current_player)) {
         g_object_unref(current_player);
-        current_player = NULL;
     }
-    if (player_manager) {
+    current_player = NULL;
+
+    if (player_manager && G_IS_OBJECT(player_manager)) {
         g_object_unref(player_manager);
-        player_manager = NULL;
     }
-    if (soup_session) {
+    player_manager = NULL;
+
+    if (soup_session && G_IS_OBJECT(soup_session)) {
         g_object_unref(soup_session);
-        soup_session = NULL;
     }
+    soup_session = NULL;
 
     g_free(background_size);
     g_free(background_position);
