@@ -111,24 +111,53 @@ static gchar *find_battery_path(void) {
     GDir   *dir = g_dir_open(base, 0, NULL);
     if (!dir) return NULL;
 
-    gchar *found = NULL;
+    gchar *found_bat  = NULL;  // BAT* match
+    gchar *found_any  = NULL;  // any system battery
+
     const gchar *name;
-
     while ((name = g_dir_read_name(dir)) != NULL) {
-        gchar *type_path = g_build_filename(base, name, "type", NULL);
-        gchar *type      = sysfs_read(type_path);
+        gchar *type_path  = g_build_filename(base, name, "type",  NULL);
+        gchar *scope_path = g_build_filename(base, name, "scope", NULL);
+        gchar *type  = sysfs_read(type_path);
+        gchar *scope = sysfs_read(scope_path);
         g_free(type_path);
+        g_free(scope_path);
 
-        if (type && g_strcmp0(type, "Battery") == 0) {
-            found = g_build_filename(base, name, NULL);
-            g_free(type);
-            break;
-        }
+        gboolean is_battery    = type  && g_strcmp0(type,  "Battery") == 0;
+        gboolean is_device     = scope && g_strcmp0(scope, "Device")  == 0;
+
         g_free(type);
+        g_free(scope);
+
+        if (!is_battery || is_device) continue;
+
+        gchar *entry = g_build_filename(base, name, NULL);
+
+        // Prefer entries named BAT* (case-insensitive)
+        if (!found_bat) {
+            gchar *lower = g_ascii_strdown(name, -1);
+            if (g_str_has_prefix(lower, "bat")) {
+                found_bat = entry;
+                g_free(lower);
+                break;
+            }
+            g_free(lower);
+        }
+
+        if (!found_any) {
+            found_any = entry;
+        } else {
+            g_free(entry);
+        }
     }
 
     g_dir_close(dir);
-    return found;
+
+    if (found_bat) {
+        g_free(found_any);
+        return found_bat;
+    }
+    return found_any;
 }
 
 static BatState query_battery(void) {
