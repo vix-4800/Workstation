@@ -128,7 +128,7 @@ resolve_variables() {
 
 read_mappings() {
     require_json
-    jq -r '.mappings[] | "\(.source)\t\(.target)\t\(.sudo // false)"' "${CONF_JSON}"
+    jq -r '.mappings[] | "\(.source)\t\(.target // "__NONE__")\t\(.sudo // false)\t\(.action // "")"' "${CONF_JSON}"
 }
 
 maybe_sudo() {
@@ -180,18 +180,40 @@ make_absolute_source() {
     fi
 }
 
+# Returns the NM connection name derived from a wg-quick config file path
+# (e.g. /repo/wireguard/wg0.conf -> wg0)
+nmcli_conn_name() {
+    local src="$1"
+    basename "${src}" .conf
+}
+
 # Dotfiles commands
 do_link() {
-    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW NEEDS_SUDO; do
-        local SRC TGT
+    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW NEEDS_SUDO ACTION; do
+        local SRC
         SRC="$(make_absolute_source "${SRC_RAW}")"
-        TGT="$(resolve_variables "${TGT_RAW}")"
 
         if [[ ! -e "${SRC}" ]]; then
             warn "Source missing: ${DIM}${SRC}${OFF} — skipping"
             continue
         fi
 
+        if [[ "${ACTION}" == "nmcli-import" ]]; then
+            local conn_name
+            conn_name="$(nmcli_conn_name "${SRC}")"
+            if [[ "${DRYRUN}" -eq 1 ]]; then
+                msg "${DIM}DRY-RUN:${OFF} sudo nmcli connection import type wireguard file ${BLU}${SRC}${OFF}"
+            else
+                # Delete existing connection with the same name to allow re-import
+                sudo nmcli connection delete "${conn_name}" 2>/dev/null || true
+                sudo nmcli connection import type wireguard file "${SRC}"
+                ok "Imported: ${BOLD}${conn_name}${OFF} ${DIM}(${SRC})${OFF}"
+            fi
+            continue
+        fi
+
+        local TGT
+        TGT="$(resolve_variables "${TGT_RAW}")"
         ensure_parent_dir "${TGT}" "${NEEDS_SUDO}"
 
         if [[ "${DRYRUN}" -eq 1 ]]; then
@@ -215,7 +237,24 @@ do_link() {
 }
 
 do_unlink() {
-    read_mappings | while IFS=$'\t' read -r _ TGT_RAW NEEDS_SUDO; do
+    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW NEEDS_SUDO ACTION; do
+        if [[ "${ACTION}" == "nmcli-import" ]]; then
+            local SRC conn_name
+            SRC="$(make_absolute_source "${SRC_RAW}")"
+            conn_name="$(nmcli_conn_name "${SRC}")"
+            if [[ "${DRYRUN}" -eq 1 ]]; then
+                msg "${DIM}DRY-RUN:${OFF} sudo nmcli connection delete ${BOLD}${conn_name}${OFF}"
+            else
+                if sudo nmcli connection show "${conn_name}" &>/dev/null; then
+                    sudo nmcli connection delete "${conn_name}"
+                    ok "Deleted NM connection: ${BOLD}${conn_name}${OFF}"
+                else
+                    warn "NM connection not found: ${BOLD}${conn_name}${OFF}"
+                fi
+            fi
+            continue
+        fi
+
         local TGT
         TGT="$(resolve_variables "${TGT_RAW}")"
 
@@ -233,9 +272,26 @@ do_unlink() {
 }
 
 do_status() {
-    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW NEEDS_SUDO; do
-        local SRC TGT
+    read_mappings | while IFS=$'\t' read -r SRC_RAW TGT_RAW NEEDS_SUDO ACTION; do
+        local SRC
         SRC="$(make_absolute_source "${SRC_RAW}")"
+
+        if [[ "${ACTION}" == "nmcli-import" ]]; then
+            local conn_name
+            conn_name="$(nmcli_conn_name "${SRC}")"
+            if ! [[ -e "${SRC}" ]]; then
+                echo -e "${DIM}–${OFF} ${BOLD}${conn_name}${OFF} ${DIM}— source missing (${SRC})${OFF}"
+            elif nmcli connection show "${conn_name}" &>/dev/null; then
+                local state
+                state="$(nmcli -g GENERAL.STATE connection show "${conn_name}" 2>/dev/null || echo 'unknown')"
+                echo -e "${GRN}✓${OFF} ${BOLD}${conn_name}${OFF} ${DIM}(nmcli — ${state}) ← ${SRC}${OFF}"
+            else
+                echo -e "${YLW}⚠${OFF} ${BOLD}${conn_name}${OFF} ${DIM}— not imported yet${OFF}"
+            fi
+            continue
+        fi
+
+        local TGT
         TGT="$(resolve_variables "${TGT_RAW}")"
 
         local is_link=false is_exists=false
