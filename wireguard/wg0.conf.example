@@ -1,0 +1,12 @@
+[Interface]
+PrivateKey = YOUR_PRIVATE_KEY_HERE
+Address = 10.8.0.X/24
+DNS = 1.1.1.1
+ListenPort = 51821 # Set a static port so the router NAT entry survives reboots.
+
+[Peer]
+PublicKey = SERVER_PUBLIC_KEY_HERE
+PresharedKey = YOUR_PRESHARED_KEY_HERE
+AllowedIPs = 0.0.0.0/0, ::/0
+PersistentKeepalive = 25 # Keep the NAT entry alive so incoming packets always reach this host.
+Endpoint = SERVER_IP:51820

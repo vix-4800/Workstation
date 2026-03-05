@@ -23,3 +23,7 @@ Thumbs.db
 # Local test files
 test-*.sh
 scratch/
+
+# WireGuard configs contain private keys — keep only .example files tracked
+wireguard/*.conf
+wireguard/*.nmconnection
