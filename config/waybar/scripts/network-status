@@ -12,7 +12,7 @@ fi
 # Build connection info for tooltip
 if [[ -n "$WIFI_DEVICE" ]]; then
     CONNECTION_TYPE="wifi"
-    ICON=""
+    ICON="󰤨"
     SSID=$(nmcli -t -f ACTIVE,SSID device wifi 2>/dev/null | awk -F: '$1=="yes" {print $2; exit}')
     SIGNAL=$(nmcli -t -f ACTIVE,SIGNAL device wifi 2>/dev/null | awk -F: '$1=="yes" {print $2; exit}')
     CONN_INFO="${SSID} (${SIGNAL}%) "
