@@ -70,6 +70,60 @@
         state: link
         force: true
 
+    - name: 'Build gtklock-network-module'
+      ansible.builtin.command:
+        cmd: meson setup build --wipe
+        chdir: '{{ playbook_dir }}/../config/gtklock/gtklock-network-module'
+        creates: '{{ playbook_dir }}/../config/gtklock/gtklock-network-module/build/build.ninja'
+      become: false
+
+    - name: 'Compile gtklock-network-module'
+      ansible.builtin.command:
+        cmd: meson compile -C build
+        chdir: '{{ playbook_dir }}/../config/gtklock/gtklock-network-module'
+      become: false
+      changed_when: true
+
+    - name: 'Install gtklock-network-module'
+      ansible.builtin.command:
+        cmd: meson install -C build
+        chdir: '{{ playbook_dir }}/../config/gtklock/gtklock-network-module'
+      changed_when: true
+
+    - name: 'Create gtklock network-module symlink'
+      ansible.builtin.file:
+        src: /usr/local/lib/gtklock/modules/libnetwork.so
+        dest: /usr/lib/gtklock/network-module.so
+        state: link
+        force: true
+
+    - name: 'Build gtklock-battery-module'
+      ansible.builtin.command:
+        cmd: meson setup build --wipe
+        chdir: '{{ playbook_dir }}/../config/gtklock/gtklock-battery-module'
+        creates: '{{ playbook_dir }}/../config/gtklock/gtklock-battery-module/build/build.ninja'
+      become: false
+
+    - name: 'Compile gtklock-battery-module'
+      ansible.builtin.command:
+        cmd: meson compile -C build
+        chdir: '{{ playbook_dir }}/../config/gtklock/gtklock-battery-module'
+      become: false
+      changed_when: true
+
+    - name: 'Install gtklock-battery-module'
+      ansible.builtin.command:
+        cmd: meson install -C build
+        chdir: '{{ playbook_dir }}/../config/gtklock/gtklock-battery-module'
+      changed_when: true
+
+    - name: 'Create gtklock battery-module symlink'
+      ansible.builtin.file:
+        src: /usr/local/lib/gtklock/modules/libbattery.so
+        dest: /usr/lib/gtklock/battery-module.so
+        state: link
+        force: true
+
     - name: 'Check if yay is installed'
       ansible.builtin.command:
         cmd: which yay
