@@ -13,11 +13,23 @@
     "bluetooth",
     "pulseaudio",
     "custom/microphone",
+    "idle_inhibitor",
     "custom/resources",
     "battery",
     "sway/language",
     "custom/notification"
   ],
+
+  "idle_inhibitor": {
+    "tooltip": true,
+    "tooltip-format-activated": "Idle inhibitor active",
+    "tooltip-format-deactivated": "Idle inhibitor not active",
+    "format": "{icon}",
+    "format-icons": {
+      "activated": " ",
+      "deactivated": " "
+    }
+  },
 
   "sway/workspaces": {
     "disable-scroll": true,

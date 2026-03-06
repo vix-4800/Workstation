@@ -51,7 +51,8 @@
 #custom-vpn,
 #custom-docker,
 #custom-notification,
-#custom-microphone {
+#custom-microphone,
+#idle_inhibitor {
     background-color: @surface0;
     padding: 0.5rem 1rem;
     margin: 5px 0;
@@ -177,9 +178,13 @@
     margin-right: 1rem;
 }
 
+#idle_inhibitor {
+    color: @peach;
+    border-radius: 1rem 0 0px 1rem;
+}
+
 #custom-resources {
     color: @blue;
-    border-radius: 1rem 0 0 1rem;
 }
 
 #custom-resources.warning {
