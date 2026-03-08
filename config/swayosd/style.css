@@ -1,8 +1,9 @@
 @import 'mocha.css';
 
 window#osd {
-    border-radius: 1rem;
-    border: 2px solid @lavender;
+    border-radius: 20px;
+    border: 1px solid @surface1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
     background: @base;
     padding: 2px;
 }

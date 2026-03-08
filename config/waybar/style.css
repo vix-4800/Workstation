@@ -1,202 +1,182 @@
 @import 'mocha.css';
 
 * {
-    font-family: 'JetBrainsMono Nerd Font';
-    font-size: 17px;
+    font-family: 'JetBrainsMono Nerd Font', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
     min-height: 0;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-#waybar {
+window#waybar {
     background: transparent;
-    color: @text;
-    margin: 5px 5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Base pill style — standalone blocks */
+#workspaces,
+#custom-weather,
+#custom-calendar,
+#custom-docker,
+#custom-notification {
+    background-color: @base;
+    border: 1px solid @surface1;
+    border-radius: 20px;
+    margin: 6px 8px 6px 8px;
+    padding: 2px 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Group pill — no side padding, icons provide their own spacing */
+#net,
+#media,
+#system {
+    background-color: @base;
+    border: 1px solid @surface1;
+    border-radius: 20px;
+    margin: 6px 8px 6px 8px;
+    padding: 2px 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Workspaces specific */
 #workspaces {
-    border-radius: 1rem;
-    margin: 5px;
-    background-color: @surface0;
-    margin-left: 1rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 2px 6px;
 }
 
 #workspaces button {
     color: @lavender;
-    border-radius: 1rem;
-    padding: 0.4rem;
+    border-radius: 18px;
+    padding: 4px;
+    margin: 2px;
 }
 
 #workspaces button.active {
-    color: @sky;
-    border-radius: 1rem;
+    color: @base;
+    background-color: @mauve;
 }
 
 #workspaces button:hover {
-    color: @sapphire;
-    border-radius: 1rem;
+    color: @base;
+    background-color: @sapphire;
 }
 
-#tray,
-#clock,
-#custom-calendar,
-#custom-weather,
-#custom-resources,
-#battery,
-#pulseaudio,
-#custom-network,
-#bluetooth,
-#language,
-#custom-vpn,
-#custom-docker,
-#custom-notification,
-#custom-microphone,
-#idle_inhibitor {
-    background-color: @surface0;
-    padding: 0.5rem 1rem;
-    margin: 5px 0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-}
-
-/* Hover effects for interactive elements */
-#tray:hover,
-#clock:hover,
-#custom-calendar:hover,
-#custom-weather:hover,
-#custom-resources:hover,
-#battery:hover,
-#pulseaudio:hover,
-#custom-network:hover,
-#bluetooth:hover,
-#language:hover,
-#custom-vpn:hover,
-#custom-docker:hover,
-#custom-notification:hover,
-#custom-microphone:hover {
-    background-color: @surface1;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-#clock,
-#custom-calendar {
-    color: @blue;
-    border-radius: 1rem;
-    margin-right: 1rem;
-}
-
-#battery {
-    color: @green;
-}
-
-#battery.charging {
-    color: @teal;
-}
-
-#battery.warning:not(.charging) {
-    color: @red;
-}
-
-#pulseaudio {
+/* Colors for specific modules */
+#custom-weather {
     color: @sky;
-    border-radius: 1rem 0px 0px 1rem;
-    margin-left: 1rem;
 }
-
-#pulseaudio.muted {
-    color: @red;
+#custom-calendar {
+    color: @rosewater;
 }
-
-#custom-microphone {
-    color: @peach;
-    border-radius: 0px 1rem 1rem 0px;
-    margin-right: 1rem;
-    padding-right: 1.5rem;
-}
-
-#custom-microphone.muted {
-    color: @red;
-}
-
-#tray {
-    border-radius: 1rem;
-}
-
-#custom-network {
-    color: @yellow;
-}
-
-#custom-network.no-internet {
-    color: @peach;
-}
-
-#custom-network.disconnected {
-    color: @red;
-}
-
-#bluetooth {
-    color: @sapphire;
-    border-radius: 0 1rem 1rem 0;
-}
-
-#language {
-    color: @peach;
-    border-radius: 0 1rem 1rem 0;
-    margin-right: 1rem;
-}
-
-#custom-vpn {
-    border-radius: 1rem 0 0 1rem;
-}
-
-#custom-vpn.connected {
-    color: @green;
-}
-
-#custom-vpn.disconnected {
-    color: @red;
-}
-
 #custom-docker {
     color: @blue;
-    border-radius: 1rem;
-    margin-right: 1rem;
 }
-
 #custom-docker.running {
     color: @sky;
 }
-
 #custom-docker.stopped {
-    color: @gray;
+    color: @surface2;
+}
+
+/* Group: net */
+#custom-vpn {
+    color: @green;
+}
+#custom-vpn.disconnected {
+    color: @red;
+}
+#custom-network {
+    color: @subtext1;
+}
+#custom-network.online {
+    color: @green;
+}
+#custom-network.no-internet {
+    color: @red;
+}
+#custom-network.disconnected {
+    color: @red;
+}
+#bluetooth {
+    color: @sapphire;
+}
+
+/* Group: media */
+#pulseaudio {
+    color: @flamingo;
+}
+#pulseaudio.muted {
+    color: @surface2;
+}
+#custom-microphone {
+    color: @peach;
+}
+#custom-microphone.muted {
+    color: @surface2;
+}
+
+/* Group: system */
+#idle_inhibitor {
+    color: @yellow;
+}
+#custom-resources {
+    color: @teal;
+}
+#battery {
+    color: @green;
+}
+#battery.charging {
+    color: @teal;
+}
+#battery.warning:not(.charging) {
+    color: @yellow;
+}
+#battery.critical:not(.charging) {
+    color: @red;
+}
+#language {
+    color: @mauve;
 }
 
 #custom-notification {
     color: @yellow;
-    border-radius: 1rem;
-    margin-right: 1rem;
 }
 
-#idle_inhibitor {
-    color: @peach;
-    border-radius: 1rem 0 0px 1rem;
+/* Standalone pill hover — for blocks that are not inside a group */
+#workspaces:hover,
+#custom-weather:hover,
+#custom-calendar:hover,
+#custom-docker:hover,
+#custom-notification:hover {
+    background-color: @surface0;
+    border-color: @lavender;
 }
 
-#custom-resources {
-    color: @blue;
+/* Group: modules inside groups — styled as small inner pills */
+#custom-vpn,
+#custom-network,
+#bluetooth,
+#pulseaudio,
+#custom-microphone,
+#idle_inhibitor,
+#custom-resources,
+#battery,
+#language {
+    padding: 2px 10px;
+    margin: 0 3px;
+    border-radius: 16px;
+    background-color: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-#custom-resources.warning {
-    color: @peach;
-}
-
-#custom-resources.critical {
-    color: @red;
-}
-
-#custom-weather {
-    color: @sky;
-    border-radius: 1rem;
-    margin-left: 1rem;
+/* Per-module hover inside a group — highlights just the hovered icon */
+#custom-vpn:hover,
+#custom-network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#custom-microphone:hover,
+#idle_inhibitor:hover,
+#custom-resources:hover,
+#battery:hover,
+#language:hover {
+    background-color: @surface1;
 }

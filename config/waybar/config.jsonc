@@ -6,19 +6,22 @@
 
   "modules-left": ["custom/weather", "sway/workspaces"],
   "modules-center": ["custom/calendar"],
-  "modules-right": [
-    "custom/docker",
-    "custom/vpn",
-    "custom/network",
-    "bluetooth",
-    "pulseaudio",
-    "custom/microphone",
-    "idle_inhibitor",
-    "custom/resources",
-    "battery",
-    "sway/language",
-    "custom/notification"
-  ],
+  "modules-right": ["custom/docker", "group/net", "group/media", "group/system", "custom/notification"],
+
+  "group/net": {
+    "orientation": "horizontal",
+    "modules": ["custom/vpn", "custom/network", "bluetooth"]
+  },
+
+  "group/media": {
+    "orientation": "horizontal",
+    "modules": ["pulseaudio", "custom/microphone"]
+  },
+
+  "group/system": {
+    "orientation": "horizontal",
+    "modules": ["idle_inhibitor", "custom/resources", "battery", "sway/language"]
+  },
 
   "idle_inhibitor": {
     "tooltip": true,

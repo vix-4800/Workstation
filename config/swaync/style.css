@@ -48,12 +48,12 @@ scale trough {
     margin: 0rem 1rem;
     min-height: 8px;
     min-width: 70px;
-    border-radius: 12.6px;
+    border-radius: 20px;
 }
 
 trough slider {
     margin: -10px;
-    border-radius: 12.6px;
+    border-radius: 20px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
     transition: all 0.2s ease;
     background-color: @blue;
@@ -69,8 +69,9 @@ trough {
 
 /* notifications */
 .notification-background {
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px @surface1;
-    border-radius: 12.6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    border: 1px solid @surface1;
+    border-radius: 20px;
     margin: 18px;
     background: @mantle;
     color: @text;
@@ -79,7 +80,7 @@ trough {
 
 .notification-background .notification {
     padding: 7px;
-    border-radius: 12.6px;
+    border-radius: 20px;
 }
 
 .notification-background .notification.critical {
@@ -114,7 +115,7 @@ trough {
 .notification-background .close-button {
     margin: 7px;
     padding: 2px;
-    border-radius: 6.3px;
+    border-radius: 14px;
     color: @base;
     background-color: @red;
 }
@@ -128,9 +129,9 @@ trough {
 }
 
 .notification .notification-action {
-    border-radius: 7px;
+    border-radius: 14px;
     color: @text;
-    box-shadow: inset 0 0 0 1px @surface1;
+    border: 1px solid @surface1;
     margin: 4px;
     padding: 8px;
     font-size: 0.2rem; /* controls the button size not text size*/
@@ -160,27 +161,28 @@ trough {
 .notification progress,
 .notification trough,
 .notification progressbar {
-    border-radius: 12.6px;
+    border-radius: 20px;
     padding: 3px 0;
 }
 
 /* control center */
 .control-center {
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px @surface0;
-    border-radius: 12.6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    border: 1px solid @surface0;
+    border-radius: 20px;
     background-color: @base;
     color: @text;
     padding: 14px;
 }
 
 .control-center .notification-background {
-    border-radius: 7px;
-    box-shadow: inset 0 0 0 1px @surface1;
+    border-radius: 14px;
+    border: 1px solid @surface1;
     margin: 4px 10px;
 }
 
 .control-center .notification-background .notification {
-    border-radius: 7px;
+    border-radius: 14px;
 }
 
 .control-center .notification-background .notification.low {
@@ -193,10 +195,10 @@ trough {
 }
 
 .control-center .widget-title button {
-    border-radius: 7px;
+    border-radius: 14px;
     color: @text;
     background-color: @surface0;
-    box-shadow: inset 0 0 0 1px @surface1;
+    border: 1px solid @surface1;
     padding: 8px;
 }
 
@@ -251,7 +253,7 @@ scrollbar trough {
 /* mpris */
 .widget-mpris-player {
     background: @surface0;
-    border-radius: 12.6px;
+    border-radius: 20px;
     color: @text;
 }
 
@@ -263,7 +265,7 @@ scrollbar trough {
 
 .widget-mpris-album-art {
     -gtk-icon-size: 100px;
-    border-radius: 12.6px;
+    border-radius: 20px;
     margin: 0 10px;
 }
 
@@ -278,7 +280,7 @@ scrollbar trough {
 }
 
 .widget-mpris button {
-    border-radius: 12.6px;
+    border-radius: 20px;
     color: @text;
     margin: 0 5px;
     padding: 2px;
@@ -366,7 +368,7 @@ scrollbar trough {
     padding: 0.4rem;
     min-width: 2.5rem;
     min-height: 2.5rem;
-    box-shadow: inset 0 0 0 1px @surface1;
+    border: 1px solid @surface1;
 }
 
 .widget-buttons-grid > flowbox > flowboxchild > button:first-child {

@@ -60,11 +60,9 @@
 /* Window */
 window {
     margin: 0px;
-    padding: 10px;
+    padding: 0px;
     border: none;
-    border-radius: 12.6px;
-    background-color: rgba(30, 30, 46, 0.95);
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px @surface1;
+    background-color: transparent;
     animation: slideIn 0.35s ease-in-out both;
 }
 
@@ -101,10 +99,12 @@ window {
 
 /* Outer Box */
 #outer-box {
-    margin: 5px;
-    padding: 20px 5px;
-    border: none;
-    background-color: transparent;
+    margin: 0px;
+    padding: 16px 5px;
+    border: 1px solid @surface1;
+    border-radius: 20px;
+    background-color: @base;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 /* Scroll */
@@ -120,7 +120,7 @@ window {
     margin: 5px 20px;
     padding: 10px;
     border: none;
-    border-radius: 12.6px;
+    border-radius: 20px;
     color: @text;
     background-color: @surface0;
     box-shadow: inset 0 0 0 1px @surface1;
@@ -148,7 +148,7 @@ window {
     background-color: transparent;
     margin: 5px 8px;
     padding: 10px 15px;
-    border-radius: 7px;
+    border-radius: 14px;
     transition: all 0.2s ease;
 }
 

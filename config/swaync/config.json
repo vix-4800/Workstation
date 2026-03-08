@@ -84,7 +84,7 @@
       "buttons-per-row": 5,
       "actions": [
         {
-          "label": "󰖩",
+          "label": "󰤨",
           "type": "toggle",
           "active": true,
           "command": "sh -c '[[ $SWAYNC_TOGGLE_STATE == true ]] && nmcli radio wifi on || nmcli radio wifi off'",
@@ -98,7 +98,7 @@
           "update-command": "sh -c 'bluetoothctl show | grep -q \"Powered: yes\" && echo true || echo false'"
         },
         {
-          "label": "",
+          "label": "󰕾",
           "type": "toggle",
           "active": true,
           "command": "swayosd-client --output-volume mute-toggle",
@@ -112,7 +112,7 @@
           "update-command": "sh -c 'pactl get-source-mute @DEFAULT_SOURCE@ | grep -q \"no\" && echo true || echo false'"
         },
         {
-          "label": "",
+          "label": "󰉋",
           "type": "normal",
           "command": "thunar"
         }
