@@ -39,7 +39,6 @@
       become: false
       ansible.builtin.command:
         cmd: fish -c "fisher update"
-      when: fisher_installed.stat.exists or not fisher_installed.stat.exists
       failed_when: false  # Plugins may already be up to date
       changed_when: "'Updated' in fisher_update.stdout or 'Installed' in fisher_update.stdout"
       register: fisher_update
