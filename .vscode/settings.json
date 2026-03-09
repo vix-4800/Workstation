@@ -1,0 +1,29 @@
+{
+  "cSpell.words": [
+    "Adwaita",
+    "analyse",
+    "autocmd",
+    "autocmds",
+    "codesnap",
+    "devicons",
+    "fontconfig",
+    "gtkrc",
+    "keymap",
+    "keymaps",
+    "lspconfig",
+    "pyproject",
+    "regreet",
+    "titlebar"
+  ],
+  "Lua.diagnostics.globals": [
+    "vim"
+  ],
+  "Lua.workspace.library": [
+    "${addons}/love2d/module/library"
+  ],
+  "Lua.runtime.version": "LuaJIT",
+  "Lua.runtime.special": {
+    "love.filesystem.load": "loadfile"
+  },
+  "Lua.workspace.checkThirdParty": false
+}
