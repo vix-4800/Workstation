@@ -48,12 +48,12 @@ if ping -c 1 -W 1 1.1.1.1 &>/dev/null; then
     else
         ICON="󰈀"
     fi
-    printf '{"text": "%s", "class": "online %s", "tooltip": "%s"}\n' "$ICON" "$CONNECTION_TYPE" "$CONN_INFO"
+    printf '{"text": "%s", "class": "online", "tooltip": "%s"}\n' "$ICON" "$CONN_INFO"
 else
     if [[ "$CONNECTION_TYPE" == "wifi" ]]; then
         ICON=$(wifi_icon_nointernet "$SIGNAL")
     else
         ICON="󰤮"
     fi
-    printf '{"text": "%s", "class": "no-internet %s", "tooltip": "%s — No internet"}\n' "$ICON" "$CONNECTION_TYPE" "$CONN_INFO"
+    printf '{"text": "%s", "class": "no-internet", "tooltip": "%s — No internet"}\n' "$ICON" "$CONN_INFO"
 fi
