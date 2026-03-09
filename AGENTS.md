@@ -64,94 +64,95 @@ Order matters - see `ansible/main.yml` for sequence.
 
 ### Configuration Patterns
 
-**Sway config** is modular:
-
-```text
-config/sway/config         # Main file, includes catppuccin-mocha theme
-config/sway/config.d/      # Split by concern (10-variables, 40-keybindings, etc.)
-```
-
-Number prefixes control load order. Always check `config.d/*.conf` before modifying main config.
-
-**Shell configs** support Fish (primary) and Bash:
-
-- Fish: `config/fish/` (with completions, functions, conf.d)
-- Bash: `config/bash/` (separate .bash_profile, bashrc)
-
-**Development tools** configs in `tools/`:
-
-- PHP: phpstan, rector, php-cs-fixer, pint configs
-- Python: flake8, mypy configs
-- Completions for custom scripts in `config/fish/completions/`
+- **Sway**: Modular in `config/sway/config.d/` with numbered prefixes (10-_, 40-_, etc.)
+- **Shell**: Fish primary (`config/fish/`), Bash secondary (`config/bash/`)
+- **Dev tools**: PHP/Python configs in `tools/`, completions in `config/fish/completions/`
 
 ### Systemd Services
 
-Managed via `workstation service`:
-
 ```bash
-workstation service enable batsignal.service
-workstation service list
-workstation timers
-workstation timers setup
+workstation services enable batsignal.service
+workstation services list
+workstation services status
 ```
 
-Service files in `systemd/user/` are symlinked to `~/.config/systemd/user/`. See `docs/SYSTEMD.md`.
+Service files in `systemd/user/` are symlinked to `~/.config/systemd/user/`.
 
-## Shell Script Patterns
+## Code Style Guidelines
 
-All `bin/` scripts follow consistent patterns:
+- **Idempotency**: All operations idempotent - running multiple times produces same result
+- **Dry-run first**: Always use `-n` flag before applying changes
+- **Modularity**: Split configs by concern using numbered prefixes (e.g., `10-vars`, `40-keys`)
 
-- **Colored output**: `RED/GRN/YLW` vars for terminal colors
-- **Logging functions**: `ok()`, `warn()`, `err()`, `msg()`
-- **Dry-run support**: `-n` flag for safe testing
-- **Relative path resolution**: Scripts find repo root via `SCRIPT_DIR`
-- **Error handling**: `set -euo pipefail` for bash scripts
+### Shell Scripts (`bin/`)
 
-Example: `bin/workstation` uses `jq` for JSON parsing, `realpath` for canonicalization, and unified command interface.
+- Use `#!/usr/bin/env bash` (NOT `#!/bin/sh`)
+- Always use `set -euo pipefail`
+- Use `local` for function variables
+- Color variables: `RED`, `GRN`, `YLW`, `BLU`, `BOLD`, `DIM`, `OFF`
+- Logging functions: `msg()`, `ok()`, `warn()`, `err()`
 
-## Ansible Specifics
+### YAML/Ansible
 
-- **Pacman/AUR packages**: Use `community.general.pacman` module
-- **AUR helper**: `yay` installed via `ansible/yay.yml`
-- **Become/sudo**: Most tasks need `become: true`
-- **Idempotency**: Check for existence before creating (e.g., check if symlink exists)
+- Use 2-space indentation
+- Prefer `community.general.pacman` for Arch packages
+- Include `become: true` for privileged tasks
+- Check existence before creating: `when: not stat_result.stat.exists`
 
-## Theme & Visual Consistency
+### JSON Config (`dotfiles.json`)
 
-**Catppuccin Mocha** palette is used everywhere:
+- Use `$HOME` variable (not hardcoded paths)
+- All paths relative to repo root
 
-- GTK: `config/gtk/*/settings.ini`
-- Terminal: `config/alacritty/catppuccin-mocha.toml`
-- Sway: `config/sway/catppuccin-mocha` (color variables)
-- Waybar: `config/waybar/mocha.css`
-- Bat syntax: `config/bat/themes/Catppuccin Mocha.tmTheme`
+### Naming Conventions
 
-When adding new tool configs, check if Catppuccin theme exists for it.
+- Scripts: lowercase, no extensions (e.g., `workstation`)
+- Services: `*.service`, `*.timer` in `systemd/user/`
+- Ansible playbooks: descriptive names (e.g., `audio.yml`, `sway.yml`)
 
-## Testing & Validation
+## Build/Lint/Test Commands
 
-- **Always dry-run first**: `workstation link -n`
-- **Validate JSON**: `jq empty dotfiles.json`
-- **Check symlinks**: `workstation status | grep "✗\|⚠"`
-- **Test Ansible**: Add `--check` flag for dry-run mode
+```bash
+# Pre-commit hooks (all linters: shellcheck, yamllint, gitleaks, etc.)
+pre-commit run -a              # Run all hooks on all files
+pre-commit run -a --files <file>  # Run on specific file
+
+# Shell script linting
+shellcheck bin/workstation      # Lint specific script
+shellcheck bin/*                # Lint all scripts
+
+# YAML linting (Ansible)
+ansible-lint                   # Lint all playbooks
+ansible-lint ansible/main.yml   # Lint specific playbook
+
+# JSON validation
+jq empty dotfiles.json          # Validate JSON syntax
+jq -e '.mappings[]' dotfiles.json  # Validate structure
+
+# Dotfiles validation
+workstation dotfiles doctor     # Environment checks
+workstation dotfiles status     # Check symlink status
+workstation dotfiles link -n    # Dry-run symlink creation
+
+# Ansible dry-run
+ansible-playbook ansible/main.yml --check
+```
 
 ## Integration Points
 
-- **Display manager**: Greetd + ReGreet (configured in `ansible/display-managers/greetd.yml`)
-- **Notifications**: SwayNC (`config/swaync/`)
-- **Status bar**: Waybar with custom scripts in `config/waybar/scripts/`
-- **Lock screen**: GTKLock (config in `config/gtklock/`)
-- **Boot splash**: Plymouth with Catppuccin theme (`themes/plymouth/`)
+- **Display manager**: Greetd + ReGreet
+- **Notifications**: SwayNC
+- **Status bar**: Waybar
+- **Lock screen**: GTKLock
 
 ## Common Gotchas
 
 1. **Fish as default shell** - installed via Ansible, scripts should use `#!/usr/bin/env bash` not `#!/bin/sh`
 2. **Wayland-specific tools** - Don't suggest X11 tools (use grim/slurp not scrot)
-3. **JSON schema validation** - VS Code validates `dotfiles.json` against schema automatically
-4. **Symlink targets** - Must use `$HOME` not hardcoded paths in `dotfiles.json`
-5. **Ansible on localhost** - Uses `connection: local`, no SSH needed
+3. **Symlink targets** - Must use `$HOME` not hardcoded paths in `dotfiles.json`
+4. **Ansible on localhost** - Uses `connection: local`, no SSH needed
 
-## Quick Reference Files
+## Quick Reference
 
 - Main Ansible: `ansible/main.yml`
 - Dotfiles config: `dotfiles.json`
