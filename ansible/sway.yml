@@ -21,9 +21,6 @@
           - libnotify
           - xdg-desktop-portal
           - xdg-desktop-portal-wlr
-          # - wlsunset
-          # - kanshi
-          # - wf-recorder
           - gtklock
           - gtklock-playerctl-module
           - gtklock-userinfo-module
@@ -32,6 +29,7 @@
           - poppler-glib  # Tumbler: PDF thumbnails
           - libgsf  # Tumbler: ODF thumbnails
           - libopenraw  # Tumbler: RAW image thumbnails
+          - geoclue  # Geolocation service for auto-detecting location
         state: present
 
     - name: 'Install gtklock-media-background-module build dependencies'

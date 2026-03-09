@@ -244,6 +244,11 @@
       "source": "wireguard/wg0.conf",
       "action": "nmcli-import",
       "comment": "WireGuard VPN config — imported via nmcli. Copy from wg0.conf.example and fill in keys."
+    },
+    {
+      "source": "config/geoclue/curl.conf",
+      "target": "$HOME/.config/geoclue/curl.conf",
+      "comment": "Geoclue configuration for location services"
     }
   ]
 }

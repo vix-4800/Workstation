@@ -1,13 +1,28 @@
 #!/usr/bin/env bash
 
-# Weather module using wttr.in
+# Weather module using wttr.in with auto-location via Geoclue
 
-# Cache file
 CACHE_FILE="/tmp/waybar-weather-cache"
-CACHE_TIME=1800  # 30 minutes
+CACHE_TIME=1800
 
-# Location (change to your city or leave empty for auto-detect)
-LOCATION="Saratov"
+get_location() {
+    if command -v curl &>/dev/null && command -v jq &>/dev/null; then
+        local lat lon
+        lat=$(curl -s --max-time 5 "http://127.0.0.1:1777/json" 2>/dev/null | jq -r '.[0].coordinates.latitude // empty')
+        lon=$(curl -s --max-time 5 "http://127.0.0.1:1777/json" 2>/dev/null | jq -r '.[0].coordinates.longitude // empty')
+
+        if [[ -n "${lat}" && -n "${lon}" ]]; then
+            echo "${lat},${lon}"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+LOCATION=$(get_location)
+if [[ -z "${LOCATION}" ]]; then
+    LOCATION=""
+fi
 
 # Check cache
 if [[ -f "${CACHE_FILE}" ]]; then
@@ -19,7 +34,8 @@ if [[ -f "${CACHE_FILE}" ]]; then
 fi
 
 # Fetch weather data
-weather_data=$(curl -s "https://wttr.in/${LOCATION}?format=j1" 2>/dev/null)
+weather_url="https://wttr.in/${LOCATION}?format=j1"
+weather_data=$(curl -s "${weather_url}" 2>/dev/null)
 
 if [[ -z "${weather_data}" ]]; then
     echo '{"text":"", "tooltip":"Weather data unavailable"}'
@@ -34,6 +50,7 @@ wind_speed=$(echo "${weather_data}" | jq -r '.current_condition[0].windspeedKmph
 wind_dir=$(echo "${weather_data}" | jq -r '.current_condition[0].winddir16Point')
 description=$(echo "${weather_data}" | jq -r '.current_condition[0].weatherDesc[0].value')
 weather_code=$(echo "${weather_data}" | jq -r '.current_condition[0].weatherCode')
+location_name=$(echo "${weather_data}" | jq -r '.nearest_area[0].areaName[0].value // .nearest_area[0].region[0].value // "Unknown"')
 
 # Determine icon based on weather code
 case ${weather_code} in
@@ -52,6 +69,7 @@ esac
 # Build tooltip
 tooltip="<span font_size='x-large' color='#cba6f7'><b>${description}</b></span>\n\n"
 tooltip+="<span font_size='large'>"
+tooltip+="<b>Location:</b> ${location_name}\n"
 tooltip+="<b>Temperature:</b> ${temp}°C (feels like ${feels_like}°C)\n"
 tooltip+="<b>Humidity:</b> ${humidity}%\n"
 tooltip+="<b>Wind:</b> ${wind_speed} km/h ${wind_dir}"
