@@ -37,8 +37,6 @@
   import_playbook: plymouth.yml
 - name: 'Setup display manager (Greetd)'
   import_playbook: display-managers/greetd.yml
-- name: 'Configure Secure Boot (sbctl)'
-  import_playbook: secure-boot.yml
 - name: 'Install Docker'
   import_playbook: docker.yml
 - name: 'Configure Bluetooth'
