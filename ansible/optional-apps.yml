@@ -30,6 +30,7 @@
           - feh
           - trash-cli
           - zenity
+          - opencode
         state: present
 
     - name: 'Check if yay is installed'
