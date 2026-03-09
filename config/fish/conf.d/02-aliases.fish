@@ -3,8 +3,13 @@ alias vim nvim
 alias vi nvim
 alias neovim nvim
 
-alias grep rg
-alias find fd
+if command -v rg >/dev/null
+    alias grep rg
+end
+
+if command -v fd >/dev/null
+    alias find fd
+end
 
 if command -v eza >/dev/null
     alias ls='eza --icons --group-directories-first'
@@ -34,5 +39,5 @@ alias search='pacman -Ss'
 alias arch='workstation'
 
 if command -v pacman >/dev/null 2>&1
-    alias system-cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
+    alias system-cleanup 'sudo pacman -Rns (pacman -Qtdq)'
 end
