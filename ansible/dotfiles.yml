@@ -34,7 +34,7 @@
 
     - name: 'Apply dotfiles symlinks'
       ansible.builtin.command:
-        cmd: "{{ repo_root }}/bin/workstation link"
+        cmd: "{{ repo_root }}/bin/workstation dotfiles link"
       register: dotfiles_output
       changed_when: "'Linked:' in dotfiles_output.stdout"
 
@@ -45,7 +45,7 @@
 
     - name: 'Check dotfiles status'
       ansible.builtin.command:
-        cmd: "{{ repo_root }}/bin/workstation status"
+        cmd: "{{ repo_root }}/bin/workstation dotfiles status"
       register: dotfiles_status
       changed_when: false
 
