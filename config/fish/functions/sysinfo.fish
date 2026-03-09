@@ -5,6 +5,5 @@ function sysinfo
         lsb_release -a 2>/dev/null
     end
     echo
-    echo "Shell: (fish --version)"
-    echo (fish --version)
+    echo "Shell: "(fish --version)
 end
