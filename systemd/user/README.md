@@ -33,17 +33,25 @@ systemd/user/
 Use `workstation` script:
 
 ```bash
-workstation service list        # list all
-workstation timers              # show active timers
-workstation timers setup        # enable health timers
+workstation services list           # list all available services/timers
+workstation services enable-all     # enable all services and timers
+workstation services disable-all    # disable all services and timers
+workstation services status         # show status of all services
+```
+
+Or manage individual units directly:
+
+```bash
+systemctl --user enable --now my-service.timer
+systemctl --user status my-service.timer
 ```
 
 ## Adding service
 
-1. Create directory: `systemd/user/my-service/`
-2. Add `my-service.service` and optionally `my-service.timer`
-3. Run: `workstation link`
-4. Enable: `workstation service enable my-service.timer`
+1. Create `systemd/user/my-service.service` (and optionally `my-service.timer`)
+2. Add entries to `dotfiles.json` pointing to `$HOME/.config/systemd/user/`
+3. Run: `workstation dotfiles link`
+4. Enable: `systemctl --user enable --now my-service.timer`
 
 ## Logs
 
