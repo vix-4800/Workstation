@@ -1,7 +1,4 @@
 # ======= PATH =======
-if set -q NODE_VERSION; and test -n "$NODE_VERSION"
-    fish_add_path $HOME/.local/share/nvm/$NODE_VERSION/bin
-end
 fish_add_path $HOME/.fuelup/bin
 
 if test -d $HOME/go/bin

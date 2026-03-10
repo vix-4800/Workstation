@@ -23,9 +23,6 @@ fi
 export EDITOR="nvim"
 export VISUAL="${EDITOR}"
 
-# Node.js version for consistency
-export NODE_VERSION="v24.7.0"
-
 # ======= Load shell-agnostic aliases =======
 if [[ -f "${HOME}/.aliases" ]]; then
     . "${HOME}/.aliases"
