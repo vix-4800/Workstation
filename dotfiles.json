@@ -249,6 +249,11 @@
       "source": "config/geoclue/curl.conf",
       "target": "$HOME/.config/geoclue/curl.conf",
       "comment": "Geoclue configuration for location services"
+    },
+    {
+      "source": "config/opencode",
+      "target": "$HOME/.config/opencode",
+      "comment": "OpenCode configuration for AI code generation and assistance"
     }
   ]
 }
