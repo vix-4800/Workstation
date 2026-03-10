@@ -1,6 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "github-copilot/claude-sonnet-4.6",
   "autoupdate": "notify",
   "formatter": {
     "php-cs-fixer": {
@@ -18,5 +17,23 @@
       "command": ["shfmt", "-w", "-i", "4", "$FILE"],
       "extensions": [".sh", ".bash"]
     }
-  }
+  },
+  "mcp": {
+    "context7": {
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      },
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp",
+      "headers": {
+        "Authorization": "Bearer {env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    }
+  },
+  "model": "github-copilot/claude-sonnet-4.6",
+  "plugin": ["@mohak34/opencode-notifier@latest", "opencode-wakatime"]
 }
