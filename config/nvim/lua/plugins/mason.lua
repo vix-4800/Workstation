@@ -27,7 +27,6 @@ return {
         "gopls", -- Go
         "bash-language-server", -- Bash
         "intelephense", -- PHP
-        "phpactor", -- PHP (refactoring & code actions)
         "yaml-language-server", -- YAML
         "json-lsp", -- JSON
         "html-lsp", -- HTML
