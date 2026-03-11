@@ -147,8 +147,7 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     # Step 10 (optional): Docker cleanup
     echo
     if command -v docker >/dev/null
-        echo -n "$BOLD$YLW?$OFF $BOLD[Optional]$OFF Clean Docker images & volumes? [y/N] "
-        read -l docker_confirm
+        read -l docker_confirm -P "$BOLD$YLW?$OFF $BOLD""[Optional]$OFF Clean Docker images & volumes? [y/N] "
         if string match -qi y -- $docker_confirm
             echo
             echo "$BOLD$BLU===>$OFF $BOLD(optional)$OFF Removing unused Docker images..."
