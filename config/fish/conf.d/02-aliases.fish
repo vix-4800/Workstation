@@ -37,7 +37,3 @@ alias install='sudo pacman -S'
 alias remove='sudo pacman -Rns'
 alias search='pacman -Ss'
 alias arch='workstation'
-
-if command -v pacman >/dev/null 2>&1
-    alias system-cleanup 'sudo pacman -Rns (pacman -Qtdq)'
-end

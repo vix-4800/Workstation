@@ -43,7 +43,6 @@ fi
 # ======= Package manager aliases =======
 # Arch Linux / pacman
 if command -v pacman >/dev/null 2>&1; then
-    alias system-cleanup='sudo pacman -Rns $(pacman -Qtdq)'
     alias system-update='sudo pacman -Syu'
     alias system-search='pacman -Ss'
     alias system-install='sudo pacman -S'
