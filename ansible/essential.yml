@@ -34,6 +34,7 @@
           - tldr
           - chafa
           - reflector
+          - pacman-contrib
         state: present
 
     - name: 'Update mirror list with reflector'
