@@ -144,6 +144,32 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
         _cleanup_skip "Composer not installed, skipping"
     end
 
+    # Step 10 (optional): Docker cleanup
+    echo
+    if command -v docker >/dev/null
+        echo -n "$BOLD$YLW?$OFF $BOLD[Optional]$OFF Clean Docker images & volumes? [y/N] "
+        read -l docker_confirm
+        if string match -qi y -- $docker_confirm
+            echo
+            echo "$BOLD$BLU===>$OFF $BOLD(optional)$OFF Removing unused Docker images..."
+            if docker image prune -a --force
+                _cleanup_ok "Unused Docker images removed"
+            else
+                _cleanup_err "Docker image prune failed"
+            end
+
+            echo
+            echo "$BOLD$BLU===>$OFF $BOLD(optional)$OFF Removing dangling Docker volumes..."
+            if docker volume prune --force
+                _cleanup_ok "Dangling Docker volumes removed"
+            else
+                _cleanup_err "Docker volume prune failed"
+            end
+        else
+            _cleanup_skip "Docker cleanup skipped"
+        end
+    end
+
     echo
     echo "$BOLD$CYN╔════════════════════════════════════════╗$OFF"
     echo "$BOLD$CYN║         System Cleanup Complete        ║$OFF"
