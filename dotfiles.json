@@ -259,6 +259,11 @@
       "source": "config/codex",
       "target": "$HOME/.codex",
       "comment": "Codex configuration for AI code generation and assistance"
+    },
+    {
+      "source": "config/agents",
+      "target": "$HOME/.agents",
+      "comment": "Codex agents configuration for AI automation and task management"
     }
   ]
 }
