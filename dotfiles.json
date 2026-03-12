@@ -256,9 +256,14 @@
       "comment": "OpenCode configuration for AI code generation and assistance"
     },
     {
-      "source": "config/codex",
-      "target": "$HOME/.codex",
+      "source": "config/codex/config.toml",
+      "target": "$HOME/.codex/config.toml",
       "comment": "Codex configuration for AI code generation and assistance"
+    },
+    {
+      "source": "config/codex/AGENTS.md",
+      "target": "$HOME/.codex/AGENTS.md",
+      "comment": "Codex agents instructions"
     },
     {
       "source": "config/agents",
