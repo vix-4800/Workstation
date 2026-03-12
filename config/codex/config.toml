@@ -9,10 +9,16 @@ enabled = false
 [feedback]
 enabled = false
 
+[features]
+multi_agent = true
+
+[agents.reviewer]
+description = "PR reviewer focused on correctness, security, and missing tests."
+config_file = "agents/reviewer.toml"
+
 [mcp_servers.github]
-enabled = true
-url = "https://api.githubcopilot.com/mcp/"
-bearer_token_env_var = "GITHUB_PAT_TOKEN"
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
 
 [mcp_servers.serena]
 enabled = true
@@ -21,8 +27,5 @@ args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-s
 startup_timeout_sec = 60
 
 [mcp_servers.context7]
-enabled = true
 command = "npx"
-args = ["-y", "@upstash/context7-mcp"]
-env = { "CONTEXT7_API_KEY" = "${CONTEXT7_API_KEY}" }
-startup_timeout_ms = 20000
+args = ["-y", "@upstash/context7-mcp@latest"]
