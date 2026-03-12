@@ -171,6 +171,10 @@ canonical() {
     fi
 }
 
+is_git_repo() {
+    git -C "${REPO_ROOT}" rev-parse --is-inside-work-tree >/dev/null 2>&1
+}
+
 make_absolute_source() {
     local src="$1"
     if [[ "${src}" =~ ^/ ]]; then
@@ -349,7 +353,7 @@ do_doctor() {
         ok_all=0
     fi
 
-    if [[ -d "${REPO_ROOT}/.git" ]]; then
+    if is_git_repo; then
         ok "${GRN}✓${OFF} Git repository: ${BLU}${REPO_ROOT}${OFF}"
     else
         err "${RED}✗${OFF} Not a git repository: ${REPO_ROOT}"
@@ -574,7 +578,7 @@ This will:
 EOF
 
     # Check if in git repo
-    if [[ ! -d "${REPO_ROOT}/.git" ]]; then
+    if ! is_git_repo; then
         err "Not a git repository: ${REPO_ROOT}"
         exit 1
     fi

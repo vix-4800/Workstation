@@ -41,6 +41,14 @@ repos:
       - id: markdownlint
         args: ['--fix', '--config', 'tools/markdown/markdownlint/.markdownlint.jsonc']
 
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.34.1
+    hooks:
+      - id: check-jsonschema
+        name: Validate dotfiles.json schema
+        files: ^dotfiles\.json$
+        args: ['--schemafile', 'dotfiles.schema.json']
+
   - repo: local
     hooks:
       - id: dotfiles-syntax-check
@@ -50,13 +58,6 @@ repos:
         language: script
         pass_filenames: false
         always_run: true
-
-      - id: dotfiles-json-schema
-        name: Validate dotfiles.json schema
-        entry: bash -c 'jq -e . dotfiles.json >/dev/null 2>&1'
-        language: system
-        files: ^dotfiles\.json$
-        pass_filenames: false
 
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.23.0
