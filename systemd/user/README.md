@@ -6,9 +6,9 @@ Services managed via dotfiles symlinks to `~/.config/systemd/user/`.
 
 ### Health & Wellness
 
-- **break-reminder.timer** - Every 90 min: reminder to take a break
-- **water-reminder.timer** - Every 60 min: stay hydrated
-- **posture-check.timer** - Every 45 min: check your posture
+- **break-reminder.timer** - After 85 min from boot, then every 85 min with up to 15 min randomized delay
+- **water-reminder.timer** - After 55 min from boot, then every 55 min with up to 10 min randomized delay
+- **posture-check.timer** - After 40 min from boot, then every 40 min with up to 10 min randomized delay
 
 ### System Services
 
@@ -17,7 +17,8 @@ Services managed via dotfiles symlinks to `~/.config/systemd/user/`.
 
 ### Dotfiles Maintenance
 
-- **dotfiles-update-check.timer** - Every 60 min: check for dotfiles repository updates on GitHub
+- **composer-update-check.timer** - Weekly, 15 min after boot, with up to 1 hour randomized delay
+- **dotfiles-update-check.timer** - 5 min after boot, then every hour
 
 ## Structure
 

@@ -109,7 +109,7 @@ After running `workstation dotfiles link`, the script is available globally from
 - **Visual Studio Code** - IDE
 - **Git** - Version control
 - **PHP** + Composer (PHPStan, Rector, PHP-CS-Fixer, Pint, PHPCS)
-- **Python** + pipx (Black, Flake8, Mypy, Pre-commit)
+- **Python** + pipx (Ruff, MyPy, Pre-commit)
 - **Go** - Go language runtime
 - **Docker** + Docker Compose
 - **Base-devel** - Build tools (GCC, Make, etc.)
@@ -117,12 +117,13 @@ After running `workstation dotfiles link`, the script is available globally from
 ### Applications
 
 - **Firefox** - Web browser
-- **Discord** - Chat (with BetterDiscord)
+- **Discord** - Chat client
 - **Telegram Desktop** - Messenger
 - **Spotify** - Music streaming
 - **Obsidian** - Note-taking
 - **Zathura** - PDF viewer
 - **Thunar** - File manager
+- **OpenCode** - AI coding assistant CLI
 
 ### System Services
 
