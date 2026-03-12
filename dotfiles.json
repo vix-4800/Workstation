@@ -251,22 +251,22 @@
       "comment": "Geoclue configuration for location services"
     },
     {
-      "source": "config/opencode",
+      "source": "config/ai/opencode",
       "target": "$HOME/.config/opencode",
       "comment": "OpenCode configuration for AI code generation and assistance"
     },
     {
-      "source": "config/codex/config.toml",
+      "source": "config/ai/codex/config.toml",
       "target": "$HOME/.codex/config.toml",
       "comment": "Codex configuration for AI code generation and assistance"
     },
     {
-      "source": "config/codex/AGENTS.md",
+      "source": "config/ai/codex/AGENTS.md",
       "target": "$HOME/.codex/AGENTS.md",
       "comment": "Codex agents instructions"
     },
     {
-      "source": "config/agents",
+      "source": "config/ai/agents",
       "target": "$HOME/.agents",
       "comment": "Codex agents configuration for AI automation and task management"
     }
