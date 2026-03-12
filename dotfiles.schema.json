@@ -36,6 +36,20 @@
             "description": "Special action instead of symlinking. 'nmcli-import' imports a wg-quick conf via nmcli."
           }
         },
+        "oneOf": [
+          {
+            "required": ["source", "target"],
+            "not": {
+              "required": ["action"]
+            }
+          },
+          {
+            "required": ["source", "action"],
+            "not": {
+              "required": ["target"]
+            }
+          }
+        ],
         "required": ["source"],
         "additionalProperties": false
       }
