@@ -254,6 +254,11 @@
       "source": "config/opencode",
       "target": "$HOME/.config/opencode",
       "comment": "OpenCode configuration for AI code generation and assistance"
+    },
+    {
+      "source": "config/codex",
+      "target": "$HOME/.codex",
+      "comment": "Codex configuration for AI code generation and assistance"
     }
   ]
 }

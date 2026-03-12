@@ -1,0 +1,28 @@
+model = "gpt-5.4"
+approval_policy = "on-request"
+web_search = "cached"
+personality = "pragmatic"
+
+[analytics]
+enabled = false
+
+[feedback]
+enabled = false
+
+[mcp_servers.github]
+enabled = true
+url = "https://api.githubcopilot.com/mcp/"
+bearer_token_env_var = "GITHUB_PAT_TOKEN"
+
+[mcp_servers.serena]
+enabled = true
+command = "uvx"
+args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex"]
+startup_timeout_sec = 60
+
+[mcp_servers.context7]
+enabled = true
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+env = { "CONTEXT7_API_KEY" = "${CONTEXT7_API_KEY}" }
+startup_timeout_ms = 20000
