@@ -19,7 +19,7 @@ get_location() {
     return 1
 }
 
-LOCATION=$(get_location)
+LOCATION="Saratov" # $(get_location)
 if [[ -z "${LOCATION}" ]]; then
     LOCATION=""
 fi
