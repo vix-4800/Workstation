@@ -1,4 +1,16 @@
+# the language backend to use for code understanding and manipulation.
+# Possible values are:
+#  * LSP: Use the language server protocol (LSP), spawning freely available language servers
+#      via the SolidLSP library that is part of Serena.
+#  * JetBrains: Use the Serena plugin in your JetBrains IDE.
+#      (requires the plugin to be installed and the project being worked on to be open
+#      in your IDE).
 language_backend: LSP
+
+# line ending convention to use when writing source files.
+# Possible values: "lf" (Unix), "crlf" (Windows), "native" (platform default).
+# Note that Serena's own files (e.g. memories and configuration files) always use native line endings.
+# This setting can be overridden on a per-project basis in project.yml files.
 line_ending: lf
 
 # whether to open a graphical window with Serena's logs.
@@ -61,15 +73,15 @@ ls_specific_settings: {}
 # Same syntax as gitignore, so you can use * and **.
 # These patterns are merged additively with each project's own ignored_paths.
 ignored_paths:
-  - ".git/**"
-  - "node_modules/**"
-  - "vendor/**"
-  - ".next/**"
-  - "dist/**"
-  - "build/**"
-  - "coverage/**"
-  - "tmp/**"
-  - "var/cache/**"
+- ".git/**"
+- "node_modules/**"
+- "vendor/**"
+- ".next/**"
+- "dist/**"
+- "build/**"
+- "coverage/**"
+- "tmp/**"
+- "var/cache/**"
 
 # list of regex patterns which, when matched, mark a memory entry as read‑only.
 # For example, "global/.*" will mark all global memories as read-only.
@@ -99,8 +111,8 @@ base_modes:
 # The full set of modes to be activated is base_modes + default_modes.
 # These modes can be overridden by the project configuration (project.yml) or through the CLI (--mode).
 default_modes:
-  - interactive
-  - editing
+- interactive
+- editing
 
 # Used as default for tools where the apply method has a default maximal answer length.
 # Even though the value of the max_answer_chars can be changed when calling the tool, it may make sense to adjust this default
