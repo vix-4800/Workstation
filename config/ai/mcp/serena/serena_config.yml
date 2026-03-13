@@ -1,17 +1,5 @@
-# the language backend to use for code understanding and manipulation.
-# Possible values are:
-#  * LSP: Use the language server protocol (LSP), spawning freely available language servers
-#      via the SolidLSP library that is part of Serena.
-#  * JetBrains: Use the Serena plugin in your JetBrains IDE.
-#      (requires the plugin to be installed and the project being worked on to be open
-#      in your IDE).
 language_backend: LSP
-
-# line ending convention to use when writing source files.
-# Possible values: "lf" (Unix), "crlf" (Windows), "native" (platform default).
-# Note that Serena's own files (e.g. memories and configuration files) always use native line endings.
-# This setting can be overridden on a per-project basis in project.yml files.
-line_ending: native
+line_ending: lf
 
 # whether to open a graphical window with Serena's logs.
 # This is mainly supported on Windows and (partly) on Linux; not available on macOS.
@@ -51,7 +39,7 @@ web_dashboard_listen_address: 127.0.0.1
 # b) manually navigating to http://localhost:24282/dashboard/ in your web browser (actual port
 #    may be higher if you have multiple instances running; try ports 24283, 24284, etc.)
 # See also: https://oraios.github.io/serena/02-usage/060_dashboard.html
-web_dashboard_open_on_launch: true
+web_dashboard_open_on_launch: false
 
 # address where JetBrains plugin servers are running (only relevant when using the JetBrains language backend)
 jetbrains_plugin_server_address: 127.0.0.1
@@ -72,7 +60,16 @@ ls_specific_settings: {}
 # list of paths to ignore across all projects.
 # Same syntax as gitignore, so you can use * and **.
 # These patterns are merged additively with each project's own ignored_paths.
-ignored_paths: []
+ignored_paths:
+  - ".git/**"
+  - "node_modules/**"
+  - "vendor/**"
+  - ".next/**"
+  - "dist/**"
+  - "build/**"
+  - "coverage/**"
+  - "tmp/**"
+  - "var/cache/**"
 
 # list of regex patterns which, when matched, mark a memory entry as read‑only.
 # For example, "global/.*" will mark all global memories as read-only.
