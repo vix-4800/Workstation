@@ -9,7 +9,7 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     set -l OFF (set_color normal)
 
     set -l step 1
-    set -l total_steps 9
+    set -l total_steps 10
     set -l freed 0
 
     function _cleanup_step
@@ -144,7 +144,25 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
         _cleanup_skip "Composer not installed, skipping"
     end
 
-    # Step 10 (optional): Docker cleanup
+    # Step 10: Clean workstation dotfiles backups
+    _cleanup_step "Cleaning workstation dotfiles backups..."
+    set -l workstation_backup_dir "$HOME/.local/share/dotfiles/backups"
+    if test -d "$workstation_backup_dir"
+        set -l backup_entries (find "$workstation_backup_dir" -mindepth 1 -maxdepth 1 2>/dev/null)
+        if test (count $backup_entries) -gt 0
+            if rm -rf -- $backup_entries
+                _cleanup_ok "Workstation backups removed"
+            else
+                _cleanup_err "Failed to remove workstation backups"
+            end
+        else
+            _cleanup_ok "No workstation backups found"
+        end
+    else
+        _cleanup_ok "No workstation backup directory found"
+    end
+
+    # Step 11 (optional): Docker cleanup
     echo
     if command -v docker >/dev/null
         read -l docker_confirm -P "$BOLD$YLW?$OFF $BOLD""[Optional]$OFF Clean Docker images & volumes? [y/N] "
