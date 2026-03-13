@@ -115,6 +115,104 @@ require_json() {
     fi
 }
 
+validate_json_schema() {
+    local schema_path="${REPO_ROOT}/dotfiles.schema.json"
+
+    if [[ ! -f "${schema_path}" ]]; then
+        err "JSON schema not found: ${schema_path}"
+        return 1
+    fi
+
+    if ! command -v python3 >/dev/null 2>&1; then
+        err "python3 is required for schema validation"
+        return 1
+    fi
+
+    python3 - "${CONF_JSON}" "${schema_path}" <<'PY'
+import json
+import sys
+
+
+class ValidationError(Exception):
+    pass
+
+
+def validate(value, schema, path="$"):
+    if "oneOf" in schema:
+        matched = 0
+        for candidate in schema["oneOf"]:
+            try:
+                validate(value, candidate, path)
+            except ValidationError:
+                continue
+            matched += 1
+        if matched != 1:
+            raise ValidationError(f"{path}: expected exactly one matching schema, got {matched}")
+
+    if "not" in schema:
+        try:
+            validate(value, schema["not"], path)
+        except ValidationError:
+            pass
+        else:
+            raise ValidationError(f"{path}: matched a forbidden schema")
+
+    if "enum" in schema and value not in schema["enum"]:
+        allowed = ", ".join(repr(item) for item in schema["enum"])
+        raise ValidationError(f"{path}: expected one of {allowed}, got {value!r}")
+
+    expected_type = schema.get("type")
+    if expected_type == "object" and not isinstance(value, dict):
+        raise ValidationError(f"{path}: expected object, got {type(value).__name__}")
+    if expected_type == "array" and not isinstance(value, list):
+        raise ValidationError(f"{path}: expected array, got {type(value).__name__}")
+    if expected_type == "string" and not isinstance(value, str):
+        raise ValidationError(f"{path}: expected string, got {type(value).__name__}")
+    if expected_type == "boolean" and not isinstance(value, bool):
+        raise ValidationError(f"{path}: expected boolean, got {type(value).__name__}")
+
+    if isinstance(value, dict):
+        properties = schema.get("properties", {})
+        for key in schema.get("required", []):
+            if key not in value:
+                raise ValidationError(f"{path}: missing required property {key!r}")
+
+        if schema.get("additionalProperties") is False:
+            extra_keys = sorted(set(value) - set(properties))
+            if extra_keys:
+                raise ValidationError(f"{path}: unexpected properties {extra_keys!r}")
+
+        for key, subschema in properties.items():
+            if key in value:
+                validate(value[key], subschema, f"{path}.{key}")
+
+    if isinstance(value, list):
+        min_items = schema.get("minItems")
+        if min_items is not None and len(value) < min_items:
+            raise ValidationError(f"{path}: expected at least {min_items} item(s), got {len(value)}")
+
+        item_schema = schema.get("items")
+        if item_schema is not None:
+            for index, item in enumerate(value):
+                validate(item, item_schema, f"{path}[{index}]")
+
+
+config_path, schema_path = sys.argv[1], sys.argv[2]
+
+with open(config_path, "r", encoding="utf-8") as config_handle:
+    config = json.load(config_handle)
+
+with open(schema_path, "r", encoding="utf-8") as schema_handle:
+    schema = json.load(schema_handle)
+
+try:
+    validate(config, schema)
+except ValidationError as error:
+    print(error, file=sys.stderr)
+    sys.exit(1)
+PY
+}
+
 timestamp() { date +"%Y%m%d-%H%M%S"; }
 
 resolve_variables() {
@@ -382,6 +480,22 @@ do_doctor() {
         fi
     else
         err "${RED}✗${OFF} JSON config not found: ${CONF_JSON}"
+        ok_all=0
+    fi
+
+    if [[ -f "${REPO_ROOT}/dotfiles.schema.json" ]]; then
+        local schema_error=""
+        if schema_error="$(validate_json_schema 2>&1)"; then
+            ok "${GRN}✓${OFF} JSON config matches schema: ${BLU}${REPO_ROOT}/dotfiles.schema.json${OFF}"
+        else
+            err "${RED}✗${OFF} JSON config does not match schema: ${REPO_ROOT}/dotfiles.schema.json"
+            if [[ -n "${schema_error}" ]]; then
+                err "${schema_error}"
+            fi
+            ok_all=0
+        fi
+    else
+        err "${RED}✗${OFF} JSON schema not found: ${REPO_ROOT}/dotfiles.schema.json"
         ok_all=0
     fi
 
