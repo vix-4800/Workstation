@@ -269,6 +269,11 @@
       "source": "config/ai/agents",
       "target": "$HOME/.agents",
       "comment": "Codex agents configuration for AI automation and task management"
+    },
+    {
+      "source": "config/ai/qwen/settings.json",
+      "target": "$HOME/.qwen/settings.json",
+      "comment": "Qwen agent configuration for AI automation and task management"
     }
   ]
 }

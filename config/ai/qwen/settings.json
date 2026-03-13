@@ -1,0 +1,17 @@
+{
+  "security": {
+    "auth": {
+      "selectedType": "qwen-oauth"
+    }
+  },
+  "$version": 3,
+  "ide": {
+    "enabled": true,
+    "hasSeenNudge": true
+  },
+  "mcpServers": {},
+  "general": {
+    "preferredEditor": "vim",
+    "gitCoAuthor": true
+  }
+}
