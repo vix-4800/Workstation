@@ -39,7 +39,28 @@
     "gitCoAuthor": true
   },
   "ui": {
-    "theme": "GitHub",
+    "theme": "Catppuccin Mocha",
+    "customThemes": {
+      "Catppuccin Mocha": {
+        "name": "Catppuccin Mocha",
+        "type": "custom",
+        "Background": "#1e1e2e",
+        "Foreground": "#cdd6f4",
+        "LightBlue": "#89dceb",
+        "AccentBlue": "#89b4fa",
+        "AccentPurple": "#cba6f7",
+        "AccentCyan": "#94e2d5",
+        "AccentGreen": "#a6e3a1",
+        "AccentYellow": "#f9e2af",
+        "AccentRed": "#f38ba8",
+        "Comment": "#6c7086",
+        "Gray": "#9399b2",
+        "DiffAdded": "#a6e3a1",
+        "DiffRemoved": "#f38ba8",
+        "DiffModified": "#89b4fa",
+        "GradientColors": ["#89b4fa", "#cba6f7", "#f5c2e7"]
+      }
+    },
     "hideTips": false
   },
   "privacy": {
