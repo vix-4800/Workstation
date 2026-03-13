@@ -266,8 +266,8 @@
       "comment": "Codex agents instructions"
     },
     {
-      "source": "config/ai/agents",
-      "target": "$HOME/.agents",
+      "source": "config/ai/agents/skills",
+      "target": ["$HOME/.agents/skills", "$HOME/.qwen/skills"],
       "comment": "Codex agents configuration for AI automation and task management"
     },
     {
