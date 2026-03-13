@@ -274,6 +274,11 @@
       "source": "config/ai/qwen/settings.json",
       "target": "$HOME/.qwen/settings.json",
       "comment": "Qwen agent configuration for AI automation and task management"
+    },
+    {
+      "source": "config/ai/mcp/serena/serena_config.yml",
+      "target": "$HOME/.serena/serena_config.yml",
+      "comment": "Serena MCP configuration"
     }
   ]
 }
