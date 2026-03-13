@@ -35,7 +35,7 @@
     }
   },
   "general": {
-    "preferredEditor": "vim",
+    "preferredEditor": "neovim",
     "gitCoAuthor": true
   },
   "ui": {
@@ -74,5 +74,11 @@
     "fileFiltering": {
       "respectGitIgnore": true
     }
+  },
+  "model": {
+    "name": "coder-model"
+  },
+  "tools": {
+    "approvalMode": "auto-edit"
   }
 }
