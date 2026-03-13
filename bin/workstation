@@ -128,7 +128,22 @@ resolve_variables() {
 
 read_mappings() {
     require_json
-    jq -r '.mappings[] | "\(.source)\t\(.target // "__NONE__")\t\(.sudo // false)\t\(.action // "")"' "${CONF_JSON}"
+    jq -r '
+        .mappings[]
+        | if has("target") then
+            . as $mapping
+            | (
+                if (.target | type) == "array" then
+                    .target[]
+                else
+                    .target
+                end
+            ) as $target
+            | "\($mapping.source)\t\($target)\t\($mapping.sudo // false)\t\($mapping.action // "")"
+        else
+            "\(.source)\t__NONE__\t\(.sudo // false)\t\(.action // "")"
+        end
+    ' "${CONF_JSON}"
 }
 
 maybe_sudo() {

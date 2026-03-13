@@ -19,8 +19,19 @@
             "description": "Source path relative to repository root or absolute path"
           },
           "target": {
-            "type": "string",
-            "description": "Target path (supports $HOME and ~ variables)"
+            "description": "Target path or paths (supports $HOME and ~ variables)",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              }
+            ]
           },
           "comment": {
             "type": "string",
