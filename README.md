@@ -12,11 +12,7 @@ Personal configuration files for Arch Linux with Sway (Wayland) desktop environm
 
 ![File Manager and Wallpaper](./assets/files-wallpaper.png)
 
-### 3. Terminal and Notification Center
-
-![Help Menu and Notifications](./assets/helpmenu-notifications.png)
-
-### 4. Neovim
+### 3. Neovim
 
 ![Neovim](./assets/neovim.png)
 
