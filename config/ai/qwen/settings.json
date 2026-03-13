@@ -2,6 +2,9 @@
   "security": {
     "auth": {
       "selectedType": "qwen-oauth"
+    },
+    "folderTrust": {
+      "enabled:": true
     }
   },
   "$version": 3,
@@ -13,5 +16,21 @@
   "general": {
     "preferredEditor": "vim",
     "gitCoAuthor": true
+  },
+  "ui": {
+    "theme": "GitHub",
+    "hideTips": false
+  },
+  "privacy": {
+    "usageStatisticsEnabled": false
+  },
+  "telemetry": {
+    "enabled": false
+  },
+  "context": {
+    "fileName": ["QWEN.md", "AGENTS.md"],
+    "fileFiltering": {
+      "respectGitIgnore": true
+    }
   }
 }
