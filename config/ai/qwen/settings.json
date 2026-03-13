@@ -12,7 +12,28 @@
     "enabled": true,
     "hasSeenNudge": true
   },
-  "mcpServers": {},
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "serena": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "codex"
+      ],
+      "timeout": 60000
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    }
+  },
   "general": {
     "preferredEditor": "vim",
     "gitCoAuthor": true
