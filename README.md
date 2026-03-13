@@ -26,10 +26,6 @@ The `workstation` command provides unified management for dotfiles and systemd s
 # Bootstrap new system
 workstation setup                   # Full system provisioning with Ansible
 
-# Update from git
-workstation update                  # Pull changes and reapply configuration
-workstation update -n               # Dry-run to preview changes
-
 # Dotfiles management
 workstation dotfiles link           # Apply all symlinks
 workstation dotfiles status         # Check symlink status
