@@ -1,0 +1,6 @@
+---
+nvidia_packages:
+  - nvidia-dkms
+  - nvidia-utils
+  - nvidia-settings
+  - lib32-nvidia-utils

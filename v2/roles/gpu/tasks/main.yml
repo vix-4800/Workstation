@@ -1,0 +1,17 @@
+---
+- name: Install NVIDIA drivers
+  community.general.pacman:
+    name: "{{ nvidia_packages }}"
+    state: present
+  become: true
+  when: gpu_vendor == 'nvidia'
+  tags: [gpu, packages]
+
+- name: Deploy GPU fan control service
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/gpu/files/gpu-fan-control.service"
+    dest: "{{ ansible_env.HOME }}/.config/systemd/user/gpu-fan-control.service"
+    state: link
+  when: gpu_vendor == 'nvidia'
+  notify: reload systemd user
+  tags: [gpu, config, services]
