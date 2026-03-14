@@ -11,6 +11,8 @@ vault/secrets.yml
 # Ansible
 *.retry
 
+inventory/host_vars/*.yml
+
 # Systemd auto-generated wants/ symlinks (created by systemctl enable)
 roles/services/files/*.wants/
 

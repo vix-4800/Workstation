@@ -1,4 +1,0 @@
----
-cpu_vendor: intel # intel | amd
-gpu_vendor: nvidia # nvidia | amd | none
-has_battery: false # true for laptops
