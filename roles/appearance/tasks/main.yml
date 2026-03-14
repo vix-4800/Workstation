@@ -77,6 +77,20 @@
   become: true
   tags: [appearance, system]
 
+- name: Check Plymouth theme path type
+  ansible.builtin.stat:
+    path: /usr/share/plymouth/themes/catppuccin-mocha
+  register: plymouth_stat
+  tags: [appearance, system]
+
+- name: Remove existing Plymouth theme directory if not a symlink
+  ansible.builtin.file:
+    path: /usr/share/plymouth/themes/catppuccin-mocha
+    state: absent
+  become: true
+  when: plymouth_stat.stat.exists and not plymouth_stat.stat.islnk
+  tags: [appearance, system]
+
 - name: Deploy Plymouth theme
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/appearance/files/themes/plymouth/catppuccin-mocha"
