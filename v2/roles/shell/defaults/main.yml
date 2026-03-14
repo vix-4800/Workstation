@@ -6,7 +6,9 @@ shell_packages:
 
 shell_configs:
   - { src: fish, dest: "{{ ansible_env.HOME }}/.config/fish" }
-  - { src: bash, dest: "{{ ansible_env.HOME }}/.config/bash" }
   - { src: alacritty, dest: "{{ ansible_env.HOME }}/.config/alacritty" }
   - { src: tmux, dest: "{{ ansible_env.HOME }}/.config/tmux" }
-  - { src: aliases, dest: "{{ ansible_env.HOME }}/.config/shell/aliases" }
+  - { src: shell/aliases, dest: "{{ ansible_env.HOME }}/.aliases" }
+  - { src: .profile, dest: "{{ ansible_env.HOME }}/.profile" }
+  - { src: bash/.bash_profile, dest: "{{ ansible_env.HOME }}/.bash_profile" }
+  - { src: bash/bashrc, dest: "{{ ansible_env.HOME }}/.bashrc" }
