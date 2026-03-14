@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+# Get list of input devices (sources) with better formatting
+devices=$(pactl list sources | awk '
+BEGIN {
+    name = ""
+    desc = ""
+    state = ""
+}
+/State:/ {
+    state = $2
+}
+/Name:/ {
+    name = $2
+    # Skip monitor sources (they are outputs, not inputs)
+    if (name ~ /\.monitor$/) {
+        name = ""
+    }
+}
+/Description:/ {
+    if (name == "") next
+
+    # Get everything after "Description: "
+    desc = $0
+    sub(/^[[:space:]]*Description:[[:space:]]*/, "", desc)
+
+    # Only output when we have all three fields
+    if (name != "" && desc != "" && state != "") {
+        # Clean up common prefixes and make description more readable
+        gsub(/Built-in /, "🎤 ", desc)
+        gsub(/Starship\/Matisse HD Audio Controller /, "🎙️ ", desc)
+        gsub(/Family 17h\/19h HD Audio Controller /, "🎙️ ", desc)
+        gsub(/Family 17h\/19h\/1ah HD Audio Controller /, "🎙️ ", desc)
+        gsub(/Webcam /, "📷 ", desc)
+        gsub(/Analog Stereo/, "🎵 Stereo", desc)
+        gsub(/Pro Audio/, "🎙️ Pro", desc)
+        gsub(/Monitor of /, "🔊 Monitor: ", desc)
+
+        # Add running indicator
+        if (state == "RUNNING") {
+            icon = "▶️ "
+        } else if (state == "SUSPENDED") {
+            icon = "⏸️  "
+        } else {
+            icon = "⏹️  "
+        }
+
+        # Truncate long descriptions
+        if (length(desc) > 60) {
+            desc = substr(desc, 1, 57) "..."
+        }
+
+        printf "%s%s\t%s\n", icon, desc, name
+        name = ""
+        desc = ""
+        state = ""
+    }
+}
+')
+
+if [[ -z "${devices}" ]]; then
+    notify-send "Audio" "No input devices found" -u normal
+    exit 0
+fi
+
+# Show wofi menu with formatted device names
+selected=$(echo "${devices}" | wofi \
+    --dmenu \
+    --prompt "Choose Input Device" \
+    --width 1000 \
+    --height 300)
+
+if [[ -z "${selected}" ]]; then
+    exit 0
+fi
+
+# Extract the actual device name from the selection
+device_name=$(echo "${selected}" | awk -F'\t' '{print $2}')
+
+# Set the default source
+if pactl set-default-source "${device_name}"; then
+    # Get the short description for notification
+    short_desc=$(echo "${selected}" | awk -F'\t' '{print $1}' | sed 's/^[▶️⏸️⏹️ ]*//')
+    notify-send "Audio" "Input: ${short_desc}" -u normal
+else
+    notify-send "Audio" "Error switching device" -u critical
+fi

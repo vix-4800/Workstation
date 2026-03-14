@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+PROFILES_DIR="${HOME}/.config/sing-box/profiles"
+ACTIVE_FILE="${HOME}/.config/sing-box/.active-profile"
+
+# --- Gather current state ---
+WG_ACTIVE=$(nmcli -t -f NAME,TYPE,STATE connection show --active 2>/dev/null \
+    | grep ':wireguard:activated' | cut -d: -f1 | head -1)
+
+SINGBOX_ACTIVE=""
+if systemctl is-active --quiet sing-box 2>/dev/null; then
+    [[ -f "$ACTIVE_FILE" ]] && SINGBOX_ACTIVE=$(cat "$ACTIVE_FILE")
+    SINGBOX_ACTIVE="${SINGBOX_ACTIVE:-vless}"
+fi
+
+# --- Build menu ---
+menu=""
+
+if [[ -n "$WG_ACTIVE" || -n "$SINGBOX_ACTIVE" ]]; then
+    menu+="󰦞  Disconnect all\n---\n"
+fi
+
+# WireGuard profiles
+while IFS= read -r name; do
+    [[ -z "$name" ]] && continue
+    if [[ "$name" == "$WG_ACTIVE" ]]; then
+        menu+="󰦝  WireGuard: ${name} ✓\n"
+    else
+        menu+="󰢾  WireGuard: ${name}\n"
+    fi
+done < <(nmcli -t -f NAME,TYPE connection show 2>/dev/null \
+    | grep ':wireguard$' | cut -d: -f1)
+
+# sing-box profiles
+if [[ -d "$PROFILES_DIR" ]]; then
+    for f in "${PROFILES_DIR}"/*.json; do
+        [[ -e "$f" ]] || continue
+        pname=$(basename "$f" .json)
+        if [[ "$pname" == "$SINGBOX_ACTIVE" ]]; then
+            menu+="󰦝  VLESS: ${pname} ✓\n"
+        else
+            menu+="󱇱  VLESS: ${pname}\n"
+        fi
+    done
+fi
+
+if [[ -z "$menu" ]]; then
+    notify-send "VPN" "No VPN profiles configured.\nUse: vpn import <vless://...>" -u normal
+    exit 0
+fi
+
+# --- Show menu ---
+selected=$(printf '%b' "$menu" | wofi \
+    --dmenu \
+    --prompt "VPN" \
+    --width 500 \
+    --height 300 \
+    --cache-file=/dev/null)
+
+[[ -z "$selected" ]] && exit 0
+
+# --- Handle selection ---
+if [[ "$selected" == *"Disconnect all"* ]]; then
+    [[ -n "$WG_ACTIVE" ]] && nmcli connection down "$WG_ACTIVE"
+    systemctl is-active --quiet sing-box && sudo systemctl stop sing-box && rm -f "$ACTIVE_FILE"
+    notify-send "VPN" "Disconnected" -u normal
+
+elif [[ "$selected" == *"WireGuard:"* ]]; then
+    name=$(printf '%s' "$selected" | sed 's/.*WireGuard: //; s/ ✓$//')
+    [[ -n "$SINGBOX_ACTIVE" ]] && sudo systemctl stop sing-box && rm -f "$ACTIVE_FILE"
+    nmcli connection up "$name"
+    notify-send "VPN" "WireGuard: $name" -u normal
+
+elif [[ "$selected" == *"VLESS:"* ]]; then
+    pname=$(printf '%s' "$selected" | sed 's/.*VLESS: //; s/ ✓$//')
+    profile_file="${PROFILES_DIR}/${pname}.json"
+    [[ -n "$WG_ACTIVE" ]] && nmcli connection down "$WG_ACTIVE"
+    sudo tee /etc/sing-box/config.json < "$profile_file" > /dev/null
+    if systemctl is-active --quiet sing-box; then
+        sudo systemctl restart sing-box
+    else
+        sudo systemctl start sing-box
+    fi
+    printf '%s' "$pname" > "$ACTIVE_FILE"
+    notify-send "VPN" "VLESS: $pname" -u normal
+fi

@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+
+# Get WiFi status
+wifi_status=$(nmcli radio wifi)
+wifi_enabled=$([[ "${wifi_status}" == "enabled" ]] && echo "yes" || echo "no")
+
+# Get current connection
+current_connection=$(nmcli -t -f NAME,TYPE,DEVICE connection show --active | grep -E ":ethernet:|:wifi:" | head -1)
+current_name=$(echo "${current_connection}" | cut -d: -f1)
+current_type=$(echo "${current_connection}" | cut -d: -f2)
+
+# Build menu
+menu=""
+
+# Current connection info
+if [[ -n "${current_name}" ]]; then
+    if [[ "${current_type}" == "wifi" ]]; then
+        signal=$(nmcli -t -f SIGNAL device wifi list | head -1 | cut -d: -f1)
+        menu+="✅ Connected: ${current_name} (${signal}%)\n"
+    else
+        menu+="✅ Connected: ${current_name}\n"
+    fi
+    menu+="🔌 Disconnect\n"
+    menu+="---\n"
+fi
+
+# WiFi toggle
+if [[ "${wifi_enabled}" == "yes" ]]; then
+    menu+="📶 WiFi: ON (Click to disable)\n"
+else
+    menu+="📵 WiFi: OFF (Click to enable)\n"
+fi
+
+menu+="---\n"
+
+# Get available WiFi networks
+if [[ "${wifi_enabled}" == "yes" ]]; then
+    # Refresh scan
+    nmcli device wifi rescan 2>/dev/null || true
+    sleep 0.5
+
+    # Get saved connections
+    saved_networks=$(nmcli -t -f NAME connection show | sort)
+
+    # Get available networks with signal strength
+    available=$(nmcli -t -f SSID,SIGNAL,SECURITY device wifi list | grep -v "^:") || true
+
+    if [[ -n "${available}" ]]; then
+        menu+="📡 Available Networks:\n"
+
+        # Process networks
+        seen_ssids=()
+        while IFS=: read -r ssid signal security; do
+            # Skip empty SSIDs
+            [[ -z "${ssid}" ]] && continue
+
+            # Skip duplicates
+            if printf '%s\n' "${seen_ssids[@]}" | grep -qx "${ssid}"; then
+                continue
+            fi
+            seen_ssids+=("${ssid}")
+
+            # Determine icon based on signal strength
+            if [[ "${signal}" -ge 75 ]]; then
+                icon="󰤨"
+            elif [[ "${signal}" -ge 50 ]]; then
+                icon="󰤥"
+            elif [[ "${signal}" -ge 25 ]]; then
+                icon="󰤢"
+            else
+                icon="󰤟"
+            fi
+
+            # Security icon
+            if [[ -n "${security}" ]]; then
+                sec_icon="🔒"
+            else
+                sec_icon="🔓"
+            fi
+
+            # Check if saved
+            saved_icon=""
+            if echo "${saved_networks}" | grep -qx "${ssid}"; then
+                saved_icon=" ⭐"
+            fi
+
+            # Check if current
+            current_icon=""
+            if [[ "${ssid}" == "${current_name}" ]]; then
+                current_icon=" ✓"
+            fi
+
+            menu+="  ${icon} ${sec_icon} ${ssid} (${signal}%)${saved_icon}${current_icon}\n"
+        done <<< "${available}"
+    fi
+fi
+
+menu+="---\n"
+menu+="⚙️  Network Settings\n"
+menu+="🔄 Refresh"
+
+# Show menu
+selected=$(echo -e "${menu}" | wofi \
+    --dmenu \
+    --prompt "Network" \
+    --width 800 \
+    --height 500 \
+    --cache-file=/dev/null)
+
+if [[ -z "${selected}" ]]; then
+    exit 0
+fi
+
+# Handle selection
+if [[ "${selected}" == *"Disconnect"* ]]; then
+    nmcli connection down "${current_name}"
+    notify-send "Network" "Disconnected from ${current_name}" -u normal
+
+elif [[ "${selected}" == *"WiFi: ON"* ]]; then
+    nmcli radio wifi off
+    notify-send "Network" "WiFi disabled" -u normal
+
+elif [[ "${selected}" == *"WiFi: OFF"* ]]; then
+    nmcli radio wifi on
+    notify-send "Network" "WiFi enabled" -u normal
+
+elif [[ "${selected}" == *"Network Settings"* ]]; then
+    nm-connection-editor &
+
+elif [[ "${selected}" == *"Refresh"* ]]; then
+    exec "$0"
+
+elif [[ "${selected}" =~ ^[[:space:]]*[󰤨󰤥󰤢󰤟][[:space:]]*[🔒🔓][[:space:]]*(.+)[[:space:]]*\(([0-9]+)%\) ]]; then
+    # Extract SSID from selection
+    ssid=$(echo "${selected}" | sed -E 's/^[[:space:]]*[󰤨󰤥󰤢󰤟][[:space:]]*[🔒🔓][[:space:]]*//; s/[[:space:]]*\([0-9]+%\).*$//')
+
+    # Check if network is saved
+    if echo "${saved_networks}" | grep -qx "${ssid}"; then
+        # Connect to saved network
+        if nmcli connection up "${ssid}"; then
+            notify-send "Network" "Connected to ${ssid}" -u normal
+        else
+            notify-send "Network" "Failed to connect to ${ssid}" -u critical
+        fi
+    else
+        # New network - need password
+        # Use networkmanager_dmenu for password prompt
+        NMCLI_FIELDS="SSID:${ssid}" networkmanager_dmenu
+    fi
+fi

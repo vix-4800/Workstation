@@ -1,0 +1,182 @@
+@import 'mocha.css';
+
+* {
+    font-family: 'JetBrainsMono Nerd Font', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    min-height: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+window#waybar {
+    background: transparent;
+}
+
+/* Base pill style — standalone blocks */
+#workspaces,
+#custom-weather,
+#custom-calendar,
+#custom-docker,
+#custom-notification {
+    background-color: @base;
+    border: 1px solid @surface1;
+    border-radius: 20px;
+    margin: 6px 8px 6px 8px;
+    padding: 2px 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Group pill — no side padding, icons provide their own spacing */
+#net,
+#media,
+#system {
+    background-color: @base;
+    border: 1px solid @surface1;
+    border-radius: 20px;
+    margin: 6px 8px 6px 8px;
+    padding: 2px 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Workspaces specific */
+#workspaces {
+    padding: 2px 6px;
+}
+
+#workspaces button {
+    color: @lavender;
+    border-radius: 18px;
+    padding: 4px;
+    margin: 2px;
+}
+
+#workspaces button.active {
+    color: @base;
+    background-color: @mauve;
+}
+
+#workspaces button:hover {
+    color: @base;
+    background-color: @sapphire;
+}
+
+/* Colors for specific modules */
+#custom-weather {
+    color: @sky;
+}
+#custom-calendar {
+    color: @rosewater;
+}
+#custom-docker {
+    color: @blue;
+}
+#custom-docker.running {
+    color: @sky;
+}
+#custom-docker.stopped {
+    color: @surface2;
+}
+
+/* Group: net */
+#custom-vpn {
+    color: @green;
+}
+#custom-vpn.disconnected {
+    color: @red;
+}
+#custom-network {
+    color: @subtext1;
+}
+#custom-network.online {
+    color: @green;
+}
+#custom-network.no-internet {
+    color: @red;
+}
+#custom-network.disconnected {
+    color: @red;
+}
+#bluetooth {
+    color: @sapphire;
+}
+
+/* Group: media */
+#pulseaudio {
+    color: @flamingo;
+}
+#pulseaudio.muted {
+    color: @surface2;
+}
+#custom-microphone {
+    color: @peach;
+}
+#custom-microphone.muted {
+    color: @surface2;
+}
+
+/* Group: system */
+#idle_inhibitor {
+    color: @yellow;
+}
+#custom-resources {
+    color: @teal;
+}
+#battery {
+    color: @green;
+}
+#battery.charging {
+    color: @teal;
+}
+#battery.warning:not(.charging) {
+    color: @yellow;
+}
+#battery.critical:not(.charging) {
+    color: @red;
+}
+#language {
+    color: @mauve;
+}
+
+#custom-notification {
+    color: @yellow;
+}
+
+/* Standalone pill hover — for blocks that are not inside a group */
+#workspaces:hover,
+#custom-weather:hover,
+#custom-calendar:hover,
+#custom-docker:hover,
+#custom-notification:hover {
+    background-color: @surface0;
+    border-color: @lavender;
+}
+
+/* Group: modules inside groups — styled as small inner pills */
+#custom-vpn,
+#custom-network,
+#bluetooth,
+#pulseaudio,
+#custom-microphone,
+#idle_inhibitor,
+#custom-resources,
+#battery,
+#language {
+    padding: 2px 10px;
+    margin: 0 3px;
+    border-radius: 16px;
+    background-color: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Per-module hover inside a group — highlights just the hovered icon */
+#custom-vpn:hover,
+#custom-network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#custom-microphone:hover,
+#idle_inhibitor:hover,
+#custom-resources:hover,
+#battery:hover,
+#language:hover {
+    background-color: @surface1;
+}
