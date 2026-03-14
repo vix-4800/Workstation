@@ -1,0 +1,12 @@
+---
+shell_packages:
+  - fish
+  - alacritty
+  - tmux
+
+shell_configs:
+  - { src: fish, dest: "{{ ansible_env.HOME }}/.config/fish" }
+  - { src: bash, dest: "{{ ansible_env.HOME }}/.config/bash" }
+  - { src: alacritty, dest: "{{ ansible_env.HOME }}/.config/alacritty" }
+  - { src: tmux, dest: "{{ ansible_env.HOME }}/.config/tmux" }
+  - { src: aliases, dest: "{{ ansible_env.HOME }}/.config/shell/aliases" }
