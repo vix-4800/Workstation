@@ -18,6 +18,28 @@
   become: true
   tags: [network, system]
 
+- name: Add sudoers rules for passwordless sing-box management
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/sing-box
+    content: |
+      %wheel ALL=(ALL) NOPASSWD: /usr/bin/systemctl start sing-box
+      %wheel ALL=(ALL) NOPASSWD: /usr/bin/systemctl stop sing-box
+      %wheel ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart sing-box
+      %wheel ALL=(ALL) NOPASSWD: /usr/bin/tee /etc/sing-box/config.json
+    mode: "0440"
+    validate: "visudo -cf %s"
+  become: true
+  tags: [network, system]
+
+- name: Ensure sing-box is disabled at boot (vpn script controls it)
+  ansible.builtin.systemd:
+    name: sing-box
+    enabled: false
+    daemon_reload: true
+  become: true
+  ignore_errors: true
+  tags: [network, services]
+
 - name: Deploy sing-box profiles
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/network/files/sing-box"

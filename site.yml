@@ -40,6 +40,7 @@
     - { role: display-manager, tags: [display-manager] }
     - { role: development, tags: [development] }
     - { role: appearance, tags: [appearance] }
+    - { role: apps, tags: [apps] }
     - { role: services, tags: [services] }
     - { role: ai-tools, tags: [ai-tools] }
 

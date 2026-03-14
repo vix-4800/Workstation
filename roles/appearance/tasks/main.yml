@@ -3,9 +3,18 @@
   community.general.pacman:
     name:
       - ttf-jetbrains-mono-nerd
+      - otf-font-awesome
+      - ttf-dejavu
+      - ttf-liberation
       - noto-fonts
       - noto-fonts-cjk
       - noto-fonts-emoji
+      - ttf-opensans
+      - ttf-roboto
+      - ttf-ubuntu-font-family
+      - inter-font
+      - freetype2
+      - fontconfig
     state: present
   become: true
   tags: [appearance, packages]

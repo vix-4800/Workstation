@@ -7,7 +7,12 @@ essential_packages:
   - git
   - curl
   - wget
+  - make
+  - gcc
+  - less
+  - just
   - unzip
+  - unrar
   - zip
   - man-db
   - man-pages
@@ -15,11 +20,17 @@ essential_packages:
   - htop
   - tree
   - jq
+  - udiskie
+  - xdg-user-dirs
+
+cli_packages:
   - eza
   - bat
   - ripgrep
   - fd
   - fzf
   - tldr
+  - chafa
   - trash-cli
-  - xdg-user-dirs
+  - reflector
+  - pacman-contrib

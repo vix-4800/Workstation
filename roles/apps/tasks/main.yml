@@ -1,0 +1,33 @@
+---
+- name: Install applications
+  community.general.pacman:
+    name: "{{ app_packages }}"
+    state: present
+  become: true
+  tags: [apps, packages]
+
+- name: Install AUR applications
+  kewlfft.aur.aur:
+    name: "{{ item }}"
+    state: present
+  become: false
+  loop: "{{ app_aur_packages }}"
+  loop_control:
+    label: "{{ item }}"
+  tags: [apps, packages]
+
+- name: Enable auto-cpufreq service
+  ansible.builtin.systemd:
+    name: auto-cpufreq
+    enabled: true
+    state: started
+  become: true
+  tags: [apps, services]
+
+- name: Install custom waypaper
+  ansible.builtin.pip:
+    name: "git+https://github.com/vix-4800/waypaper.git"
+    state: present
+    extra_args: "--break-system-packages --no-deps"
+  become: true
+  tags: [apps, packages]

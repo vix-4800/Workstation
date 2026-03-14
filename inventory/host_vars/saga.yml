@@ -7,6 +7,10 @@ gpu_vendor: none
 has_battery: true
 vpn_profile: laptop
 
+# Host-specific services
+host_services:
+  - auto-cpufreq
+
 # WireGuard (values from vault)
 wg_private_key: "{{ vault_wg_private_key_saga }}"
 wg_address: "{{ vault_wg_address_saga }}"

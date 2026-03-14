@@ -1,0 +1,24 @@
+---
+app_packages:
+  - firefox
+  - telegram-desktop
+  - github-cli
+  - flatpak
+  - zenity
+  - thunar
+  - thunar-archive-plugin
+  - thunar-media-tags-plugin
+  - thunar-volman
+  - gvfs
+  - gvfs-mtp
+  - gvfs-smb
+  - gvfs-nfs
+  - zathura
+  - zathura-pdf-mupdf
+  - feh
+
+app_aur_packages:
+  - spotify
+  - batsignal
+  - auto-cpufreq
+  - better-control-git

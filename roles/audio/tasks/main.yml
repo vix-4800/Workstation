@@ -23,3 +23,14 @@
   loop_control:
     label: "{{ item.src }}"
   tags: [audio, config]
+
+- name: Enable PipeWire user services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    scope: user
+    enabled: true
+  loop:
+    - pipewire.service
+    - pipewire-pulse.service
+    - wireplumber.service
+  tags: [audio, services]

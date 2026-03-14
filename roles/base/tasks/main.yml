@@ -28,6 +28,20 @@
   become: true
   tags: [base, packages]
 
+- name: Install modern CLI tools
+  community.general.pacman:
+    name: "{{ cli_packages }}"
+    state: present
+  become: true
+  tags: [base, packages]
+
+- name: Update mirror list with reflector
+  ansible.builtin.command:
+    cmd: reflector --country Russia --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
+  become: true
+  changed_when: false
+  tags: [base, system]
+
 - name: Deploy environment variables
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/base/files/environment"

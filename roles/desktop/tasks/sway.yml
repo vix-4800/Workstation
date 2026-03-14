@@ -3,14 +3,30 @@
   community.general.pacman:
     name:
       - swayidle
+      - swaybg
       - grim
       - slurp
       - wl-clipboard
+      - cliphist
+      - xdg-desktop-portal
       - xdg-desktop-portal-wlr
       - xdg-desktop-portal-gtk
+      - xorg-xwayland
+      - libnotify
       - wofi
       - wlogout
       - brightnessctl
+      - geoclue
+      - tumbler
+      - libgepub
+      - poppler-glib
+      - libgsf
+      - libopenraw
+      - ffmpegthumbnailer
+      - meson
+      - ninja
+      - playerctl
+      - libsoup3
     state: present
   become: true
   tags: [packages]
@@ -32,6 +48,13 @@
 - name: Install gtklock (AUR)
   kewlfft.aur.aur:
     name: gtklock
+    state: present
+  become: false
+  tags: [packages]
+
+- name: Install autotiling (AUR)
+  kewlfft.aur.aur:
+    name: autotiling
     state: present
   become: false
   tags: [packages]
