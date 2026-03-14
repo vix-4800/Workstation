@@ -8,7 +8,7 @@
 
 - name: Install SwayOSD
   kewlfft.aur.aur:
-    name: swayosd-git
+    name: swayosd
     state: present
   become: false
   tags: [packages]
