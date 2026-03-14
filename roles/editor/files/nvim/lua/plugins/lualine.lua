@@ -4,10 +4,12 @@ return {
   dependencies = { "nvim-tree/nvim-web-devicons" },
   opts = function()
     local icons = require("config.icons")
+    local theme = require("config.lualine-theme")
+
     return {
       options = {
         icons_enabled = true,
-        theme = "catppuccin",
+        theme = theme,
         component_separators = icons.lualine.component_separators,
         section_separators = icons.lualine.section_separators,
         globalstatus = true,
