@@ -13,6 +13,20 @@
         fail_msg: "This playbook only supports Arch Linux"
       tags: [always]
 
+    - name: Ensure essential directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - "{{ ansible_env.HOME }}/.config"
+        - "{{ ansible_env.HOME }}/.config/systemd"
+        - "{{ ansible_env.HOME }}/.config/yamllint"
+        - "{{ ansible_env.HOME }}/.config/geoclue"
+        - "{{ ansible_env.HOME }}/.local/bin"
+        - "{{ ansible_env.HOME }}/Pictures"
+      tags: [always]
+
   roles:
     - { role: base, tags: [base] }
     - { role: yay, tags: [yay] }
