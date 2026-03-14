@@ -2,6 +2,7 @@
 # Common variables shared across all workstations
 
 username: vix
+home: "/home/{{ username }}"
 dotfiles_dir: "{{ playbook_dir }}"
 
 # Appearance

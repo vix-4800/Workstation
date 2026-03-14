@@ -27,7 +27,7 @@
 - name: Install Fisher plugin manager
   ansible.builtin.shell:
     cmd: fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
-    creates: "{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish"
+    creates: "{{ home }}/.config/fish/functions/fisher.fish"
   tags: [shell]
 
 - name: Install Fish plugins from fish_plugins

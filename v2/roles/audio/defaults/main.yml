@@ -13,5 +13,5 @@ multimedia_packages:
   - imagemagick
 
 audio_configs:
-  - { src: pipewire, dest: "{{ ansible_env.HOME }}/.config/pipewire" }
-  - { src: wireplumber, dest: "{{ ansible_env.HOME }}/.config/wireplumber" }
+  - { src: pipewire, dest: "{{ home }}/.config/pipewire" }
+  - { src: wireplumber, dest: "{{ home }}/.config/wireplumber" }

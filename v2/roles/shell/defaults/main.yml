@@ -5,10 +5,10 @@ shell_packages:
   - tmux
 
 shell_configs:
-  - { src: fish, dest: "{{ ansible_env.HOME }}/.config/fish" }
-  - { src: alacritty, dest: "{{ ansible_env.HOME }}/.config/alacritty" }
-  - { src: tmux, dest: "{{ ansible_env.HOME }}/.config/tmux" }
-  - { src: shell/aliases, dest: "{{ ansible_env.HOME }}/.aliases" }
-  - { src: .profile, dest: "{{ ansible_env.HOME }}/.profile" }
-  - { src: bash/.bash_profile, dest: "{{ ansible_env.HOME }}/.bash_profile" }
-  - { src: bash/bashrc, dest: "{{ ansible_env.HOME }}/.bashrc" }
+  - { src: fish, dest: "{{ home }}/.config/fish" }
+  - { src: alacritty, dest: "{{ home }}/.config/alacritty" }
+  - { src: tmux, dest: "{{ home }}/.config/tmux" }
+  - { src: shell/aliases, dest: "{{ home }}/.aliases" }
+  - { src: .profile, dest: "{{ home }}/.profile" }
+  - { src: bash/.bash_profile, dest: "{{ home }}/.bash_profile" }
+  - { src: bash/bashrc, dest: "{{ home }}/.bashrc" }

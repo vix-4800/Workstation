@@ -40,7 +40,7 @@
 - name: Deploy user-dirs config
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/base/files/user-dirs.dirs"
-    dest: "{{ ansible_env.HOME }}/.config/user-dirs.dirs"
+    dest: "{{ home }}/.config/user-dirs.dirs"
     state: link
     force: true
   tags: [base, config]
@@ -48,7 +48,7 @@
 - name: Deploy fontconfig
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/base/files/fontconfig"
-    dest: "{{ ansible_env.HOME }}/.config/fontconfig"
+    dest: "{{ home }}/.config/fontconfig"
     state: link
     force: true
   tags: [base, config]
@@ -56,7 +56,7 @@
 - name: Deploy editorconfig
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/base/files/.editorconfig"
-    dest: "{{ ansible_env.HOME }}/.editorconfig"
+    dest: "{{ home }}/.editorconfig"
     state: link
     force: true
   tags: [base, config]

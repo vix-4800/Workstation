@@ -9,7 +9,7 @@
   pre_tasks:
     - name: Verify running on Arch Linux
       ansible.builtin.assert:
-        that: ansible_os_family == "Archlinux"
+        that: ansible_facts['os_family'] == "Archlinux"
         fail_msg: "This playbook only supports Arch Linux"
       tags: [always]
 
@@ -19,12 +19,12 @@
         state: directory
         mode: "0755"
       loop:
-        - "{{ ansible_env.HOME }}/.config"
-        - "{{ ansible_env.HOME }}/.config/systemd"
-        - "{{ ansible_env.HOME }}/.config/yamllint"
-        - "{{ ansible_env.HOME }}/.config/geoclue"
-        - "{{ ansible_env.HOME }}/.local/bin"
-        - "{{ ansible_env.HOME }}/Pictures"
+        - "{{ home }}/.config"
+        - "{{ home }}/.config/systemd"
+        - "{{ home }}/.config/yamllint"
+        - "{{ home }}/.config/geoclue"
+        - "{{ home }}/.local/bin"
+        - "{{ home }}/Pictures"
       tags: [always]
 
   roles:

@@ -21,7 +21,7 @@
 - name: Deploy sing-box profiles
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/network/files/sing-box"
-    dest: "{{ ansible_env.HOME }}/.config/sing-box"
+    dest: "{{ home }}/.config/sing-box"
     state: link
     force: true
   tags: [config]

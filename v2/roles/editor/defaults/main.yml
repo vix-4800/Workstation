@@ -4,6 +4,6 @@ editor_packages:
   - code
 
 editor_configs:
-  - { src: nvim, dest: "{{ ansible_env.HOME }}/.config/nvim" }
-  - { src: code/code-flags.conf, dest: "{{ ansible_env.HOME }}/.config/code-flags.conf" }
-  - { src: git/gitconfig, dest: "{{ ansible_env.HOME }}/.gitconfig" }
+  - { src: nvim, dest: "{{ home }}/.config/nvim" }
+  - { src: code/code-flags.conf, dest: "{{ home }}/.config/code-flags.conf" }
+  - { src: git/gitconfig, dest: "{{ home }}/.gitconfig" }

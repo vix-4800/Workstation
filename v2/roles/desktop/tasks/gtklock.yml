@@ -8,7 +8,7 @@
 - name: Deploy gtklock config
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/desktop/files/gtklock"
-    dest: "{{ ansible_env.HOME }}/.config/gtklock"
+    dest: "{{ home }}/.config/gtklock"
     state: link
     force: true
   tags: [config]
