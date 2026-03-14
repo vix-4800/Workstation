@@ -8,8 +8,8 @@
 
 - name: Deploy bluetooth config
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/network/files/bluetooth"
-    dest: /etc/bluetooth
+    src: "{{ dotfiles_dir }}/roles/network/files/bluetooth/main.conf"
+    dest: /etc/bluetooth/main.conf
     state: link
     force: true
   become: true
