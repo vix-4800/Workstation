@@ -1,10 +1,8 @@
 ---
-- name: Install Sway and core components
+- name: Install Sway core components
   community.general.pacman:
     name:
-      - sway
       - swayidle
-      - swaylock
       - grim
       - slurp
       - wl-clipboard
@@ -17,7 +15,21 @@
   become: true
   tags: [packages]
 
-- name: Install gtklock
+- name: Install swayfx (AUR)
+  kewlfft.aur.aur:
+    name: swayfx
+    state: present
+  become: false
+  tags: [packages]
+
+- name: Install swaylock-effects (AUR)
+  kewlfft.aur.aur:
+    name: swaylock-effects
+    state: present
+  become: false
+  tags: [packages]
+
+- name: Install gtklock (AUR)
   kewlfft.aur.aur:
     name: gtklock
     state: present
