@@ -1,0 +1,37 @@
+---
+- name: Install yay (AUR helper)
+  block:
+    - name: Check if yay is installed
+      ansible.builtin.command:
+        cmd: pacman -Qi yay
+      register: yay_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install yay from AUR
+      when: yay_check.rc != 0
+      block:
+        - name: Install build dependencies
+          community.general.pacman:
+            name: [base-devel, git]
+            state: present
+          become: true
+
+        - name: Clone yay repository
+          ansible.builtin.git:
+            repo: https://aur.archlinux.org/yay.git
+            dest: /tmp/yay-build
+            version: master
+            force: true
+
+        - name: Build and install yay
+          ansible.builtin.command:
+            cmd: makepkg -si --noconfirm
+            chdir: /tmp/yay-build
+          changed_when: true
+
+        - name: Cleanup yay build directory
+          ansible.builtin.file:
+            path: /tmp/yay-build
+            state: absent
+  tags: [yay, packages]
