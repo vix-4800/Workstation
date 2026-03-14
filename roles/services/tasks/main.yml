@@ -1,4 +1,10 @@
 ---
+- name: Remove existing systemd user directory before symlinking
+  ansible.builtin.file:
+    path: "{{ home }}/.config/systemd/user"
+    state: absent
+  tags: [services, config]
+
 - name: Deploy systemd user services directory
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/services/files"
