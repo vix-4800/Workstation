@@ -35,12 +35,20 @@ deps:
 vault-edit:
     ansible-vault edit vault/secrets.yml
 
+# Create encrypted vault file from example template
+vault-create:
+    test -f vault/secrets.yml && { echo "vault/secrets.yml already exists"; exit 1; } || true
+    cp vault/secrets.yml.example /tmp/workstation-secrets.yml
+    ansible-vault encrypt --output vault/secrets.yml /tmp/workstation-secrets.yml
+    rm -f /tmp/workstation-secrets.yml
+    @echo "Created encrypted vault/secrets.yml from vault/secrets.yml.example"
+
 # Create vault password file (first-time setup)
 vault-init:
     @echo "Enter vault password:"
     @read -s pass && echo "$$pass" > .vault-password
     @chmod 600 .vault-password
-    @echo "Created .vault-password (add to .gitignore)"
+    @echo "Created .vault-password"
 
 # Show systemd user services status
 services:

@@ -29,7 +29,7 @@ just role desktop network   # Multiple roles
 
 ```bash
 just vault-init         # Create vault password file (first time)
-cp vault/secrets.yml.example vault/secrets.yml
+just vault-create       # Create encrypted vault/secrets.yml from the example
 just vault-edit         # Edit encrypted secrets
 ```
 
@@ -93,6 +93,28 @@ Per-host variables in `host_vars/` reference vault secrets, and templates render
 ```
 vault/secrets.yml ──> host_vars/saga.yml ──> templates/wg0.conf.j2 ──> /etc/wireguard/wg0.conf
      (encrypted)        (per-host vars)         (Jinja2 template)        (deployed config)
+```
+
+Create the vault file like this:
+
+```bash
+just vault-init
+just vault-create
+just vault-edit
+```
+
+Do not create `vault/secrets.yml` with a plain `cp` or editor save. `site.yml` loads it through `vars_files`, so the file must be actual `ansible-vault` ciphertext.
+
+If you already created `vault/secrets.yml` as plain YAML, re-encrypt it:
+
+```bash
+ansible-vault encrypt vault/secrets.yml
+```
+
+You can verify the file is encrypted if the first line starts with:
+
+```text
+$ANSIBLE_VAULT;
 ```
 
 ## Structure
@@ -164,6 +186,7 @@ WireGuard gets the correct key from vault via `host_vars`.
 | `just deps` | Install Galaxy collections |
 | `just vault-edit` | Edit encrypted secrets |
 | `just vault-init` | Create vault password file |
+| `just vault-create` | Create encrypted `vault/secrets.yml` from the example |
 | `just services` | Show running user services |
 | `just lint` | Lint playbooks and roles |
 | `just check` | Syntax check only |
