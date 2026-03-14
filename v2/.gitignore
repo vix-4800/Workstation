@@ -1,0 +1,12 @@
+# Sensitive files
+.vault-password
+vault/secrets.yml
+
+# OS
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Ansible
+*.retry
