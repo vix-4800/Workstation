@@ -11,6 +11,10 @@
   ansible.builtin.include_tasks: docker.yml
   tags: [development, docker]
 
+- name: Install Rust tools
+  ansible.builtin.include_tasks: rust.yml
+  tags: [development, rust]
+
 - name: Install additional dev tools
   community.general.pacman:
     name:

@@ -1,0 +1,14 @@
+---
+- name: Install Rust toolchain
+  community.general.pacman:
+    name: [rust]
+    state: present
+  become: true
+  tags: [development, packages]
+
+- name: Install just-lsp via Cargo
+  ansible.builtin.command:
+    cmd: cargo install just-lsp
+    creates: "{{ home }}/.cargo/bin/just-lsp"
+  become: false
+  tags: [development, packages]
