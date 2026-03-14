@@ -1,4 +1,4 @@
-# Sensitive files
+# Vault
 .vault-password
 vault/secrets.yml
 
@@ -10,3 +10,7 @@ vault/secrets.yml
 
 # Ansible
 *.retry
+
+# Node (from ai-tools configs)
+roles/ai-tools/files/opencode/node_modules/
+roles/ai-tools/files/opencode/bun.lock
