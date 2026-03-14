@@ -1,0 +1,14 @@
+---
+- name: Install SwayNC
+  community.general.pacman:
+    name: swaync
+    state: present
+  become: true
+  tags: [packages]
+
+- name: Install SwayOSD
+  kewlfft.aur.aur:
+    name: swayosd-git
+    state: present
+  become: false
+  tags: [packages]

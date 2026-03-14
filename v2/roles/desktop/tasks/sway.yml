@@ -1,0 +1,25 @@
+---
+- name: Install Sway and core components
+  community.general.pacman:
+    name:
+      - sway
+      - swayidle
+      - swaylock
+      - grim
+      - slurp
+      - wl-clipboard
+      - xdg-desktop-portal-wlr
+      - xdg-desktop-portal-gtk
+      - wofi
+      - wlogout
+      - brightnessctl
+    state: present
+  become: true
+  tags: [packages]
+
+- name: Install gtklock
+  kewlfft.aur.aur:
+    name: gtklock
+    state: present
+  become: false
+  tags: [packages]

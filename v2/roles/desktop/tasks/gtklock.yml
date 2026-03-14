@@ -1,0 +1,14 @@
+---
+# TODO: Move gtklock module build tasks from current ansible/sway.yml
+# This includes meson-based builds for:
+#   - gtklock-media-background-module
+#   - gtklock-network-module
+#   - gtklock-battery-module
+
+- name: Deploy gtklock config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/desktop/files/gtklock"
+    dest: "{{ ansible_env.HOME }}/.config/gtklock"
+    state: link
+    force: true
+  tags: [config]
