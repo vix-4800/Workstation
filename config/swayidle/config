@@ -1,6 +1,0 @@
-# Idle management configuration
-# Lock screen after 10 minutes of inactivity
-# Turn off displays after 25 minutes
-timeout 600 'gtklock'
-timeout 1500 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
-before-sleep 'gtklock'
