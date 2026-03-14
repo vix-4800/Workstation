@@ -7,19 +7,19 @@ host := `cat /etc/hostname`
 
 # Full state apply (packages + configs + services)
 apply:
-    ansible-playbook site.yml -l {{ host }} --ask-become-pass --diff
+    ansible-playbook site.yml --ask-become-pass --diff
 
 # Deploy only configs (no package installs, no sudo)
 sync:
-    ansible-playbook site.yml -l {{ host }} --tags config --diff
+    ansible-playbook site.yml --tags config --diff
 
 # Dry-run: show what would change
 plan:
-    ansible-playbook site.yml -l {{ host }} --ask-become-pass --check --diff
+    ansible-playbook site.yml --ask-become-pass --check --diff
 
 # Apply specific role(s): just role shell desktop
 role +TAGS:
-    ansible-playbook site.yml -l {{ host }} --tags {{ TAGS }} --diff
+    ansible-playbook site.yml --tags {{ TAGS }} --diff
 
 # Bootstrap from scratch (first run on a fresh system)
 bootstrap:
