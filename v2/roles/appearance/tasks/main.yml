@@ -31,7 +31,7 @@
     state: link
     force: true
   loop:
-    - { src: "2.0", dest: "{{ ansible_env.HOME }}/.gtkrc-2.0" }
+    - { src: "2.0/.gtkrc-2.0", dest: "{{ ansible_env.HOME }}/.gtkrc-2.0" }
     - { src: "3.0", dest: "{{ ansible_env.HOME }}/.config/gtk-3.0" }
     - { src: "4.0", dest: "{{ ansible_env.HOME }}/.config/gtk-4.0" }
   loop_control:
@@ -55,7 +55,15 @@
 - name: Deploy wallpapers
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/appearance/files/wallpapers"
-    dest: "{{ ansible_env.HOME }}/.local/share/wallpapers"
+    dest: "{{ ansible_env.HOME }}/Pictures/Wallpapers"
+    state: link
+    force: true
+  tags: [appearance, config]
+
+- name: Deploy themes directory
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/appearance/files/themes"
+    dest: "{{ ansible_env.HOME }}/.config/themes"
     state: link
     force: true
   tags: [appearance, config]
@@ -76,4 +84,12 @@
     state: link
     force: true
   become: true
+  tags: [appearance, config]
+
+- name: Deploy avatar
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/appearance/files/avatar.jpg"
+    dest: "{{ ansible_env.HOME }}/.face"
+    state: link
+    force: true
   tags: [appearance, config]
