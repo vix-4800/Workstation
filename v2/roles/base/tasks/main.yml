@@ -52,3 +52,11 @@
     state: link
     force: true
   tags: [base, config]
+
+- name: Deploy editorconfig
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/.editorconfig"
+    dest: "{{ ansible_env.HOME }}/.editorconfig"
+    state: link
+    force: true
+  tags: [base, config]
