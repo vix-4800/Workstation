@@ -25,15 +25,6 @@
   when: has_battery | default(false)
   tags: [services]
 
-- name: Enable GPU fan control
-  ansible.builtin.systemd:
-    name: gpu-fan-control.service
-    scope: user
-    enabled: true
-    state: started
-  when: gpu_vendor | default('none') == 'nvidia'
-  tags: [services]
-
 - name: Enable host-specific services
   ansible.builtin.systemd:
     name: "{{ item }}"

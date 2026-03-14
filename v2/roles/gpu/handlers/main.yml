@@ -1,5 +1,0 @@
----
-- name: reload systemd user
-  ansible.builtin.systemd:
-    daemon_reload: true
-    scope: user
