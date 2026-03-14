@@ -1,0 +1,27 @@
+model = "gpt-5.4"
+web_search = "cached"
+personality = "pragmatic"
+model_reasoning_effort = "high"
+
+[analytics]
+enabled = false
+
+[feedback]
+enabled = false
+
+[features]
+multi_agent = true
+
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+
+[mcp_servers.serena]
+enabled = true
+command = "uvx"
+args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex"]
+startup_timeout_sec = 60
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp@latest"]
