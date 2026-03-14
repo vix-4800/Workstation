@@ -1,0 +1,21 @@
+---
+- name: Install PHP
+  community.general.pacman:
+    name: [php, composer]
+    state: present
+  become: true
+  tags: [packages]
+
+- name: Install global Composer packages
+  community.general.composer:
+    command: require
+    global_command: true
+    arguments: "{{ item }}"
+  loop:
+    - phpstan/phpstan
+    - rector/rector
+    - friendsofphp/php-cs-fixer
+    - laravel/pint
+    - squizlabs/php_codesniffer
+  become: false
+  tags: [packages]

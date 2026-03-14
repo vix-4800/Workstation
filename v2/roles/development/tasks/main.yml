@@ -1,0 +1,66 @@
+---
+- name: Install PHP and tools
+  ansible.builtin.include_tasks: php.yml
+  tags: [development, php]
+
+- name: Install Python tools
+  ansible.builtin.include_tasks: python.yml
+  tags: [development, python]
+
+- name: Install Docker
+  ansible.builtin.include_tasks: docker.yml
+  tags: [development, docker]
+
+- name: Install additional dev tools
+  community.general.pacman:
+    name:
+      - go
+      - shellcheck
+      - shfmt
+    state: present
+  become: true
+  tags: [development, packages]
+
+- name: Install linter configs (npm-based)
+  community.general.npm:
+    name: "{{ item }}"
+    global: true
+  loop:
+    - markdownlint-cli2
+    - "@commitlint/cli"
+    - "@commitlint/config-conventional"
+  become: false
+  tags: [development, packages]
+
+- name: Deploy tool configs
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/development/files/tools/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: true
+  loop:
+    - { src: phpstan, dest: "{{ ansible_env.HOME }}/.config/phpstan" }
+    - { src: rector, dest: "{{ ansible_env.HOME }}/.config/rector" }
+    - { src: php-cs-fixer, dest: "{{ ansible_env.HOME }}/.config/php-cs-fixer" }
+    - { src: pint, dest: "{{ ansible_env.HOME }}/.config/pint" }
+    - { src: ruff, dest: "{{ ansible_env.HOME }}/.config/ruff" }
+    - { src: eslint, dest: "{{ ansible_env.HOME }}/.config/eslint" }
+    - { src: shellcheck, dest: "{{ ansible_env.HOME }}/.shellcheckrc" }
+    - { src: yamllint, dest: "{{ ansible_env.HOME }}/.config/yamllint" }
+    - { src: markdownlint, dest: "{{ ansible_env.HOME }}/.config/markdownlint" }
+    - { src: commitlint, dest: "{{ ansible_env.HOME }}/.config/commitlint" }
+    - { src: prettier, dest: "{{ ansible_env.HOME }}/.prettierrc" }
+  loop_control:
+    label: "{{ item.src }}"
+  tags: [development, config]
+
+- name: Deploy helper scripts
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/development/scripts/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.local/bin/{{ item }}"
+    state: link
+    force: true
+  loop:
+    - check-composer-updates
+    - check-dotfiles-updates
+  tags: [development, config]
