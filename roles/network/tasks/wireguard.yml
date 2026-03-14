@@ -1,7 +1,9 @@
 ---
-- name: Install wireguard-tools
+- name: Install NetworkManager and wireguard tools
   community.general.pacman:
-    name: wireguard-tools
+    name:
+      - networkmanager
+      - wireguard-tools
     state: present
   become: true
   tags: [network, packages]
@@ -14,7 +16,7 @@
     group: root
     mode: "0600"
   become: true
-  tags: [network, system]
+  tags: [network, config]
 
 - name: Import WireGuard connection to NetworkManager
   ansible.builtin.command:
@@ -23,4 +25,4 @@
   register: network_wg_import
   changed_when: "'successfully added' in network_wg_import.stdout"
   failed_when: false
-  tags: [network, system]
+  tags: [network, config]
