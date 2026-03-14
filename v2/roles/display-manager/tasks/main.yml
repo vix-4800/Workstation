@@ -1,0 +1,44 @@
+---
+- name: Install greetd
+  community.general.pacman:
+    name: [greetd, greetd-regreet]
+    state: present
+  become: true
+  tags: [display-manager, packages]
+
+- name: Deploy greetd config
+  ansible.builtin.copy:
+    src: config.toml
+    dest: /etc/greetd/config.toml
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  tags: [display-manager, config]
+
+- name: Deploy greeter Sway config
+  ansible.builtin.copy:
+    src: sway-config
+    dest: /etc/greetd/sway-config
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  tags: [display-manager, config]
+
+- name: Deploy ReGreet config
+  ansible.builtin.template:
+    src: regreet.toml.j2
+    dest: /etc/greetd/regreet.toml
+    owner: greeter
+    group: greeter
+    mode: "0644"
+  become: true
+  tags: [display-manager, config]
+
+- name: Enable greetd service
+  ansible.builtin.systemd:
+    name: greetd
+    enabled: true
+  become: true
+  tags: [display-manager, services]
