@@ -79,9 +79,10 @@ Every task is tagged for granular execution:
 
 | Tag | Scope |
 |-----|-------|
-| `config` | Only deploy config files (symlinks/templates) |
-| `packages` | Only install packages |
-| `services` | Only manage systemd units |
+| `config` | Deploy user-space config files (symlinks, no sudo) |
+| `system` | System-level configs requiring sudo (/etc/, /boot/) |
+| `packages` | Install packages |
+| `services` | Manage systemd units |
 | Per-role tags | `shell`, `desktop`, `network`, etc. |
 
 ### Secrets
