@@ -1,0 +1,99 @@
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+
+parameters:
+    parallel:
+        processTimeout: 900.0
+
+    level: max
+
+    dynamicConstantNames:
+        - YII_ENV
+        - YII_DEBUG
+
+    excludePaths:
+        - vendor/*
+        - node_modules/*
+        - storage/*
+        - bootstrap/cache/*
+        - public/build/*
+        - tests/*
+
+    # Vague typehints
+    checkMissingCallableSignature: true
+
+    # Property checks
+    checkUninitializedProperties: true
+    checkDynamicProperties: true
+
+    # Mixed type checks
+    checkImplicitMixed: true
+    checkExplicitMixedMissingReturn: true
+
+    # Case sensitivity checks
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+
+    # Type inference
+    inferPrivatePropertyTypeFromConstructor: true
+    treatPhpDocTypesAsCertain: false
+
+    # Return type checks
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+
+    # Error reporting
+    reportUnmatchedIgnoredErrors: true
+    reportMaybesInMethodSignatures: true
+    reportMaybesInPropertyPhpDocTypes: true
+    reportStaticMethodSignatures: true
+    reportWrongPhpDocTypeInVarTag: true
+    reportAnyTypeWideningInVarTag: true
+
+    # Variable scoping (stricter analysis)
+    polluteScopeWithLoopInitialAssignments: false
+    polluteScopeWithAlwaysIterableForeach: false
+
+    # PHPDoc checks
+    checkMissingVarTagTypehint: true
+
+    # Array offset checks
+    reportPossiblyNonexistentGeneralArrayOffset: true
+    reportPossiblyNonexistentConstantArrayOffset: true
+
+    # Benevolent union types
+    checkBenevolentUnionTypes: true
+
+    # Conditional checks
+    reportAlwaysTrueInLastCondition: true
+
+    # Function purity
+    rememberPossiblyImpureFunctionValues: true
+
+    checkStrictPrintfPlaceholderTypes: true
+    checkMissingOverrideMethodAttribute: false
+    polluteScopeWithBlock: false
+
+    exceptions:
+        implicitThrows: false
+
+        uncheckedExceptionClasses:
+            - LogicException
+            - BadFunctionCallException
+            - BadMethodCallException
+            - DomainException
+            - InvalidArgumentException
+            - LengthException
+            - OutOfRangeException
+            - RuntimeException
+
+            # PHP Native Errors
+            - Error
+            - TypeError
+            - ValueError
+            - ArithmeticError
+            - DivisionByZeroError
+            - UnhandledMatchError
+        reportUncheckedExceptionDeadCatch: true
+        check:
+            missingCheckedExceptionInThrows: true
+            tooWideThrowType: true
