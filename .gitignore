@@ -17,6 +17,3 @@ roles/services/files/*.wants/
 # Node (from ai-tools configs)
 roles/ai-tools/files/opencode/node_modules/
 roles/ai-tools/files/opencode/bun.lock
-
-# WireGuard config (contains real keys, use vault + template instead)
-wireguard/wg0.conf
