@@ -1,4 +1,14 @@
 ---
+- name: Ensure AI config parent directories exist
+  ansible.builtin.file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ ai_configs }}"
+  loop_control:
+    label: "{{ item.dest | dirname }}"
+  tags: [ai-tools, config]
+
 - name: Deploy AI tool configs
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/ai-tools/files/{{ item.src }}"

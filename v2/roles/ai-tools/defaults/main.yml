@@ -1,7 +1,9 @@
 ---
 ai_configs:
-  - { src: codex, dest: "{{ ansible_env.HOME }}/.codex" }
   - { src: opencode, dest: "{{ ansible_env.HOME }}/.config/opencode" }
-  - { src: qwen, dest: "{{ ansible_env.HOME }}/.qwen" }
-  - { src: mcp, dest: "{{ ansible_env.HOME }}/.config/mcp" }
+  - { src: codex/config.toml, dest: "{{ ansible_env.HOME }}/.codex/config.toml" }
+  - { src: codex/AGENTS.md, dest: "{{ ansible_env.HOME }}/.codex/AGENTS.md" }
+  - { src: qwen/settings.json, dest: "{{ ansible_env.HOME }}/.qwen/settings.json" }
+  - { src: mcp/serena/serena_config.yml, dest: "{{ ansible_env.HOME }}/.serena/serena_config.yml" }
   - { src: agents/skills, dest: "{{ ansible_env.HOME }}/.agents/skills" }
+  - { src: agents/skills, dest: "{{ ansible_env.HOME }}/.qwen/skills" }
