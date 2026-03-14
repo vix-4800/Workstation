@@ -15,6 +15,8 @@ jobs:
   ansible-lint:
     name: Lint Ansible playbooks
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
