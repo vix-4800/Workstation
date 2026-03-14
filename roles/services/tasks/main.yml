@@ -8,6 +8,9 @@
   notify: reload systemd user
   tags: [services, config]
 
+- name: Reload systemd user daemon before enabling units
+  ansible.builtin.meta: flush_handlers
+
 - name: Enable common services
   ansible.builtin.systemd:
     name: "{{ item }}"
