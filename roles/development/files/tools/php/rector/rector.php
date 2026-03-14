@@ -84,7 +84,7 @@ use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use RectorLaravel\Set\LaravelSetProvider;
 
 $laravelRulesEnabled = false;
-$yii2RulesEnabled = true;
+$yii2RulesEnabled = false;
 
 $rulesDir = __DIR__ . '/rules';
 $ruleFiles = glob("{$rulesDir}/*.php");
