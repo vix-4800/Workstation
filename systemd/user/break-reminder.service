@@ -1,6 +1,0 @@
-[Unit]
-Description=Break reminder notification
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/notify-send -u normal -i clock "Take a break" "Take a break from the screen for 5-10 minutes"
