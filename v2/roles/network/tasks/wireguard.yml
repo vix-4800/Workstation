@@ -19,6 +19,7 @@
 - name: Import WireGuard connection to NetworkManager
   ansible.builtin.command:
     cmd: nmcli connection import type wireguard file /etc/wireguard/wg0.conf
+  become: true
   register: wg_import
   changed_when: "'successfully added' in wg_import.stdout"
   failed_when: false
