@@ -1,0 +1,47 @@
+# Main settings
+mode=drun
+show=drun
+allow-images=true
+allow-markup=true
+dynamic_lines=true
+columns=1
+lines=10
+prompt=Search Applications...
+term=alacritty
+hide-scroll=true
+no-actions=true
+print-command=true
+exec-search=true
+
+always_parse_args=true
+show_all=false
+hide_scroll=true
+print_command=true
+
+# Behavior
+matching=fuzzy
+insensitive=true
+filter_rate=100
+scroll_rate=100
+
+# Appearance
+location=center
+width=50%
+height=35%
+layer=overlay
+gtk_dark=true
+
+# Performance
+cache-file=~/.cache/wofi-drun
+parse-search=true
+sort-order=alphabetical
+image_size=20
+icon_theme=Adwaita
+
+# Key bindings
+key_expand=Tab
+key_exit=Escape
+key_left=Left
+key_right=Right
+key_up=Up
+key_down=Down
