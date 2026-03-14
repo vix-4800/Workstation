@@ -6,6 +6,13 @@
   become: true
   tags: [editor, packages]
 
+- name: Install Visual Studio Code (AUR)
+  kewlfft.aur.aur:
+    name: visual-studio-code-bin
+    state: present
+  become: false
+  tags: [editor, packages]
+
 - name: Deploy editor configs
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/editor/files/{{ item.src }}"

@@ -1,7 +1,6 @@
 ---
 editor_packages:
   - neovim
-  - code
 
 editor_configs:
   - { src: nvim, dest: "{{ home }}/.config/nvim" }
