@@ -1,0 +1,27 @@
+---
+- name: Install sing-box
+  kewlfft.aur.aur:
+    name: sing-box
+    state: present
+  become: false
+  tags: [packages]
+
+- name: Enable IP forwarding for TUN mode
+  ansible.posix.sysctl:
+    name: "{{ item }}"
+    value: "1"
+    sysctl_set: true
+    reload: true
+  loop:
+    - net.ipv4.ip_forward
+    - net.ipv6.conf.all.forwarding
+  become: true
+  tags: [config]
+
+- name: Deploy sing-box profiles
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/network/files/sing-box"
+    dest: "{{ ansible_env.HOME }}/.config/sing-box"
+    state: link
+    force: true
+  tags: [config]

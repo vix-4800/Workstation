@@ -1,0 +1,24 @@
+---
+- name: Install firewall
+  ansible.builtin.include_tasks: firewall.yml
+  tags: [network, firewall]
+
+- name: Configure Bluetooth
+  ansible.builtin.include_tasks: bluetooth.yml
+  tags: [network, bluetooth]
+
+- name: Configure WireGuard
+  ansible.builtin.include_tasks: wireguard.yml
+  tags: [network, wireguard]
+
+- name: Configure sing-box
+  ansible.builtin.include_tasks: sing-box.yml
+  tags: [network, sing-box]
+
+- name: Deploy VPN management script
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/network/scripts/vpn"
+    dest: "{{ ansible_env.HOME }}/.local/bin/vpn"
+    state: link
+    force: true
+  tags: [network, config]

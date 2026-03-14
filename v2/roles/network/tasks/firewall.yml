@@ -1,0 +1,14 @@
+---
+- name: Install firewall packages
+  community.general.pacman:
+    name: [nftables, firewalld]
+    state: present
+  become: true
+  tags: [packages]
+
+- name: Enable firewalld service
+  ansible.builtin.systemd:
+    name: firewalld
+    enabled: true
+    state: started
+  become: true

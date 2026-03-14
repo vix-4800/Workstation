@@ -1,0 +1,23 @@
+---
+- name: Install bluetooth packages
+  community.general.pacman:
+    name: [bluez, bluez-utils]
+    state: present
+  become: true
+  tags: [packages]
+
+- name: Deploy bluetooth config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/network/files/bluetooth"
+    dest: /etc/bluetooth
+    state: link
+    force: true
+  become: true
+  tags: [config]
+
+- name: Enable bluetooth service
+  ansible.builtin.systemd:
+    name: bluetooth
+    enabled: true
+    state: started
+  become: true
