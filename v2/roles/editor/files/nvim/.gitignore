@@ -1,0 +1,12 @@
+# Neovim runtime/state
+lua/local.lua
+**/.netrwhist
+**/*.swp
+**/*.swo
+**/undo/*
+**/swap/*
+**/backup/*
+**/shada/*
+
+# Neovim runtime files
+lazy-lock.json
