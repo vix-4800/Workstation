@@ -1,0 +1,54 @@
+---
+- name: Set locale
+  ansible.builtin.lineinfile:
+    path: /etc/locale.gen
+    regexp: "^#?{{ locale }}"
+    line: "{{ locale }} UTF-8"
+  become: true
+  notify: generate locale
+  tags: [base, config]
+
+- name: Generate locale
+  ansible.builtin.command:
+    cmd: locale-gen
+  become: true
+  changed_when: true
+  tags: [base, config]
+
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+  become: true
+  tags: [base, config]
+
+- name: Install essential packages
+  community.general.pacman:
+    name: "{{ essential_packages }}"
+    state: present
+  become: true
+  tags: [base, packages]
+
+- name: Deploy environment variables
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/environment"
+    dest: /etc/environment
+    state: link
+    force: true
+  become: true
+  tags: [base, config]
+
+- name: Deploy user-dirs config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/user-dirs.dirs"
+    dest: "{{ ansible_env.HOME }}/.config/user-dirs.dirs"
+    state: link
+    force: true
+  tags: [base, config]
+
+- name: Deploy fontconfig
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/fontconfig"
+    dest: "{{ ansible_env.HOME }}/.config/fontconfig"
+    state: link
+    force: true
+  tags: [base, config]

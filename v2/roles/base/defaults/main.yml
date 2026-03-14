@@ -1,0 +1,25 @@
+---
+locale: en_US.UTF-8
+timezone: UTC
+
+essential_packages:
+  - base-devel
+  - git
+  - curl
+  - wget
+  - unzip
+  - zip
+  - man-db
+  - man-pages
+  - openssh
+  - htop
+  - tree
+  - jq
+  - eza
+  - bat
+  - ripgrep
+  - fd
+  - fzf
+  - tldr
+  - trash-cli
+  - xdg-user-dirs
