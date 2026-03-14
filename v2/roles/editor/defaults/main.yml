@@ -1,0 +1,9 @@
+---
+editor_packages:
+  - neovim
+  - code
+
+editor_configs:
+  - { src: nvim, dest: "{{ ansible_env.HOME }}/.config/nvim" }
+  - { src: code, dest: "{{ ansible_env.HOME }}/.config/Code" }
+  - { src: git, dest: "{{ ansible_env.HOME }}/.config/git" }

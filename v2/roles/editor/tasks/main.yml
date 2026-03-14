@@ -1,0 +1,18 @@
+---
+- name: Install editor packages
+  community.general.pacman:
+    name: "{{ editor_packages }}"
+    state: present
+  become: true
+  tags: [editor, packages]
+
+- name: Deploy editor configs
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/editor/files/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: true
+  loop: "{{ editor_configs }}"
+  loop_control:
+    label: "{{ item.src }}"
+  tags: [editor, config]
