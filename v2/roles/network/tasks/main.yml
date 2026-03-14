@@ -22,3 +22,11 @@
     state: link
     force: true
   tags: [network, config]
+
+- name: Deploy geoclue config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/network/files/geoclue/curl.conf"
+    dest: "{{ ansible_env.HOME }}/.config/geoclue/curl.conf"
+    state: link
+    force: true
+  tags: [network, config]
