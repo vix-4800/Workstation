@@ -1,0 +1,7 @@
+---
+ai_configs:
+  - { src: codex, dest: "{{ ansible_env.HOME }}/.codex" }
+  - { src: opencode, dest: "{{ ansible_env.HOME }}/.config/opencode" }
+  - { src: qwen, dest: "{{ ansible_env.HOME }}/.qwen" }
+  - { src: mcp, dest: "{{ ansible_env.HOME }}/.config/mcp" }
+  - { src: agents/skills, dest: "{{ ansible_env.HOME }}/.agents/skills" }
