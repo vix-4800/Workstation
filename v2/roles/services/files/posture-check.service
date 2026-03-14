@@ -1,0 +1,6 @@
+[Unit]
+Description=Posture check reminder
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/notify-send -u normal -i preferences-desktop-accessibility "Check your posture" "Straighten your back, relax your shoulders"

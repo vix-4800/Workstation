@@ -1,0 +1,8 @@
+[Unit]
+Description=Check for global Composer package updates
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/check-composer-updates

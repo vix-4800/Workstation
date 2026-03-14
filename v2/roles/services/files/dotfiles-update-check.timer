@@ -1,0 +1,10 @@
+[Unit]
+Description=Check for dotfiles updates every hour
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+Persistent=false
+
+[Install]
+WantedBy=timers.target
