@@ -12,8 +12,7 @@ vault/secrets.yml
 *.retry
 
 # Systemd auto-generated wants/ symlinks (created by systemctl enable)
-roles/services/files/default.target.wants/
-roles/services/files/timers.target.wants/
+roles/services/files/*.wants/
 
 # Node (from ai-tools configs)
 roles/ai-tools/files/opencode/node_modules/
