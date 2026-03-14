@@ -1,7 +1,7 @@
 model = "gpt-5.4"
 web_search = "cached"
 personality = "pragmatic"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 
 [analytics]
 enabled = false
