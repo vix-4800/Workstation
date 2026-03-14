@@ -1,0 +1,136 @@
+/* Custom GTK3 CSS overrides for Catppuccin Mocha theme */
+
+/* === Window and View Styling === */
+.window-frame,
+.window-frame:backdrop {
+    box-shadow: 0 0 0 1px rgba(180, 190, 254, 0.1);
+    border-radius: 12px;
+    margin: 0;
+}
+
+/* === Scrollbars === */
+scrollbar {
+    background-color: transparent;
+}
+
+scrollbar slider {
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 8px;
+    background-color: alpha(#cdd6f4, 0.3);
+}
+
+scrollbar slider:hover {
+    background-color: alpha(#cdd6f4, 0.5);
+}
+
+scrollbar slider:active {
+    background-color: #b4befe;
+}
+
+/* === Rounded corners === */
+.titlebar {
+    border-radius: 12px 12px 0 0;
+}
+
+window.csd {
+    border-radius: 12px;
+}
+
+/* === Tooltips === */
+tooltip {
+    border-radius: 8px;
+    padding: 6px 10px;
+    background-color: #313244;
+    color: #cdd6f4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* === Selection === */
+selection {
+    background-color: #b4befe;
+    color: #1e1e2e;
+}
+
+/* === Focus outline === */
+*:focus {
+    outline-color: #b4befe;
+    outline-style: solid;
+    outline-width: 2px;
+    outline-offset: -2px;
+}
+
+/* === Sidebar === */
+.sidebar {
+    background-color: #1e1e2e;
+    border-right: 1px solid #313244;
+}
+
+/* === Popover === */
+popover.background {
+    border-radius: 12px;
+    padding: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* === Context menu === */
+menu,
+.menu,
+.context-menu {
+    border-radius: 8px;
+    padding: 4px;
+}
+
+/* === Notebook tabs === */
+notebook > header > tabs > tab {
+    border-radius: 8px 8px 0 0;
+    padding: 8px 16px;
+}
+
+/* === Buttons === */
+button {
+    border-radius: 6px;
+}
+
+button.suggested-action {
+    background-color: #b4befe;
+    color: #1e1e2e;
+}
+
+button.destructive-action {
+    background-color: #f38ba8;
+    color: #1e1e2e;
+}
+
+/* === Entry fields === */
+entry {
+    border-radius: 6px;
+}
+
+/* === Switches === */
+switch {
+    border-radius: 12px;
+}
+
+switch slider {
+    border-radius: 50%;
+}
+
+/* === Progress bars === */
+progressbar trough {
+    border-radius: 4px;
+}
+
+progressbar progress {
+    border-radius: 4px;
+    background-color: #b4befe;
+}
+
+/* === Level bars === */
+levelbar trough {
+    border-radius: 4px;
+}
+
+levelbar block {
+    border-radius: 4px;
+}
