@@ -149,5 +149,4 @@ symbol_info_budget: 10
 project_serena_folder_location: "$projectDir/.serena"
 
 # the list of registered project paths (updated automatically).
-projects:
-- /home/vix/Code/Workstation
+projects: []
