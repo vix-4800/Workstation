@@ -4,7 +4,7 @@
     name: [docker, docker-compose, docker-buildx]
     state: present
   become: true
-  tags: [packages]
+  tags: [development, packages]
 
 - name: Add user to docker group
   ansible.builtin.user:
@@ -12,7 +12,7 @@
     groups: docker
     append: true
   become: true
-  tags: [config]
+  tags: [development, system]
 
 - name: Enable Docker service
   ansible.builtin.systemd:
@@ -20,4 +20,4 @@
     enabled: true
     state: started
   become: true
-  tags: [services]
+  tags: [development, services]

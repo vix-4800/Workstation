@@ -4,7 +4,7 @@
     name: wireguard-tools
     state: present
   become: true
-  tags: [packages]
+  tags: [network, packages]
 
 - name: Deploy WireGuard config from vault
   ansible.builtin.template:
@@ -14,7 +14,7 @@
     group: root
     mode: "0600"
   become: true
-  tags: [config]
+  tags: [network, system]
 
 - name: Import WireGuard connection to NetworkManager
   ansible.builtin.command:
@@ -22,4 +22,4 @@
   register: wg_import
   changed_when: "'successfully added' in wg_import.stdout"
   failed_when: false
-  tags: [config]
+  tags: [network, system]

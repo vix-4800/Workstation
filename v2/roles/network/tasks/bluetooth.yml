@@ -13,7 +13,7 @@
     state: link
     force: true
   become: true
-  tags: [config]
+  tags: [network, system]
 
 - name: Enable bluetooth service
   ansible.builtin.systemd:
@@ -21,3 +21,4 @@
     enabled: true
     state: started
   become: true
+  tags: [network, services]

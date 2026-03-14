@@ -11,4 +11,4 @@
     dest: "{{ home }}/.config/gtklock"
     state: link
     force: true
-  tags: [config]
+  tags: [desktop, config]

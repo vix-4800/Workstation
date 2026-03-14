@@ -16,7 +16,7 @@
     - net.ipv4.ip_forward
     - net.ipv6.conf.all.forwarding
   become: true
-  tags: [config]
+  tags: [network, system]
 
 - name: Deploy sing-box profiles
   ansible.builtin.file:
@@ -24,4 +24,4 @@
     dest: "{{ home }}/.config/sing-box"
     state: link
     force: true
-  tags: [config]
+  tags: [network, config]

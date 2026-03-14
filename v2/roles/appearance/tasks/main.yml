@@ -75,7 +75,7 @@
     state: link
     force: true
   become: true
-  tags: [appearance, config]
+  tags: [appearance, system]
 
 - name: Deploy Plymouth theme
   ansible.builtin.file:
@@ -84,7 +84,7 @@
     state: link
     force: true
   become: true
-  tags: [appearance, config]
+  tags: [appearance, system]
 
 - name: Deploy avatar
   ansible.builtin.file:

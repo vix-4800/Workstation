@@ -6,20 +6,20 @@
     line: "{{ locale }} UTF-8"
   become: true
   notify: generate locale
-  tags: [base, config]
+  tags: [base, system]
 
 - name: Generate locale
   ansible.builtin.command:
     cmd: locale-gen
   become: true
   changed_when: true
-  tags: [base, config]
+  tags: [base, system]
 
 - name: Set hostname
   ansible.builtin.hostname:
     name: "{{ hostname }}"
   become: true
-  tags: [base, config]
+  tags: [base, system]
 
 - name: Install essential packages
   community.general.pacman:
@@ -35,7 +35,7 @@
     state: link
     force: true
   become: true
-  tags: [base, config]
+  tags: [base, system]
 
 - name: Deploy user-dirs config
   ansible.builtin.file:
