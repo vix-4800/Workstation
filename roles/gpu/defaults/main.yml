@@ -1,6 +1,5 @@
 ---
 gpu_nvidia_packages:
-  - nvidia-dkms
+  - nvidia-open
   - nvidia-utils
   - nvidia-settings
-  - lib32-nvidia-utils
