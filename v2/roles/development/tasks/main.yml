@@ -39,17 +39,21 @@
     state: link
     force: true
   loop:
-    - { src: phpstan, dest: "{{ ansible_env.HOME }}/.config/phpstan" }
-    - { src: rector, dest: "{{ ansible_env.HOME }}/.config/rector" }
-    - { src: php-cs-fixer, dest: "{{ ansible_env.HOME }}/.config/php-cs-fixer" }
-    - { src: pint, dest: "{{ ansible_env.HOME }}/.config/pint" }
-    - { src: ruff, dest: "{{ ansible_env.HOME }}/.config/ruff" }
-    - { src: eslint, dest: "{{ ansible_env.HOME }}/.config/eslint" }
-    - { src: shellcheck, dest: "{{ ansible_env.HOME }}/.shellcheckrc" }
-    - { src: yamllint, dest: "{{ ansible_env.HOME }}/.config/yamllint" }
-    - { src: markdownlint, dest: "{{ ansible_env.HOME }}/.config/markdownlint" }
+    - { src: php/phpstan, dest: "{{ ansible_env.HOME }}/.config/phpstan" }
+    - { src: php/rector, dest: "{{ ansible_env.HOME }}/.config/rector" }
+    - { src: php/php-cs-fixer, dest: "{{ ansible_env.HOME }}/.config/php-cs-fixer" }
+    - { src: php/pint, dest: "{{ ansible_env.HOME }}/.config/pint" }
+    - { src: php/phpcs, dest: "{{ ansible_env.HOME }}/.config/phpcs" }
+    - { src: php/phpmd, dest: "{{ ansible_env.HOME }}/.config/phpmd" }
+    - { src: python/ruff, dest: "{{ ansible_env.HOME }}/.config/ruff" }
+    - { src: javascript/eslint, dest: "{{ ansible_env.HOME }}/.config/eslint" }
+    - { src: shellcheck/.shellcheckrc, dest: "{{ ansible_env.HOME }}/.shellcheckrc" }
+    - { src: yaml/yamllint.yml, dest: "{{ ansible_env.HOME }}/.config/yamllint/config" }
+    - { src: markdown/markdownlint, dest: "{{ ansible_env.HOME }}/.config/markdownlint" }
     - { src: commitlint, dest: "{{ ansible_env.HOME }}/.config/commitlint" }
-    - { src: prettier, dest: "{{ ansible_env.HOME }}/.prettierrc" }
+    - { src: prettier/.prettierrc, dest: "{{ ansible_env.HOME }}/.prettierrc" }
+    - { src: prettier/.prettierignore, dest: "{{ ansible_env.HOME }}/.prettierignore" }
+    - { src: docker/hadolint.yaml, dest: "{{ ansible_env.HOME }}/.config/hadolint.yaml" }
   loop_control:
     label: "{{ item.src }}"
   tags: [development, config]
