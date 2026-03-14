@@ -1,0 +1,15 @@
+---
+# Services enabled on all hosts
+common_services:
+  - alsa-restore.service
+  - break-reminder.timer
+  - water-reminder.timer
+  - posture-check.timer
+  - composer-update-check.timer
+  - dotfiles-update-check.timer
+  - git-maintenance@daily.timer
+  - git-maintenance@hourly.timer
+  - git-maintenance@weekly.timer
+
+# Additional services per host (merged in tasks)
+host_services: []

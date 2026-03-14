@@ -1,0 +1,56 @@
+---
+- name: Create systemd user directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/systemd/user"
+    state: directory
+    mode: "0755"
+  tags: [services, config]
+
+- name: Deploy systemd service and timer files
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/services/files/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.config/systemd/user/{{ item }}"
+    state: link
+    force: true
+  with_fileglob:
+    - "{{ dotfiles_dir }}/roles/services/files/*.service"
+    - "{{ dotfiles_dir }}/roles/services/files/*.timer"
+  loop_control:
+    label: "{{ item | basename }}"
+  notify: reload systemd user
+  tags: [services, config]
+
+- name: Enable common services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    scope: user
+    enabled: true
+  loop: "{{ common_services }}"
+  tags: [services]
+
+- name: Enable batsignal (battery monitoring)
+  ansible.builtin.systemd:
+    name: batsignal.service
+    scope: user
+    enabled: true
+    state: started
+  when: has_battery | default(false)
+  tags: [services]
+
+- name: Enable GPU fan control
+  ansible.builtin.systemd:
+    name: gpu-fan-control.service
+    scope: user
+    enabled: true
+    state: started
+  when: gpu_vendor | default('none') == 'nvidia'
+  tags: [services]
+
+- name: Enable host-specific services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    scope: user
+    enabled: true
+  loop: "{{ host_services }}"
+  when: host_services | length > 0
+  tags: [services]
