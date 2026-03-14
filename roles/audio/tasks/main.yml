@@ -6,6 +6,13 @@
   become: true
   tags: [audio, packages]
 
+- name: Remove conflicting exfat-utils before installing exfatprogs
+  community.general.pacman:
+    name: exfat-utils
+    state: absent
+  become: true
+  tags: [audio, packages]
+
 - name: Install multimedia packages
   community.general.pacman:
     name: "{{ audio_multimedia_packages }}"
