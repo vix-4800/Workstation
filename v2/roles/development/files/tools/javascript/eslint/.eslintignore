@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+bower_components/
+vendor/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+public/
+target/
+
+# Cache directories
+.cache/
+.temp/
+.tmp/
+.eslintcache
+
+# Coverage reports
+coverage/
+.nyc_output/
+*.lcov
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Compiled files
+*.min.js
+*.bundle.js
+
+# Documentation
+docs/
+
+# Config files that may have syntax incompatible with ESLint
+*.config.ts
