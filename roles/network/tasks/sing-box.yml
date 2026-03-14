@@ -3,7 +3,8 @@
   kewlfft.aur.aur:
     name: sing-box
     state: present
-  become: false
+  become: true
+  become_user: aur_builder
   tags: [packages]
 
 - name: Enable IP forwarding for TUN mode
