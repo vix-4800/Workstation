@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+# Check for dotfiles repository updates on GitHub
+# Shows notification if updates are available
+
+set -euo pipefail
+
+# Colors for output
+readonly RED='\033[0;31m'
+readonly GRN='\033[0;32m'
+readonly YLW='\033[1;33m'
+readonly NC='\033[0m'
+
+# Determine repository root directory by following symlink
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
+REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null || true)"
+
+if [[ -z "${REPO_ROOT}" ]]; then
+    err "Unable to determine git repository root from: ${SCRIPT_DIR}"
+    exit 1
+fi
+
+# Logging functions
+msg() { echo -e "${1}"; }
+ok() { msg "${GRN}✓${NC} ${1}"; }
+warn() { msg "${YLW}⚠${NC} ${1}"; }
+err() { msg "${RED}✗${NC} ${1}"; }
+
+# Change to repository directory
+cd "${REPO_ROOT}"
+
+# Check if we're in a git repository
+if [[ ! -d .git ]]; then
+    err "Not a git repository: ${REPO_ROOT}"
+    exit 1
+fi
+
+# Fetch latest changes from origin (quietly)
+if ! git fetch origin --quiet 2>/dev/null; then
+    err "Failed to fetch from origin"
+    exit 1
+fi
+
+# Get current branch name
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Get local and remote commit hashes
+LOCAL_HASH=$(git rev-parse HEAD)
+REMOTE_HASH=$(git rev-parse "origin/${CURRENT_BRANCH}")
+
+# Compare hashes
+if [[ "${LOCAL_HASH}" != "${REMOTE_HASH}" ]]; then
+    # Get number of commits behind
+    COMMITS_BEHIND=$(git rev-list --count HEAD..origin/"${CURRENT_BRANCH}")
+
+    # Send notification
+    notify-send \
+        -u normal \
+        -i software-update-available \
+        "Dotfiles Updates Available" \
+        "${COMMITS_BEHIND} new commit(s) on ${CURRENT_BRANCH}\n\nRun: cd ${REPO_ROOT} && git pull"
+
+    ok "Updates available: ${COMMITS_BEHIND} commit(s) behind origin/${CURRENT_BRANCH}"
+    exit 0
+else
+    # No updates needed (only log when run manually)
+    if [[ -t 1 ]]; then
+        ok "Dotfiles are up to date"
+    fi
+    exit 0
+fi

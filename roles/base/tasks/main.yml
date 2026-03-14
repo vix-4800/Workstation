@@ -1,0 +1,76 @@
+---
+- name: Set locale
+  ansible.builtin.lineinfile:
+    path: /etc/locale.gen
+    regexp: "^#?{{ base_locale }}"
+    line: "{{ base_locale }} UTF-8"
+  become: true
+  notify: generate locale
+  tags: [base, system]
+
+- name: Generate locale
+  ansible.builtin.command:
+    cmd: locale-gen
+  become: true
+  changed_when: true
+  tags: [base, system]
+
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+  become: true
+  tags: [base, system]
+
+- name: Install essential packages
+  community.general.pacman:
+    name: "{{ base_essential_packages }}"
+    state: present
+  become: true
+  tags: [base, packages]
+
+- name: Install modern CLI tools
+  community.general.pacman:
+    name: "{{ base_cli_packages }}"
+    state: present
+  become: true
+  tags: [base, packages]
+
+- name: Update mirror list with reflector
+  ansible.builtin.command:
+    cmd: reflector --country Russia --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
+  become: true
+  changed_when: false
+  tags: [base, system]
+
+- name: Deploy environment variables
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/environment"
+    dest: /etc/environment
+    state: link
+    force: true
+  become: true
+  tags: [base, system]
+
+- name: Deploy user-dirs config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/user-dirs.dirs"
+    dest: "{{ home }}/.config/user-dirs.dirs"
+    state: link
+    force: true
+  tags: [base, config]
+
+- name: Deploy fontconfig
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/fontconfig"
+    dest: "{{ home }}/.config/fontconfig"
+    state: link
+    force: true
+  tags: [base, config]
+
+- name: Deploy editorconfig
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/.editorconfig"
+    dest: "{{ home }}/.editorconfig"
+    state: link
+    force: true
+  tags: [base, config]

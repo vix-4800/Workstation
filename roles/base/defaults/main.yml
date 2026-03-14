@@ -1,0 +1,36 @@
+---
+base_locale: en_US.UTF-8
+base_timezone: UTC
+
+base_essential_packages:
+  - base-devel
+  - git
+  - curl
+  - wget
+  - make
+  - gcc
+  - less
+  - just
+  - unzip
+  - unrar
+  - zip
+  - man-db
+  - man-pages
+  - openssh
+  - htop
+  - tree
+  - jq
+  - udiskie
+  - xdg-user-dirs
+
+base_cli_packages:
+  - eza
+  - bat
+  - ripgrep
+  - fd
+  - fzf
+  - tldr
+  - chafa
+  - trash-cli
+  - reflector
+  - pacman-contrib

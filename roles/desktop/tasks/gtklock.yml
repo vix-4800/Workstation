@@ -1,0 +1,74 @@
+---
+- name: Build gtklock-media-background-module
+  ansible.builtin.command:
+    cmd: meson setup build --wipe
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-media-background-module"
+    creates: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-media-background-module/build/build.ninja"
+  tags: [desktop, packages]
+
+- name: Compile gtklock-media-background-module
+  ansible.builtin.command:
+    cmd: meson compile -C build
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-media-background-module"
+  changed_when: true
+  tags: [desktop, packages]
+
+- name: Install gtklock-media-background-module
+  ansible.builtin.command:
+    cmd: meson install -C build
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-media-background-module"
+  become: true
+  changed_when: true
+  tags: [desktop, packages]
+
+- name: Build gtklock-network-module
+  ansible.builtin.command:
+    cmd: meson setup build --wipe
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-network-module"
+    creates: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-network-module/build/build.ninja"
+  tags: [desktop, packages]
+
+- name: Compile gtklock-network-module
+  ansible.builtin.command:
+    cmd: meson compile -C build
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-network-module"
+  changed_when: true
+  tags: [desktop, packages]
+
+- name: Install gtklock-network-module
+  ansible.builtin.command:
+    cmd: meson install -C build
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-network-module"
+  become: true
+  changed_when: true
+  tags: [desktop, packages]
+
+- name: Build gtklock-battery-module
+  ansible.builtin.command:
+    cmd: meson setup build --wipe
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module"
+    creates: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module/build/build.ninja"
+  tags: [desktop, packages]
+
+- name: Compile gtklock-battery-module
+  ansible.builtin.command:
+    cmd: meson compile -C build
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module"
+  changed_when: true
+  tags: [desktop, packages]
+
+- name: Install gtklock-battery-module
+  ansible.builtin.command:
+    cmd: meson install -C build
+    chdir: "{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module"
+  become: true
+  changed_when: true
+  tags: [desktop, packages]
+
+- name: Deploy gtklock config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/desktop/files/gtklock"
+    dest: "{{ home }}/.config/gtklock"
+    state: link
+    force: true
+  tags: [desktop, config]

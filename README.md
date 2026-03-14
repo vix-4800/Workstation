@@ -1,203 +1,169 @@
-# Dotfiles
+# Workstation
 
-Personal configuration files for Arch Linux with Sway (Wayland) desktop environment.
+Machine state management for Arch Linux with Sway (Wayland) desktop environment.
 
-## Overview
-
-### 1. Sway Desktop
-
-![Sway Desktop](./assets/empty.png)
-
-### 2. File Manager and Wallpaper
-
-![File Manager and Wallpaper](./assets/files-wallpaper.png)
-
-### 3. Neovim
-
-![Neovim](./assets/neovim.png)
+Ansible-driven provisioning and configuration for multiple workstations from a single repository.
 
 ## Quick Start
 
-### Management Tool
-
-The `workstation` command provides unified management for dotfiles and systemd services:
+### Bootstrap from scratch
 
 ```bash
-# Bootstrap new system
-workstation setup                   # Full system provisioning with Ansible
-
-# Dotfiles management
-workstation dotfiles link           # Apply all symlinks
-workstation dotfiles status         # Check symlink status
-workstation dotfiles doctor         # Validate environment
-
-# Systemd services
-workstation services list           # List available services
-workstation services enable-all     # Enable all services/timers
-workstation services disable-all    # Disable all services/timers
-workstation services status         # Show status of all services
+sudo pacman -S --needed git ansible just
+git clone https://github.com/vix-4800/Workstation ~/Code/Workstation
+cd ~/Code/Workstation
+just bootstrap
 ```
 
-After running `workstation dotfiles link`, the script is available globally from any directory.
+### Daily usage
 
-## Installed Components
+```bash
+just apply              # Full state: packages + configs + services
+just sync               # Only configs (fast, no package installs)
+just plan               # Dry-run: show what would change
+just role shell         # Apply specific role
+just role desktop network   # Multiple roles
+```
 
-### Desktop Environment
+### Secrets
 
-- **SwayFX** - Wayland compositor with blur, shadows, rounded corners
-- **Waybar** - Status bar with custom scripts
-- **Greetd + ReGreet** - Display manager (login screen)
-- **Plymouth** - Boot splash screen
-- **GTKLock** - Screen locker
-- **Swayidle** - Idle management and auto-lock
-- **Wlogout** - Logout/power menu
-- **Swaybg** - Wallpaper setter
+```bash
+just vault-init         # Create vault password file (first time)
+cp vault/secrets.yml.example vault/secrets.yml
+just vault-edit         # Edit encrypted secrets
+```
 
-### Notifications & OSD
+## Architecture
 
-- **SwayNC** - Notification daemon with DND
-- **SwayOSD** - Volume/brightness overlay
-- **Batsignal** - Battery notifications
-- **libnotify** - Notification library
+### Single tool, single workflow
 
-### Launchers & Tools
+Everything is managed through **Ansible roles** — packages, configs, services, and secrets.
+`just` provides a thin UX layer on top of `ansible-playbook`.
 
-- **Wofi** - Application launcher
-- **Cliphist** - Clipboard manager
-- **Wdisplays** - Display configuration GUI
-- **Waypaper** - Wallpaper selector
+### Multi-machine support
 
-### Screenshots & Media
+Machines are defined in `inventory/hosts.yml` with per-host variables in `host_vars/`.
+Ansible auto-detects the current machine by hostname and applies the correct configuration.
 
-- **Grim** - Screenshot capture
-- **Slurp** - Region selector
-- **Swappy** - Screenshot editor
-- **Feh** - Image viewer
-- **VLC** - Media player
-- **FFmpeg** - Media processing
+```
+inventory/
+├── hosts.yml                     # Machine definitions
+├── group_vars/all.yml            # Shared: theme, font, shell, editor...
+└── host_vars/
+    ├── saga.yml                  # Laptop: AMD, no GPU, battery
+    └── desktop.yml               # Desktop: Intel, NVIDIA, no battery
+```
 
-### Terminal & Shell
+### Roles
 
-- **Alacritty** - GPU terminal emulator
-- **Fish** - Shell with syntax highlighting
-- **Tmux** - Terminal multiplexer
-- **Fisher** - Fish plugin manager
-- **Tide** - Fish prompt theme
+| Role | What it manages |
+|------|----------------|
+| `base` | Locale, hostname, essential packages, env vars, fontconfig |
+| `yay` | AUR helper installation |
+| `cpu` | CPU microcode (AMD/Intel, conditional) |
+| `gpu` | GPU drivers + fan control (NVIDIA, conditional) |
+| `shell` | Fish, Bash, Alacritty, Tmux, aliases |
+| `editor` | Neovim, VSCode flags, Git config |
+| `audio` | PipeWire, WirePlumber, multimedia apps |
+| `network` | Firewall, Bluetooth, WireGuard (vault), sing-box, VPN script |
+| `desktop` | Sway, Waybar, Wofi, SwayNC, GTKLock, Wlogout, etc. |
+| `display-manager` | Greetd + ReGreet |
+| `development` | PHP, Python, Go, Docker, linter configs |
+| `appearance` | GTK, fonts, cursors, icons, wallpapers, themes |
+| `services` | All systemd user services and timers |
+| `ai-tools` | Codex, OpenCode, Qwen, MCP/Serena, agent skills |
 
-### CLI Tools
+### Tags
 
-- **Bat** - Syntax-highlighted cat
-- **Eza** - Modern ls replacement
-- **Ripgrep** - Fast grep
-- **Fd** - Fast find
-- **Chafa** - Terminal image viewer
-- **Trash-cli** - Trash management
-- **Reflector** - Mirror list updater
-- **GitHub CLI** - GitHub integration
+Every task is tagged for granular execution:
 
-### Development
+| Tag | Scope |
+|-----|-------|
+| `config` | Deploy user-space config files (symlinks, no sudo) |
+| `system` | System-level configs requiring sudo (/etc/, /boot/) |
+| `packages` | Install packages |
+| `services` | Manage systemd units |
+| Per-role tags | `shell`, `desktop`, `network`, etc. |
 
-- **Neovim** - Text editor with LSP
-- **Visual Studio Code** - IDE
-- **Git** - Version control
-- **PHP** + Composer (PHPStan, Rector, PHP-CS-Fixer, Pint, PHPCS)
-- **Python** + pipx (Ruff, MyPy, Pre-commit)
-- **Go** - Go language runtime
-- **Docker** + Docker Compose
-- **Base-devel** - Build tools (GCC, Make, etc.)
+### Secrets
 
-### Applications
+WireGuard keys and VPN profiles are stored in `vault/secrets.yml`, encrypted with `ansible-vault`.
+Per-host variables in `host_vars/` reference vault secrets, and templates render the final configs.
 
-- **Firefox** - Web browser
-- **Discord** - Chat client
-- **Telegram Desktop** - Messenger
-- **Spotify** - Music streaming
-- **Obsidian** - Note-taking
-- **Zathura** - PDF viewer
-- **Thunar** - File manager
-- **OpenCode** - AI coding assistant CLI
+```
+vault/secrets.yml ──> host_vars/saga.yml ──> templates/wg0.conf.j2 ──> /etc/wireguard/wg0.conf
+     (encrypted)        (per-host vars)         (Jinja2 template)        (deployed config)
+```
 
-### System Services
+## Structure
 
-- **PipeWire** + WirePlumber - Audio system
-- **PulseAudio** (via pipewire-pulse) - Audio compatibility
-- **Pavucontrol** - Audio mixer
-- **Better Control** - Audio device switcher
-- **Bluetooth** (bluez + blueman) - Bluetooth stack
-- **NetworkManager** - Network management
-- **UFW** - Firewall
-- **Udiskie** - Automount removable drives
-- **Auto-cpufreq** - CPU governor optimization
-- **WireGuard** - VPN
+```
+├── Justfile                    # Command interface
+├── ansible.cfg                 # Ansible settings
+├── requirements.yml            # Galaxy collections
+├── site.yml                    # Master playbook
+├── inventory/                  # Machine definitions + variables
+├── vault/                      # Encrypted secrets
+└── roles/
+    └── <role>/
+        ├── tasks/main.yml      # What to install and deploy
+        ├── defaults/main.yml   # Default variables
+        ├── files/              # Config files (symlinked to ~/)
+        ├── templates/          # Jinja2 templates
+        ├── handlers/main.yml   # Event handlers (daemon-reload, etc.)
+        └── scripts/            # Executable scripts (→ ~/.local/bin/)
+```
 
-### Hardware Support
+## Workflow
 
-- **Brightnessctl** - Backlight control
-- **CPU Microcode** - AMD/Intel updates
-- **GPU Drivers** - NVIDIA/AMD/Intel support
-- **Xorg-xwayland** - X11 app compatibility
+### Changed a config on machine A
 
-### Desktop Integration
+```bash
+# On machine A: edit the file (it's a symlink into the repo)
+vim roles/desktop/files/waybar/style.css
+git add -A && git commit -m "feat: update waybar style" && git push
 
-- **XDG Desktop Portal** - Desktop integration
-- **xdg-desktop-portal-wlr** - Wayland portal
-- **GTK** - GTK theming (Catppuccin)
-- **Cursor Theme** - Catppuccin cursors
+# On machine B:
+git pull && just sync
+```
 
-### Package Management
+### Adding a new package
 
-- **Yay** - AUR helper
-- **Flatpak** - Universal packages
+Add it to the appropriate role's `tasks/main.yml`, commit, push, and run `just apply` on both machines.
 
-### Fonts
+### Host-specific behavior
 
-- **JetBrains Mono Nerd Font** - Primary monospace font
-- **Font Awesome** - Icon fonts (TTF, OTF, WOFF2)
+GPU role skips on laptop (`gpu_vendor: none`), batsignal skips on desktop (`has_battery: false`),
+WireGuard gets the correct key from vault via `host_vars`.
 
-### Theming
+## Desktop Stack
 
-- **Catppuccin Mocha** - Consistent color scheme across:
-  - GTK (2.0, 3.0, 4.0)
-  - Sway/SwayFX
-  - Terminal (Alacritty, Bat)
-  - Waybar, SwayNC, SwayOSD
-  - Zathura, Wofi, Wlogout
-  - Plymouth boot screen
-  - Greetd/ReGreet
-  - Cursor theme
+- **SwayFX** — compositor (blur, shadows, rounded corners)
+- **Waybar** — status bar with custom scripts
+- **Greetd + ReGreet** — display manager
+- **GTKLock** — screen locker
+- **SwayNC** — notifications
+- **Wofi** — launcher
+- **Catppuccin Mocha** — consistent theme everywhere
 
-## Configuration Structure
+## Prerequisites
 
-- `config/` - Application configurations
-- `bin/` - Executable scripts
-- `ansible/` - Ansible playbooks for system provisioning
-- `systemd/user/` - User systemd services and timers
-- `tools/` - Development tool configurations (PHP, Python, JS, etc.)
-- `themes/` - Plymouth and GRUB themes
-- `wallpapers/` - Wallpaper collection
-- `dotfiles.json` - Symlink mapping configuration
+- Arch Linux
+- `sudo` access
+- Internet connection
 
-## Customization
+## Just Commands
 
-### Adding New Dotfiles
-
-1. Place your config file in the appropriate directory under `config/`
-2. Add a mapping entry to [dotfiles.json](dotfiles.json)
-3. Run `workstation dotfiles link` to create the symlink
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Catppuccin](https://github.com/catppuccin/catppuccin) - Color scheme
-- [Sway](https://swaywm.org/) - Wayland compositor
-- All the amazing open-source projects that make this configuration possible
-
-## Related Resources
-
-- [Arch Linux Wiki](https://wiki.archlinux.org/)
-- [Sway Documentation](https://github.com/swaywm/sway/wiki)
-- [Waybar Examples](https://github.com/Alexays/Waybar/wiki/Examples)
-- [r/unixporn](https://reddit.com/r/unixporn) - Desktop customization showcase
+| Command | Description |
+|---------|-------------|
+| `just apply` | Full state apply |
+| `just sync` | Deploy configs only |
+| `just plan` | Dry-run (check mode) |
+| `just role <tags>` | Apply specific role(s) |
+| `just bootstrap` | First-time setup |
+| `just deps` | Install Galaxy collections |
+| `just vault-edit` | Edit encrypted secrets |
+| `just vault-init` | Create vault password file |
+| `just services` | Show running user services |
+| `just lint` | Lint playbooks and roles |
+| `just check` | Syntax check only |

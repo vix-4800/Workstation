@@ -1,0 +1,16 @@
+---
+- name: Install AMD microcode
+  community.general.pacman:
+    name: amd-ucode
+    state: present
+  become: true
+  when: cpu_vendor == 'amd'
+  tags: [cpu, packages]
+
+- name: Install Intel microcode
+  community.general.pacman:
+    name: intel-ucode
+    state: present
+  become: true
+  when: cpu_vendor == 'intel'
+  tags: [cpu, packages]

@@ -1,0 +1,70 @@
+---
+- name: Install PHP and tools
+  ansible.builtin.include_tasks: php.yml
+  tags: [development, php]
+
+- name: Install Python tools
+  ansible.builtin.include_tasks: python.yml
+  tags: [development, python]
+
+- name: Install Docker
+  ansible.builtin.include_tasks: docker.yml
+  tags: [development, docker]
+
+- name: Install additional dev tools
+  community.general.pacman:
+    name:
+      - go
+      - shellcheck
+      - shfmt
+    state: present
+  become: true
+  tags: [development, packages]
+
+- name: Install linter configs (npm-based)
+  community.general.npm:
+    name: "{{ item }}"
+    global: true
+  loop:
+    - markdownlint-cli2
+    - "@commitlint/cli"
+    - "@commitlint/config-conventional"
+  become: false
+  tags: [development, packages]
+
+- name: Deploy tool configs
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/development/files/tools/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: true
+  loop:
+    - { src: php/phpstan, dest: "{{ home }}/.config/phpstan" }
+    - { src: php/rector, dest: "{{ home }}/.config/rector" }
+    - { src: php/php-cs-fixer, dest: "{{ home }}/.config/php-cs-fixer" }
+    - { src: php/pint, dest: "{{ home }}/.config/pint" }
+    - { src: php/phpcs, dest: "{{ home }}/.config/phpcs" }
+    - { src: php/phpmd, dest: "{{ home }}/.config/phpmd" }
+    - { src: python/ruff, dest: "{{ home }}/.config/ruff" }
+    - { src: javascript/eslint, dest: "{{ home }}/.config/eslint" }
+    - { src: shellcheck/.shellcheckrc, dest: "{{ home }}/.shellcheckrc" }
+    - { src: yaml/yamllint.yml, dest: "{{ home }}/.config/yamllint/config" }
+    - { src: markdown/markdownlint, dest: "{{ home }}/.config/markdownlint" }
+    - { src: commitlint, dest: "{{ home }}/.config/commitlint" }
+    - { src: prettier/.prettierrc, dest: "{{ home }}/.prettierrc" }
+    - { src: prettier/.prettierignore, dest: "{{ home }}/.prettierignore" }
+    - { src: docker/hadolint.yaml, dest: "{{ home }}/.config/hadolint.yaml" }
+  loop_control:
+    label: "{{ item.src }}"
+  tags: [development, config]
+
+- name: Deploy helper scripts
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/development/scripts/{{ item }}"
+    dest: "{{ home }}/.local/bin/{{ item }}"
+    state: link
+    force: true
+  loop:
+    - check-composer-updates
+    - check-dotfiles-updates
+  tags: [development, config]

@@ -1,0 +1,28 @@
+---
+- name: Install NetworkManager and wireguard tools
+  community.general.pacman:
+    name:
+      - networkmanager
+      - wireguard-tools
+    state: present
+  become: true
+  tags: [network, packages]
+
+- name: Deploy WireGuard config from vault
+  ansible.builtin.template:
+    src: wg0.conf.j2
+    dest: /etc/wireguard/wg0.conf
+    owner: root
+    group: root
+    mode: "0600"
+  become: true
+  tags: [network, config]
+
+- name: Import WireGuard connection to NetworkManager
+  ansible.builtin.command:
+    cmd: nmcli connection import type wireguard file /etc/wireguard/wg0.conf
+  become: true
+  register: network_wg_import
+  changed_when: "'successfully added' in network_wg_import.stdout"
+  failed_when: false
+  tags: [network, config]

@@ -1,0 +1,37 @@
+---
+- name: Install shell packages
+  community.general.pacman:
+    name: "{{ shell_packages }}"
+    state: present
+  become: true
+  tags: [shell, packages]
+
+- name: Set fish as default shell
+  ansible.builtin.user:
+    name: "{{ username }}"
+    shell: "{{ default_shell }}"
+  become: true
+  tags: [shell]
+
+- name: Deploy shell configs
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/shell/files/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: true
+  loop: "{{ shell_configs }}"
+  loop_control:
+    label: "{{ item.src }}"
+  tags: [shell, config]
+
+- name: Install Fisher plugin manager
+  ansible.builtin.shell: # noqa: risky-shell-pipe
+    cmd: fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
+    creates: "{{ home }}/.config/fish/functions/fisher.fish"
+  tags: [shell]
+
+- name: Install Fish plugins from fish_plugins
+  ansible.builtin.command:
+    cmd: fish -c "fisher update"
+  changed_when: false
+  tags: [shell]

@@ -1,28 +1,23 @@
-# IDE settings
-.idea/
+# Vault
+.vault-password
+vault/secrets.yml
 
-# Pre-commit cache
-.pre-commit-cache/
-
-# Backup files
-*.bak
-*~
-.*.swp
-.*.swo
-
-# OS files
+# OS
 .DS_Store
-Thumbs.db
+*.swp
+*.swo
+*~
 
-# Temporary files
-*.tmp
-*.temp
-.cache/
+# Ansible
+*.retry
 
-# Local test files
-test-*.sh
-scratch/
+# Systemd auto-generated wants/ symlinks (created by systemctl enable)
+roles/services/files/default.target.wants/
+roles/services/files/timers.target.wants/
 
-# WireGuard configs contain private keys — keep only .example files tracked
-wireguard/*.conf
-wireguard/*.nmconnection
+# Node (from ai-tools configs)
+roles/ai-tools/files/opencode/node_modules/
+roles/ai-tools/files/opencode/bun.lock
+
+# WireGuard config (contains real keys, use vault + template instead)
+wireguard/wg0.conf

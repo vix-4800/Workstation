@@ -1,40 +1,14 @@
 ---
-# Ansible-lint configuration for dotfiles repository
-
 profile: production
 
-# Exclude paths
-exclude_paths:
-  - .git/
-  - .cache/
-  - .vscode/
-  - config/
-
 skip_list:
-  - latest[git]
+    - yaml[line-length]
+    - name[casing]
 
-# Warn only for these rules (don't fail)
 warn_list:
-  - command-instead-of-module
-  - risky-shell-pipe
+    - command-instead-of-module
+    - no-changed-when
 
-# Enable specific rules
-enable_list:
-  - yaml
-  - no-changed-when
-  - no-handler
-
-# Use offline mode to avoid network lookups
-offline: false
-
-# Mock roles
-mock_roles: []
-
-# Set loop variable prefix
-loop_var_prefix: "{role}_"
-
-# Var naming pattern
-var_naming_pattern: "^[a-z_][a-z0-9_]*$"
-
-# Task file naming
-task_name_prefix: "{stem}"
+exclude_paths:
+    - .git/
+    - vault/

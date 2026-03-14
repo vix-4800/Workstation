@@ -1,0 +1,14 @@
+---
+shell_packages:
+  - fish
+  - alacritty
+  - tmux
+
+shell_configs:
+  - { src: fish, dest: "{{ home }}/.config/fish" }
+  - { src: alacritty, dest: "{{ home }}/.config/alacritty" }
+  - { src: tmux, dest: "{{ home }}/.config/tmux" }
+  - { src: shell/aliases, dest: "{{ home }}/.aliases" }
+  - { src: .profile, dest: "{{ home }}/.profile" }
+  - { src: bash/.bash_profile, dest: "{{ home }}/.bash_profile" }
+  - { src: bash/bashrc, dest: "{{ home }}/.bashrc" }

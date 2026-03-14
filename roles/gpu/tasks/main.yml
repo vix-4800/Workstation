@@ -1,0 +1,8 @@
+---
+- name: Install NVIDIA drivers
+  community.general.pacman:
+    name: "{{ gpu_nvidia_packages }}"
+    state: present
+  become: true
+  when: gpu_vendor == 'nvidia'
+  tags: [gpu, packages]

@@ -1,0 +1,38 @@
+---
+- name: Deploy systemd user services directory
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/services/files"
+    dest: "{{ home }}/.config/systemd/user"
+    state: link
+    force: true
+  notify: reload systemd user
+  tags: [services, config]
+
+- name: Reload systemd user daemon before enabling units
+  ansible.builtin.meta: flush_handlers
+
+- name: Enable common services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    scope: user
+    enabled: true
+  loop: "{{ services_common }}"
+  tags: [services]
+
+- name: Enable batsignal (battery monitoring)
+  ansible.builtin.systemd:
+    name: batsignal.service
+    scope: user
+    enabled: true
+    state: started
+  when: has_battery | default(false)
+  tags: [services]
+
+- name: Enable host-specific services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    scope: user
+    enabled: true
+  loop: "{{ services_host }}"
+  when: services_host | length > 0
+  tags: [services]

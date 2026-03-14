@@ -1,0 +1,40 @@
+---
+audio_packages:
+  - pipewire
+  - pipewire-alsa
+  - pipewire-pulse
+  - pipewire-jack
+  - wireplumber
+  - pavucontrol
+  - alsa-utils
+
+audio_multimedia_packages:
+  - ffmpeg
+  - vlc
+  - mpv
+  - imagemagick
+  - gstreamer
+  - gst-libav
+  - gst-plugins-base
+  - gst-plugins-good
+  - gst-plugins-bad
+  - gst-plugins-ugly
+  - a52dec
+  - faac
+  - faad2
+  - flac
+  - lame
+  - libdca
+  - libdv
+  - libmad
+  - libmpeg2
+  - libtheora
+  - libvorbis
+  - libdvdnav
+  - libdvdcss
+  - libdvdread
+  - exfatprogs
+
+audio_configs:
+  - { src: pipewire, dest: "{{ home }}/.config/pipewire" }
+  - { src: wireplumber, dest: "{{ home }}/.config/wireplumber" }

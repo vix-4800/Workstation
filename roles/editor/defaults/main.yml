@@ -1,0 +1,8 @@
+---
+editor_packages:
+  - neovim
+
+editor_configs:
+  - { src: nvim, dest: "{{ home }}/.config/nvim" }
+  - { src: code/code-flags.conf, dest: "{{ home }}/.config/code-flags.conf" }
+  - { src: git/gitconfig, dest: "{{ home }}/.gitconfig" }

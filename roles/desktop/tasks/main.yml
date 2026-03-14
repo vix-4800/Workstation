@@ -1,0 +1,27 @@
+---
+- name: Install Sway ecosystem
+  ansible.builtin.include_tasks: sway.yml
+  tags: [desktop, sway]
+
+- name: Setup Waybar
+  ansible.builtin.include_tasks: waybar.yml
+  tags: [desktop, waybar]
+
+- name: Build and install gtklock modules
+  ansible.builtin.include_tasks: gtklock.yml
+  tags: [desktop, gtklock]
+
+- name: Setup notifications
+  ansible.builtin.include_tasks: notifications.yml
+  tags: [desktop, notifications]
+
+- name: Deploy desktop configs
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/desktop/files/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: true
+  loop: "{{ desktop_configs }}"
+  loop_control:
+    label: "{{ item.src }}"
+  tags: [desktop, config]

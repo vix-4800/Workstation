@@ -1,0 +1,9 @@
+[Interface]
+PrivateKey = {{ wg_private_key }}
+Address = {{ wg_address }}
+DNS = {{ wg_dns }}
+
+[Peer]
+PublicKey = {{ vault_wg_peer_public_key }}
+Endpoint = {{ vault_wg_endpoint }}
+AllowedIPs = 0.0.0.0/0, ::/0

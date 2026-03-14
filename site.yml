@@ -1,0 +1,53 @@
+---
+- name: Provision workstation
+  hosts: workstations
+  gather_facts: true
+
+  vars_files:
+    - vault/secrets.yml
+
+  pre_tasks:
+    - name: Verify running on Arch Linux
+      ansible.builtin.assert:
+        that: ansible_facts['os_family'] == "Archlinux"
+        fail_msg: "This playbook only supports Arch Linux"
+      tags: [always]
+
+    - name: Ensure essential directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - "{{ home }}/.config"
+        - "{{ home }}/.config/systemd"
+        - "{{ home }}/.config/yamllint"
+        - "{{ home }}/.config/geoclue"
+        - "{{ home }}/.local/bin"
+        - "{{ home }}/Pictures"
+      tags: [always]
+
+  roles:
+    - { role: base, tags: [base] }
+    - { role: yay, tags: [yay] }
+    - { role: cpu, tags: [cpu] }
+    - { role: gpu, tags: [gpu] }
+    - { role: shell, tags: [shell] }
+    - { role: editor, tags: [editor] }
+    - { role: audio, tags: [audio] }
+    - { role: network, tags: [network] }
+    - { role: desktop, tags: [desktop] }
+    - { role: display-manager, tags: [display-manager] }
+    - { role: development, tags: [development] }
+    - { role: appearance, tags: [appearance] }
+    - { role: apps, tags: [apps] }
+    - { role: services, tags: [services] }
+    - { role: ai-tools, tags: [ai-tools] }
+
+  post_tasks:
+    - name: Clean package cache
+      ansible.builtin.command:
+        cmd: paccache -rk2
+      become: true
+      changed_when: false
+      tags: [cleanup]

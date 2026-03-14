@@ -1,0 +1,12 @@
+---
+desktop_configs:
+  - { src: sway, dest: "{{ home }}/.config/sway" }
+  - { src: waybar, dest: "{{ home }}/.config/waybar" }
+  - { src: wofi, dest: "{{ home }}/.config/wofi" }
+  - { src: swaync, dest: "{{ home }}/.config/swaync" }
+  - { src: swayosd, dest: "{{ home }}/.config/swayosd" }
+  - { src: swayidle, dest: "{{ home }}/.config/swayidle" }
+  - { src: swappy, dest: "{{ home }}/.config/swappy" }
+  - { src: waypaper, dest: "{{ home }}/.config/waypaper" }
+  - { src: wlogout, dest: "{{ home }}/.config/wlogout" }
+  - { src: zathura, dest: "{{ home }}/.config/zathura" }

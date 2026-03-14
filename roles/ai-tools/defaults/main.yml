@@ -1,0 +1,9 @@
+---
+ai_configs:
+  - { src: opencode, dest: "{{ home }}/.config/opencode" }
+  - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
+  - { src: codex/AGENTS.md, dest: "{{ home }}/.codex/AGENTS.md" }
+  - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
+  - { src: mcp/serena/serena_config.yml, dest: "{{ home }}/.serena/serena_config.yml" }
+  - { src: agents/skills, dest: "{{ home }}/.agents/skills" }
+  - { src: agents/skills, dest: "{{ home }}/.qwen/skills" }
