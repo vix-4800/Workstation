@@ -1,8 +1,8 @@
 ---
-locale: en_US.UTF-8
-timezone: UTC
+base_locale: en_US.UTF-8
+base_timezone: UTC
 
-essential_packages:
+base_essential_packages:
   - base-devel
   - git
   - curl
@@ -23,7 +23,7 @@ essential_packages:
   - udiskie
   - xdg-user-dirs
 
-cli_packages:
+base_cli_packages:
   - eza
   - bat
   - ripgrep

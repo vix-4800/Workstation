@@ -1,5 +1,5 @@
 ---
-nvidia_packages:
+gpu_nvidia_packages:
   - nvidia-dkms
   - nvidia-utils
   - nvidia-settings

@@ -16,7 +16,7 @@
     name: "{{ item }}"
     scope: user
     enabled: true
-  loop: "{{ common_services }}"
+  loop: "{{ services_common }}"
   tags: [services]
 
 - name: Enable batsignal (battery monitoring)
@@ -33,6 +33,6 @@
     name: "{{ item }}"
     scope: user
     enabled: true
-  loop: "{{ host_services }}"
-  when: host_services | length > 0
+  loop: "{{ services_host }}"
+  when: services_host | length > 0
   tags: [services]

@@ -2,8 +2,8 @@
 - name: Set locale
   ansible.builtin.lineinfile:
     path: /etc/locale.gen
-    regexp: "^#?{{ locale }}"
-    line: "{{ locale }} UTF-8"
+    regexp: "^#?{{ base_locale }}"
+    line: "{{ base_locale }} UTF-8"
   become: true
   notify: generate locale
   tags: [base, system]
@@ -23,14 +23,14 @@
 
 - name: Install essential packages
   community.general.pacman:
-    name: "{{ essential_packages }}"
+    name: "{{ base_essential_packages }}"
     state: present
   become: true
   tags: [base, packages]
 
 - name: Install modern CLI tools
   community.general.pacman:
-    name: "{{ cli_packages }}"
+    name: "{{ base_cli_packages }}"
     state: present
   become: true
   tags: [base, packages]

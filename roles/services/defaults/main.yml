@@ -1,6 +1,6 @@
 ---
 # Services enabled on all hosts
-common_services:
+services_common:
   - alsa-restore.service
   - break-reminder.timer
   - water-reminder.timer
@@ -12,4 +12,4 @@ common_services:
   - git-maintenance@weekly.timer
 
 # Additional services per host (merged in tasks)
-host_services: []
+services_host: []

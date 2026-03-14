@@ -25,13 +25,13 @@
   tags: [shell, config]
 
 - name: Install Fisher plugin manager
-  ansible.builtin.shell:
+  ansible.builtin.shell: # noqa: risky-shell-pipe
     cmd: fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
     creates: "{{ home }}/.config/fish/functions/fisher.fish"
   tags: [shell]
 
 - name: Install Fish plugins from fish_plugins
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: fish -c "fisher update"
   changed_when: false
   tags: [shell]

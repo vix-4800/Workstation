@@ -8,7 +8,7 @@ has_battery: true
 vpn_profile: laptop
 
 # Host-specific services
-host_services:
+services_host:
   - auto-cpufreq
 
 # WireGuard (values from vault)

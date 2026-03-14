@@ -1,5 +1,5 @@
 ---
-app_packages:
+apps_packages:
   - firefox
   - telegram-desktop
   - github-cli
@@ -17,7 +17,7 @@ app_packages:
   - zathura-pdf-mupdf
   - feh
 
-app_aur_packages:
+apps_aur_packages:
   - spotify
   - batsignal
   - auto-cpufreq

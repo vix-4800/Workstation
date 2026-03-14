@@ -8,7 +8,7 @@
 
 - name: Install multimedia packages
   community.general.pacman:
-    name: "{{ multimedia_packages }}"
+    name: "{{ audio_multimedia_packages }}"
     state: present
   become: true
   tags: [audio, packages]

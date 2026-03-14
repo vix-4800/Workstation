@@ -8,7 +8,7 @@ audio_packages:
   - pavucontrol
   - alsa-utils
 
-multimedia_packages:
+audio_multimedia_packages:
   - ffmpeg
   - vlc
   - mpv

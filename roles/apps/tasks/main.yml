@@ -1,7 +1,7 @@
 ---
 - name: Install applications
   community.general.pacman:
-    name: "{{ app_packages }}"
+    name: "{{ apps_packages }}"
     state: present
   become: true
   tags: [apps, packages]
@@ -11,7 +11,7 @@
     name: "{{ item }}"
     state: present
   become: false
-  loop: "{{ app_aur_packages }}"
+  loop: "{{ apps_aur_packages }}"
   loop_control:
     label: "{{ item }}"
   tags: [apps, packages]

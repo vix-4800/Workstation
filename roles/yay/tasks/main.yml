@@ -1,5 +1,6 @@
 ---
 - name: Install yay (AUR helper)
+  tags: [yay, packages]
   block:
     - name: Check if yay is installed
       ansible.builtin.command:
@@ -34,4 +35,3 @@
           ansible.builtin.file:
             path: /tmp/yay-build
             state: absent
-  tags: [yay, packages]

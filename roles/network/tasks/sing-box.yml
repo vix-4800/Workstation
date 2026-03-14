@@ -37,7 +37,7 @@
     enabled: false
     daemon_reload: true
   become: true
-  ignore_errors: true
+  failed_when: false
   tags: [network, services]
 
 - name: Deploy sing-box profiles
