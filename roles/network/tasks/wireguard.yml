@@ -18,11 +18,27 @@
   become: true
   tags: [network, config]
 
+- name: Enable NetworkManager service
+  ansible.builtin.systemd:
+    name: NetworkManager
+    enabled: true
+    state: started
+  become: true
+  tags: [network, services]
+
+- name: Check whether WireGuard connection already exists in NetworkManager
+  ansible.builtin.command:
+    cmd: nmcli --terse --fields NAME,TYPE connection show
+  become: true
+  register: network_wg_connections
+  changed_when: false
+  tags: [network, config]
+
 - name: Import WireGuard connection to NetworkManager
   ansible.builtin.command:
     cmd: nmcli connection import type wireguard file /etc/wireguard/wg0.conf
   become: true
   register: network_wg_import
-  changed_when: "'successfully added' in network_wg_import.stdout"
-  failed_when: false
+  changed_when: true
+  when: "'wg0:wireguard' not in network_wg_connections.stdout_lines"
   tags: [network, config]
