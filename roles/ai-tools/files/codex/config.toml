@@ -19,8 +19,14 @@ args = ["-y", "@modelcontextprotocol/server-github"]
 [mcp_servers.serena]
 enabled = true
 command = "uvx"
-args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex"]
-startup_timeout_sec = 60
+args = [
+  "--from",
+  "git+https://github.com/oraios/serena",
+  "serena",
+  "start-mcp-server",
+  "--context",
+  "codex",
+]
 
 [mcp_servers.context7]
 command = "npx"
