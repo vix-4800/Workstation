@@ -26,6 +26,23 @@
   become: true
   tags: [display-manager, system]
 
+- name: Ensure system backgrounds directory exists
+  ansible.builtin.file:
+    path: /usr/share/backgrounds
+    state: directory
+    mode: "0755"
+  become: true
+  tags: [display-manager, system]
+
+- name: Deploy ReGreet wallpaper
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/appearance/files/wallpapers/{{ wallpaper_file }}"
+    dest: "/usr/share/backgrounds/{{ wallpaper_file }}"
+    state: link
+    force: true
+  become: true
+  tags: [display-manager, system]
+
 - name: Deploy ReGreet config
   ansible.builtin.template:
     src: regreet.toml.j2
