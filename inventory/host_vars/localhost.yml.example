@@ -2,6 +2,7 @@
 # Machine-specific variables for this host.
 # Copy this file to localhost.yml and fill in the values.
 
+hostname: workstation
 cpu_vendor: intel   # intel | amd
 gpu_vendor: nvidia  # nvidia | amd | none
 has_battery: false  # true for laptops
