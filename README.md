@@ -71,6 +71,7 @@ inventory/
 | `display-manager` | Greetd + ReGreet                                             |
 | `development`     | PHP, Python, Go, Docker, linter configs                      |
 | `appearance`      | GTK, fonts, cursors, icons, wallpapers, themes               |
+| `apps`            | Desktop applications, AUR apps, and waypaper                 |
 | `services`        | All systemd user services and timers                         |
 | `ai-tools`        | Codex, OpenCode, Qwen, MCP/Serena, agent skills              |
 
@@ -103,13 +104,13 @@ Create the vault file like this:
 
 ```bash
 just vault-init
-cp vault/secrets.yml.example vault/secrets.yml
+# create vault/secrets.yml from vault/secrets.yml.example and fill in your values
 just vault-encrypt
 just vault-edit
 ```
 
-Do not create `vault/secrets.yml` with a plain `cp` or editor save. `site.yml` loads it through `vars_files`, so the
-file must be actual `ansible-vault` ciphertext.
+Before running `just vault-encrypt`, `vault/secrets.yml` may exist temporarily as plain YAML copied from the example.
+After that step, `site.yml` loads it through `vars_files`, so the file must remain actual `ansible-vault` ciphertext.
 
 If you already created `vault/secrets.yml` as plain YAML, re-encrypt it:
 
