@@ -5,5 +5,11 @@ DNS = {{ vault_wg_dns }}
 
 [Peer]
 PublicKey = {{ vault_wg_peer_public_key }}
+{% if vault_wg_preshared_key | default('') != '' %}
+PresharedKey = {{ vault_wg_preshared_key }}
+{% endif %}
+{% if vault_wg_persistent_keepalive is defined %}
+PersistentKeepalive = {{ vault_wg_persistent_keepalive }}
+{% endif %}
 Endpoint = {{ vault_wg_endpoint }}
 AllowedIPs = 0.0.0.0/0, ::/0
