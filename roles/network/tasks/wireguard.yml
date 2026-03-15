@@ -16,6 +16,7 @@
     group: root
     mode: "0600"
   become: true
+  register: network_wg_config
   tags: [network, config]
 
 - name: Enable NetworkManager service
@@ -28,9 +29,10 @@
 
 - name: Check whether WireGuard connection already exists in NetworkManager
   ansible.builtin.command:
-    cmd: nmcli --terse --fields NAME,TYPE connection show
+    cmd: nmcli --terse --fields NAME,TYPE connection show wg0
   become: true
-  register: network_wg_connections
+  register: network_wg_connection
+  failed_when: false
   changed_when: false
   tags: [network, config]
 
@@ -40,5 +42,25 @@
   become: true
   register: network_wg_import
   changed_when: true
-  when: "'wg0:wireguard' not in network_wg_connections.stdout_lines"
+  when: network_wg_connection.rc != 0
+  tags: [network, config]
+
+- name: Remove existing WireGuard connection before re-import
+  ansible.builtin.command:
+    cmd: nmcli connection delete wg0
+  become: true
+  changed_when: true
+  when:
+    - network_wg_connection.rc == 0
+    - network_wg_config.changed
+  tags: [network, config]
+
+- name: Re-import updated WireGuard connection to NetworkManager
+  ansible.builtin.command:
+    cmd: nmcli connection import type wireguard file /etc/wireguard/wg0.conf
+  become: true
+  changed_when: true
+  when:
+    - network_wg_connection.rc == 0
+    - network_wg_config.changed
   tags: [network, config]
