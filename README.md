@@ -40,18 +40,19 @@ just vault-edit         # Edit encrypted secrets
 Everything is managed through **Ansible roles** — packages, configs, services, and secrets. `just` provides a thin UX
 layer on top of `ansible-playbook`.
 
-### Multi-machine support
+### Inventory
 
-Machines are defined in `inventory/hosts.yml` with per-host variables in `host_vars/`. Ansible auto-detects the current
-machine by hostname and applies the correct configuration.
+The checked-in inventory targets `localhost` by default. Machine-specific hardware values live in
+`inventory/host_vars/localhost.yml`, which is intentionally untracked; copy the example file on each machine and adjust
+it locally.
 
 ```text
 inventory/
-├── hosts.yml                     # Machine definitions
+├── hosts.yml                     # Tracked inventory (defaults to localhost)
 ├── group_vars/all.yml            # Shared: theme, font, shell, editor...
 └── host_vars/
-    ├── saga.yml                  # Laptop: AMD, no GPU, battery
-    └── desktop.yml               # Desktop: Intel, NVIDIA, no battery
+    ├── localhost.yml.example     # Template for per-machine hardware values
+    └── localhost.yml             # Local untracked copy
 ```
 
 ### Roles
@@ -75,7 +76,9 @@ inventory/
 
 ### Tags
 
-Every task is tagged for granular execution:
+Tasks are tagged for granular execution. The stable tags are the role tag (`desktop`, `network`, `development`, etc.)
+plus the type tags (`packages`, `config`, `services`, `system`). Some include wrappers also expose narrower subgroup tags
+such as `wireguard`, `gtklock`, or `php`.
 
 | Tag           | Scope                                               |
 | ------------- | --------------------------------------------------- |
@@ -83,7 +86,8 @@ Every task is tagged for granular execution:
 | `system`      | System-level configs requiring sudo (/etc/, /boot/) |
 | `packages`    | Install packages                                    |
 | `services`    | Manage systemd units                                |
-| Per-role tags | `shell`, `desktop`, `network`, etc.                 |
+| Role tags     | `shell`, `desktop`, `network`, etc.                 |
+| Subgroup tags | `wireguard`, `gtklock`, `php`, `docker`, etc.       |
 
 ### Secrets
 
@@ -157,8 +161,8 @@ Add it to the appropriate role's `tasks/main.yml`, commit, push, and run `just a
 
 ### Host-specific behavior
 
-GPU role skips on laptop (`gpu_vendor: none`), batsignal skips on desktop (`has_battery: false`), WireGuard gets the
-correct key from vault via `host_vars`.
+Hardware-dependent roles read values from the local untracked `inventory/host_vars/localhost.yml`. For example, GPU
+setup depends on `gpu_vendor`, battery services depend on `has_battery`, and WireGuard gets its secrets from vault.
 
 ## Desktop Stack
 
