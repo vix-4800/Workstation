@@ -12,7 +12,7 @@ prompt: |
 This is a **machine state management repository** for Arch Linux with Sway (Wayland) desktop environment.
 
 - **Ansible roles** (`roles/`) — single tool for packages, configs, services, and secrets
-- **Inventory** (`inventory/`) — multi-machine support via `host_vars/`
+- **Inventory** (`inventory/`) — checked-in `localhost` inventory with per-machine overrides in local `host_vars/`
 - **Justfile** — UX layer for common commands (`just apply`, `just sync`, `just plan`)
 - **ansible-vault** (`vault/`) — encrypted secrets (WireGuard keys, VPN profiles)
 - **Catppuccin Mocha** theme consistently across all applications
@@ -23,7 +23,7 @@ This is a **machine state management repository** for Arch Linux with Sway (Wayl
 ### Apply full state
 
 ```bash
-just apply              # Packages + configs + services (auto-detects host)
+just apply              # Packages + configs + services
 just sync               # Only configs (fast)
 just plan               # Dry-run
 just role shell         # Specific role
@@ -53,11 +53,11 @@ just bootstrap
 ├── requirements.yml            # Ansible Galaxy collections
 ├── site.yml                    # Master playbook (imports all roles with tags)
 ├── inventory/
-│   ├── hosts.yml               # Machine definitions
+│   ├── hosts.yml               # Tracked inventory (defaults to localhost)
 │   ├── group_vars/all.yml      # Shared variables (theme, font, shell, editor)
 │   └── host_vars/
-│       ├── saga.yml            # Laptop: AMD CPU, no GPU, has battery
-│       └── <desktop>.yml       # Desktop: Intel CPU, NVIDIA, no battery
+│       ├── localhost.yml.example # Template for local machine-specific vars
+│       └── localhost.yml       # Local untracked vars for this machine
 ├── vault/
 │   ├── secrets.yml             # Encrypted (gitignored)
 │   └── secrets.yml.example     # Template for secrets
@@ -95,7 +95,7 @@ just bootstrap
 ### Ansible Tasks
 
 - Use 2-space indentation
-- Every task must have tags: `[<role>, <type>]` where type is `packages`, `config`, or `services`
+- Every task should include the role tag plus the most relevant type tag when one applies; common type tags are `packages`, `config`, `services`, and `system`
 - Prefer `community.general.pacman` for Arch packages, `kewlfft.aur.aur` for AUR
 - Use `become: true` only where needed (package install, system paths)
 - Config deployment: `ansible.builtin.file` with `state: link` (symlinks, not copies)
@@ -157,9 +157,9 @@ shellcheck roles/*/scripts/*   # Lint scripts
 
 ## Adding a New Machine
 
-1. Add host to `inventory/hosts.yml`
-2. Create `inventory/host_vars/<hostname>.yml` with machine-specific vars
-3. Add vault secrets for the new host in `vault/secrets.yml`
+1. Clone the repo onto the new machine
+2. Copy `inventory/host_vars/localhost.yml.example` to `inventory/host_vars/localhost.yml` on that machine and fill in its machine-specific vars
+3. Add that machine's vault secrets in `vault/secrets.yml`
 4. On the new machine: `just bootstrap`
 
 ## Common Gotchas
@@ -168,7 +168,7 @@ shellcheck roles/*/scripts/*   # Lint scripts
 2. **Wayland only** — use grim/slurp (not scrot), wl-clipboard (not xclip)
 3. **Symlink direction** — `src` is inside the repo, `dest` is the target in `~/`
 4. **Vault required** — `vault/secrets.yml` must exist (even if empty) for `site.yml` to parse
-5. **Host detection** — `just` reads `/etc/hostname` to select the right `host_vars`
+5. **Local host vars are untracked** — `inventory/host_vars/localhost.yml` is intentionally gitignored and must be created from the example on each machine
 6. **`become: false`** — needed for AUR packages (yay runs as user)
 
 ## Quick Reference

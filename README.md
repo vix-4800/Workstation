@@ -44,7 +44,7 @@ layer on top of `ansible-playbook`.
 
 The checked-in inventory targets `localhost` by default. Machine-specific hardware values live in
 `inventory/host_vars/localhost.yml`, which is intentionally untracked; copy the example file on each machine and adjust
-it locally.
+`hostname`, hardware flags, and any local overrides there.
 
 ```text
 inventory/
@@ -76,9 +76,9 @@ inventory/
 
 ### Tags
 
-Tasks are tagged for granular execution. The stable tags are the role tag (`desktop`, `network`, `development`, etc.)
-plus the type tags (`packages`, `config`, `services`, `system`). Some include wrappers also expose narrower subgroup tags
-such as `wireguard`, `gtklock`, or `php`.
+Tasks are tagged for granular execution. The common tags are role tags (`desktop`, `network`, `development`, etc.),
+type tags (`packages`, `config`, `services`, `system`), and narrower subgroup tags such as `wireguard`, `gtklock`, or
+`php`.
 
 | Tag           | Scope                                               |
 | ------------- | --------------------------------------------------- |
@@ -86,17 +86,17 @@ such as `wireguard`, `gtklock`, or `php`.
 | `system`      | System-level configs requiring sudo (/etc/, /boot/) |
 | `packages`    | Install packages                                    |
 | `services`    | Manage systemd units                                |
-| Role tags     | `shell`, `desktop`, `network`, etc.                 |
+| Role tags     | `shell`, `desktop`, `network`, etc.; some tasks use only the role tag |
 | Subgroup tags | `wireguard`, `gtklock`, `php`, `docker`, etc.       |
 
 ### Secrets
 
 WireGuard keys and VPN profiles are stored in `vault/secrets.yml`, encrypted with `ansible-vault`. Per-host variables in
-`host_vars/` reference vault secrets, and templates render the final configs.
+`host_vars/localhost.yml` and vault variables render the final configs.
 
 ```text
-vault/secrets.yml ──> host_vars/saga.yml ──> templates/wg0.conf.j2 ──> /etc/wireguard/wg0.conf
-     (encrypted)        (per-host vars)         (Jinja2 template)        (deployed config)
+vault/secrets.yml ──> host_vars/localhost.yml ──> templates/wg0.conf.j2 ──> /etc/wireguard/wg0.conf
+     (encrypted)           (local vars)             (Jinja2 template)        (deployed config)
 ```
 
 Create the vault file like this:
@@ -161,8 +161,9 @@ Add it to the appropriate role's `tasks/main.yml`, commit, push, and run `just a
 
 ### Host-specific behavior
 
-Hardware-dependent roles read values from the local untracked `inventory/host_vars/localhost.yml`. For example, GPU
-setup depends on `gpu_vendor`, battery services depend on `has_battery`, and WireGuard gets its secrets from vault.
+Host-specific state lives in the local untracked `inventory/host_vars/localhost.yml`. For example, `base` sets
+`hostname`, GPU setup depends on `gpu_vendor`, battery services depend on `has_battery`, and WireGuard gets its secrets
+from vault.
 
 ## Desktop Stack
 
