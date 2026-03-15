@@ -36,12 +36,12 @@ vault-edit:
     ansible-vault edit vault/secrets.yml
 
 # Create encrypted vault file from example template
-vault-create:
-    test -f vault/secrets.yml && { echo "vault/secrets.yml already exists"; exit 1; } || true
-    cp vault/secrets.yml.example /tmp/workstation-secrets.yml
-    ansible-vault encrypt --output vault/secrets.yml /tmp/workstation-secrets.yml
-    rm -f /tmp/workstation-secrets.yml
-    @echo "Created encrypted vault/secrets.yml from vault/secrets.yml.example"
+vault-encrypt:
+    @if [ ! -f vault/secrets.yml ]; then \
+        echo "Error: vault/secrets.yml not found. Please create it from vault/secrets.yml.example and add your secrets before encrypting."; \
+        exit 1; \
+    fi
+    ansible-vault encrypt vault/secrets.yml
 
 # Create vault password file (first-time setup)
 vault-init:

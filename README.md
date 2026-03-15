@@ -29,7 +29,7 @@ just role desktop network   # Multiple roles
 
 ```bash
 just vault-init         # Create vault password file (first time)
-just vault-create       # Create encrypted vault/secrets.yml from the example
+just vault-encrypt      # Encrypt vault/secrets.yml (after adding secrets in plain YAML)
 just vault-edit         # Edit encrypted secrets
 ```
 
@@ -37,15 +37,15 @@ just vault-edit         # Edit encrypted secrets
 
 ### Single tool, single workflow
 
-Everything is managed through **Ansible roles** — packages, configs, services, and secrets.
-`just` provides a thin UX layer on top of `ansible-playbook`.
+Everything is managed through **Ansible roles** — packages, configs, services, and secrets. `just` provides a thin UX
+layer on top of `ansible-playbook`.
 
 ### Multi-machine support
 
-Machines are defined in `inventory/hosts.yml` with per-host variables in `host_vars/`.
-Ansible auto-detects the current machine by hostname and applies the correct configuration.
+Machines are defined in `inventory/hosts.yml` with per-host variables in `host_vars/`. Ansible auto-detects the current
+machine by hostname and applies the correct configuration.
 
-```
+```text
 inventory/
 ├── hosts.yml                     # Machine definitions
 ├── group_vars/all.yml            # Shared: theme, font, shell, editor...
@@ -56,41 +56,41 @@ inventory/
 
 ### Roles
 
-| Role | What it manages |
-|------|----------------|
-| `base` | Locale, hostname, essential packages, env vars, fontconfig |
-| `yay` | AUR helper installation |
-| `cpu` | CPU microcode (AMD/Intel, conditional) |
-| `gpu` | GPU drivers + fan control (NVIDIA, conditional) |
-| `shell` | Fish, Bash, Alacritty, Tmux, aliases |
-| `editor` | Neovim, VSCode flags, Git config |
-| `audio` | PipeWire, WirePlumber, multimedia apps |
-| `network` | Firewall, Bluetooth, WireGuard (vault), sing-box, VPN script |
-| `desktop` | Sway, Waybar, Wofi, SwayNC, GTKLock, Wlogout, etc. |
-| `display-manager` | Greetd + ReGreet |
-| `development` | PHP, Python, Go, Docker, linter configs |
-| `appearance` | GTK, fonts, cursors, icons, wallpapers, themes |
-| `services` | All systemd user services and timers |
-| `ai-tools` | Codex, OpenCode, Qwen, MCP/Serena, agent skills |
+| Role              | What it manages                                              |
+| ----------------- | ------------------------------------------------------------ |
+| `base`            | Locale, hostname, essential packages, env vars, fontconfig   |
+| `yay`             | AUR helper installation                                      |
+| `cpu`             | CPU microcode (AMD/Intel, conditional)                       |
+| `gpu`             | GPU drivers + fan control (NVIDIA, conditional)              |
+| `shell`           | Fish, Bash, Alacritty, Tmux, aliases                         |
+| `editor`          | Neovim, VSCode flags, Git config                             |
+| `audio`           | PipeWire, WirePlumber, multimedia apps                       |
+| `network`         | Firewall, Bluetooth, WireGuard (vault), sing-box, VPN script |
+| `desktop`         | Sway, Waybar, Wofi, SwayNC, GTKLock, Wlogout, etc.           |
+| `display-manager` | Greetd + ReGreet                                             |
+| `development`     | PHP, Python, Go, Docker, linter configs                      |
+| `appearance`      | GTK, fonts, cursors, icons, wallpapers, themes               |
+| `services`        | All systemd user services and timers                         |
+| `ai-tools`        | Codex, OpenCode, Qwen, MCP/Serena, agent skills              |
 
 ### Tags
 
 Every task is tagged for granular execution:
 
-| Tag | Scope |
-|-----|-------|
-| `config` | Deploy user-space config files (symlinks, no sudo) |
-| `system` | System-level configs requiring sudo (/etc/, /boot/) |
-| `packages` | Install packages |
-| `services` | Manage systemd units |
-| Per-role tags | `shell`, `desktop`, `network`, etc. |
+| Tag           | Scope                                               |
+| ------------- | --------------------------------------------------- |
+| `config`      | Deploy user-space config files (symlinks, no sudo)  |
+| `system`      | System-level configs requiring sudo (/etc/, /boot/) |
+| `packages`    | Install packages                                    |
+| `services`    | Manage systemd units                                |
+| Per-role tags | `shell`, `desktop`, `network`, etc.                 |
 
 ### Secrets
 
-WireGuard keys and VPN profiles are stored in `vault/secrets.yml`, encrypted with `ansible-vault`.
-Per-host variables in `host_vars/` reference vault secrets, and templates render the final configs.
+WireGuard keys and VPN profiles are stored in `vault/secrets.yml`, encrypted with `ansible-vault`. Per-host variables in
+`host_vars/` reference vault secrets, and templates render the final configs.
 
-```
+```text
 vault/secrets.yml ──> host_vars/saga.yml ──> templates/wg0.conf.j2 ──> /etc/wireguard/wg0.conf
      (encrypted)        (per-host vars)         (Jinja2 template)        (deployed config)
 ```
@@ -99,11 +99,13 @@ Create the vault file like this:
 
 ```bash
 just vault-init
-just vault-create
+cp vault/secrets.yml.example vault/secrets.yml
+just vault-encrypt
 just vault-edit
 ```
 
-Do not create `vault/secrets.yml` with a plain `cp` or editor save. `site.yml` loads it through `vars_files`, so the file must be actual `ansible-vault` ciphertext.
+Do not create `vault/secrets.yml` with a plain `cp` or editor save. `site.yml` loads it through `vars_files`, so the
+file must be actual `ansible-vault` ciphertext.
 
 If you already created `vault/secrets.yml` as plain YAML, re-encrypt it:
 
@@ -119,7 +121,7 @@ $ANSIBLE_VAULT;
 
 ## Structure
 
-```
+```text
 ├── Justfile                    # Command interface
 ├── ansible.cfg                 # Ansible settings
 ├── requirements.yml            # Galaxy collections
@@ -155,8 +157,8 @@ Add it to the appropriate role's `tasks/main.yml`, commit, push, and run `just a
 
 ### Host-specific behavior
 
-GPU role skips on laptop (`gpu_vendor: none`), batsignal skips on desktop (`has_battery: false`),
-WireGuard gets the correct key from vault via `host_vars`.
+GPU role skips on laptop (`gpu_vendor: none`), batsignal skips on desktop (`has_battery: false`), WireGuard gets the
+correct key from vault via `host_vars`.
 
 ## Desktop Stack
 
@@ -176,17 +178,17 @@ WireGuard gets the correct key from vault via `host_vars`.
 
 ## Just Commands
 
-| Command | Description |
-|---------|-------------|
-| `just apply` | Full state apply |
-| `just sync` | Deploy configs only |
-| `just plan` | Dry-run (check mode) |
-| `just role <tags>` | Apply specific role(s) |
-| `just bootstrap` | First-time setup |
-| `just deps` | Install Galaxy collections |
-| `just vault-edit` | Edit encrypted secrets |
-| `just vault-init` | Create vault password file |
-| `just vault-create` | Create encrypted `vault/secrets.yml` from the example |
-| `just services` | Show running user services |
-| `just lint` | Lint playbooks and roles |
-| `just check` | Syntax check only |
+| Command              | Description                 |
+| -------------------- | --------------------------- |
+| `just apply`         | Full state apply            |
+| `just sync`          | Deploy configs only         |
+| `just plan`          | Dry-run (check mode)        |
+| `just role <tags>`   | Apply specific role(s)      |
+| `just bootstrap`     | First-time setup            |
+| `just deps`          | Install Galaxy collections  |
+| `just vault-edit`    | Edit encrypted secrets      |
+| `just vault-init`    | Create vault password file  |
+| `just vault-encrypt` | Encrypt `vault/secrets.yml` |
+| `just services`      | Show running user services  |
+| `just lint`          | Lint playbooks and roles    |
+| `just check`         | Syntax check only           |
