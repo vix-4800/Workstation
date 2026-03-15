@@ -77,18 +77,17 @@ inventory/
 
 ### Tags
 
-Tasks are tagged for granular execution. The common tags are role tags (`desktop`, `network`, `development`, etc.),
-type tags (`packages`, `config`, `services`, `system`), and narrower subgroup tags such as `wireguard`, `gtklock`, or
-`php`.
+Tasks are tagged for granular execution. The common tags are role tags (`desktop`, `network`, `development`, etc.), type
+tags (`packages`, `config`, `services`, `system`), and narrower subgroup tags such as `wireguard`, `gtklock`, or `php`.
 
-| Tag           | Scope                                               |
-| ------------- | --------------------------------------------------- |
-| `config`      | Deploy user-space config files (symlinks, no sudo)  |
-| `system`      | System-level configs requiring sudo (/etc/, /boot/) |
-| `packages`    | Install packages                                    |
-| `services`    | Manage systemd units                                |
+| Tag           | Scope                                                                 |
+| ------------- | --------------------------------------------------------------------- |
+| `config`      | Deploy user-space config files (symlinks, no sudo)                    |
+| `system`      | System-level configs requiring sudo (/etc/, /boot/)                   |
+| `packages`    | Install packages                                                      |
+| `services`    | Manage systemd units                                                  |
 | Role tags     | `shell`, `desktop`, `network`, etc.; some tasks use only the role tag |
-| Subgroup tags | `wireguard`, `gtklock`, `php`, `docker`, etc.       |
+| Subgroup tags | `wireguard`, `gtklock`, `php`, `docker`, etc.                         |
 
 ### Secrets
 
