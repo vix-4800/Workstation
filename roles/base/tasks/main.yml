@@ -17,7 +17,7 @@
 
 - name: Set hostname
   ansible.builtin.hostname:
-    name: "{{ ansible_hostname }}"
+    name: "{{ ansible_facts['hostname'] }}"
   become: true
   tags: [base, system]
 
