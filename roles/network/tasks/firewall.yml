@@ -4,7 +4,7 @@
     name: [nftables, firewalld]
     state: present
   become: true
-  tags: [packages]
+  tags: [network, packages]
 
 - name: Enable firewalld service
   ansible.builtin.systemd:

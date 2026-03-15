@@ -4,7 +4,7 @@
     name: [bluez, bluez-utils]
     state: present
   become: true
-  tags: [packages]
+  tags: [network, packages]
 
 - name: Deploy bluetooth config
   ansible.builtin.file:

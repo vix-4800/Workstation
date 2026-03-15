@@ -3,9 +3,8 @@
   kewlfft.aur.aur:
     name: sing-box
     state: present
-  become: true
-  become_user: aur_builder
-  tags: [packages]
+  become: false
+  tags: [network, packages]
 
 - name: Enable IP forwarding for TUN mode
   ansible.posix.sysctl:

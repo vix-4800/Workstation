@@ -1,18 +1,30 @@
 ---
 - name: Install Sway ecosystem
-  ansible.builtin.include_tasks: sway.yml
+  ansible.builtin.include_tasks:
+    file: sway.yml
+    apply:
+      tags: [desktop]
   tags: [desktop, sway]
 
 - name: Setup Waybar
-  ansible.builtin.include_tasks: waybar.yml
+  ansible.builtin.include_tasks:
+    file: waybar.yml
+    apply:
+      tags: [desktop]
   tags: [desktop, waybar]
 
 - name: Build and install gtklock modules
-  ansible.builtin.include_tasks: gtklock.yml
+  ansible.builtin.include_tasks:
+    file: gtklock.yml
+    apply:
+      tags: [desktop]
   tags: [desktop, gtklock]
 
 - name: Setup notifications
-  ansible.builtin.include_tasks: notifications.yml
+  ansible.builtin.include_tasks:
+    file: notifications.yml
+    apply:
+      tags: [desktop]
   tags: [desktop, notifications]
 
 - name: Deploy desktop configs

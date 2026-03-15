@@ -29,32 +29,32 @@
       - libsoup3
     state: present
   become: true
-  tags: [packages]
+  tags: [desktop, packages]
 
 - name: Install swayfx (AUR)
   kewlfft.aur.aur:
     name: swayfx
     state: present
   become: false
-  tags: [packages]
+  tags: [desktop, packages]
 
 - name: Install swaylock-effects (AUR)
   kewlfft.aur.aur:
     name: swaylock-effects
     state: present
   become: false
-  tags: [packages]
+  tags: [desktop, packages]
 
 - name: Install gtklock (AUR)
   kewlfft.aur.aur:
     name: gtklock
     state: present
   become: false
-  tags: [packages]
+  tags: [desktop, packages]
 
 - name: Install autotiling (AUR)
   kewlfft.aur.aur:
     name: autotiling
     state: present
   become: false
-  tags: [packages]
+  tags: [desktop, packages]

@@ -1,18 +1,30 @@
 ---
 - name: Install firewall
-  ansible.builtin.include_tasks: firewall.yml
+  ansible.builtin.include_tasks:
+    file: firewall.yml
+    apply:
+      tags: [network]
   tags: [network, firewall]
 
 - name: Configure Bluetooth
-  ansible.builtin.include_tasks: bluetooth.yml
+  ansible.builtin.include_tasks:
+    file: bluetooth.yml
+    apply:
+      tags: [network]
   tags: [network, bluetooth]
 
 - name: Configure WireGuard
-  ansible.builtin.include_tasks: wireguard.yml
+  ansible.builtin.include_tasks:
+    file: wireguard.yml
+    apply:
+      tags: [network]
   tags: [network, wireguard]
 
 - name: Configure sing-box
-  ansible.builtin.include_tasks: sing-box.yml
+  ansible.builtin.include_tasks:
+    file: sing-box.yml
+    apply:
+      tags: [network]
   tags: [network, sing-box]
 
 - name: Deploy VPN management script

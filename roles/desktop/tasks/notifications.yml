@@ -4,11 +4,11 @@
     name: swaync
     state: present
   become: true
-  tags: [packages]
+  tags: [desktop, packages]
 
 - name: Install SwayOSD
   kewlfft.aur.aur:
     name: swayosd
     state: present
   become: false
-  tags: [packages]
+  tags: [desktop, packages]

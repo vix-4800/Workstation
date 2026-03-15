@@ -4,4 +4,4 @@
     name: waybar
     state: present
   become: true
-  tags: [packages]
+  tags: [desktop, packages]

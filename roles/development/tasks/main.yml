@@ -1,18 +1,30 @@
 ---
 - name: Install PHP and tools
-  ansible.builtin.include_tasks: php.yml
+  ansible.builtin.include_tasks:
+    file: php.yml
+    apply:
+      tags: [development]
   tags: [development, php]
 
 - name: Install Python tools
-  ansible.builtin.include_tasks: python.yml
+  ansible.builtin.include_tasks:
+    file: python.yml
+    apply:
+      tags: [development]
   tags: [development, python]
 
 - name: Install Docker
-  ansible.builtin.include_tasks: docker.yml
+  ansible.builtin.include_tasks:
+    file: docker.yml
+    apply:
+      tags: [development]
   tags: [development, docker]
 
 - name: Install Rust tools
-  ansible.builtin.include_tasks: rust.yml
+  ansible.builtin.include_tasks:
+    file: rust.yml
+    apply:
+      tags: [development]
   tags: [development, rust]
 
 - name: Install additional dev tools
