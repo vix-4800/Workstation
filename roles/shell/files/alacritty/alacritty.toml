@@ -63,3 +63,8 @@ log_level = "OFF"
 # ——— TERMINAL —————————————————————————————————————
 [terminal.shell]
 program = "/usr/bin/fish"
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"
