@@ -93,7 +93,3 @@ if ! shopt -oq posix; then
 fi
 
 # PATH is configured in ~/.profile
-
-if [[ -f "${HOME}/.config/workstation/env/github-token.sh" ]]; then
-  . "${HOME}/.config/workstation/env/github-token.sh"
-fi

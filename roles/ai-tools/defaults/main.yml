@@ -1,7 +1,6 @@
 ---
 ai_tools_packages:
   - npm
-  - uv
 
 ai_tools_npm_packages:
   - "@openai/codex"
@@ -16,7 +15,3 @@ ai_configs:
   - { src: mcp/serena/serena_config.yml, dest: "{{ home }}/.serena/serena_config.yml" }
   - { src: agents/skills, dest: "{{ home }}/.agents/skills" }
   - { src: agents/skills, dest: "{{ home }}/.qwen/skills" }
-
-ai_templates:
-  - { src: env/github-token.sh.j2, dest: "{{ home }}/.config/workstation/env/github-token.sh" }
-  - { src: env/github-token.fish.j2, dest: "{{ home }}/.config/workstation/env/github-token.fish" }

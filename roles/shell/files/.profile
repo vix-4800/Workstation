@@ -23,10 +23,6 @@ fi
 export EDITOR="nvim"
 export VISUAL="${EDITOR}"
 
-if [[ -f "${HOME}/.config/workstation/env/github-token.sh" ]]; then
-    . "${HOME}/.config/workstation/env/github-token.sh"
-fi
-
 # ======= Load shell-agnostic aliases =======
 if [[ -f "${HOME}/.aliases" ]]; then
     . "${HOME}/.aliases"
