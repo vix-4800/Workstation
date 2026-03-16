@@ -34,3 +34,8 @@ args = [
 [mcp_servers.context7]
 command = "npx"
 args = ["-y", "@upstash/context7-mcp@latest"]
+
+[mcp_servers.docker]
+command = "uvx"
+args = ["--with", "fastmcp[tasks]", "mcp-docker"]
+startup_timeout_sec = 30
