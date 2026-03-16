@@ -42,3 +42,10 @@
     state: link
     force: true
   tags: [network, config]
+
+- name: Install v2rayN
+  kewlfft.aur.aur:
+    name: "v2rayN"
+    state: present
+  become: false
+  tags: [network, packages]
