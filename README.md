@@ -6,7 +6,7 @@ Ansible-driven provisioning and configuration for multiple workstations from a s
 
 ## Quick Start
 
-### Bootstrap from scratch
+### First run on a fresh system
 
 ```bash
 sudo pacman -Syu --needed sudo vim git ansible just base-devel
@@ -66,7 +66,7 @@ Then log in as that user.
 
 ### 2. Install required packages
 
-Install the base tools that are needed before this repository can bootstrap the rest of the system:
+Install the base tools that are needed before this repository can manage the rest of the system:
 
 ```bash
 sudo pacman -Syu --needed sudo vim git ansible just base-devel
@@ -137,12 +137,6 @@ ansible-galaxy collection install -r requirements.yml
 
 ```bash
 just apply
-```
-
-If you want the repo to install Ansible collections for you as part of first-time setup, use:
-
-```bash
-just bootstrap
 ```
 
 ## Architecture
@@ -303,7 +297,6 @@ from vault.
 | `just sync`          | Deploy configs only         |
 | `just plan`          | Dry-run (check mode)        |
 | `just role <tags>`   | Apply specific role(s)      |
-| `just bootstrap`     | First-time setup            |
 | `just deps`          | Install Galaxy collections  |
 | `just vault-edit`    | Edit encrypted secrets      |
 | `just vault-init`    | Create vault password file  |

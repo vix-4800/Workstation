@@ -21,12 +21,6 @@ plan:
 role +TAGS:
     ansible-playbook {{yml_file}} --ask-become-pass --tags {{ TAGS }} --diff
 
-# Bootstrap from scratch (first run on a fresh system)
-bootstrap:
-    sudo pacman -S --needed --noconfirm ansible just
-    ansible-galaxy collection install -r requirements.yml
-    @just apply
-
 # Install ansible-galaxy requirements
 deps:
     ansible-galaxy collection install -r requirements.yml
