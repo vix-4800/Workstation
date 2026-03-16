@@ -19,7 +19,7 @@ plan:
 
 # Apply specific role(s): just role shell desktop
 role +TAGS:
-    ansible-playbook site.yml --tags {{ TAGS }} --diff
+    ansible-playbook site.yml --ask-become-pass --tags {{ TAGS }} --diff
 
 # Bootstrap from scratch (first run on a fresh system)
 bootstrap:
