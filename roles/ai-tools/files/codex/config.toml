@@ -12,6 +12,9 @@ enabled = false
 [features]
 multi_agent = true
 
+[tui]
+theme = "catppuccin-mocha"
+
 [mcp_servers.github]
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-github"]
