@@ -1,4 +1,10 @@
 ---
+ai_tools_packages:
+  - npm
+
+ai_tools_npm_packages:
+  - "@openai/codex"
+
 ai_configs:
   - { src: opencode, dest: "{{ home }}/.config/opencode" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
