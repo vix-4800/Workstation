@@ -3,23 +3,23 @@
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-host := `cat /etc/hostname`
+yml_file := "site.yml"
 
 # Full state apply (packages + configs + services)
 apply:
-    ansible-playbook site.yml --ask-become-pass --diff
+    ansible-playbook {{yml_file}} --ask-become-pass --diff
 
 # Deploy only configs (no package installs, no sudo)
 sync:
-    ansible-playbook site.yml --tags config --diff
+    ansible-playbook {{yml_file}} --tags config --diff
 
 # Dry-run: show what would change
 plan:
-    ansible-playbook site.yml --ask-become-pass --check --diff
+    ansible-playbook {{yml_file}} --ask-become-pass --check --diff
 
 # Apply specific role(s): just role shell desktop
 role +TAGS:
-    ansible-playbook site.yml --ask-become-pass --tags {{ TAGS }} --diff
+    ansible-playbook {{yml_file}} --ask-become-pass --tags {{ TAGS }} --diff
 
 # Bootstrap from scratch (first run on a fresh system)
 bootstrap:
@@ -56,8 +56,8 @@ services:
 
 # Lint all playbooks and roles
 lint:
-    ansible-lint site.yml
+    ansible-lint {{yml_file}}
 
 # Validate syntax only
 check:
-    ansible-playbook site.yml --syntax-check
+    ansible-playbook {{yml_file}} --syntax-check
