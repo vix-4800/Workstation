@@ -9,10 +9,16 @@ Ansible-driven provisioning and configuration for multiple workstations from a s
 ### Bootstrap from scratch
 
 ```bash
-sudo pacman -S --needed git ansible just
+sudo pacman -Syu --needed sudo vim git ansible just base-devel
 git clone https://github.com/vix-4800/Workstation ~/Code/Workstation
 cd ~/Code/Workstation
-just bootstrap
+cp inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
+cp vault/secrets.yml.example vault/secrets.yml
+just vault-init
+# edit inventory/host_vars/localhost.yml and vault/secrets.yml
+just vault-encrypt
+just deps
+just apply
 ```
 
 ### Daily usage
@@ -31,6 +37,112 @@ just role desktop network   # Multiple roles
 just vault-init         # Create vault password file (first time)
 just vault-encrypt      # Encrypt vault/secrets.yml (after adding secrets in plain YAML)
 just vault-edit         # Edit encrypted secrets
+```
+
+## Fresh System Setup
+
+Use this order on a clean Arch install. `just apply` is not enough by itself on a fresh machine.
+
+### 1. Prepare the user and sudo
+
+The target user must exist before running this repo and must be allowed to use `sudo`, because `just apply` runs
+`ansible-playbook --ask-become-pass`.
+
+Example:
+
+```bash
+useradd -m -G wheel -s /bin/bash <username>
+passwd <username>
+EDITOR=vim visudo
+```
+
+Enable sudo for the `wheel` group in `/etc/sudoers`:
+
+```text
+%wheel ALL=(ALL:ALL) ALL
+```
+
+Then log in as that user.
+
+### 2. Install required packages
+
+Install the base tools that are needed before this repository can bootstrap the rest of the system:
+
+```bash
+sudo pacman -Syu --needed sudo vim git ansible just base-devel
+```
+
+These are needed for:
+
+- `sudo` — privilege escalation for Ansible tasks
+- `vim` — editing `host_vars`, vault files, and `visudo`
+- `git` — cloning and updating the repository
+- `ansible` — running the playbook
+- `just` — command runner used by this repo
+- `base-devel` — required for AUR builds during `yay`/AUR tasks
+
+### 3. Clone the repository
+
+```bash
+git clone https://github.com/vix-4800/Workstation ~/Code/Workstation
+cd ~/Code/Workstation
+```
+
+### 4. Create host variables
+
+This file is intentionally untracked and must be created locally on every machine:
+
+```bash
+cp inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
+vim inventory/host_vars/localhost.yml
+```
+
+At minimum, fill in the machine-specific values such as:
+
+- `username`
+- `hostname`
+- `cpu_vendor`
+- `gpu_vendor`
+- `has_battery`
+
+### 5. Create vault secrets
+
+`site.yml` always loads `vault/secrets.yml`, so the file must exist before you run the playbook.
+
+```bash
+cp vault/secrets.yml.example vault/secrets.yml
+vim vault/secrets.yml
+just vault-init
+just vault-encrypt
+```
+
+After encryption, the file must start with `$ANSIBLE_VAULT;`.
+
+### 6. Install Ansible collections
+
+This repository depends on Galaxy collections declared in [requirements.yml](/home/vix/Code/Workstation/requirements.yml),
+including `kewlfft.aur`. On a clean system install them before the first apply:
+
+```bash
+just deps
+```
+
+Equivalent command:
+
+```bash
+ansible-galaxy collection install -r requirements.yml
+```
+
+### 7. Run the first apply
+
+```bash
+just apply
+```
+
+If you want the repo to install Ansible collections for you as part of first-time setup, use:
+
+```bash
+just bootstrap
 ```
 
 ## Architecture
@@ -178,7 +290,9 @@ from vault.
 ## Prerequisites
 
 - Arch Linux
-- `sudo` access
+- A local user account already created
+- The user is in `wheel` (or otherwise configured in `sudoers`)
+- `sudo`, `vim`, `git`, `ansible`, `just`, and `base-devel` installed
 - Internet connection
 
 ## Just Commands
