@@ -1,0 +1,1 @@
+After changes, verify the affected files and run the smallest relevant checks. For Ansible config changes, inspect `git diff` and run repo checks such as `just check` or `just lint` when feasible. Avoid reverting unrelated user changes in the worktree.

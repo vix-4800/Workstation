@@ -1,0 +1,1 @@
+Useful commands for this repo: `just apply`, `just sync`, `just plan`, `just lint`, `just check`, `pre-commit run -a`, `shellcheck roles/*/scripts/*`, `git status`, `git diff`, `rg --files`, `rg -n <pattern>`.
