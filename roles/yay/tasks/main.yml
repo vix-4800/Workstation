@@ -14,7 +14,7 @@
       block:
         - name: Install build dependencies
           community.general.pacman:
-            name: [base-devel, git]
+            name: [base-devel, git, go]
             state: present
           become: true
 
