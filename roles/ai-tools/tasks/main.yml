@@ -25,12 +25,12 @@
 
 - name: Ensure AI config parent directories exist
   ansible.builtin.file:
-    path: "{{ item.dest | dirname }}"
+    path: "{{ item | dirname }}"
     state: directory
     mode: "0755"
-  loop: "{{ ai_configs }}"
+  loop: "{{ (ai_configs | map(attribute='dest') | list) + (ai_templates | map(attribute='dest') | list) }}"
   loop_control:
-    label: "{{ item.dest | dirname }}"
+    label: "{{ item | dirname }}"
   tags: [ai-tools, config]
 
 - name: Deploy AI tool configs
@@ -42,4 +42,77 @@
   loop: "{{ ai_configs }}"
   loop_control:
     label: "{{ item.src }}"
+  tags: [ai-tools, config]
+
+- name: Deploy AI environment templates
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0600"
+  loop: "{{ ai_templates }}"
+  loop_control:
+    label: "{{ item.src }}"
+  when: vault_github_token is defined and vault_github_token != ""
+  tags: [ai-tools, config]
+
+- name: Remove Claude GitHub MCP server if it already exists
+  ansible.builtin.command:
+    argv:
+      - "{{ home }}/.local/bin/claude"
+      - mcp
+      - remove
+      - --scope
+      - user
+      - github
+  register: claude_github_remove
+  failed_when: false
+  changed_when: "'Removed MCP server github' in claude_github_remove.stdout"
+  when: vault_github_token is defined and vault_github_token != ""
+  tags: [ai-tools, config]
+
+- name: Configure Claude GitHub MCP server
+  ansible.builtin.command:
+    argv:
+      - "{{ home }}/.local/bin/claude"
+      - mcp
+      - add
+      - --transport
+      - http
+      - --scope
+      - user
+      - github
+      - https://api.githubcopilot.com/mcp/
+      - -H
+      - "Authorization: Bearer ${GITHUB_TOKEN}"
+  when: vault_github_token is defined and vault_github_token != ""
+  tags: [ai-tools, config]
+
+- name: Remove Claude Docker MCP server if it already exists
+  ansible.builtin.command:
+    argv:
+      - "{{ home }}/.local/bin/claude"
+      - mcp
+      - remove
+      - --scope
+      - user
+      - docker
+  register: claude_docker_remove
+  failed_when: false
+  changed_when: "'Removed MCP server docker' in claude_docker_remove.stdout"
+  tags: [ai-tools, config]
+
+- name: Configure Claude Docker MCP server
+  ansible.builtin.command:
+    argv:
+      - "{{ home }}/.local/bin/claude"
+      - mcp
+      - add
+      - --scope
+      - user
+      - docker
+      - --
+      - uvx
+      - --with
+      - fastmcp[tasks]
+      - mcp-docker
   tags: [ai-tools, config]
