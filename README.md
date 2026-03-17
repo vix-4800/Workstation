@@ -163,23 +163,23 @@ inventory/
 
 ### Roles
 
-| Role              | What it manages                                              |
-| ----------------- | ------------------------------------------------------------ |
-| `base`            | Locale, hostname, essential packages, env vars, fontconfig   |
-| `yay`             | AUR helper installation                                      |
-| `cpu`             | CPU microcode (AMD/Intel, conditional)                       |
-| `gpu`             | GPU drivers + fan control (NVIDIA, conditional)              |
-| `shell`           | Fish, Bash, Alacritty, Tmux, aliases                         |
-| `editor`          | Neovim, VSCode flags, Git config                             |
-| `audio`           | PipeWire, WirePlumber, multimedia apps                       |
-| `network`         | Firewall, Bluetooth, WireGuard (vault), sing-box, VPN script |
-| `desktop`         | Sway, Waybar, Wofi, SwayNC, GTKLock, Wlogout, etc.           |
-| `display-manager` | Greetd + ReGreet                                             |
-| `development`     | PHP, Python, Go, Docker, linter configs                      |
-| `appearance`      | GTK, fonts, cursors, icons, wallpapers, themes               |
-| `apps`            | Desktop applications, AUR apps, and waypaper                 |
-| `services`        | All systemd user services and timers                         |
-| `ai-tools`        | Codex, Qwen, MCP/Serena, agent skills                        |
+| Role | What it manages |
+| --- | --- |
+| `base` | Locale, hostname, timezone, essential packages (btop, dust, lm_sensors, yq, xdg-utils), env vars, fontconfig, vm.swappiness, paccache.timer |
+| `yay` | AUR helper installation |
+| `cpu` | CPU microcode (AMD/Intel); thermald thermal management service (Intel only) |
+| `gpu` | GPU drivers + fan control (NVIDIA); DRM KMS modprobe and Wayland env config |
+| `shell` | Fish, Bash, Alacritty, Tmux, aliases |
+| `editor` | Neovim (with Lua + LuaRocks), VSCode flags, Git config |
+| `audio` | PipeWire, WirePlumber, EasyEffects, multimedia apps |
+| `network` | Firewall (nftables), Bluetooth (blueman, nm-applet), WireGuard (vault), sing-box, USBGuard, VPN scripts |
+| `desktop` | SwayFX, Waybar, Wofi, SwayNC, GTKLock, Wlogout, polkit-gnome, XDG portals, swappy, wdisplays, qt5/6-wayland |
+| `display-manager` | Greetd + ReGreet |
+| `development` | PHP, Python, Go, Docker, linter configs |
+| `appearance` | GTK themes (nwg-look), fonts, cursors, icons, wallpapers, plymouth |
+| `apps` | Obsidian, Bitwarden, file-roller, gvfs-goa, Flatpak + Flathub, waypaper, auto-cpufreq (battery only) |
+| `services` | All systemd user services and timers (xdg-user-dirs, etc.) |
+| `ai-tools` | Codex, Qwen, MCP/Serena, agent skills |
 
 ### Tags
 
@@ -273,13 +273,49 @@ from vault.
 
 ## Desktop Stack
 
-- **SwayFX** — compositor (blur, shadows, rounded corners)
-- **Waybar** — status bar with custom scripts
+### Core Compositor & Shell
+
+- **SwayFX** — Sway fork with blur, shadows, and rounded corners
+- **Waybar** — status bar with custom scripts (weather, VPN, Docker, resources, network, audio)
+- **Wofi** — launcher and selection menus used by Waybar scripts
+- **SwayNC** — notification daemon
 - **Greetd + ReGreet** — display manager
-- **GTKLock** — screen locker
-- **SwayNC** — notifications
-- **Wofi** — launcher
-- **Catppuccin Mocha** — consistent theme everywhere
+
+### Lock & Session
+
+- **GTKLock** — screen locker with media and background modules
+- **Wlogout** — session logout menu
+- **polkit-gnome** — authentication agent (autostarted with Sway)
+- **xdg-desktop-portal-wlr** — screensharing and file picker portals
+
+### Audio
+
+- **PipeWire + WirePlumber** — audio server
+- **EasyEffects** — per-application equaliser and audio effects
+
+### Networking
+
+- **NetworkManager** — connection management
+- **network-manager-applet** — systray indicator (`nm-connection-editor` via Waybar)
+- **Blueman** — Bluetooth manager (opened from Waybar Bluetooth module)
+- **WireGuard / sing-box** — VPN (managed via Waybar VPN module)
+
+### Screenshots & Display
+
+- **Swappy** — screenshot annotation
+- **wdisplays** — display configuration GUI
+
+### Appearance
+
+- **nwg-look** — GTK theme manager for Wayland
+- **Catppuccin Mocha** — consistent colour theme across all components
+
+### Applications
+
+- **Obsidian** — notes
+- **Bitwarden** — password manager
+- **File Roller** — archive manager
+- **Flatpak + Flathub** — additional applications
 
 ## Prerequisites
 
