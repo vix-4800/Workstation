@@ -47,20 +47,6 @@
   become: true
   tags: [appearance, packages]
 
-- name: Deploy GTK configs
-  ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/gtk/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    state: link
-    force: true
-  loop:
-    - { src: "2.0/.gtkrc-2.0", dest: "{{ home }}/.gtkrc-2.0" }
-    - { src: "3.0", dest: "{{ home }}/.config/gtk-3.0" }
-    - { src: "4.0", dest: "{{ home }}/.config/gtk-4.0" }
-  loop_control:
-    label: "GTK {{ item.src }}"
-  tags: [appearance, config]
-
 - name: Deploy bat config and themes
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/appearance/files/bat"
