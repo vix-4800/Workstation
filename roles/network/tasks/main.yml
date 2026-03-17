@@ -6,6 +6,13 @@
       tags: [network]
   tags: [network, firewall]
 
+- name: Configure USBGuard
+  ansible.builtin.include_tasks:
+    file: usbguard.yml
+    apply:
+      tags: [network]
+  tags: [network, usbguard]
+
 - name: Configure Bluetooth
   ansible.builtin.include_tasks:
     file: bluetooth.yml

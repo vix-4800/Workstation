@@ -1,0 +1,25 @@
+---
+- name: Install usbguard
+  community.general.pacman:
+    name: usbguard
+    state: present
+  become: true
+  tags: [network, packages]
+
+- name: Deploy usbguard rules (allow-all safe default)
+  ansible.builtin.copy:
+    src: "{{ dotfiles_dir }}/roles/network/files/usbguard/rules.conf"
+    dest: /etc/usbguard/rules.conf
+    mode: "0600"
+    owner: root
+    group: root
+  become: true
+  tags: [network, config]
+
+- name: Enable usbguard service
+  ansible.builtin.systemd:
+    name: usbguard
+    enabled: true
+    state: started
+  become: true
+  tags: [network, services]
