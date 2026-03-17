@@ -17,7 +17,7 @@
   kewlfft.aur.aur:
     name: "{{ item }}"
     state: present
-  become: false
+  become: true
   loop: "{{ apps_aur_packages }}"
   loop_control:
     label: "{{ item }}"

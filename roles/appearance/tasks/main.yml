@@ -37,7 +37,7 @@
   kewlfft.aur.aur:
     name: nwg-look
     state: present
-  become: false
+  become: true
   tags: [appearance, packages]
 
 - name: Deploy GTK configs
