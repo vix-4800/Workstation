@@ -19,7 +19,6 @@
     - rector/rector
     - driftingly/rector-laravel
     - friendsofphp/php-cs-fixer
-    - laravel/pint
     - squizlabs/php_codesniffer
     - slevomat/coding-standard
     - devstrict/phpcs:dev-main
