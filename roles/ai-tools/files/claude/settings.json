@@ -6,6 +6,7 @@
     "security-guidance@claude-plugins-official": true,
     "serena@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true
+    "lua-lsp@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true
   }
 }
