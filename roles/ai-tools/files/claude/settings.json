@@ -1,4 +1,7 @@
 {
+  "permissions": {
+    "defaultMode": "acceptEdits"
+  },
   "enabledPlugins": {
     "security-guidance@claude-plugins-official": true,
     "serena@claude-plugins-official": true,
