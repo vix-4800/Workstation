@@ -33,6 +33,13 @@
   become: true
   tags: [appearance, packages]
 
+- name: Install plymouth
+  community.general.pacman:
+    name: plymouth
+    state: present
+  become: true
+  tags: [appearance, packages]
+
 - name: Install nwg-look (AUR)
   kewlfft.aur.aur:
     name: nwg-look

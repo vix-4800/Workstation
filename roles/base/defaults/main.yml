@@ -38,3 +38,5 @@ base_cli_packages:
   - pacman-contrib
   - btop
   - dust
+  - lm_sensors
+  - yq

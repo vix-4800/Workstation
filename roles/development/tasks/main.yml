@@ -31,6 +31,8 @@
   community.general.pacman:
     name:
       - go
+      - lua
+      - luarocks
       - shellcheck
       - shfmt
     state: present
