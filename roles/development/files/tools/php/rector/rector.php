@@ -81,6 +81,8 @@ use RectorLaravel\Rector\MethodCall\ResponseHelperCallToJsonResponseRector;
 use RectorLaravel\Rector\MethodCall\ValidationRuleArrayStringValueToArrayRector;
 use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
 use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
+use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
+use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use RectorLaravel\Set\LaravelSetProvider;
 
 $laravelRulesEnabled = false;
@@ -209,7 +211,9 @@ $rules = [
     ArrayKeyExistsTernaryThenValueToCoalescingRector::class, // Replaces array_key_exists checks in ternary conditions with null coalescing
     SimplifyTautologyTernaryRector::class, // Simplifies tautological ternary expressions
     AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
+    AddOverrideAttributeToOverriddenPropertiesRector::class, // Adds #[Override] attribute to overridden properties
     DeprecatedAnnotationToDeprecatedAttributeRector::class, // Converts @deprecated annotations to #[Deprecated] attributes
+    ConstAndTraitDeprecatedAttributeRector::class, // Adds #[Deprecated] attribute to deprecated constants and traits
 
     // Arrays
     ChangeArrayPushToArrayAssignRector::class,
