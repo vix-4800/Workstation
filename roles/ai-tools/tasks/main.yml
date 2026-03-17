@@ -17,9 +17,12 @@
   tags: [ai-tools, packages]
 
 - name: Install Claude CLI
-  ansible.builtin.shell: curl -fsSL https://claude.ai/install.sh | bash
-  args:
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      curl -fsSL https://claude.ai/install.sh | bash
     creates: "{{ home }}/.local/bin/claude"
+    executable: /bin/bash
   become: false
   tags: [ai-tools, packages]
 

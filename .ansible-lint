@@ -4,6 +4,7 @@ profile: production
 skip_list:
     - yaml[line-length]
     - name[casing]
+    - role-name
 
 warn_list:
     - command-instead-of-module
@@ -11,4 +12,8 @@ warn_list:
 
 exclude_paths:
     - .git/
+    - .github/
+    - .serena/
+    - .pre-commit-config.yaml
     - vault/
+    - roles/ai-tools/files/
