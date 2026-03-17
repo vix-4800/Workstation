@@ -8,6 +8,7 @@ return {
       { "<leader>c", group = "[C]ode Tools" },
       { "<leader>cp", group = "[C]ode Tools - PHP" },
       { "<leader>t", group = "[T]oggle" },
+      { "<leader>tl", desc = "[T]oggle [L]inter (picker)" },
       { "<leader>r", group = "[R]eplace" },
       { "<leader>d", group = "[D]iagnostic/Debug" },
       { "<leader>a", group = "[A]I Tools" },

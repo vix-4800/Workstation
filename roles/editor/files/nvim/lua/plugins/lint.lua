@@ -9,6 +9,18 @@ return {
     -- Global linting state
     vim.g.linting_enabled = true
 
+    -- Per-linter disabled state (linter name -> true if disabled)
+    local disabled_linters = {}
+
+    -- Returns active linters for current buffer's filetype, minus disabled ones
+    local function get_active_linters()
+      local ft = vim.bo.filetype
+      local all = lint.linters_by_ft[ft] or {}
+      return vim.tbl_filter(function(l)
+        return not disabled_linters[l]
+      end, all)
+    end
+
     lint.linters_by_ft = {
       markdown = { "markdownlint" },
       php = { "phpstan", "phpcs", "phpmd" },
@@ -151,7 +163,7 @@ return {
         -- avoid superfluous noise, notably within the handy LSP pop-ups that
         -- describe the hovered symbol using Markdown.
         if vim.bo.modifiable and vim.g.linting_enabled then
-          lint.try_lint()
+          lint.try_lint(get_active_linters())
         end
       end,
     })
@@ -165,9 +177,70 @@ return {
         vim.diagnostic.reset(nil, 0)
       else
         if vim.bo.modifiable then
-          lint.try_lint()
+          lint.try_lint(get_active_linters())
         end
       end
     end, { desc = "Toggle all linting" })
+
+    -- Toggle individual linter by name
+    vim.api.nvim_create_user_command("ToggleLinter", function(opts)
+      local name = opts.args
+      if name == "" then
+        vim.notify("Usage: ToggleLinter <linter-name>", vim.log.levels.WARN)
+        return
+      end
+      if disabled_linters[name] then
+        disabled_linters[name] = nil
+        vim.notify("Linter enabled: " .. name, vim.log.levels.INFO)
+        if vim.bo.modifiable and vim.g.linting_enabled then
+          lint.try_lint(get_active_linters())
+        end
+      else
+        disabled_linters[name] = true
+        vim.notify("Linter disabled: " .. name, vim.log.levels.INFO)
+        vim.diagnostic.reset(nil, 0)
+        if vim.bo.modifiable and vim.g.linting_enabled then
+          lint.try_lint(get_active_linters())
+        end
+      end
+    end, {
+      nargs = 1,
+      complete = function()
+        local ft = vim.bo.filetype
+        return lint.linters_by_ft[ft] or {}
+      end,
+      desc = "Toggle individual linter",
+    })
+
+    -- Interactive picker: toggle linters for the current filetype
+    vim.keymap.set("n", "<leader>tl", function()
+      local ft = vim.bo.filetype
+      local linters = lint.linters_by_ft[ft] or {}
+      if vim.tbl_isempty(linters) then
+        vim.notify("No linters configured for filetype: " .. ft, vim.log.levels.INFO)
+        return
+      end
+      local items = vim.tbl_map(function(l)
+        local state = disabled_linters[l] and "[ ]" or "[x]"
+        return state .. " " .. l
+      end, linters)
+      vim.ui.select(items, {
+        prompt = "Toggle linter (" .. ft .. "):",
+      }, function(choice, idx)
+        if not choice or not idx then return end
+        local name = linters[idx]
+        if disabled_linters[name] then
+          disabled_linters[name] = nil
+          vim.notify("Linter enabled: " .. name, vim.log.levels.INFO)
+        else
+          disabled_linters[name] = true
+          vim.notify("Linter disabled: " .. name, vim.log.levels.INFO)
+        end
+        vim.diagnostic.reset(nil, 0)
+        if vim.bo.modifiable and vim.g.linting_enabled then
+          lint.try_lint(get_active_linters())
+        end
+      end)
+    end, { desc = "[T]oggle [L]inter (picker)" })
   end,
 }
