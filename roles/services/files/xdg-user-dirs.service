@@ -1,0 +1,10 @@
+[Unit]
+Description=Update XDG user directories
+After=default.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/xdg-user-dirs-update
+
+[Install]
+WantedBy=default.target

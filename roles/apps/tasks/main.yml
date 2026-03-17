@@ -22,7 +22,16 @@
     enabled: true
     state: started
   become: true
+  when: has_battery | default(false)
   tags: [apps, services]
+
+- name: Add Flathub remote
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    method: user
+  tags: [apps, packages]
 
 - name: Install custom waypaper
   ansible.builtin.pip:

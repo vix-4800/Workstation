@@ -6,3 +6,4 @@ hostname: workstation
 cpu_vendor: intel   # intel | amd
 gpu_vendor: nvidia  # nvidia | amd | none
 has_battery: false  # true for laptops
+base_timezone: Europe/Saratov  # override default UTC, see timedatectl list-timezones

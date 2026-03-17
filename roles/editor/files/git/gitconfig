@@ -59,3 +59,6 @@
 
 [gc]
 	auto = 256
+
+[maintenance]
+	strategy = incremental

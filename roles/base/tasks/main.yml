@@ -8,6 +8,12 @@
   notify: generate locale
   tags: [base, system]
 
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ base_timezone }}"
+  become: true
+  tags: [base, system]
+
 - name: Set hostname
   ansible.builtin.hostname:
     name: "{{ hostname }}"
@@ -67,3 +73,33 @@
     state: link
     force: true
   tags: [base, config]
+
+- name: Set vm.swappiness for SSD/NVMe performance
+  ansible.posix.sysctl:
+    name: vm.swappiness
+    value: "10"
+    state: present
+    sysctl_file: /etc/sysctl.d/99-vm.conf
+  become: true
+  tags: [base, system]
+
+- name: Deploy paccache systemd units
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/systemd/system/{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    state: link
+    force: true
+  become: true
+  loop:
+    - paccache.service
+    - paccache.timer
+  tags: [base, system]
+
+- name: Enable paccache timer
+  ansible.builtin.systemd:
+    name: paccache.timer
+    daemon_reload: true
+    enabled: true
+    state: started
+  become: true
+  tags: [base, services]
