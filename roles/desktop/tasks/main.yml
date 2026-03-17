@@ -37,3 +37,35 @@
   loop_control:
     label: "{{ item.src }}"
   tags: [desktop, config]
+
+- name: Ensure xdg-desktop-portal config dir exists
+  ansible.builtin.file:
+    path: "{{ home }}/.config/xdg-desktop-portal"
+    state: directory
+    mode: "0755"
+  tags: [desktop, config]
+
+- name: Deploy XDG Desktop Portal config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/desktop/files/xdg-desktop-portal/portals.conf"
+    dest: "{{ home }}/.config/xdg-desktop-portal/portals.conf"
+    state: link
+    force: true
+  tags: [desktop, config]
+
+- name: Deploy mimeapps.list
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/desktop/files/mimeapps.list"
+    dest: "{{ home }}/.config/mimeapps.list"
+    state: link
+    force: true
+  tags: [desktop, config]
+
+- name: Deploy gtklock PAM config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/desktop/files/pam.d/gtklock"
+    dest: /etc/pam.d/gtklock
+    state: link
+    force: true
+  become: true
+  tags: [desktop, system]

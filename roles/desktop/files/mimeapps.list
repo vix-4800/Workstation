@@ -1,0 +1,57 @@
+[Default Applications]
+# Browser
+text/html=firefox.desktop
+x-scheme-handler/http=firefox.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/about=firefox.desktop
+x-scheme-handler/unknown=firefox.desktop
+
+# PDF / Documents
+application/pdf=org.pwmt.zathura.desktop
+application/postscript=org.pwmt.zathura.desktop
+
+# Images
+image/jpeg=feh.desktop
+image/png=feh.desktop
+image/gif=feh.desktop
+image/webp=feh.desktop
+image/bmp=feh.desktop
+image/svg+xml=feh.desktop
+image/tiff=feh.desktop
+
+# Video
+video/mp4=mpv.desktop
+video/x-matroska=mpv.desktop
+video/webm=mpv.desktop
+video/quicktime=mpv.desktop
+video/x-msvideo=mpv.desktop
+video/mpeg=mpv.desktop
+
+# Audio
+audio/mpeg=mpv.desktop
+audio/ogg=mpv.desktop
+audio/flac=mpv.desktop
+audio/wav=mpv.desktop
+audio/x-wav=mpv.desktop
+audio/aac=mpv.desktop
+audio/mp4=mpv.desktop
+
+# Archives
+application/zip=org.gnome.FileRoller.desktop
+application/x-tar=org.gnome.FileRoller.desktop
+application/x-compressed-tar=org.gnome.FileRoller.desktop
+application/x-7z-compressed=org.gnome.FileRoller.desktop
+application/x-rar=org.gnome.FileRoller.desktop
+application/gzip=org.gnome.FileRoller.desktop
+application/x-bzip2=org.gnome.FileRoller.desktop
+application/x-xz=org.gnome.FileRoller.desktop
+
+# Torrent
+application/x-bittorrent=transmission-gtk.desktop
+x-scheme-handler/magnet=transmission-gtk.desktop
+
+# File manager
+inode/directory=thunar.desktop
+
+# Telegram
+x-scheme-handler/tg=telegram-desktop.desktop
