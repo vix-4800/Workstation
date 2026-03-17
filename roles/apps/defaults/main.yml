@@ -16,6 +16,7 @@ apps_packages:
   - zathura
   - zathura-pdf-mupdf
   - feh
+  - qbittorrent
 
 apps_aur_packages:
   - spotify
