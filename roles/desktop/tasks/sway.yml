@@ -27,6 +27,10 @@
       - ninja
       - playerctl
       - libsoup3
+      - polkit
+      - polkit-gnome
+      - qt5-wayland
+      - qt6-wayland
     state: present
   become: true
   tags: [desktop, packages]

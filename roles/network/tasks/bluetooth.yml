@@ -1,7 +1,11 @@
 ---
 - name: Install bluetooth packages
   community.general.pacman:
-    name: [bluez, bluez-utils]
+    name:
+      - bluez
+      - bluez-utils
+      - blueman
+      - network-manager-applet
     state: present
   become: true
   tags: [network, packages]

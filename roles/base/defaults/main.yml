@@ -22,6 +22,7 @@ base_essential_packages:
   - jq
   - udiskie
   - xdg-user-dirs
+  - xdg-utils
 
 base_cli_packages:
   - eza
@@ -34,3 +35,5 @@ base_cli_packages:
   - trash-cli
   - reflector
   - pacman-contrib
+  - btop
+  - dust

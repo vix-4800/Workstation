@@ -14,3 +14,20 @@
   become: true
   when: cpu_vendor == 'intel'
   tags: [cpu, packages]
+
+- name: Install thermald (Intel thermal management)
+  community.general.pacman:
+    name: thermald
+    state: present
+  become: true
+  when: cpu_vendor == 'intel'
+  tags: [cpu, packages]
+
+- name: Enable thermald service
+  ansible.builtin.systemd:
+    name: thermald
+    enabled: true
+    state: started
+  become: true
+  when: cpu_vendor == 'intel'
+  tags: [cpu, services]

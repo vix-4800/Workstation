@@ -13,6 +13,8 @@ apps_packages:
   - gvfs-mtp
   - gvfs-smb
   - gvfs-nfs
+  - gvfs-goa
+  - file-roller
   - zathura
   - zathura-pdf-mupdf
   - feh
@@ -23,3 +25,5 @@ apps_aur_packages:
   - batsignal
   - auto-cpufreq
   - better-control-git
+  - obsidian
+  - bitwarden

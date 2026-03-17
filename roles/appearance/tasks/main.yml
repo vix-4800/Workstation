@@ -33,6 +33,13 @@
   become: true
   tags: [appearance, packages]
 
+- name: Install nwg-look (AUR)
+  kewlfft.aur.aur:
+    name: nwg-look
+    state: present
+  become: false
+  tags: [appearance, packages]
+
 - name: Deploy GTK configs
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/appearance/files/gtk/{{ item.src }}"
