@@ -31,6 +31,8 @@
       - polkit-gnome
       - qt5-wayland
       - qt6-wayland
+      - swappy
+      - wdisplays
     state: present
   become: true
   tags: [desktop, packages]

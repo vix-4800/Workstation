@@ -8,6 +8,14 @@
   notify: generate locale
   tags: [base, system]
 
+- name: Deploy locale.conf
+  ansible.builtin.copy:
+    dest: /etc/locale.conf
+    content: "LANG={{ base_locale }}\n"
+    mode: "0644"
+  become: true
+  tags: [base, system]
+
 - name: Set timezone
   community.general.timezone:
     name: "{{ base_timezone }}"
