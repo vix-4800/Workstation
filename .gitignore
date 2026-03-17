@@ -16,9 +16,5 @@ inventory/host_vars/*.yml
 # Systemd auto-generated wants/ symlinks (created by systemctl enable)
 roles/services/files/*.wants/
 
-# Node (from ai-tools configs)
-roles/ai-tools/files/opencode/node_modules/
-roles/ai-tools/files/opencode/bun.lock
-
 # Logs
 *.log

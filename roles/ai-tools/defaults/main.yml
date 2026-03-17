@@ -8,7 +8,6 @@ ai_tools_npm_packages:
 ai_configs:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
   - { src: claude/CLAUDE.md, dest: "{{ home }}/.claude/CLAUDE.md" }
-  - { src: opencode, dest: "{{ home }}/.config/opencode" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
   - { src: codex/AGENTS.md, dest: "{{ home }}/.codex/AGENTS.md" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
