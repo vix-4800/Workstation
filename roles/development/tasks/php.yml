@@ -13,9 +13,17 @@
     arguments: "{{ item }}"
   loop:
     - phpstan/phpstan
+    - phpstan/extension-installer
+    - phpstan/phpstan-strict-rules
+    - phpstan/phpstan-deprecation-rules
     - rector/rector
+    - driftingly/rector-laravel
     - friendsofphp/php-cs-fixer
     - laravel/pint
     - squizlabs/php_codesniffer
+    - slevomat/coding-standard
+    - devstrict/phpcs:dev-main
+    - phpcompatibility/php-compatibility:"^10.0.0@dev"
+    - phpmd/phpmd
   become: false
   tags: [development, packages]
