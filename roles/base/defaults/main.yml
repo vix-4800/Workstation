@@ -1,6 +1,7 @@
 ---
 base_locale: en_US.UTF-8
 base_timezone: UTC
+base_reflector_country: Russia
 
 base_essential_packages:
   - base-devel

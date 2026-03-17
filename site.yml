@@ -37,9 +37,9 @@
     - { role: audio, tags: [audio] }
     - { role: network, tags: [network] }
     - { role: desktop, tags: [desktop] }
+    - { role: appearance, tags: [appearance] }
     - { role: display-manager, tags: [display-manager] }
     - { role: development, tags: [development] }
-    - { role: appearance, tags: [appearance] }
     - { role: apps, tags: [apps] }
     - { role: services, tags: [services] }
     - { role: ai-tools, tags: [ai-tools] }

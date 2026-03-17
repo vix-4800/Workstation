@@ -1,16 +1,40 @@
 ---
-- name: Remove existing systemd user directory before symlinking
+- name: Check if systemd user dir is a directory symlink
+  ansible.builtin.stat:
+    path: "{{ home }}/.config/systemd/user"
+  register: services_systemd_stat
+  tags: [services, config]
+
+- name: Remove old directory symlink if present
   ansible.builtin.file:
     path: "{{ home }}/.config/systemd/user"
     state: absent
+  when: services_systemd_stat.stat.exists and services_systemd_stat.stat.islnk
   tags: [services, config]
 
-- name: Deploy systemd user services directory
+- name: Ensure systemd user directory exists
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/services/files"
-    dest: "{{ home }}/.config/systemd/user"
+    path: "{{ home }}/.config/systemd/user"
+    state: directory
+    mode: "0755"
+  tags: [services, config]
+
+- name: Find service and timer files
+  ansible.builtin.find:
+    paths: "{{ dotfiles_dir }}/roles/services/files"
+    file_type: file
+  register: services_unit_files
+  tags: [services, config]
+
+- name: Deploy systemd user service and timer files
+  ansible.builtin.file:
+    src: "{{ item.path }}"
+    dest: "{{ home }}/.config/systemd/user/{{ item.path | basename }}"
     state: link
     force: true
+  loop: "{{ services_unit_files.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
   notify: reload systemd user
   tags: [services, config]
 

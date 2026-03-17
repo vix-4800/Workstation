@@ -36,7 +36,7 @@
 
 - name: Update mirror list with reflector
   ansible.builtin.command:
-    cmd: reflector --country Russia --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
+    cmd: reflector --country {{ base_reflector_country }} --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
   become: true
   changed_when: false
   tags: [base, system]
