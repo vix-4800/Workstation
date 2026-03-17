@@ -34,7 +34,6 @@ audio_multimedia_packages:
   - libdvdnav
   - libdvdcss
   - libdvdread
-  - exfatprogs
 
 audio_configs:
   - { src: pipewire, dest: "{{ home }}/.config/pipewire" }

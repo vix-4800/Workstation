@@ -19,6 +19,7 @@ apps_packages:
   - zathura-pdf-mupdf
   - feh
   - transmission-gtk
+  - exfatprogs
 
 apps_aur_packages:
   - spotify

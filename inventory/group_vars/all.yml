@@ -4,7 +4,6 @@
 # Connection (always local — this playbook runs on the machine it configures)
 ansible_connection: local
 
-username: vix
 home: "/home/{{ username }}"
 dotfiles_dir: "{{ playbook_dir }}"
 

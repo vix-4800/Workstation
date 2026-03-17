@@ -1,4 +1,11 @@
 ---
+- name: Remove conflicting exfat-utils before installing exfatprogs
+  community.general.pacman:
+    name: exfat-utils
+    state: absent
+  become: true
+  tags: [apps, packages]
+
 - name: Install applications
   community.general.pacman:
     name: "{{ apps_packages }}"
