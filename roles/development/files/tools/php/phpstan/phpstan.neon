@@ -6,6 +6,7 @@ parameters:
         processTimeout: 900.0
 
     level: max
+    reportIgnoresWithoutComments: true
 
     dynamicConstantNames:
         - YII_ENV
@@ -30,22 +31,29 @@ parameters:
     checkImplicitMixed: true
     checkExplicitMixedMissingReturn: true
 
+    # Make strict-rules intent explicit
+    strictRules:
+        allRules: true
+
     # Case sensitivity checks
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true
 
     # Type inference
     inferPrivatePropertyTypeFromConstructor: true
-    treatPhpDocTypesAsCertain: false
+    treatPhpDocTypesAsCertain: true
 
     # Return type checks
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkTooWideParameterOutInProtectedAndPublicMethods: true
+    checkTooWideThrowTypesInProtectedAndPublicMethods: true
 
     # Error reporting
     reportUnmatchedIgnoredErrors: true
     reportMaybesInMethodSignatures: true
     reportMaybesInPropertyPhpDocTypes: true
     reportStaticMethodSignatures: true
+    reportNonIntStringArrayKey: true
     reportWrongPhpDocTypeInVarTag: true
     reportAnyTypeWideningInVarTag: true
 
@@ -70,7 +78,8 @@ parameters:
     rememberPossiblyImpureFunctionValues: true
 
     checkStrictPrintfPlaceholderTypes: true
-    checkMissingOverrideMethodAttribute: false
+    checkMissingOverrideMethodAttribute: true
+    checkMissingOverridePropertyAttribute: true
     polluteScopeWithBlock: false
 
     exceptions:
