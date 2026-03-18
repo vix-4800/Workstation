@@ -50,9 +50,9 @@
     label: "{{ item }}"
   tags: [apps, packages]
 
-- name: Check if waypaper AUR packages are installed
+- name: Check if waypaper AUR packages are installed and intact
   ansible.builtin.command:
-    cmd: pacman -Q {{ item }}
+    cmd: pacman -Qkk {{ item }}
   loop: "{{ apps_waypaper_aur_packages }}"
   loop_control:
     label: "{{ item }}"
@@ -121,6 +121,17 @@
     - item.skipped is not defined
     - item.stdout_lines | length > 0
   changed_when: true
+  tags: [apps, packages]
+
+- name: Verify waypaper binary is available after install
+  ansible.builtin.command:
+    argv:
+      - which
+      - waypaper
+  register: apps_waypaper_binary
+  changed_when: false
+  failed_when: apps_waypaper_binary.rc != 0
+  when: apps_waypaper_aur_packages | length > 0
   tags: [apps, packages]
 
 - name: Enable auto-cpufreq service
