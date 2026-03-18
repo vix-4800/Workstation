@@ -48,6 +48,10 @@ vault-init:
 services:
     systemctl --user list-units --type=service --type=timer --state=running --no-pager
 
+# Launch Kitty + Zellij companion session scaffold
+companion:
+    companion-session
+
 # Lint all playbooks and roles
 lint:
     ansible-lint {{yml_file}}

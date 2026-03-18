@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/terminal-companion"
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/terminal-companion"
+fifo_path="$state_dir/events.fifo"
+state_file="$state_dir/current-state"
+sprite_dir="$config_dir/sprites"
+idle_timeout="${TERMINAL_COMPANION_IDLE_TIMEOUT:-90}"
+
+mkdir -p "$state_dir"
+rm -f "$fifo_path"
+mkfifo "$fifo_path"
+trap 'rm -f "$fifo_path"' EXIT
+
+render_state() {
+  local state="$1"
+  local sprite_path="$sprite_dir/${state}.png"
+
+  printf '\033[2J\033[H'
+  if command -v kitten >/dev/null 2>&1 && [[ -f "$sprite_path" ]] && [[ "${TERM_PROGRAM:-}" == "kitty" ]]; then
+    kitten icat --unicode-placeholder --align left --clear >/dev/null 2>&1 || true
+    kitten icat --place 30x8@0x0 "$sprite_path"
+  else
+    cat <<FRAME
+┌──────────────────────────────┐
+│  companion :: ${state}
+│
+│  add ${sprite_path##*/} to enable pixel-art mode
+│  waiting for fish + kitty events
+└──────────────────────────────┘
+FRAME
+  fi
+
+  printf '%s\n' "$state" > "$state_file"
+}
+
+map_event_to_state() {
+  local event="$1"
+  local payload="${2:-}"
+
+  case "$event" in
+    prompt|postexec)
+      if [[ "$payload" == success:* ]]; then
+        printf 'success'
+      elif [[ "$payload" == error:* ]]; then
+        printf 'error'
+      else
+        printf 'idle'
+      fi
+      ;;
+    preexec)
+      case "$payload" in
+        sweep*|clean*) printf 'sweep' ;;
+        git*|jj*|lazygit*|docker*|kubectl*|ansible*|nvim*|vim*) printf 'thinking' ;;
+        sleep*|suspend*|systemctl\ suspend*) printf 'sleep' ;;
+        notify*|bell*) printf 'surprised' ;;
+        *) printf 'react' ;;
+      esac
+      ;;
+    notification)
+      printf 'surprised'
+      ;;
+    idle)
+      printf 'sleep'
+      ;;
+    *)
+      printf 'idle'
+      ;;
+  esac
+}
+
+render_state idle
+last_event_ts="$(date +%s)"
+
+while true; do
+  if IFS=$'\t' read -r -t 1 event payload < "$fifo_path"; then
+    last_event_ts="$(date +%s)"
+    render_state "$(map_event_to_state "$event" "$payload")"
+    continue
+  fi
+
+  now="$(date +%s)"
+  if (( now - last_event_ts >= idle_timeout )); then
+    if [[ ! -f "$state_file" ]] || [[ "$(<"$state_file")" != "sleep" ]]; then
+      render_state sleep
+    fi
+  fi
+
+done

@@ -11,7 +11,7 @@
     name: "{{ username }}"
     shell: "{{ default_shell }}"
   become: true
-  tags: [shell]
+  tags: [shell, system]
 
 - name: Deploy shell configs
   ansible.builtin.file:
@@ -24,17 +24,28 @@
     label: "{{ item.src }}"
   tags: [shell, config]
 
+- name: Deploy shell helper scripts
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/shell/scripts/{{ item }}"
+    dest: "{{ home }}/.local/bin/{{ item }}"
+    state: link
+    force: true
+  loop: "{{ shell_scripts }}"
+  loop_control:
+    label: "{{ item }}"
+  tags: [shell, config]
+
 - name: Install Fisher plugin manager
   ansible.builtin.shell: # noqa: risky-shell-pipe
     cmd: fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher"
     creates: "{{ home }}/.config/fish/functions/fisher.fish"
-  tags: [shell]
+  tags: [shell, config]
 
 - name: Install Fish plugins from fish_plugins
   ansible.builtin.command:
     cmd: fish -c "fisher update"
   changed_when: false
-  tags: [shell]
+  tags: [shell, config]
 
 - name: Bootstrap Node.js LTS with nvm
   ansible.builtin.command:

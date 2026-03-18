@@ -1,0 +1,12 @@
+layout {
+  default_tab_template {
+    pane size=5 borderless=true {
+      command "terminal-companion"
+    }
+    children
+  }
+
+  tab name="companion" {
+    pane
+  }
+}

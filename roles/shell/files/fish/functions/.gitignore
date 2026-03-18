@@ -10,3 +10,5 @@
 !system-upgrade.fish
 !refactor.fish
 !system-cleanup.fish
+!companion_emit.fish
+!companion_classify_command.fish

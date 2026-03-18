@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v kitty >/dev/null 2>&1; then
+  echo "kitty is required for the terminal companion session" >&2
+  exit 1
+fi
+
+if ! command -v zellij >/dev/null 2>&1; then
+  echo "zellij is required for the terminal companion session" >&2
+  exit 1
+fi
+
+layout_path="${XDG_CONFIG_HOME:-$HOME/.config}/zellij/layouts/terminal-companion.kdl"
+
+exec kitty zellij --layout "$layout_path"

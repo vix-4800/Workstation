@@ -2,6 +2,8 @@
 shell_packages:
   - fish
   - alacritty
+  - kitty
+  - zellij
   - tmux
   - nodejs
 
@@ -14,8 +16,15 @@ node_global_packages:
 shell_configs:
   - { src: fish, dest: "{{ home }}/.config/fish" }
   - { src: alacritty, dest: "{{ home }}/.config/alacritty" }
+  - { src: kitty, dest: "{{ home }}/.config/kitty" }
+  - { src: zellij, dest: "{{ home }}/.config/zellij" }
+  - { src: terminal-companion, dest: "{{ home }}/.config/terminal-companion" }
   - { src: tmux, dest: "{{ home }}/.config/tmux" }
   - { src: shell/aliases, dest: "{{ home }}/.aliases" }
   - { src: .profile, dest: "{{ home }}/.profile" }
   - { src: bash/.bash_profile, dest: "{{ home }}/.bash_profile" }
   - { src: bash/bashrc, dest: "{{ home }}/.bashrc" }
+
+shell_scripts:
+  - companion-session
+  - terminal-companion
