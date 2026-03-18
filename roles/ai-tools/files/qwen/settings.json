@@ -15,7 +15,10 @@
   "mcpServers": {
     "github": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ]
     },
     "serena": {
       "command": "uvx",
@@ -31,7 +34,10 @@
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
     }
   },
   "general": {
@@ -58,7 +64,11 @@
         "DiffAdded": "#a6e3a1",
         "DiffRemoved": "#f38ba8",
         "DiffModified": "#89b4fa",
-        "GradientColors": ["#89b4fa", "#cba6f7", "#f5c2e7"]
+        "GradientColors": [
+          "#89b4fa",
+          "#cba6f7",
+          "#f5c2e7"
+        ]
       }
     },
     "hideTips": false
@@ -70,7 +80,10 @@
     "enabled": false
   },
   "context": {
-    "fileName": ["QWEN.md", "AGENTS.md"],
+    "fileName": [
+      "QWEN.md",
+      "AGENTS.md"
+    ],
     "fileFiltering": {
       "respectGitIgnore": true
     }

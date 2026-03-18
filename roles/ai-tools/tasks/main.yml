@@ -26,6 +26,25 @@
   become: false
   tags: [ai-tools, packages]
 
+- name: Install Qwen CLI
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      if command -v qwen >/dev/null 2>&1; then
+        exit 0
+      fi
+      curl -fsSL https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen.sh | bash
+    executable: /bin/bash
+  register: qwen_cli_install
+  changed_when: "'Qwen Code installed successfully!' in qwen_cli_install.stdout"
+  failed_when: >
+    qwen_cli_install.rc != 0 and (
+      'No input provided via stdin' not in qwen_cli_install.stderr or
+      'Qwen Code installed successfully!' not in qwen_cli_install.stdout
+    )
+  become: false
+  tags: [ai-tools, packages]
+
 - name: Ensure AI config parent directories exist
   ansible.builtin.file:
     path: "{{ item.dest | dirname }}"
