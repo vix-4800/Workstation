@@ -39,11 +39,3 @@
     flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
     method: user
   tags: [apps, packages]
-
-- name: Install custom waypaper
-  ansible.builtin.pip:
-    name: "git+https://github.com/vix-4800/waypaper.git"
-    state: present
-    extra_args: "--break-system-packages --no-deps"
-  become: true
-  tags: [apps, packages]
