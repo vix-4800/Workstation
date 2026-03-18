@@ -23,3 +23,13 @@
   loop_control:
     label: "{{ item.src }}"
   tags: [editor, config]
+
+- name: Deploy editor templates
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0644"
+  loop: "{{ editor_templates }}"
+  loop_control:
+    label: "{{ item.src }}"
+  tags: [editor, config]

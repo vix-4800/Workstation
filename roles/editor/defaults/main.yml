@@ -8,3 +8,6 @@ editor_configs:
   - { src: code/code-flags.conf, dest: "{{ home }}/.config/code-flags.conf" }
   - { src: git/delta.gitconfig, dest: "{{ home }}/.gitconfig.delta" }
   - { src: git/gitconfig, dest: "{{ home }}/.gitconfig" }
+
+editor_templates:
+  - { src: git/gitconfig.user.j2, dest: "{{ home }}/.gitconfig.user" }
