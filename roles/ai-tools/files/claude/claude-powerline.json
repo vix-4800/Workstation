@@ -1,0 +1,66 @@
+{
+  "theme": "custom",
+  "display": {
+    "colorCompatibility": "auto",
+    "padding": 0,
+    "lines": [
+      {
+        "segments": {
+          "directory": {
+            "enabled": false,
+            "style": "fish"
+          },
+          "git": {
+            "enabled": true,
+            "showWorkingTree": true,
+            "showUpstream": false
+          },
+          "model": {
+            "enabled": true
+          },
+          "session": {
+            "enabled": true,
+            "type": "both",
+            "costSource": "official"
+          },
+          "today": {
+            "enabled": true,
+            "type": "both"
+          },
+          "context": {
+            "enabled": true,
+            "displayStyle": "capped"
+          }
+        }
+      }
+    ]
+  },
+  "colors": {
+    "custom": {
+      "directory": {
+        "bg": "#b4befe",
+        "fg": "#1e1e2e"
+      },
+      "git": {
+        "bg": "#74c7ec",
+        "fg": "#1e1e2e"
+      },
+      "model": {
+        "bg": "#cba6f7",
+        "fg": "#1e1e2e"
+      },
+      "session": {
+        "bg": "#a6e3a1",
+        "fg": "#1e1e2e"
+      },
+      "today": {
+        "bg": "#fab387",
+        "fg": "#1e1e2e"
+      },
+      "context": {
+        "bg": "#45475a",
+        "fg": "#cdd6f4"
+      }
+    }
+  }
+}

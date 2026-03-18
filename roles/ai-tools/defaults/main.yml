@@ -4,6 +4,7 @@ ai_tools_global_instruction_home_path: "{{ home }}/.agents/instructions/AGENTS.m
 
 ai_tools_repo_symlinks:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
+  - { src: claude/claude-powerline.json, dest: "{{ home }}/.claude/claude-powerline.json" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
   - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }

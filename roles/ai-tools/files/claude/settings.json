@@ -9,5 +9,9 @@
     "lua-lsp@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true
   },
-  "effortLevel": "medium"
+  "effortLevel": "medium",
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json"
+  }
 }
