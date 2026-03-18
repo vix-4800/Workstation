@@ -3,6 +3,7 @@ shell_packages:
   - fish
   - alacritty
   - tmux
+  - nodejs
 
 node_global_packages:
   - markdownlint-cli2
