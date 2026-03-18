@@ -1,9 +1,23 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # Weather module using wttr.in with auto-location via Geoclue
 
 CACHE_FILE="/tmp/waybar-weather-cache"
 CACHE_TIME=1800
+LOCATION="${WAYBAR_WEATHER_LOCATION:-Saratov}"
+
+emit_json() {
+    local text="$1"
+    local tooltip="$2"
+
+    jq -cn --arg text "${text}" --arg tooltip "${tooltip}" '{text: $text, tooltip: $tooltip}'
+}
+
+emit_unavailable() {
+    emit_json "" "Weather data unavailable"
+}
 
 get_location() {
     if command -v curl &>/dev/null && command -v jq &>/dev/null; then
@@ -19,7 +33,6 @@ get_location() {
     return 1
 }
 
-LOCATION="Saratov" # $(get_location)
 if [[ -z "${LOCATION}" ]]; then
     LOCATION=""
 fi
@@ -27,7 +40,13 @@ fi
 # Check cache
 if [[ -f "${CACHE_FILE}" ]]; then
     cache_age=$(($(date +%s) - $(stat -c %Y "${CACHE_FILE}")))
-    if [[ "${cache_age}" -lt "${CACHE_TIME}" ]]; then
+    if [[ "${cache_age}" -lt "${CACHE_TIME}" ]] && jq -e '
+        (.text | type == "string") and
+        (.tooltip | type == "string") and
+        (.text | contains("null") | not) and
+        (.tooltip | contains("\\n") | not) and
+        (.tooltip | contains("null") | not)
+    ' "${CACHE_FILE}" >/dev/null 2>&1; then
         cat "${CACHE_FILE}"
         exit 0
     fi
@@ -35,22 +54,42 @@ fi
 
 # Fetch weather data
 weather_url="https://wttr.in/${LOCATION}?format=j1"
-weather_data=$(curl -s "${weather_url}" 2>/dev/null)
+weather_data=$(curl -fsSL --max-time 10 "${weather_url}" 2>/dev/null || true)
 
-if [[ -z "${weather_data}" ]]; then
-    echo '{"text":"", "tooltip":"Weather data unavailable"}'
+if [[ -z "${weather_data}" ]] || ! printf '%s' "${weather_data}" | jq -e '
+    (.data // .) as $weather
+    | ($weather.current_condition | type == "array")
+    and ($weather.current_condition | length > 0)
+    and ($weather.current_condition[0].temp_C != null)
+    and ($weather.current_condition[0].FeelsLikeC != null)
+    and ($weather.current_condition[0].weatherCode != null)
+    and ($weather.weather | type == "array")
+    and ($weather.weather | length >= 3)
+' >/dev/null 2>&1; then
+    if [[ -f "${CACHE_FILE}" ]] && jq -e '
+        (.text | type == "string") and
+        (.tooltip | type == "string") and
+        (.text | contains("null") | not) and
+        (.tooltip | contains("\\n") | not) and
+        (.tooltip | contains("null") | not)
+    ' "${CACHE_FILE}" >/dev/null 2>&1; then
+        cat "${CACHE_FILE}"
+        exit 0
+    fi
+
+    emit_unavailable
     exit 0
 fi
 
 # Parse JSON
-temp=$(echo "${weather_data}" | jq -r '.current_condition[0].temp_C')
-feels_like=$(echo "${weather_data}" | jq -r '.current_condition[0].FeelsLikeC')
-humidity=$(echo "${weather_data}" | jq -r '.current_condition[0].humidity')
-wind_speed=$(echo "${weather_data}" | jq -r '.current_condition[0].windspeedKmph')
-wind_dir=$(echo "${weather_data}" | jq -r '.current_condition[0].winddir16Point')
-description=$(echo "${weather_data}" | jq -r '.current_condition[0].weatherDesc[0].value')
-weather_code=$(echo "${weather_data}" | jq -r '.current_condition[0].weatherCode')
-location_name=$(echo "${weather_data}" | jq -r '.nearest_area[0].areaName[0].value // .nearest_area[0].region[0].value // "Unknown"')
+temp=$(printf '%s' "${weather_data}" | jq -r '(.data // .).current_condition[0].temp_C')
+feels_like=$(printf '%s' "${weather_data}" | jq -r '(.data // .).current_condition[0].FeelsLikeC')
+humidity=$(printf '%s' "${weather_data}" | jq -r '(.data // .).current_condition[0].humidity')
+wind_speed=$(printf '%s' "${weather_data}" | jq -r '(.data // .).current_condition[0].windspeedKmph')
+wind_dir=$(printf '%s' "${weather_data}" | jq -r '(.data // .).current_condition[0].winddir16Point')
+description=$(printf '%s' "${weather_data}" | jq -r '(.data // .).current_condition[0].weatherDesc[0].value')
+weather_code=$(printf '%s' "${weather_data}" | jq -r '(.data // .).current_condition[0].weatherCode')
+location_name=$(printf '%s' "${weather_data}" | jq -r --arg fallback "${LOCATION:-Unknown}" '(.data // .).request[0].query // $fallback')
 
 # Determine icon based on weather code
 case ${weather_code} in
@@ -67,33 +106,40 @@ case ${weather_code} in
 esac
 
 # Build tooltip
-tooltip="<span font_size='x-large' color='#cba6f7'><b>${description}</b></span>\n\n"
+tooltip="<span font_size='x-large' color='#cba6f7'><b>${description}</b></span>"
+tooltip+=$'\n\n'
 tooltip+="<span font_size='large'>"
-tooltip+="<b>Location:</b> ${location_name}\n"
-tooltip+="<b>Temperature:</b> ${temp}°C (feels like ${feels_like}°C)\n"
-tooltip+="<b>Humidity:</b> ${humidity}%\n"
+tooltip+="<b>Location:</b> ${location_name}"
+tooltip+=$'\n'
+tooltip+="<b>Temperature:</b> ${temp}°C (feels like ${feels_like}°C)"
+tooltip+=$'\n'
+tooltip+="<b>Humidity:</b> ${humidity}%"
+tooltip+=$'\n'
 tooltip+="<b>Wind:</b> ${wind_speed} km/h ${wind_dir}"
-tooltip+="</span>\n\n"
+tooltip+="</span>"
+tooltip+=$'\n\n'
 
 # Add forecast
-tooltip+="<span font_size='medium' color='#89b4fa'><b>Forecast:</b></span>\n"
+tooltip+="<span font_size='medium' color='#89b4fa'><b>Forecast:</b></span>"
+tooltip+=$'\n'
 tooltip+="<tt><span font_size='small'>"
 
 for i in 0 1 2; do
-    date=$(echo "${weather_data}" | jq -r ".weather[${i}].date")
-    max_temp=$(echo "${weather_data}" | jq -r ".weather[${i}].maxtempC")
-    min_temp=$(echo "${weather_data}" | jq -r ".weather[${i}].mintempC")
-    desc=$(echo "${weather_data}" | jq -r ".weather[${i}].hourly[4].weatherDesc[0].value")
+    date=$(printf '%s' "${weather_data}" | jq -r "(.data // .).weather[${i}].date")
+    max_temp=$(printf '%s' "${weather_data}" | jq -r "(.data // .).weather[${i}].maxtempC")
+    min_temp=$(printf '%s' "${weather_data}" | jq -r "(.data // .).weather[${i}].mintempC")
+    desc=$(printf '%s' "${weather_data}" | jq -r "(.data // .).weather[${i}].hourly[4].weatherDesc[0].value")
 
     day_name=$(date -d "${date}" +"%a")
-    tooltip+="${day_name}: ${min_temp}°-${max_temp}°C, ${desc}\n"
+    tooltip+="${day_name}: ${min_temp}°-${max_temp}°C, ${desc}"
+    tooltip+=$'\n'
 done
 
 tooltip+="</span></tt>"
 
 # Output
 text="${icon} ${temp}°C"
-output="{\"text\":\"${text}\", \"tooltip\":\"${tooltip}\"}"
+output=$(emit_json "${text}" "${tooltip}")
 
 # Cache the result
 echo "${output}" > "${CACHE_FILE}"
