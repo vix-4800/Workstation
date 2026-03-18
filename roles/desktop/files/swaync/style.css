@@ -67,15 +67,31 @@ trough {
     background-color: @surface0;
 }
 
+notificationwindow,
+blankwindow,
+.blank-window,
+.floating-notifications {
+    background: transparent;
+}
+
 /* notifications */
-.notification-background {
+.notification-row {
+    background: transparent;
+    outline: none;
+}
+
+.notification-row .notification-background {
+    margin: 18px;
+    padding: 0;
+    background: transparent;
+}
+
+.notification-row .notification-background .notification {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
     border: 1px solid @surface1;
     border-radius: 20px;
-    margin: 18px;
     background: @mantle;
     color: @text;
-    padding: 0;
 }
 
 .notification-background .notification {
