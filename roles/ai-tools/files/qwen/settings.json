@@ -38,6 +38,15 @@
         "-y",
         "@upstash/context7-mcp@latest"
       ]
+    },
+    "docker": {
+      "command": "uvx",
+      "args": [
+        "--with",
+        "fastmcp[tasks]",
+        "mcp-docker"
+      ],
+      "timeout": 30000
     }
   },
   "general": {
