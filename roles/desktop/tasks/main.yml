@@ -61,6 +61,14 @@
     force: true
   tags: [desktop, config]
 
+- name: Deploy electron-flags.conf
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/desktop/files/electron-flags.conf"
+    dest: "{{ home }}/.config/electron-flags.conf"
+    state: link
+    force: true
+  tags: [desktop, config]
+
 - name: Deploy gtklock PAM config
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/desktop/files/pam.d/gtklock"
