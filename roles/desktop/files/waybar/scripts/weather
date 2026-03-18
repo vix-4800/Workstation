@@ -6,7 +6,8 @@ set -euo pipefail
 
 CACHE_FILE="/tmp/waybar-weather-cache"
 CACHE_TIME=1800
-LOCATION="${WAYBAR_WEATHER_LOCATION:-Saratov}"
+CONFIG_LOCATION_FILE="${HOME}/.config/waybar/weather-location"
+LOCATION="${WAYBAR_WEATHER_LOCATION:-}"
 
 emit_json() {
     local text="$1"
@@ -33,8 +34,39 @@ get_location() {
     return 1
 }
 
-if [[ -z "${LOCATION}" ]]; then
-    LOCATION=""
+get_effective_location() {
+    if [[ -n "${LOCATION}" ]]; then
+        printf '%s' "${LOCATION}"
+        return 0
+    fi
+
+    if [[ -f "${CONFIG_LOCATION_FILE}" ]]; then
+        local configured_location
+        configured_location=$(<"${CONFIG_LOCATION_FILE}")
+        if [[ -n "${configured_location}" ]]; then
+            printf '%s' "${configured_location}"
+            return 0
+        fi
+    fi
+
+    local detected_location=""
+    # shellcheck disable=SC2310
+    if detected_location=$(get_location); then
+        printf '%s' "${detected_location}"
+    fi
+
+    return 0
+}
+
+LOCATION="$(get_effective_location)"
+
+if [[ "${1:-}" == "--open" ]]; then
+    if [[ -n "${LOCATION}" ]]; then
+        xdg-open "https://wttr.in/${LOCATION}" >/dev/null 2>&1 &
+    else
+        xdg-open "https://wttr.in" >/dev/null 2>&1 &
+    fi
+    exit 0
 fi
 
 # Check cache

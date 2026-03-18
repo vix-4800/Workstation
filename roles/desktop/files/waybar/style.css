@@ -17,7 +17,8 @@ window#waybar {
 #custom-weather,
 #custom-calendar,
 #custom-docker,
-#custom-notification {
+#custom-notification,
+#tray {
     background-color: @base;
     border: 1px solid @surface1;
     border-radius: 20px;
@@ -146,7 +147,8 @@ window#waybar {
 #custom-weather:hover,
 #custom-calendar:hover,
 #custom-docker:hover,
-#custom-notification:hover {
+#custom-notification:hover,
+#tray:hover {
     background-color: @surface0;
     border-color: @lavender;
 }
