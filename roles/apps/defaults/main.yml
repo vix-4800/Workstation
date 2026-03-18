@@ -21,6 +21,30 @@ apps_packages:
   - transmission-gtk
   - exfatprogs
   - gnome-keyring
+  - gtk3
+  - gdk-pixbuf2
+  - python-gobject
+  - python-imageio
+  - python-pillow
+  - python-platformdirs
+  - ffmpeg
+  - python-build
+  - python-installer
+  - python-setuptools
+  - python-wheel
+  - python-poetry-core
+
+apps_waypaper_legacy_pip_packages:
+  - waypaper
+  - imageio
+  - imageio-ffmpeg
+  - screeninfo
+  - numpy
+
+apps_waypaper_aur_packages:
+  - python-screeninfo
+  - python-imageio-ffmpeg
+  - waypaper
 
 apps_aur_packages:
   - spotify
@@ -29,4 +53,3 @@ apps_aur_packages:
   - better-control-git
   - obsidian
   - bitwarden
-  - waypaper

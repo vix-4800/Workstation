@@ -44,7 +44,7 @@
   kewlfft.aur.aur:
     name: nwg-look
     state: present
-  become: true
+  become: false
   tags: [appearance, packages]
 
 - name: Deploy bat config and themes
