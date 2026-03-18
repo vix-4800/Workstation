@@ -15,6 +15,7 @@ base_essential_packages:
   - unzip
   - unrar
   - zip
+  - p7zip
   - man-db
   - man-pages
   - openssh
@@ -40,3 +41,4 @@ base_cli_packages:
   - dust
   - lm_sensors
   - yq
+  - arch-audit

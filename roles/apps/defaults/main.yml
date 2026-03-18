@@ -33,6 +33,7 @@ apps_packages:
   - python-setuptools
   - python-wheel
   - python-poetry-core
+  - libreoffice-still
 
 apps_waypaper_legacy_pip_packages:
   - waypaper
@@ -50,6 +51,6 @@ apps_aur_packages:
   - spotify
   - batsignal
   - auto-cpufreq
-  - better-control-git
+  - better-control
   - obsidian
   - bitwarden
