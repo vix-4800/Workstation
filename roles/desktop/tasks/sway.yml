@@ -44,13 +44,6 @@
   become: false
   tags: [desktop, packages]
 
-- name: Install swaylock-effects (AUR)
-  kewlfft.aur.aur:
-    name: swaylock-effects
-    state: present
-  become: false
-  tags: [desktop, packages]
-
 - name: Install gtklock (AUR)
   kewlfft.aur.aur:
     name: gtklock
