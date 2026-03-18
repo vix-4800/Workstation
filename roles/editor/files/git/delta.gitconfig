@@ -1,0 +1,44 @@
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[merge]
+	conflictStyle = zdiff3
+
+[delta]
+	dark = true
+	navigate = true
+	side-by-side = true
+	line-numbers = true
+	hyperlinks = true
+	syntax-theme = "Catppuccin Mocha"
+	features = decorations catppuccin-mocha
+	minus-style = syntax "#302d41"
+	minus-emph-style = syntax "#eba0ac"
+	minus-non-emph-style = syntax "#302d41"
+	plus-style = syntax "#273136"
+	plus-emph-style = syntax "#a6e3a1"
+	plus-non-emph-style = syntax "#273136"
+
+[delta "decorations"]
+	commit-style = "#f5e0dc"
+	commit-decoration-style = "#fab387" box ul
+	file-style = "#89b4fa" bold
+	file-decoration-style = "#45475a"
+	hunk-header-style = file line-number syntax
+	hunk-header-file-style = "#89dceb"
+	hunk-header-line-number-style = "#bac2de"
+	hunk-header-decoration-style = "#74c7ec" box
+
+[delta "catppuccin-mocha"]
+	line-numbers-left-style = "#6c7086"
+	line-numbers-right-style = "#6c7086"
+	line-numbers-minus-style = "#eba0ac"
+	line-numbers-zero-style = "#9399b2"
+	line-numbers-plus-style = "#a6e3a1"
+	line-numbers-left-format = "{nm:>4}│"
+	line-numbers-right-format = "{np:>4}│"
+	blame-palette = "#1e1e2e" "#181825" "#313244" "#45475a" "#585b70"
+	blame-format = "{author:<18} {commit:>8} {timestamp:<17}"

@@ -2,6 +2,9 @@
 	name = Your Name
 	email = your.email@example.com
 
+[include]
+	path = ~/.gitconfig.delta
+
 [credential "https://github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential

@@ -1,8 +1,10 @@
 ---
 editor_packages:
+  - git-delta
   - neovim
 
 editor_configs:
   - { src: nvim, dest: "{{ home }}/.config/nvim" }
   - { src: code/code-flags.conf, dest: "{{ home }}/.config/code-flags.conf" }
+  - { src: git/delta.gitconfig, dest: "{{ home }}/.gitconfig.delta" }
   - { src: git/gitconfig, dest: "{{ home }}/.gitconfig" }
