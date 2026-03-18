@@ -26,6 +26,16 @@
   become: true
   tags: [display-manager, system]
 
+- name: Deploy greetd PAM config
+  ansible.builtin.copy:
+    src: pam.d/greetd
+    dest: /etc/pam.d/greetd
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  tags: [display-manager, system]
+
 - name: Ensure system backgrounds directory exists
   ansible.builtin.file:
     path: /usr/share/backgrounds

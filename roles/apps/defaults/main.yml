@@ -20,6 +20,7 @@ apps_packages:
   - feh
   - transmission-gtk
   - exfatprogs
+  - gnome-keyring
 
 apps_aur_packages:
   - spotify
