@@ -111,3 +111,24 @@
     state: started
   become: true
   tags: [base, services]
+
+- name: Deploy reflector systemd units
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/base/files/systemd/system/{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    state: link
+    force: true
+  become: true
+  loop:
+    - reflector.service
+    - reflector.timer
+  tags: [base, system]
+
+- name: Enable reflector timer
+  ansible.builtin.systemd:
+    name: reflector.timer
+    daemon_reload: true
+    enabled: true
+    state: started
+  become: true
+  tags: [base, services]
