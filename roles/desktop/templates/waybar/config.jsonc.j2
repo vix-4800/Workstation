@@ -6,12 +6,7 @@
 
   "modules-left": ["custom/weather", "sway/workspaces"],
   "modules-center": ["custom/calendar"],
-  "modules-right": ["custom/docker", "tray", "group/net", "group/media", "group/system", "custom/notification"],
-
-  "group/net": {
-    "orientation": "horizontal",
-    "modules": ["custom/vpn", "custom/network", "bluetooth"]
-  },
+  "modules-right": ["custom/docker", "tray", "group/media", "group/system", "custom/notification"],
 
   "group/media": {
     "orientation": "horizontal",
@@ -41,33 +36,6 @@
     "format-icons": {
       "default": ""
     }
-  },
-
-  "custom/network": {
-    "format": "{}",
-    "return-type": "json",
-    "interval": 5,
-    "exec": "~/.config/waybar/scripts/network-status"
-  },
-
-  "bluetooth": {
-    "format": "󰂲",
-    "format-on": "{icon}",
-    "format-off": "{icon}",
-    "format-connected": "{icon} {device_alias}",
-    "format-connected-battery": "{icon} {device_alias} ({device_battery_percentage}%)",
-    "format-icons": {
-      "on": "󰂯",
-      "off": "󰂲",
-      "connected": "󰂱"
-    },
-    "on-click": "blueman-manager",
-    "on-click-right": "~/.local/bin/bluetooth-pair",
-    "tooltip-format": "{status}",
-    "tooltip-format-connected": "Connected: {device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias}",
-    "tooltip-format-enumerate-connected-battery": "{device_alias}\t({device_battery_percentage}%)",
-    "max-length": 10
   },
 
   "tray": {
@@ -135,15 +103,6 @@
     "format": "{short} {variant}",
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     "tooltip": false
-  },
-
-  "custom/vpn": {
-    "format": "{}",
-    "tooltip": true,
-    "exec": "~/.config/waybar/scripts/vpn-status",
-    "return-type": "json",
-    "interval": 5,
-    "on-click": "~/.config/waybar/scripts/vpn-toggle"
   },
 
   "custom/docker": {

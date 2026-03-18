@@ -28,7 +28,6 @@ window#waybar {
 }
 
 /* Group pill — no side padding, icons provide their own spacing */
-#net,
 #media,
 #system {
     background-color: @base;
@@ -78,27 +77,28 @@ window#waybar {
     color: @surface2;
 }
 
-/* Group: net */
-#custom-vpn {
-    color: @green;
+/* Tray */
+#tray {
+    padding: 2px 10px 2px 12px;
 }
-#custom-vpn.disconnected {
-    color: @red;
+
+#tray > * {
+    padding: 2px 6px;
+    margin: 0 2px;
+    border-radius: 14px;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
 }
-#custom-network {
-    color: @subtext1;
+
+#tray > *:hover {
+    background-color: @surface1;
 }
-#custom-network.online {
-    color: @green;
+
+#tray > .passive {
+    opacity: 0.7;
 }
-#custom-network.no-internet {
-    color: @red;
-}
-#custom-network.disconnected {
-    color: @red;
-}
-#bluetooth {
-    color: @sapphire;
+
+#tray > .needs-attention {
+    background-color: @surface1;
 }
 
 /* Group: media */
@@ -154,9 +154,6 @@ window#waybar {
 }
 
 /* Group: modules inside groups — styled as small inner pills */
-#custom-vpn,
-#custom-network,
-#bluetooth,
 #pulseaudio,
 #custom-microphone,
 #idle_inhibitor,
@@ -171,9 +168,6 @@ window#waybar {
 }
 
 /* Per-module hover inside a group — highlights just the hovered icon */
-#custom-vpn:hover,
-#custom-network:hover,
-#bluetooth:hover,
 #pulseaudio:hover,
 #custom-microphone:hover,
 #idle_inhibitor:hover,
