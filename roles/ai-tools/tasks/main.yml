@@ -1,21 +1,3 @@
----
-- name: Install AI tool packages
-  community.general.pacman:
-    name: "{{ ai_tools_packages }}"
-    state: present
-  become: true
-  tags: [ai-tools, packages]
-
-- name: Install AI npm CLIs
-  community.general.npm:
-    name: "{{ item }}"
-    global: true
-  loop: "{{ ai_tools_npm_packages }}"
-  loop_control:
-    label: "{{ item }}"
-  become: false
-  tags: [ai-tools, packages]
-
 - name: Install Claude CLI
   ansible.builtin.shell:
     cmd: |

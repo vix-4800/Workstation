@@ -1,10 +1,4 @@
 ---
-ai_tools_packages:
-  - npm
-
-ai_tools_npm_packages:
-  - "@openai/codex"
-
 ai_configs:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
   - { src: claude/CLAUDE.md, dest: "{{ home }}/.claude/CLAUDE.md" }

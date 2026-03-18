@@ -3,6 +3,13 @@ shell_packages:
   - fish
   - alacritty
   - tmux
+  - nodejs
+
+node_global_packages:
+  - markdownlint-cli2
+  - "@commitlint/cli"
+  - "@commitlint/config-conventional"
+  - "@openai/codex"
 
 shell_configs:
   - { src: fish, dest: "{{ home }}/.config/fish" }

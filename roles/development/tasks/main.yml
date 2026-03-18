@@ -39,17 +39,6 @@
   become: true
   tags: [development, packages]
 
-- name: Install linter configs (npm-based)
-  community.general.npm:
-    name: "{{ item }}"
-    global: true
-  loop:
-    - markdownlint-cli2
-    - "@commitlint/cli"
-    - "@commitlint/config-conventional"
-  become: false
-  tags: [development, packages]
-
 - name: Deploy tool configs
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/development/files/tools/{{ item.src }}"

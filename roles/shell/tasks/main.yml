@@ -35,3 +35,30 @@
     cmd: fish -c "fisher update"
   changed_when: false
   tags: [shell]
+
+- name: Bootstrap Node.js LTS with nvm
+  ansible.builtin.command:
+    cmd: >-
+      fish -lc
+      "set -U nvm_default_version lts;
+      nvm install --silent lts;
+      nvm use --silent lts"
+  register: shell_nvm_bootstrap
+  changed_when: "'Installing Node' in shell_nvm_bootstrap.stdout"
+  tags: [shell, packages]
+
+- name: Install global Node.js CLI packages with nvm
+  ansible.builtin.command:
+    cmd: >-
+      fish -lc
+      "set -U nvm_default_version lts;
+      nvm install --silent lts >/dev/null;
+      nvm use --silent lts >/dev/null;
+      npm list --global --depth=0 {{ item }} >/dev/null 2>&1;
+      or npm install --global {{ item }}"
+  loop: "{{ node_global_packages }}"
+  loop_control:
+    label: "{{ item }}"
+  register: shell_node_global_install
+  changed_when: "'added' in shell_node_global_install.stdout or 'changed' in shell_node_global_install.stdout"
+  tags: [shell, packages]
