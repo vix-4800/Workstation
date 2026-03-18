@@ -6,20 +6,47 @@
   become: true
   tags: [network, packages]
 
-- name: Deploy usbguard rules (allow-all safe default)
-  ansible.builtin.copy:
-    src: "{{ dotfiles_dir }}/roles/network/files/usbguard/rules.conf"
+- name: Validate usbguard mode
+  ansible.builtin.assert:
+    that:
+      - usbguard_mode in ['audit', 'enforce']
+    fail_msg: "usbguard_mode must be either 'audit' or 'enforce'"
+  tags: [network, config]
+
+- name: Require usbguard rules in enforce mode
+  ansible.builtin.assert:
+    that:
+      - usbguard_rules | length > 0
+    fail_msg: "usbguard_rules must be set in host_vars when usbguard_mode is 'enforce'"
+  when: usbguard_mode == 'enforce'
+  tags: [network, config]
+
+- name: Deploy usbguard allowlist rules
+  ansible.builtin.template:
+    src: usbguard/rules.conf.j2
     dest: /etc/usbguard/rules.conf
     mode: "0600"
     owner: root
     group: root
   become: true
+  when: usbguard_mode == 'enforce'
   tags: [network, config]
 
-- name: Enable usbguard service
+- name: Disable usbguard service in audit mode
+  ansible.builtin.systemd:
+    name: usbguard
+    enabled: false
+    state: stopped
+  become: true
+  when: usbguard_mode == 'audit'
+  failed_when: false
+  tags: [network, services]
+
+- name: Enable usbguard service in enforce mode
   ansible.builtin.systemd:
     name: usbguard
     enabled: true
     state: started
   become: true
+  when: usbguard_mode == 'enforce'
   tags: [network, services]

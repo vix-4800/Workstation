@@ -1,0 +1,4 @@
+---
+usbguard_mode: audit
+usbguard_rules: []
+bluetooth_pairing_timeout_seconds: 180

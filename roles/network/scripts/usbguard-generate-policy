@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+output_dir="${HOME}/.local/share/usbguard"
+output_file="${output_dir}/candidate-rules.conf"
+
+mkdir -p "${output_dir}"
+usbguard generate-policy > "${output_file}"
+
+yaml_rules=$(sed "s/'/''/g; s/^/  - '/; s/\$/'/" "${output_file}")
+
+cat <<EOF
+Candidate USBGuard policy written to:
+  ${output_file}
+
+Copy the rules you want into inventory/host_vars/localhost.yml:
+
+usbguard_mode: enforce
+usbguard_rules:
+${yaml_rules}
+EOF
