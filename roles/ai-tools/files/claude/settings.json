@@ -1,17 +1,61 @@
 {
-  "permissions": {
-    "defaultMode": "acceptEdits"
-  },
-  "enabledPlugins": {
-    "security-guidance@claude-plugins-official": true,
-    "serena@claude-plugins-official": true,
-    "php-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true
-  },
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "alwaysThinkingEnabled": true,
   "effortLevel": "medium",
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "github@claude-plugins-official": false,
+    "lua-lsp@claude-plugins-official": true,
+    "php-lsp@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "serena@claude-plugins-official": true
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(curl:*)",
+      "Bash(diff:*)",
+      "Bash(echo:*)",
+      "Bash(find:*)",
+      // "Bash(gh:*)",
+      // "Bash(git:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(ls:*)",
+      "Bash(pwd)",
+      "Bash(tail:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(which:*)",
+      "Bash(php-cs-fixer:*)",
+      "Bash(php:*)",
+      "Bash(phpstan:*)",
+      "Bash(phpunit:*)"
+    ],
+    "defaultMode": "acceptEdits",
+    "deny": ["Bash(rm:*)", "Read(./.env)", "Read(./.env.*)"]
+  },
   "statusLine": {
-    "type": "command",
-    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json"
+    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json",
+    "type": "command"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "case \"$CLAUDE_FILE_PATH\" in *.php) php -l \"$CLAUDE_FILE_PATH\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
   }
 }
