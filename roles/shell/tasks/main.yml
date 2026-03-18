@@ -62,3 +62,10 @@
   register: shell_node_global_install
   changed_when: "'added' in shell_node_global_install.stdout or 'changed' in shell_node_global_install.stdout"
   tags: [shell, packages]
+
+- name: Remove pacman nodejs (managed by nvm)
+  community.general.pacman:
+    name: nodejs
+    state: absent
+  become: true
+  tags: [shell, packages]
