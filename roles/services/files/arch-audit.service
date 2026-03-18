@@ -1,0 +1,7 @@
+[Unit]
+Description=Check for vulnerable packages with arch-audit
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/arch-audit-check.sh
