@@ -8,6 +8,7 @@ ai_tools_repo_symlinks:
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
   - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
   - { src: agents/skills, dest: "{{ home }}/.agents/skills" }
+  - { src: agents/skills, dest: "{{ home }}/.claude/skills" }
   - { src: agents/skills, dest: "{{ home }}/.qwen/skills" }
 
 ai_tools_home_symlinks:
