@@ -172,7 +172,7 @@ inventory/
 | `shell` | Fish, Bash, Alacritty, Tmux, aliases |
 | `editor` | Neovim (with Lua + LuaRocks), VSCode flags, Git config |
 | `audio` | PipeWire, WirePlumber, EasyEffects, multimedia apps |
-| `network` | Firewall (nftables), Bluetooth (blueman, nm-applet), WireGuard (vault), sing-box, USBGuard, VPN scripts |
+| `network` | Firewall (nftables), Bluetooth (nm-applet + blueman tray flow), WireGuard (vault), sing-box, USBGuard, VPN scripts |
 | `desktop` | SwayFX, Waybar, Wofi, SwayNC, GTKLock, Wlogout, polkit-gnome, XDG portals, swappy, wdisplays, qt5/6-wayland |
 | `display-manager` | Greetd + ReGreet |
 | `development` | PHP, Python, Go, Docker, linter configs |
@@ -296,8 +296,8 @@ from vault.
 ### Networking
 
 - **NetworkManager** — connection management
-- **network-manager-applet** — systray indicator (`nm-connection-editor` via Waybar)
-- **Blueman** — Bluetooth manager (opened from Waybar Bluetooth module)
+- **network-manager-applet** — tray-based GUI for joining and managing Wi-Fi networks
+- **Blueman** — Bluetooth manager plus tray applet for paired devices
 - **WireGuard / sing-box** — VPN (managed via Waybar VPN module)
 
 ### Screenshots & Display

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+duration="${1:-180}"
+
+if ! [[ "${duration}" =~ ^[0-9]+$ ]] || [[ "${duration}" -le 0 ]]; then
+    echo "Usage: bluetooth-pair [seconds]" >&2
+    exit 1
+fi
+
+cleanup() {
+    bluetoothctl <<'EOF' >/dev/null
+discoverable off
+pairable off
+EOF
+}
+
+trap cleanup EXIT
+
+bluetoothctl <<'EOF' >/dev/null
+power on
+discoverable on
+pairable on
+EOF
+
+notify-send "Bluetooth" "Pairing mode enabled for ${duration} seconds"
+sleep "${duration}"
+

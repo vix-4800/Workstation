@@ -34,12 +34,18 @@
       tags: [network]
   tags: [network, sing-box]
 
-- name: Deploy VPN management script
+- name: Deploy network helper scripts
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/network/scripts/vpn"
-    dest: "{{ home }}/.local/bin/vpn"
+    src: "{{ dotfiles_dir }}/roles/network/scripts/{{ item.src }}"
+    dest: "{{ home }}/.local/bin/{{ item.dest }}"
     state: link
     force: true
+  loop:
+    - { src: vpn, dest: vpn }
+    - { src: bluetooth-pair, dest: bluetooth-pair }
+    - { src: usbguard-generate-policy, dest: usbguard-generate-policy }
+  loop_control:
+    label: "{{ item.dest }}"
   tags: [network, config]
 
 - name: Deploy geoclue config
