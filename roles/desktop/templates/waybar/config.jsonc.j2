@@ -6,7 +6,7 @@
 
   "modules-left": ["custom/weather", "sway/workspaces"],
   "modules-center": ["custom/calendar"],
-  "modules-right": ["custom/docker", "group/net", "group/media", "group/system", "custom/notification"],
+  "modules-right": ["custom/docker", "tray", "group/net", "group/media", "group/system", "custom/notification"],
 
   "group/net": {
     "orientation": "horizontal",
@@ -20,7 +20,7 @@
 
   "group/system": {
     "orientation": "horizontal",
-    "modules": ["idle_inhibitor", "custom/resources", "battery", "sway/language"]
+    "modules": ["idle_inhibitor", "custom/resources"{% if has_battery | default(false) %}, "battery"{% endif %}, "sway/language"]
   },
 
   "idle_inhibitor": {
@@ -47,8 +47,7 @@
     "format": "{}",
     "return-type": "json",
     "interval": 5,
-    "exec": "~/.config/waybar/scripts/network-status",
-    "on-click": "~/.config/waybar/scripts/network-menu"
+    "exec": "~/.config/waybar/scripts/network-status"
   },
 
   "bluetooth": {
@@ -63,6 +62,7 @@
       "connected": "󰂱"
     },
     "on-click": "blueman-manager",
+    "on-click-right": "~/.local/bin/bluetooth-pair",
     "tooltip-format": "{status}",
     "tooltip-format-connected": "Connected: {device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
@@ -76,7 +76,7 @@
   },
 
   "clock": {
-    "timezone": "Europe/Saratov",
+    "timezone": "{{ base_timezone }}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "format": "  {:%I:%M %p | %e %B}",
     "format-alt": "  {:%d/%m/%Y}",
@@ -96,6 +96,7 @@
     }
   },
 
+{% if has_battery | default(false) %}
   "battery": {
     "states": {
       "warning": 30,
@@ -107,6 +108,7 @@
     "format-icons": ["", "", "", "", ""]
   },
 
+{% endif %}
   "pulseaudio": {
     "scroll-step": 2,
     "format": "{icon} {volume}%",
@@ -195,7 +197,7 @@
     "return-type": "json",
     "interval": 1800,
     "exec": "~/.config/waybar/scripts/weather",
-    "on-click": "xdg-open https://wttr.in/Saratov",
+    "on-click": "~/.config/waybar/scripts/weather --open",
     "tooltip": true
   }
 }
