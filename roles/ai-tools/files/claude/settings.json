@@ -36,7 +36,7 @@
       {
         "hooks": [
           {
-            "command": "case \"$CLAUDE_FILE_PATH\" in *.php) php -l \"$CLAUDE_FILE_PATH\"",
+            "command": "case \"$CLAUDE_FILE_PATH\" in *.php) php -l \"$CLAUDE_FILE_PATH\";; esac",
             "timeout": 30,
             "type": "command"
           }
