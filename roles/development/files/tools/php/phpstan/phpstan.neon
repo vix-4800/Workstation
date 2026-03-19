@@ -41,7 +41,7 @@ parameters:
 
     # Type inference
     inferPrivatePropertyTypeFromConstructor: true
-    treatPhpDocTypesAsCertain: true
+    treatPhpDocTypesAsCertain: false
 
     # Return type checks
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
