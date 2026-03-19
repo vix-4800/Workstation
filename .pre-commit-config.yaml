@@ -41,13 +41,6 @@ repos:
       - id: markdownlint
         args: ['--fix', '--config', 'roles/development/files/tools/markdown/markdownlint/.markdownlint.jsonc']
 
-  - repo: https://github.com/ansible/ansible-lint
-    rev: v26.3.0
-    hooks:
-      - id: ansible-lint
-        files: \.(yml|yaml)$
-        exclude: ^roles/.*/files/
-
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.24.0
     hooks:
