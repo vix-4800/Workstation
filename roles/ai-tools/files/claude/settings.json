@@ -2,16 +2,32 @@
   "permissions": {
     "defaultMode": "acceptEdits"
   },
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json"
+  },
   "enabledPlugins": {
     "security-guidance@claude-plugins-official": true,
     "serena@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true
+    "commit-commands@claude-plugins-official": true,
+    "prompts.chat@prompts.chat": true,
+    "everything-claude-code@everything-claude-code": true
   },
-  "effortLevel": "medium",
-  "statusLine": {
-    "type": "command",
-    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json"
-  }
+  "extraKnownMarketplaces": {
+    "prompts.chat": {
+      "source": {
+        "source": "github",
+        "repo": "f/prompts.chat"
+      }
+    },
+    "everything-claude-code": {
+      "source": {
+        "source": "github",
+        "repo": "affaan-m/everything-claude-code"
+      }
+    }
+  },
+  "effortLevel": "medium"
 }
