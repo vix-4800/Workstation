@@ -1,7 +1,7 @@
 interface:
   display_name: "Security Review"
-  short_description: "Comprehensive security checklist and vulnerability detection"
+  short_description: "PHP security checklist for web apps and APIs"
   brand_color: "#EF4444"
-  default_prompt: "Run security checklist: secrets, input validation, injection prevention"
+  default_prompt: "Use $security-review to review a PHP feature for secrets, validation, auth, and injection risks."
 policy:
   allow_implicit_invocation: true

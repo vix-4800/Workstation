@@ -1,7 +1,7 @@
 interface:
   display_name: "Backend Patterns"
-  short_description: "API design, database, and server-side patterns"
+  short_description: "Backend architecture and data patterns for PHP"
   brand_color: "#F59E0B"
-  default_prompt: "Apply backend patterns: API design, repository, caching"
+  default_prompt: "Use $backend-patterns to structure a PHP backend change across services, data access, and jobs."
 policy:
   allow_implicit_invocation: true
