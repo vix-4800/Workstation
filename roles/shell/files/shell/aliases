@@ -22,23 +22,23 @@ fi
 
 # ======= Modern CLI tools =======
 # Use bat instead of cat if available
-if command -v bat >/dev/null 2>&1; then
-    alias cat='bat --style=plain'
-fi
+# if command -v bat >/dev/null 2>&1; then
+#     alias cat='bat --style=plain'
+# fi
 
 # Use ripgrep instead of grep if available
-if command -v rg >/dev/null 2>&1; then
-    alias grep='rg'
-else
+# if command -v rg >/dev/null 2>&1; then
+#     alias grep='rg'
+# else
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
-fi
+# fi
 
 # Use fd instead of find if available
-if command -v fd >/dev/null 2>&1; then
-    alias find='fd'
-fi
+# if command -v fd >/dev/null 2>&1; then
+#     alias find='fd'
+# fi
 
 # ======= Package manager aliases =======
 # Arch Linux / pacman
