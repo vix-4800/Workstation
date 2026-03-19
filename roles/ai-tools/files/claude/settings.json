@@ -6,14 +6,44 @@
     "code-review@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
+    "everything-claude-code@everything-claude-code": true,
     "github@claude-plugins-official": false,
     "lua-lsp@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true,
+    "prompts.chat@prompts.chat": true,
     "security-guidance@claude-plugins-official": true,
     "serena@claude-plugins-official": true
   },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "extraKnownMarketplaces": {
+    "everything-claude-code": {
+      "source": {
+        "repo": "affaan-m/everything-claude-code",
+        "source": "github"
+      }
+    },
+    "prompts.chat": {
+      "source": {
+        "repo": "f/prompts.chat",
+        "source": "github"
+      }
+    }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "case \"$CLAUDE_FILE_PATH\" in *.php) php -l \"$CLAUDE_FILE_PATH\";; esac",
+            "timeout": 30,
+            "type": "command"
+          }
+        ],
+        "matcher": "Write|Edit"
+      }
+    ]
   },
   "permissions": {
     "allow": [
@@ -22,8 +52,6 @@
       "Bash(diff:*)",
       "Bash(echo:*)",
       "Bash(find:*)",
-      // "Bash(gh:*)",
-      // "Bash(git:*)",
       "Bash(grep:*)",
       "Bash(head:*)",
       "Bash(ls:*)",
@@ -43,19 +71,5 @@
   "statusLine": {
     "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json",
     "type": "command"
-  },
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "case \"$CLAUDE_FILE_PATH\" in *.php) php -l \"$CLAUDE_FILE_PATH\"",
-            "timeout": 30
-          }
-        ]
-      }
-    ]
   }
 }
