@@ -1,6 +1,7 @@
 # Tooling And Verification
 
-Use this reference when running or interpreting the PHP quality gates. These notes are derived from the shared workstation configs.
+Use this reference when running or interpreting the PHP quality gates.
+These notes are derived from the shared workstation configs.
 
 ## Discovery Order
 
@@ -18,7 +19,9 @@ Key expectations:
 - 4-space indentation.
 - 120-character line limit, 150 absolute limit.
 - Short arrays only.
-- Forbidden functions include `var_dump`, `dd`, `dump`, `print_r`, `var_export`, `compact`, `eval`, `extract`, `is_null`, and `call_user_func`.
+- Forbidden functions include `var_dump`, `dd`, `dump`, `print_r`,
+  `var_export`, `compact`, `eval`, `extract`, `is_null`, and
+  `call_user_func`.
 - `@` error suppression is forbidden.
 - Variable variables are forbidden.
 - PhpStorm-only attributes are forbidden.

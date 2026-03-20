@@ -1,6 +1,8 @@
 # Framework Conventions
 
-Use this reference after identifying the active PHP framework. Follow the existing framework and project conventions rather than forcing a new architecture.
+Use this reference after identifying the active PHP framework.
+Follow the existing framework and project conventions rather than forcing a new
+architecture.
 
 ## Yii2
 
@@ -34,4 +36,5 @@ Use this reference after identifying the active PHP framework. Follow the existi
 - Do not mix framework conventions in the same code path.
 - Do not introduce repositories, DTO layers, or service layers unless they solve an actual problem in the current codebase.
 - Prefer framework-native validation and authorization boundaries before custom helpers.
-- Keep transport concerns at the edge: HTTP, console input, queues, and ORM hydration should not leak into core business logic.
+- Keep transport concerns at the edge: HTTP, console input, queues, and ORM
+  hydration should not leak into core business logic.
