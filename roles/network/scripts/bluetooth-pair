@@ -25,4 +25,3 @@ EOF
 
 notify-send "Bluetooth" "Pairing mode enabled for ${duration} seconds"
 sleep "${duration}"
-

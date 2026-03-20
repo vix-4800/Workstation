@@ -4,9 +4,9 @@ Use this reference when deciding whether a language or standard-library feature 
 
 ## Official Release References
 
-- PHP 8.3 release notes: https://www.php.net/releases/8.3/en.php
-- PHP 8.4 release notes: https://www.php.net/releases/8.4/en.php
-- PHP 8.5 release notes: https://www.php.net/releases/8.5/en.php
+- PHP 8.3 release notes: <https://www.php.net/releases/8.3/en.php>
+- PHP 8.4 release notes: <https://www.php.net/releases/8.4/en.php>
+- PHP 8.5 release notes: <https://www.php.net/releases/8.5/en.php>
 
 ## Selection Rules
 
@@ -36,7 +36,8 @@ Use 8.3 features freely in repos that already require PHP 8.3+.
 - New DOM API under the `Dom\` namespace.
 - Lazy objects and additional rounding/date helpers.
 
-Property hooks are powerful, but use them where they simplify a real invariant or computed property. Do not replace a simple typed property with hooks unless there is actual logic to enforce.
+Property hooks are powerful, but use them where they simplify a real invariant or computed property. Do not replace a
+simple typed property with hooks unless there is actual logic to enforce.
 
 ## PHP 8.5 Highlights
 
@@ -48,7 +49,8 @@ PHP 8.5 was released on November 20, 2025.
 - URI extension.
 - Closures and first-class callables in constant expressions.
 
-Treat 8.5 features as opt-in. Verify that the deployment target, CI image, and static-analysis tooling all support 8.5 before using them.
+Treat 8.5 features as opt-in. Verify that the deployment target, CI image, and static-analysis tooling all support 8.5
+before using them.
 
 ## Practical Guidance
 
