@@ -11,7 +11,7 @@ apply:
 
 # Deploy only configs (no package installs, no sudo)
 sync:
-    ansible-playbook {{yml_file}} --tags config --diff
+    ansible-playbook {{yml_file}} --ask-become-pass --tags config --diff
 
 # Dry-run: show what would change
 plan:
