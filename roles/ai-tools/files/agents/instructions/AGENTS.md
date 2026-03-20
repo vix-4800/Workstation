@@ -50,6 +50,8 @@ These rules are absolute. Violating them is a blocking error.
 - Use `readonly` properties and constructor promotion (PHP 8.x) where appropriate.
 - Prefer named arguments when they materially improve call-site clarity.
 - Use attributes such as `#[\Override]`, `#[\Deprecated]`, and `#[\SensitiveParameter]` where they clarify intent.
+- Use single-quoted strings for all literals with no variable interpolation or PHP escape sequences (`\n`, `\t`). Use double-quoted strings only when interpolation or escape sequences are required.
+- Put a blank line before and after every block control structure (`if`, `foreach`, `for`, `while`, `switch`, `try`) within a method body, unless the structure is the first or last statement in the block.
 
 ### What to avoid
 
@@ -63,6 +65,10 @@ These rules are absolute. Violating them is a blocking error.
 | `global` keyword | Dependency injection |
 | Magic `__get`/`__set` for domain logic | Explicit typed properties |
 | Dynamic variable variables `$$var` | Named variables or arrays |
+| `!empty($x)` as boolean test | Extract first: `$flag = $x ?? false;` then test `$flag` or `!$flag` |
+| Double-quoted strings with no interpolation | Single-quoted strings: `'literal'` |
+| Interpolation with escaped quotes: `"<a href=\"{$u}\""` | `sprintf()`: `sprintf('<a href="%s">', $u)` |
+| Column-aligning `=` or `=>` with extra spaces | One space on each side: `$a = 1;`, `'key' => $v` |
 
 ### Standards
 
