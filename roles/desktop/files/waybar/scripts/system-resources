@@ -15,24 +15,14 @@ mem_percent=$(free | awk 'NR==2{printf "%.0f", $3*100/$2}')
 gpu_available=false
 gpu_temp=""
 gpu_usage=""
-gpu_mem_used=""
-gpu_mem_total=""
-gpu_mem_percent=""
 
 if command -v nvidia-smi &>/dev/null; then
     gpu_available=true
-    gpu_data=$(nvidia-smi --query-gpu=temperature.gpu,utilization.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null)
+    gpu_data=$(nvidia-smi --query-gpu=temperature.gpu,utilization.gpu --format=csv,noheader,nounits 2>/dev/null)
     if [[ -n "${gpu_data}" ]]; then
-        IFS=',' read -r gpu_temp gpu_usage gpu_mem_used_mb gpu_mem_total_mb <<< "${gpu_data}"
+        IFS=',' read -r gpu_temp gpu_usage <<< "${gpu_data}"
         gpu_temp=$(echo "${gpu_temp}" | xargs)
         gpu_usage=$(echo "${gpu_usage}" | xargs)
-        gpu_mem_used_mb=$(echo "${gpu_mem_used_mb}" | xargs)
-        gpu_mem_total_mb=$(echo "${gpu_mem_total_mb}" | xargs)
-
-        # Convert MB to GB for display
-        gpu_mem_used=$(awk "BEGIN {printf \"%.1f\", ${gpu_mem_used_mb}/1024}")
-        gpu_mem_total=$(awk "BEGIN {printf \"%.1f\", ${gpu_mem_total_mb}/1024}")
-        gpu_mem_percent=$(awk "BEGIN {printf \"%.0f\", (${gpu_mem_used_mb}/${gpu_mem_total_mb})*100}")
     else
         gpu_available=false
     fi
@@ -59,28 +49,21 @@ fi
 # Determine RAM icon based on usage
 if (( mem_percent >= 80 )); then
     mem_icon="󰍛"
-    mem_class="critical"
 elif (( mem_percent >= 50 )); then
     mem_icon="󰍛"
-    mem_class="warning"
 else
     mem_icon="󰍛"
-    mem_class="normal"
 fi
 
 gpu_icon="󰢮"
-gpu_class="normal"
 if [[ "${gpu_available}" == true ]] && [[ -n "${gpu_usage}" ]]; then
     gpu_usage_int=${gpu_usage%.*}
     if (( gpu_usage_int >= 80 )); then
         gpu_icon="󱤓"  # High usage
-        gpu_class="critical"
     elif (( gpu_usage_int >= 50 )); then
         gpu_icon="󰾲"  # Medium usage
-        gpu_class="warning"
     else
         gpu_icon="󰢮"  # Low usage
-        gpu_class="normal"
     fi
 fi
 
