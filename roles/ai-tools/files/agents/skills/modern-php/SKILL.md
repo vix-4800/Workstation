@@ -53,6 +53,12 @@ Senior PHP developer specialising in PHP 8.3-8.5, Yii2, Laravel, and Symfony wit
 12. Keep cyclomatic complexity, method length, and parameter count within the local tool thresholds.
 13. Use `password_hash($plainTextPassword, PASSWORD_ARGON2ID)` for password storage unless the framework already wraps this safely.
 14. Prefer repository-local binaries and config files for verification over global defaults.
+15. Use `json_validate($input)` as an early guard before `json_decode()` whenever the input crosses a trust boundary (HTTP, file, external API). Reject and return immediately if validation fails; do not attempt to decode invalid JSON.
+16. After `json_decode()`, annotate the result variable with an inline `@var array{...}|null` doc block that fully describes the expected shape. This gives phpstan structural type information and documents the contract.
+17. Add PHPDoc with `@param` (including full array shape) and `@return` on ALL methods — including private — when a parameter or return type is `array` with a non-trivial structure. When native types fully express the contract and no shape detail is needed, PHPDoc may be omitted.
+18. Use `sprintf()` for strings that embed variable values inside HTML attribute quotes. Never use double-quoted interpolation with backslash-escaped inner quotes such as `"<tag attr=\"{$val}\""`.
+19. Use single-quoted strings for all literals that contain no variable interpolation or PHP escape sequences. Use double-quoted strings only when interpolation or sequences such as `\n` are needed.
+20. No column-alignment of variable assignments or match/array arms. Use exactly one space on each side of `=` and `=>`. Never pad with extra spaces to achieve visual alignment.
 
 ### MUST NOT DO
 
@@ -66,6 +72,7 @@ Senior PHP developer specialising in PHP 8.3-8.5, Yii2, Laravel, and Symfony wit
 8. Do not leave empty catch blocks.
 9. Do not place business logic in controllers, console commands, or Active Record models when a service or domain class is the proper boundary.
 10. Do not instantiate service dependencies with `new` inside business logic when constructor injection is available.
+11. Do not use double-quoted strings for literals that contain no interpolation or escape sequences. Do not pad `=` or `=>` with extra spaces to column-align assignments or match/array arms.
 
 ## PHP Version Features Quick Reference
 
@@ -193,6 +200,44 @@ final class Temperature
         $this->celsius = $celsius;
     }
 }
+```
+
+### JSON Input Guard With Structural Annotation
+
+```php
+<?php
+
+declare(strict_types=1);
+
+// 1. Validate syntax before touching the data.
+if (!json_validate($json)) {
+    return null;
+}
+
+/**
+ * @var array{
+ *   blocks: array<int, array{
+ *     type: string,
+ *     data: array{text?: string, level?: int}
+ *   }>
+ * }|null $data
+ */
+$data = json_decode($json, true);
+
+// 2. Guard against structural mismatch after decode.
+if (!is_array($data) || !isset($data['blocks']) || !is_array($data['blocks'])) {
+    return null;
+}
+```
+
+### sprintf() for HTML Attribute Strings
+
+```php
+// Avoid: backslash escapes inside double-quoted interpolation.
+$img = "<img src=\"{$src}\" alt=\"{$caption}\">";
+
+// Prefer: sprintf with single-quoted template.
+$img = sprintf('<img src="%s" alt="%s">', $src, $caption);
 ```
 
 ## Framework Guidance
