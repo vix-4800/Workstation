@@ -39,7 +39,7 @@ repos:
     rev: v0.48.0
     hooks:
       - id: markdownlint
-        args: ['--fix', '--config', 'roles/development/files/tools/markdown/markdownlint/.markdownlint.jsonc']
+        args: ['--fix', '--config', 'roles/development/files/tools/markdown/markdownlint/.markdownlint.jsonc', '--ignore-path', 'roles/development/files/tools/markdown/markdownlint/.markdownlintignore']
 
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
     rev: v9.24.0
