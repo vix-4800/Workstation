@@ -11,6 +11,7 @@ services_common:
   - git-maintenance@daily.timer
   - git-maintenance@hourly.timer
   - git-maintenance@weekly.timer
+  - arch-audit.timer
 
 # Additional services per host (merged in tasks)
 services_host: []

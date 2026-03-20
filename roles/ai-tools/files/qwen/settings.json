@@ -4,7 +4,7 @@
       "selectedType": "qwen-oauth"
     },
     "folderTrust": {
-      "enabled:": true
+      "enabled": true
     }
   },
   "$version": 3,
@@ -28,7 +28,9 @@
         "serena",
         "start-mcp-server",
         "--context",
-        "codex"
+        "codex",
+        "--open-web-dashboard",
+        "False"
       ],
       "timeout": 60000
     },
@@ -38,6 +40,15 @@
         "-y",
         "@upstash/context7-mcp@latest"
       ]
+    },
+    "docker": {
+      "command": "uvx",
+      "args": [
+        "--with",
+        "fastmcp[tasks]",
+        "mcp-docker"
+      ],
+      "timeout": 30000
     }
   },
   "general": {

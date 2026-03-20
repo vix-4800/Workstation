@@ -1,4 +1,4 @@
-# Claude Code Global Instructions
+# AI Coding Agent Instructions
 
 You are an expert software engineer. Your job is to produce clean, correct, secure, and maintainable code. These instructions are strict — follow them without exception unless the user explicitly overrides a rule.
 
@@ -46,10 +46,10 @@ These rules are absolute. Violating them is a blocking error.
 
 - Always declare `declare(strict_types=1);` at the top of every file.
 - Use the minimum PHP version required by the project; do not use features unavailable in that version.
-- Every function/method must have a complete, typed signature: parameter types and return types.
+- Every function, method, and property must have an explicit type unless the framework or language construct makes that impossible.
 - Use `readonly` properties and constructor promotion (PHP 8.x) where appropriate.
-- Prefer named arguments for functions with many parameters to improve call-site readability.
-- Use Attributes if needed - Override, Deprecated, SensitiveParameter, etc. - but do not overuse them for things that can be expressed in code or docblocks.
+- Prefer named arguments when they materially improve call-site clarity.
+- Use attributes such as `#[\Override]`, `#[\Deprecated]`, and `#[\SensitiveParameter]` where they clarify intent.
 
 ### What to avoid
 
@@ -66,24 +66,13 @@ These rules are absolute. Violating them is a blocking error.
 
 ### Standards
 
-- Follow **PSR-1**, **PSR-4**, **PSR-12** strictly.
-- Autoloading via Composer. No manual `require`/`include` chains.
-- Exceptions: throw specific typed exceptions (`InvalidArgumentException`, domain exceptions) — never `throw new \Exception("something")` for known failure cases.
-- Never silently swallow exceptions. Either handle them meaningfully or let them propagate.
-
-### SOLID Principles (enforced)
-
-- **Single Responsibility:** A class does one thing. If you can describe it with "and", split it.
-- **Open/Closed:** Extend behaviour through interfaces and composition, not by modifying existing classes.
-- **Liskov Substitution:** Subtypes must be substitutable for their parent without breaking behaviour.
-- **Interface Segregation:** Small, focused interfaces. Never force a class to implement methods it doesn't need.
-- **Dependency Inversion:** Depend on abstractions (interfaces), not concretions. Inject dependencies — never `new` them inside business logic.
-
-### Framework conventions
-
-- In **Laravel**: use service providers for binding, form requests for validation, policies for authorisation, jobs for async work, events/listeners for side effects. Keep controllers thin — they delegate, they do not compute.
-- In **Symfony**: use autowiring, attribute-based routing, and dedicated Voter classes for authorisation. Business logic belongs in services, not controllers or entities.
-- Follow the conventions of whatever framework is already in use. Do not mix patterns from different frameworks.
+- Follow **PSR-1**, **PSR-4**, and **PSR-12** strictly. Autoloading is via Composer only.
+- Throw specific typed exceptions. Never use `throw new \Exception()` for a known failure mode.
+- Never silently swallow exceptions.
+- Classes should be `abstract` or `final` unless the active framework requires otherwise. A class should have one responsibility.
+- Depend on abstractions, not concretions. Inject dependencies instead of instantiating them inside business logic.
+- Interface names are nouns or adjectives, never `I*`.
+- Follow the conventions of the active framework. See the `modern-php` skill for Yii2, Laravel, Symfony, and toolchain-specific patterns.
 
 ---
 

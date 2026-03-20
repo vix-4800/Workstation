@@ -1,10 +1,19 @@
 ---
-ai_configs:
+ai_tools_global_instruction_repo_src: agents/instructions/AGENTS.md
+ai_tools_global_instruction_home_path: "{{ home }}/.agents/instructions/AGENTS.md"
+
+ai_tools_repo_symlinks:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
-  - { src: claude/CLAUDE.md, dest: "{{ home }}/.claude/CLAUDE.md" }
+  - { src: claude/claude-powerline.json, dest: "{{ home }}/.claude/claude-powerline.json" }
+  - { src: claude/hooks, dest: "{{ home }}/.claude/hooks" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
-  - { src: codex/AGENTS.md, dest: "{{ home }}/.codex/AGENTS.md" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
-  - { src: mcp/serena/serena_config.yml, dest: "{{ home }}/.serena/serena_config.yml" }
+  - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
   - { src: agents/skills, dest: "{{ home }}/.agents/skills" }
+  - { src: agents/skills, dest: "{{ home }}/.claude/skills" }
   - { src: agents/skills, dest: "{{ home }}/.qwen/skills" }
+
+ai_tools_home_symlinks:
+  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.codex/AGENTS.md" }
+  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.claude/CLAUDE.md" }
+  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.qwen/AGENTS.md" }

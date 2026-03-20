@@ -1,4 +1,19 @@
 ---
+- name: Ensure ~/.local/bin exists
+  ansible.builtin.file:
+    path: "{{ home }}/.local/bin"
+    state: directory
+    mode: "0755"
+  tags: [services, config]
+
+- name: Deploy arch-audit-check script
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/services/files/arch-audit-check.sh"
+    dest: "{{ home }}/.local/bin/arch-audit-check.sh"
+    state: link
+    force: true
+  tags: [services, config]
+
 - name: Check if systemd user dir is a directory symlink
   ansible.builtin.stat:
     path: "{{ home }}/.config/systemd/user"

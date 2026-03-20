@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly check for vulnerable packages
+
+[Timer]
+OnCalendar=weekly
+OnBootSec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

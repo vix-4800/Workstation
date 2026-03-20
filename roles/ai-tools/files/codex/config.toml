@@ -29,6 +29,8 @@ args = [
   "start-mcp-server",
   "--context",
   "codex",
+  "--open-web-dashboard",
+  "False",
 ]
 
 [mcp_servers.context7]

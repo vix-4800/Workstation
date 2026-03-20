@@ -5,8 +5,10 @@ Wants=pipewire.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/alsactl restore
 RemainAfterExit=yes
+ExecStartPre=/usr/bin/mkdir -p %h/.local/share/alsa
+ExecStart=/bin/sh -c '/usr/bin/alsactl --file=%h/.local/share/alsa/asound.state restore || true'
+ExecStop=/usr/bin/alsactl --file=%h/.local/share/alsa/asound.state store
 
 [Install]
 WantedBy=default.target

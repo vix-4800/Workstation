@@ -1,7 +1,7 @@
 interface:
   display_name: "API Design"
-  short_description: "REST API design patterns and best practices"
+  short_description: "REST API design patterns for PHP applications"
   brand_color: "#F97316"
-  default_prompt: "Design REST API: resources, status codes, pagination"
+  default_prompt: "Use $api-design to design or review a REST API contract for a PHP backend."
 policy:
   allow_implicit_invocation: true
