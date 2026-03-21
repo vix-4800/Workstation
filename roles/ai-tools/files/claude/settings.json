@@ -1,70 +1,25 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
-  "enabledPlugins": {
-    "code-review@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "everything-claude-code@everything-claude-code": true,
-    "github@claude-plugins-official": false,
-    "lua-lsp@claude-plugins-official": true,
-    "php-lsp@claude-plugins-official": true,
-    "prompts.chat@prompts.chat": true,
-    "security-guidance@claude-plugins-official": true,
-    "serena@claude-plugins-official": true
-  },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "MCP_TIMEOUT": "60000"
   },
-  "extraKnownMarketplaces": {
-    "everything-claude-code": {
-      "source": {
-        "repo": "affaan-m/everything-claude-code",
-        "source": "github"
-      }
-    },
-    "prompts.chat": {
-      "source": {
-        "repo": "f/prompts.chat",
-        "source": "github"
-      }
-    }
-  },
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "permission_prompt|idle_prompt",
-        "hooks": [
-          {
-            "command": "notify-send 'Claude Code' 'Claude Code needs your attention'",
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "\"$HOME/.claude/hooks/post-edit-sanity.sh\"",
-            "timeout": 30,
-            "type": "command"
-          }
-        ],
-        "matcher": "Write|Edit"
-      }
-    ]
-  },
   "permissions": {
     "allow": [
+      "Bash(ansible-lint)",
+      "Bash(ansible-lint *)",
       "Bash(awk)",
       "Bash(awk *)",
       "Bash(basename)",
       "Bash(basename *)",
       "Bash(cat)",
       "Bash(cat *)",
+      "Bash(composer info)",
+      "Bash(composer info *)",
+      "Bash(composer show)",
+      "Bash(composer show *)",
+      "Bash(composer validate)",
+      "Bash(composer validate *)",
       "Bash(cut)",
       "Bash(cut *)",
       "Bash(diff)",
@@ -96,6 +51,16 @@
       "Bash(file *)",
       "Bash(find)",
       "Bash(find *)",
+      "Bash(go build)",
+      "Bash(go build *)",
+      "Bash(go fmt)",
+      "Bash(go fmt *)",
+      "Bash(go test)",
+      "Bash(go test *)",
+      "Bash(go vet)",
+      "Bash(go vet *)",
+      "Bash(gofmt)",
+      "Bash(gofmt *)",
       "Bash(git branch)",
       "Bash(git branch *)",
       "Bash(git diff)",
@@ -121,9 +86,15 @@
       "Bash(jq *)",
       "Bash(ls)",
       "Bash(ls *)",
+      "Bash(luac)",
+      "Bash(luac *)",
       "Bash(pwd)",
       "Bash(php --version)",
       "Bash(php -l *)",
+      "Bash(php artisan list)",
+      "Bash(php artisan list *)",
+      "Bash(php artisan route:list)",
+      "Bash(php artisan route:list *)",
       "Bash(php -m)",
       "Bash(php -m *)",
       "Bash(readlink)",
@@ -134,6 +105,8 @@
       "Bash(rg *)",
       "Bash(sed)",
       "Bash(sed *)",
+      "Bash(shellcheck)",
+      "Bash(shellcheck *)",
       "Bash(sort)",
       "Bash(sort *)",
       "Bash(stat)",
@@ -144,13 +117,61 @@
       "Bash(tree *)",
       "Bash(uniq)",
       "Bash(uniq *)",
+      "Bash(vendor/bin/*)",
+      "Bash(./vendor/bin/*)",
       "Bash(wc)",
       "Bash(wc *)",
       "Bash(which)",
       "Bash(which *)",
       "Bash(xargs)",
       "Bash(xargs *)",
+      "Bash(yamllint)",
+      "Bash(yamllint *)",
       "WebSearch"
+    ],
+    "deny": [
+      "Bash(curl *)",
+      "Bash(doas *)",
+      "Bash(git am *)",
+      "Bash(git apply *)",
+      "Bash(git cherry-pick *)",
+      "Bash(git clean *)",
+      "Bash(git merge *)",
+      "Bash(git push *)",
+      "Bash(git rebase *)",
+      "Bash(git reset *)",
+      "Bash(nc *)",
+      "Bash(netcat *)",
+      "Bash(php artisan tinker)",
+      "Bash(php artisan tinker *)",
+      "Bash(rm *)",
+      "Bash(rsync *)",
+      "Bash(scp *)",
+      "Bash(sftp *)",
+      "Bash(ssh *)",
+      "Bash(sudo *)",
+      "Bash(wget *)",
+      "Bash(docker compose build *)",
+      "Bash(docker compose down *)",
+      "Bash(docker compose restart *)",
+      "Bash(docker compose up *)",
+      "Bash(docker kill *)",
+      "Bash(docker network rm *)",
+      "Bash(docker restart *)",
+      "Bash(docker rm *)",
+      "Bash(docker rmi *)",
+      "Bash(docker stop *)",
+      "Bash(docker system prune *)",
+      "Bash(docker volume rm *)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./inventory/host_vars/**)",
+      "Read(./secrets/**)",
+      "Read(./vault/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.kube/**)",
+      "Read(~/.ssh/**)"
     ],
     "ask": [
       "Bash(chmod *)",
@@ -181,52 +202,70 @@
       "Bash(yarn add *)",
       "Bash(yarn install *)"
     ],
-    "defaultMode": "acceptEdits",
-    "deny": [
-      "Bash(curl *)",
-      "Bash(doas *)",
-      "Bash(git am *)",
-      "Bash(git apply *)",
-      "Bash(git cherry-pick *)",
-      "Bash(git clean *)",
-      "Bash(git merge *)",
-      "Bash(git push *)",
-      "Bash(git rebase *)",
-      "Bash(git reset *)",
-      "Bash(nc *)",
-      "Bash(netcat *)",
-      "Bash(rm *)",
-      "Bash(rsync *)",
-      "Bash(scp *)",
-      "Bash(sftp *)",
-      "Bash(ssh *)",
-      "Bash(sudo *)",
-      "Bash(wget *)",
-      "Bash(docker compose build *)",
-      "Bash(docker compose down *)",
-      "Bash(docker compose restart *)",
-      "Bash(docker compose up *)",
-      "Bash(docker kill *)",
-      "Bash(docker network rm *)",
-      "Bash(docker restart *)",
-      "Bash(docker rm *)",
-      "Bash(docker rmi *)",
-      "Bash(docker stop *)",
-      "Bash(docker system prune *)",
-      "Bash(docker volume rm *)",
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./inventory/host_vars/**)",
-      "Read(./secrets/**)",
-      "Read(./vault/**)",
-      "Read(~/.aws/**)",
-      "Read(~/.gnupg/**)",
-      "Read(~/.kube/**)",
-      "Read(~/.ssh/**)"
+    "defaultMode": "acceptEdits"
+  },
+  "enabledMcpjsonServers": [
+    "github"
+  ],
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "permission_prompt|idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "notify-send 'Claude Code' 'Claude Code needs your attention'"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/pre-commit-check.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/post-edit-sanity.sh\"",
+            "timeout": 30
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
-    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json",
-    "type": "command"
-  }
+    "type": "command",
+    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json"
+  },
+  "enabledPlugins": {
+    "code-review@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "everything-claude-code@everything-claude-code": true,
+    "lua-lsp@claude-plugins-official": true,
+    "php-lsp@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "serena@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "everything-claude-code": {
+      "source": {
+        "source": "github",
+        "repo": "affaan-m/everything-claude-code"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "medium"
 }

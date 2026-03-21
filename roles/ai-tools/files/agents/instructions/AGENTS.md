@@ -94,6 +94,17 @@ These rules are absolute. Violating them is a blocking error.
 
 ---
 
+## Go
+
+- Accept `context.Context` explicitly at request, job, and I/O boundaries; pass it through instead of hiding it.
+- Return errors rather than panicking in library or application code, except for unrecoverable startup failures.
+- Wrap errors with `%w` and inspect them with `errors.Is` / `errors.As`.
+- Keep interfaces small and define them where they are consumed.
+- Run `gofmt` consistently and make concurrency explicit; do not share mutable state without clear synchronization.
+- Prefer simple structs and package-level functions over speculative abstraction layers.
+
+---
+
 ## Python
 
 - Type-annotate all function signatures. Use `from __future__ import annotations` for forward references.

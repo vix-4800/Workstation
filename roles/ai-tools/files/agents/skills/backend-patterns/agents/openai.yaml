@@ -1,7 +1,7 @@
 interface:
-  display_name: "Backend Patterns"
-  short_description: "Backend architecture and data patterns for PHP"
-  brand_color: "#F59E0B"
-  default_prompt: "Use $backend-patterns to structure a PHP backend change across services, data access, and jobs."
+  display_name: 'Backend Patterns'
+  short_description: 'Controller, service, repository, and transaction guidance'
+  brand_color: '#0ea5e9'
+  default_prompt: 'Review this backend change for controller boundaries, transactions, data access, and service design.'
 policy:
   allow_implicit_invocation: true

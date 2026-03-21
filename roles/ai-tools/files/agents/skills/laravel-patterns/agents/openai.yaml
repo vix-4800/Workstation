@@ -1,0 +1,7 @@
+interface:
+  display_name: 'Laravel Patterns'
+  short_description: 'Laravel controller, validation, policy, and Eloquent guidance'
+  brand_color: '#dc2626'
+  default_prompt: 'Review this Laravel change for controllers, Form Requests, policies, Eloquent usage, and framework conventions.'
+policy:
+  allow_implicit_invocation: true

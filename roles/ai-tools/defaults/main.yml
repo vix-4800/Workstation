@@ -1,17 +1,81 @@
 ---
 ai_tools_global_instruction_repo_src: agents/instructions/AGENTS.md
 ai_tools_global_instruction_home_path: "{{ home }}/.agents/instructions/AGENTS.md"
+ai_tools_health_timeout_seconds: 30
+ai_tools_run_health_checks: false
+ai_tools_github_mcp_server_version: "0.32.0"
+
+ai_tools_claude_plugins_present:
+  - code-review@claude-plugins-official
+  - commit-commands@claude-plugins-official
+  - context7@claude-plugins-official
+  - everything-claude-code@everything-claude-code
+  - lua-lsp@claude-plugins-official
+  - php-lsp@claude-plugins-official
+  - security-guidance@claude-plugins-official
+  - serena@claude-plugins-official
+
+ai_tools_claude_plugins_absent:
+  - github@claude-plugins-official
+  - prompts.chat@prompts.chat
+
+ai_tools_qwen_extensions_present:
+  - name: commit-commands
+    install_source: https://github.com/anthropics/claude-code:commit-commands
+  - name: context7
+    install_source: https://github.com/anthropics/claude-plugins-official:context7
+  - name: everything-claude-code
+    install_source: https://github.com/affaan-m/everything-claude-code:everything-claude-code
+  - name: github
+    install_source: https://github.com/anthropics/claude-plugins-official:github
+  - name: php-lsp
+    install_source: https://github.com/anthropics/claude-plugins-official:php-lsp
+  - name: security-guidance
+    install_source: https://github.com/anthropics/claude-code:security-guidance
+  - name: serena
+    install_source: https://github.com/anthropics/claude-plugins-official:serena
+
+ai_tools_qwen_extensions_absent: []
+
+ai_tools_shared_skill_names:
+  - api-design
+  - backend-patterns
+  - coding-standards
+  - modern-php
+  - security-review
+  - code-review
+  - ansible-patterns
+  - database-patterns
+  - testing-strategy
+  - laravel-patterns
+  - yii2-patterns
+
+ai_tools_shared_skill_targets:
+  - "{{ home }}/.agents/skills"
+  - "{{ home }}/.claude/skills"
+  - "{{ home }}/.codex/skills"
+  - "{{ home }}/.qwen/skills"
 
 ai_tools_repo_symlinks:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
   - { src: claude/claude-powerline.json, dest: "{{ home }}/.claude/claude-powerline.json" }
   - { src: claude/hooks, dest: "{{ home }}/.claude/hooks" }
+  - { src: claude/agents, dest: "{{ home }}/.claude/agents" }
+  - { src: claude/rules, dest: "{{ home }}/.claude/rules" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
+  - { src: codex/agents, dest: "{{ home }}/.codex/agents" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
+  - { src: qwen/extensions/catalog.json, dest: "{{ home }}/.qwen/extensions/catalog.json" }
+  - { src: qwen/agents, dest: "{{ home }}/.qwen/agents" }
   - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
-  - { src: agents/skills, dest: "{{ home }}/.agents/skills" }
-  - { src: agents/skills, dest: "{{ home }}/.claude/skills" }
-  - { src: agents/skills, dest: "{{ home }}/.qwen/skills" }
+
+ai_tools_repo_templates:
+  - src: claude/.mcp.json.j2
+    dest: "{{ home }}/.claude/.mcp.json"
+  - src: qwen/extensions/extension-enablement.json.j2
+    dest: "{{ home }}/.qwen/extensions/extension-enablement.json"
+
+ai_tools_qwen_extension_workspace_override: "{{ home }}/*"
 
 ai_tools_home_symlinks:
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.codex/AGENTS.md" }

@@ -1,7 +1,7 @@
 interface:
-  display_name: "Modern PHP"
-  short_description: "Modern PHP 8.3-8.5 patterns and verification"
-  brand_color: "#2563EB"
-  default_prompt: "Use $modern-php to implement or review strict PHP 8.3-8.5 code."
+  display_name: 'Modern PHP'
+  short_description: 'Strict modern PHP guidance for implementation and review'
+  brand_color: '#4f46e5'
+  default_prompt: 'Implement or review this PHP code using strict types, modern language features, and the project toolchain.'
 policy:
   allow_implicit_invocation: true
