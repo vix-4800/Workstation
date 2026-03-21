@@ -24,7 +24,6 @@ return {
           map("<leader>caR", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
           map("<leader>caI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
           map("<leader>caY", require("telescope.builtin").lsp_type_definitions, "[G]oto T[y]pe Definition")
-          map("<leader>car", vim.lsp.buf.rename, "[L]SP [R]ename")
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
@@ -361,8 +360,7 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "neovim/nvim-lspconfig" },
     opts = {
-      ensure_installed = {},
-      automatic_installation = false,
+      automatic_enable = false,
     },
   },
   {
@@ -456,7 +454,7 @@ return {
         },
       },
 
-      fuzzy = { implementation = "lua" },
+      fuzzy = { implementation = "prefer_rust" },
 
       signature = {
         enabled = true,

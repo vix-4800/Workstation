@@ -41,7 +41,7 @@ return {
         -- ╰─────────────────────────────────────────────────────────╯
         "stylua", -- Lua
         "prettier", -- JS/TS/JSON/CSS/HTML/MD
-        -- "prettierd", -- JS/TS/JSON/CSS/HTML/MD
+        "prettierd", -- JS/TS/JSON/CSS/HTML/MD
         "shfmt", -- Shell scripts
         "yamlfmt", -- YAML
         "php-cs-fixer",
@@ -56,9 +56,6 @@ return {
         "markdownlint", -- Markdown
         "hadolint", -- Dockerfile
         "dotenv-linter", -- .env files
-        "phpstan",
-        "phpcs",
-        "phpmd",
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Other Tools                                             │
