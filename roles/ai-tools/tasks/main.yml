@@ -1,3 +1,4 @@
+---
 - name: Install Claude CLI
   ansible.builtin.shell:
     cmd: |
@@ -27,6 +28,26 @@
   become: false
   tags: [ai-tools, packages]
 
+- name: Inspect AI shared skill targets
+  ansible.builtin.stat:
+    path: "{{ item }}"
+    follow: false
+  loop: "{{ ai_tools_shared_skill_targets }}"
+  register: ai_tools_shared_skill_target_stats
+  loop_control:
+    label: "{{ item }}"
+  tags: [ai-tools, config]
+
+- name: Remove legacy AI shared skill symlinks
+  ansible.builtin.file:
+    path: "{{ item.stat.path }}"
+    state: absent
+  loop: "{{ ai_tools_shared_skill_target_stats.results }}"
+  when: item.stat.islnk | default(false)
+  loop_control:
+    label: "{{ item.stat.path }}"
+  tags: [ai-tools, config]
+
 - name: Ensure AI config parent directories exist
   ansible.builtin.file:
     path: "{{ item }}"
@@ -35,11 +56,17 @@
   loop: >-
     {{
       (
-        ai_tools_repo_symlinks
-        + ai_tools_home_symlinks
+        (
+          (
+            ai_tools_repo_symlinks
+            + ai_tools_home_symlinks
+          )
+          | map(attribute='dest')
+          | map('dirname')
+          | list
+        )
+        + ai_tools_shared_skill_targets
       )
-      | map(attribute='dest')
-      | map('dirname')
       | unique
       | list
     }}
@@ -67,4 +94,160 @@
   loop: "{{ ai_tools_home_symlinks }}"
   loop_control:
     label: "{{ item.dest }}"
+  tags: [ai-tools, config]
+
+- name: Deploy AI tool shared skill symlinks
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/ai-tools/files/agents/skills/{{ item.1 }}"
+    dest: "{{ item.0 }}/{{ item.1 }}"
+    state: link
+    force: true
+  loop: "{{ ai_tools_shared_skill_targets | product(ai_tools_shared_skill_names) | list }}"
+  loop_control:
+    label: "{{ item.0 }}/{{ item.1 }}"
+  tags: [ai-tools, config]
+
+- name: List installed Claude plugins
+  ansible.builtin.command:
+    argv:
+      - claude
+      - plugins
+      - list
+  register: ai_tools_claude_plugins_list
+  changed_when: false
+  tags: [ai-tools, packages]
+
+- name: Capture installed Claude plugins
+  ansible.builtin.set_fact:
+    ai_tools_claude_installed_plugins: "{{ ai_tools_claude_plugins_list.stdout | regex_findall('(?m)^\\s*>\\s+([^\\s]+)$') }}"
+  tags: [ai-tools, packages]
+
+- name: Install declared Claude plugins
+  ansible.builtin.command:
+    argv:
+      - claude
+      - plugins
+      - install
+      - --scope
+      - user
+      - "{{ item }}"
+  loop: "{{ ai_tools_claude_plugins_present }}"
+  loop_control:
+    label: "{{ item }}"
+  when: item not in ai_tools_claude_installed_plugins
+  changed_when: true
+  tags: [ai-tools, packages]
+
+- name: Uninstall Claude plugins removed from target state
+  ansible.builtin.command:
+    argv:
+      - claude
+      - plugins
+      - uninstall
+      - "{{ item }}"
+  loop: "{{ ai_tools_claude_plugins_absent }}"
+  loop_control:
+    label: "{{ item }}"
+  when: item in ai_tools_claude_installed_plugins
+  changed_when: true
+  tags: [ai-tools, packages]
+
+- name: List installed Qwen extensions
+  ansible.builtin.command:
+    argv:
+      - qwen
+      - extensions
+      - list
+  register: ai_tools_qwen_extensions_list
+  changed_when: false
+  tags: [ai-tools, packages]
+
+- name: Capture installed Qwen extensions
+  ansible.builtin.set_fact:
+    ai_tools_qwen_installed_extensions: "{{ ai_tools_qwen_extensions_list.stdout | regex_findall('(?m)^[^\\w\\s]\\s+([^\\s]+)\\s+\\(') }}"
+  tags: [ai-tools, packages]
+
+- name: Install declared Qwen extensions
+  ansible.builtin.command:
+    argv:
+      - qwen
+      - extensions
+      - install
+      - --consent
+      - "{{ item.install_source }}"
+  loop: "{{ ai_tools_qwen_extensions_present }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.name not in ai_tools_qwen_installed_extensions
+  changed_when: true
+  tags: [ai-tools, packages]
+
+- name: Uninstall Qwen extensions removed from target state
+  ansible.builtin.command:
+    argv:
+      - qwen
+      - extensions
+      - uninstall
+      - "{{ item }}"
+  loop: "{{ ai_tools_qwen_extensions_absent }}"
+  loop_control:
+    label: "{{ item }}"
+  when: item in ai_tools_qwen_installed_extensions
+  changed_when: true
+  tags: [ai-tools, packages]
+
+- name: Verify Claude plugin state
+  ansible.builtin.command:
+    argv:
+      - claude
+      - plugins
+      - list
+  changed_when: false
+  when: ai_tools_run_health_checks | bool
+  tags: [ai-tools, config]
+
+- name: Verify Claude MCP health
+  ansible.builtin.command:
+    argv:
+      - timeout
+      - "{{ ai_tools_health_timeout_seconds }}s"
+      - claude
+      - mcp
+      - list
+  changed_when: false
+  when: ai_tools_run_health_checks | bool
+  tags: [ai-tools, config]
+
+- name: Verify Codex MCP health
+  ansible.builtin.command:
+    argv:
+      - timeout
+      - "{{ ai_tools_health_timeout_seconds }}s"
+      - codex
+      - mcp
+      - list
+  changed_when: false
+  when: ai_tools_run_health_checks | bool
+  tags: [ai-tools, config]
+
+- name: Verify Qwen extension state
+  ansible.builtin.command:
+    argv:
+      - qwen
+      - extensions
+      - list
+  changed_when: false
+  when: ai_tools_run_health_checks | bool
+  tags: [ai-tools, config]
+
+- name: Verify Qwen MCP health
+  ansible.builtin.command:
+    argv:
+      - timeout
+      - "{{ ai_tools_health_timeout_seconds }}s"
+      - qwen
+      - mcp
+      - list
+  changed_when: false
+  when: ai_tools_run_health_checks | bool
   tags: [ai-tools, config]

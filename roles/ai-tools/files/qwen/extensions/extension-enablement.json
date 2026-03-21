@@ -1,0 +1,37 @@
+{
+  "commit-commands": {
+    "overrides": [
+      "/home/vix/*"
+    ]
+  },
+  "context7": {
+    "overrides": [
+      "/home/vix/*"
+    ]
+  },
+  "everything-claude-code": {
+    "overrides": [
+      "/home/vix/*"
+    ]
+  },
+  "github": {
+    "overrides": [
+      "/home/vix/*"
+    ]
+  },
+  "php-lsp": {
+    "overrides": [
+      "/home/vix/*"
+    ]
+  },
+  "security-guidance": {
+    "overrides": [
+      "/home/vix/*"
+    ]
+  },
+  "serena": {
+    "overrides": [
+      "/home/vix/*"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: 'Testing Strategy'
+  short_description: 'Behaviour-first test planning and test-gap review guidance'
+  brand_color: '#0f766e'
+  default_prompt: 'Review this change for missing tests and propose the smallest effective verification strategy.'
+policy:
+  allow_implicit_invocation: true

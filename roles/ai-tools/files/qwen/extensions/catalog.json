@@ -1,0 +1,60 @@
+{
+  "extensions": [
+    {
+      "name": "commit-commands",
+      "pluginName": "commit-commands",
+      "installSource": "https://github.com/anthropics/claude-code:commit-commands",
+      "source": "https://github.com/anthropics/claude-code",
+      "type": "github-release",
+      "status": "core"
+    },
+    {
+      "name": "context7",
+      "pluginName": "context7",
+      "installSource": "https://github.com/anthropics/claude-plugins-official:context7",
+      "source": "https://github.com/anthropics/claude-plugins-official",
+      "type": "git",
+      "status": "core"
+    },
+    {
+      "name": "github",
+      "pluginName": "github",
+      "installSource": "https://github.com/anthropics/claude-plugins-official:github",
+      "source": "https://github.com/anthropics/claude-plugins-official",
+      "type": "git",
+      "status": "core"
+    },
+    {
+      "name": "php-lsp",
+      "pluginName": "php-lsp",
+      "installSource": "https://github.com/anthropics/claude-plugins-official:php-lsp",
+      "source": "https://github.com/anthropics/claude-plugins-official",
+      "type": "git",
+      "status": "core"
+    },
+    {
+      "name": "security-guidance",
+      "pluginName": "security-guidance",
+      "installSource": "https://github.com/anthropics/claude-code:security-guidance",
+      "source": "https://github.com/anthropics/claude-code",
+      "type": "github-release",
+      "status": "core"
+    },
+    {
+      "name": "serena",
+      "pluginName": "serena",
+      "installSource": "https://github.com/anthropics/claude-plugins-official:serena",
+      "source": "https://github.com/anthropics/claude-plugins-official",
+      "type": "git",
+      "status": "core"
+    },
+    {
+      "name": "everything-claude-code",
+      "pluginName": "everything-claude-code",
+      "installSource": "https://github.com/affaan-m/everything-claude-code:everything-claude-code",
+      "source": "https://github.com/affaan-m/everything-claude-code",
+      "type": "github-release",
+      "status": "transitional"
+    }
+  ]
+}

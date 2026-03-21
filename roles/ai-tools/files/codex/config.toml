@@ -1,7 +1,7 @@
 model = "gpt-5.4"
 web_search = "cached"
 personality = "pragmatic"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "xhigh"
 
 [analytics]
 enabled = false
@@ -12,8 +12,42 @@ enabled = false
 [features]
 multi_agent = true
 
+[agents]
+max_threads = 6
+max_depth = 1
+
 [tui]
 theme = "catppuccin-mocha"
+
+[profiles.default]
+model = "gpt-5.4"
+web_search = "cached"
+personality = "pragmatic"
+model_reasoning_effort = "xhigh"
+
+[profiles.review]
+model = "gpt-5.4"
+web_search = "cached"
+personality = "pragmatic"
+model_reasoning_effort = "high"
+approval_policy = "never"
+sandbox_mode = "read-only"
+
+[profiles.php]
+model = "gpt-5.4"
+web_search = "cached"
+personality = "pragmatic"
+model_reasoning_effort = "xhigh"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+
+[profiles.devops]
+model = "gpt-5.4"
+web_search = "cached"
+personality = "pragmatic"
+model_reasoning_effort = "high"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
 
 [mcp_servers.github]
 command = "npx"

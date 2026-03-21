@@ -1,0 +1,7 @@
+interface:
+  display_name: 'Yii2 Patterns'
+  short_description: 'Yii2 controller, form model, RBAC, and Active Record guidance'
+  brand_color: '#2563eb'
+  default_prompt: 'Review this Yii2 change for controllers, form models, Active Record usage, RBAC, and framework conventions.'
+policy:
+  allow_implicit_invocation: true

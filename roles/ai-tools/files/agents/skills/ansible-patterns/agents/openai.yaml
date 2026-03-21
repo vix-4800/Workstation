@@ -1,0 +1,7 @@
+interface:
+  display_name: 'Ansible Patterns'
+  short_description: 'Idempotent role design, tagging, secrets, and validation workflow'
+  brand_color: '#22c55e'
+  default_prompt: 'Review this Ansible change for idempotency, module choice, tagging, and workstation repo conventions.'
+policy:
+  allow_implicit_invocation: true
