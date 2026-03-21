@@ -1,7 +1,7 @@
 model = "gpt-5.4"
 web_search = "cached"
 personality = "pragmatic"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "medium"
 
 [analytics]
 enabled = false
@@ -23,7 +23,7 @@ theme = "catppuccin-mocha"
 model = "gpt-5.4"
 web_search = "cached"
 personality = "pragmatic"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "medium"
 
 [profiles.review]
 model = "gpt-5.4"
@@ -37,7 +37,7 @@ sandbox_mode = "read-only"
 model = "gpt-5.4"
 web_search = "cached"
 personality = "pragmatic"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "high"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 
