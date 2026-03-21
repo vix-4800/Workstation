@@ -57,6 +57,7 @@ M.dashboard = {
   settings = "⚙️",
   lazy = "",
   mason = "🔨",
+  explorer = "📁",
   quit = "❌",
 }
 

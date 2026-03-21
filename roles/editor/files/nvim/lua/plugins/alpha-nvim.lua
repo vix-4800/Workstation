@@ -16,6 +16,7 @@ return {
     }
 
     dashboard.section.buttons.val = {
+      dashboard.button("e", icons.dashboard.explorer .. " Explorer", ":lua require('oil').open()<CR>"),
       dashboard.button("f", icons.dashboard.find_file .. " Find file", ":Telescope find_files <CR>"),
       dashboard.button("n", icons.dashboard.new_file .. "  New file", ":ene <BAR> startinsert <CR>"),
       dashboard.button("r", icons.dashboard.recent_files .. " Recent files", ":Telescope oldfiles <CR>"),
