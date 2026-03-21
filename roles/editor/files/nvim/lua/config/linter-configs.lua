@@ -31,7 +31,7 @@ M.configs = {
   shellcheck = vim.fn.expand("~/.shellcheckrc"),
 
   -- YAML
-  yamllint = vim.fn.expand("~/.config/yamllint.yml"),
+  yamllint = vim.fn.expand("~/.config/yamllint/config"),
 
   -- Markdown
   markdownlint = vim.fn.expand("~/.config/markdownlint/.markdownlint.jsonc"),
