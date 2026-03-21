@@ -1,7 +1,7 @@
 local icons = require("config.icons")
 
 local function project_root()
-  local uv = vim.loop
+  local uv = vim.uv
   local function exists(p)
     return p and uv.fs_stat(p) ~= nil
   end

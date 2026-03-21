@@ -39,13 +39,14 @@ return {
       jsonc = { "prettierd", "prettier", stop_after_first = true },
       yaml = { "yamlfmt" },
       markdown = { "prettierd", "prettier", stop_after_first = true },
+      go = { "gofmt" },
       sh = { "shfmt" },
       bash = { "shfmt" },
       xml = {}, -- Use LSP formatter (lemminx)
     },
     formatters = {
       php_cs_fixer = {
-        command = "php-cs-fixer",
+        command = vim.fn.expand("~/.config/composer/vendor/bin/php-cs-fixer"),
         args = {
           "fix",
           "--config=" .. configs.getConfig("php_cs_fixer"),

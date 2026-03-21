@@ -47,8 +47,6 @@ global.confirm = true
 -- Additional useful options
 global.fileencoding = "utf-8" -- File content encoding
 
--- Better completion experience
-global.completeopt = "menu,menuone,noselect"
 global.pumheight = 10 -- Pop up menu height
 
 -- Better editing experience
@@ -95,7 +93,6 @@ global.foldlevelstart = 99
 global.foldenable = true
 
 -- Diagnostic configuration
-vim.diagnostic.enable = true
 vim.diagnostic.config({
   severity_sort = true,
   float = { border = "rounded", source = "if_many" },

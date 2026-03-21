@@ -31,10 +31,6 @@ return {
     auto_restore = false, -- Automatically restore session on startup
     auto_create = true, -- Automatically create new sessions
 
-    -- Save extra session data
-    auto_save_enabled = true,
-    auto_restore_enabled = true,
-
     -- Use git branch for session names
     use_git_branch = false,
 
@@ -95,14 +91,5 @@ return {
       end,
     },
 
-    -- Save these options as part of session
-    session_lens_options = {
-      shada_opts = {
-        -- Save marks, registers, etc.
-        marks = true,
-        registers = true,
-        globals = true,
-      },
-    },
   },
 }

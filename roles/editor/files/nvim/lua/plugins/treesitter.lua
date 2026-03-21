@@ -28,6 +28,8 @@ return {
       "python",
       "go",
       "dockerfile",
+      "xml",
+      "toml",
     },
     auto_install = true,
     sync_install = false,

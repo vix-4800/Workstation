@@ -24,10 +24,9 @@ return {
           map("<leader>caR", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
           map("<leader>caI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
           map("<leader>caY", require("telescope.builtin").lsp_type_definitions, "[G]oto T[y]pe Definition")
-          map("<leader>car", vim.lsp.buf.rename, "[L]SP [R]ename")
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+          if client and client:supports_method("textDocument/inlayHint") then
             vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 
             map("<leader>th", function()
@@ -35,7 +34,7 @@ return {
             end, "[T]oggle Inlay [H]ints")
           end
 
-          if client and client.server_capabilities.documentHighlightProvider then
+          if client and client:supports_method("textDocument/documentHighlight") then
             local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
               buffer = event.buf,
@@ -196,7 +195,7 @@ return {
               },
             },
             trace = {
-              server = "verbose",
+              server = "off",
             },
             telemetry = {
               enabled = false,
@@ -361,8 +360,7 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "neovim/nvim-lspconfig" },
     opts = {
-      ensure_installed = {},
-      automatic_installation = false,
+      automatic_enable = false,
     },
   },
   {
@@ -456,7 +454,7 @@ return {
         },
       },
 
-      fuzzy = { implementation = "lua" },
+      fuzzy = { implementation = "prefer_rust" },
 
       signature = {
         enabled = true,

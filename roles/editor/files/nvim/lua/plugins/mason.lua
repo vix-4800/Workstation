@@ -1,8 +1,7 @@
 return {
   {
     "mason-org/mason.nvim",
-    cmd = "Mason",
-    event = "VeryLazy",
+    lazy = false,
     opts = function()
       local icons = require("config.icons")
       return {
@@ -41,24 +40,15 @@ return {
         -- ╰─────────────────────────────────────────────────────────╯
         "stylua", -- Lua
         "prettier", -- JS/TS/JSON/CSS/HTML/MD
-        -- "prettierd", -- JS/TS/JSON/CSS/HTML/MD
-        "shfmt", -- Shell scripts
+        "prettierd", -- JS/TS/JSON/CSS/HTML/MD
         "yamlfmt", -- YAML
-        "php-cs-fixer",
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Linters                                                 │
         -- ╰─────────────────────────────────────────────────────────╯
-        "shellcheck", -- Bash
-        "ruff", -- Python
-        "yamllint", -- YAML
         "jsonlint", -- JSON
-        "markdownlint", -- Markdown
         "hadolint", -- Dockerfile
         "dotenv-linter", -- .env files
-        "phpstan",
-        "phpcs",
-        "phpmd",
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Other Tools                                             │

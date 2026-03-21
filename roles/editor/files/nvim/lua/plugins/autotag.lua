@@ -11,4 +11,5 @@ return {
     "vue",
     "svelte",
   },
+  opts = {},
 }
