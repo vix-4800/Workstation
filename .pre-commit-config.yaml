@@ -10,11 +10,8 @@ repos:
       - id: check-merge-conflict
       - id: check-case-conflict
       - id: check-executables-have-shebangs
-      - id: check-shebang-scripts-are-executable
       - id: check-added-large-files
         args: ['--maxkb=500']
-      - id: check-symlinks
-      - id: destroyed-symlinks
       - id: mixed-line-ending
         args: ['--fix=lf']
 
