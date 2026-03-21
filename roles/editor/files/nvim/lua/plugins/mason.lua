@@ -41,18 +41,12 @@ return {
         "stylua", -- Lua
         "prettier", -- JS/TS/JSON/CSS/HTML/MD
         "prettierd", -- JS/TS/JSON/CSS/HTML/MD
-        "shfmt", -- Shell scripts
         "yamlfmt", -- YAML
-        "php-cs-fixer",
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Linters                                                 │
         -- ╰─────────────────────────────────────────────────────────╯
-        "shellcheck", -- Bash
-        "ruff", -- Python
-        "yamllint", -- YAML
         "jsonlint", -- JSON
-        "markdownlint", -- Markdown
         "hadolint", -- Dockerfile
         "dotenv-linter", -- .env files
 
