@@ -28,3 +28,8 @@
   ansible.builtin.include_tasks: 3xui.yml
   when: server_enable_3xui | bool
   tags: [server-init, 3xui]
+
+- name: Install monitoring script
+  ansible.builtin.include_tasks: monitor.yml
+  when: server_enable_monitor | bool
+  tags: [server-init, monitor]

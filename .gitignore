@@ -12,6 +12,7 @@ vault/secrets.yml
 *.retry
 
 inventory/host_vars/*.yml
+inventory/servers/hosts.yml
 
 # Systemd auto-generated wants/ symlinks (created by systemctl enable)
 roles/services/files/*.wants/

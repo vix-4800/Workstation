@@ -8,6 +8,11 @@ server_setup_ufw: true
 # Optional services
 server_enable_mtproxy: false
 server_enable_3xui: false
+server_enable_monitor: true
+
+# Monitoring (Telegram bot)
+server_telegram_bot_token: ''
+server_telegram_chat_id: ''
 
 # Dev user
 server_dev_username: dev
