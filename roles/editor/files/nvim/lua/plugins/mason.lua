@@ -1,8 +1,7 @@
 return {
   {
     "mason-org/mason.nvim",
-    cmd = "Mason",
-    event = "VeryLazy",
+    lazy = false,
     opts = function()
       local icons = require("config.icons")
       return {

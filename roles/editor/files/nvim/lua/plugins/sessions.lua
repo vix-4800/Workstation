@@ -91,14 +91,5 @@ return {
       end,
     },
 
-    -- Save these options as part of session
-    session_lens_options = {
-      shada_opts = {
-        -- Save marks, registers, etc.
-        marks = true,
-        registers = true,
-        globals = true,
-      },
-    },
   },
 }

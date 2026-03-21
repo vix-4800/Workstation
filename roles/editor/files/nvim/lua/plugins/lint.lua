@@ -101,7 +101,6 @@ return {
     lint.linters.phpcs.args = {
       "--standard=" .. configs.getConfig("phpcs"),
       "--report=json",
-      "--colors",
       "--ignore=*/vendor/*",
       "--parallel=4",
       "--no-cache",

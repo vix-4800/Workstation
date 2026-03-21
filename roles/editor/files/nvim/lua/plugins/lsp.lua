@@ -26,7 +26,7 @@ return {
           map("<leader>caY", require("telescope.builtin").lsp_type_definitions, "[G]oto T[y]pe Definition")
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+          if client and client:supports_method("textDocument/inlayHint") then
             vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 
             map("<leader>th", function()
@@ -34,7 +34,7 @@ return {
             end, "[T]oggle Inlay [H]ints")
           end
 
-          if client and client.server_capabilities.documentHighlightProvider then
+          if client and client:supports_method("textDocument/documentHighlight") then
             local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
               buffer = event.buf,
@@ -195,7 +195,7 @@ return {
               },
             },
             trace = {
-              server = "verbose",
+              server = "off",
             },
             telemetry = {
               enabled = false,

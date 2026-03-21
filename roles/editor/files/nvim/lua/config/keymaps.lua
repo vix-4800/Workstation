@@ -1,6 +1,6 @@
 -- Remap up and down to center the cursor after moving
-vim.api.nvim_set_keymap("", "<C-u>", "<C-u>zz", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("", "<C-d>", "<C-d>zz", { noremap = true, silent = true })
+vim.keymap.set("", "<C-u>", "<C-u>zz", { desc = "Scroll up and center" })
+vim.keymap.set("", "<C-d>", "<C-d>zz", { desc = "Scroll down and center" })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
