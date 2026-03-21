@@ -3,6 +3,7 @@ ai_tools_global_instruction_repo_src: agents/instructions/AGENTS.md
 ai_tools_global_instruction_home_path: "{{ home }}/.agents/instructions/AGENTS.md"
 ai_tools_health_timeout_seconds: 30
 ai_tools_run_health_checks: false
+ai_tools_github_mcp_server_version: "0.32.0"
 
 ai_tools_claude_plugins_present:
   - code-review@claude-plugins-official
@@ -57,6 +58,7 @@ ai_tools_shared_skill_targets:
 
 ai_tools_repo_symlinks:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
+  - { src: claude/.mcp.json, dest: "{{ home }}/.claude/.mcp.json" }
   - { src: claude/claude-powerline.json, dest: "{{ home }}/.claude/claude-powerline.json" }
   - { src: claude/hooks, dest: "{{ home }}/.claude/hooks" }
   - { src: claude/agents, dest: "{{ home }}/.claude/agents" }

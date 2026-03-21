@@ -264,5 +264,6 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium"
+  "effortLevel": "medium",
+  "enabledMcpjsonServers": ["github"]
 }
