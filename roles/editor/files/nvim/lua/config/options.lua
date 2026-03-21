@@ -95,7 +95,6 @@ global.foldlevelstart = 99
 global.foldenable = true
 
 -- Diagnostic configuration
-vim.diagnostic.enable = true
 vim.diagnostic.config({
   severity_sort = true,
   float = { border = "rounded", source = "if_many" },

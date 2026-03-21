@@ -74,7 +74,9 @@ return {
       "--force-exclude",
       "--quiet",
       "--stdin-filename",
-      vim.api.nvim_buf_get_name(0),
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
       "--output-format",
       "json",
       "-",
@@ -110,10 +112,6 @@ return {
       end,
     }
     lint.linters.phpcs.stdin = false
-
-    lint.linters.phpcs.env = {
-      PHP_CS_FIXER_IGNORE_ENV = "1",
-    }
 
     -- Configure phpmd to use custom config
     lint.linters.phpmd = lint.linters.phpmd or {}
@@ -154,15 +152,27 @@ return {
       end,
     }
 
-    -- Create autocommand which carries out the actual linting on the specified events.
+    -- Filetypes with heavy linters that should only run on save
+    local heavy_fts = { php = true }
+
+    -- Create autocommands for linting
     local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-    vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+
+    -- All filetypes: lint on save
+    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
       group = lint_augroup,
       callback = function()
-        -- Only run the linter in buffers that you can modify in order to
-        -- avoid superfluous noise, notably within the handy LSP pop-ups that
-        -- describe the hovered symbol using Markdown.
         if vim.bo.modifiable and vim.g.linting_enabled then
+          lint.try_lint(get_active_linters())
+        end
+      end,
+    })
+
+    -- Light filetypes only: lint on enter and insert leave
+    vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
+      group = lint_augroup,
+      callback = function()
+        if vim.bo.modifiable and vim.g.linting_enabled and not heavy_fts[vim.bo.filetype] then
           lint.try_lint(get_active_linters())
         end
       end,

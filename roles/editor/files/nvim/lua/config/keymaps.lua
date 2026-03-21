@@ -55,13 +55,14 @@ vim.keymap.set("n", "<leader>wh", "<cmd>split<cr>", { desc = "[W]indow [H]orizon
 vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "[W]indow [=] Equal size" })
 
 -- Diagnostics navigation
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+vim.keymap.set("n", "[d", function()
+  vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = "Previous diagnostic" })
+vim.keymap.set("n", "]d", function()
+  vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = "Next diagnostic" })
 vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float, { desc = "[D]iagnostic [F]loat" })
 vim.keymap.set("n", "<leader>dl", "<cmd>Telescope diagnostics<cr>", { desc = "[D]iagnostic [L]ist" })
 
 -- Quick access to config
 vim.keymap.set("n", "<leader>vc", "<cmd>e $MYVIMRC<cr>", { desc = "Edit [V]im [C]onfig" })
-vim.keymap.set("n", "<leader>vr", "<cmd>source $MYVIMRC<cr>", { desc = "[V]im [R]eload config" })
-
-vim.keymap.set("n", "<leader>tl", "<cmd>ToggleLinting<CR>", { desc = "[T]oggle [L]inting" })
