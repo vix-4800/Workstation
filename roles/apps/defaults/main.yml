@@ -21,6 +21,7 @@ apps_packages:
   - transmission-gtk
   - exfatprogs
   - gnome-keyring
+  - seahorse
   - gtk3
   - gdk-pixbuf2
   - python-gobject
