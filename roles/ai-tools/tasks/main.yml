@@ -165,11 +165,13 @@
       - list
   register: ai_tools_claude_plugins_list
   changed_when: false
+  failed_when: ai_tools_claude_plugins_list.rc not in [0, 127]
   tags: [ai-tools, packages]
 
 - name: Capture installed Claude plugins
   ansible.builtin.set_fact:
     ai_tools_claude_installed_plugins: "{{ ai_tools_claude_plugins_list.stdout | regex_findall('(?m)^\\s*>\\s+([^\\s]+)$') }}"
+  when: ai_tools_claude_plugins_list.rc == 0
   tags: [ai-tools, packages]
 
 - name: Install declared Claude plugins
@@ -184,7 +186,9 @@
   loop: "{{ ai_tools_claude_plugins_present }}"
   loop_control:
     label: "{{ item }}"
-  when: item not in ai_tools_claude_installed_plugins
+  when:
+    - ai_tools_claude_installed_plugins is defined
+    - item not in ai_tools_claude_installed_plugins
   changed_when: true
   tags: [ai-tools, packages]
 
@@ -198,7 +202,9 @@
   loop: "{{ ai_tools_claude_plugins_absent }}"
   loop_control:
     label: "{{ item }}"
-  when: item in ai_tools_claude_installed_plugins
+  when:
+    - ai_tools_claude_installed_plugins is defined
+    - item in ai_tools_claude_installed_plugins
   changed_when: true
   tags: [ai-tools, packages]
 

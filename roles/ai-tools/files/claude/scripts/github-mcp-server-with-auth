@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if ! command -v gh >/dev/null 2>&1; then
+  echo "gh CLI not found; cannot retrieve GitHub token" >&2
+  exit 127
+fi
+
 export GITHUB_PERSONAL_ACCESS_TOKEN
-GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)"
+GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)" || {
+  echo "Failed to retrieve GitHub token via gh auth token" >&2
+  exit 1
+}
 
 exec github-mcp-server stdio "$@"
