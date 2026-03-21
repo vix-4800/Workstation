@@ -1,0 +1,18 @@
+---
+# Base setup steps
+server_run_update: true
+server_install_docker: true
+server_create_dev_user: true
+server_setup_ufw: true
+
+# Optional services
+server_enable_mtproxy: false
+server_enable_3xui: false
+
+# Dev user
+server_dev_username: dev
+
+# MTProxy
+server_mtproxy_port: 443
+server_mtproxy_fake_domain: google.com
+server_mtproxy_ip_prefer: prefer-ipv4

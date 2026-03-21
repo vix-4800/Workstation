@@ -1,0 +1,26 @@
+---
+- name: Generate password for dev user
+  ansible.builtin.set_fact:
+    server_dev_password: "{{ lookup('ansible.builtin.password', '/dev/null length=20 chars=ascii_letters,digits') }}"
+  no_log: false
+  tags: [server-init, user]
+
+- name: Create dev user with sudo and docker groups
+  ansible.builtin.user:
+    name: "{{ server_dev_username }}"
+    password: "{{ server_dev_password | password_hash('sha512') }}"
+    groups:
+      - sudo
+      - docker
+    append: true
+    shell: /bin/bash
+    create_home: true
+    state: present
+  tags: [server-init, user]
+
+- name: Print dev user credentials
+  ansible.builtin.debug:
+    msg:
+      - "User:     {{ server_dev_username }}"
+      - "Password: {{ server_dev_password }}"
+  tags: [server-init, user]

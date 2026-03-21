@@ -1,0 +1,13 @@
+---
+- name: Install 3x-ui panel
+  ansible.builtin.shell:
+    cmd: bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+    executable: /bin/bash
+  register: xui_result
+  changed_when: true
+  tags: [server-init, 3xui]
+
+- name: Print 3x-ui installer output
+  ansible.builtin.debug:
+    var: xui_result.stdout_lines
+  tags: [server-init, 3xui]
