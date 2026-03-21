@@ -204,6 +204,9 @@
     ],
     "defaultMode": "acceptEdits"
   },
+  "enabledMcpjsonServers": [
+    "github"
+  ],
   "hooks": {
     "Notification": [
       {
@@ -264,6 +267,5 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
-  "enabledMcpjsonServers": ["github"]
+  "effortLevel": "medium"
 }
