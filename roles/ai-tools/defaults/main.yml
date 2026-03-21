@@ -58,7 +58,6 @@ ai_tools_shared_skill_targets:
 
 ai_tools_repo_symlinks:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
-  - { src: claude/.mcp.json, dest: "{{ home }}/.claude/.mcp.json" }
   - { src: claude/claude-powerline.json, dest: "{{ home }}/.claude/claude-powerline.json" }
   - { src: claude/hooks, dest: "{{ home }}/.claude/hooks" }
   - { src: claude/agents, dest: "{{ home }}/.claude/agents" }
@@ -71,6 +70,8 @@ ai_tools_repo_symlinks:
   - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
 
 ai_tools_repo_templates:
+  - src: claude/.mcp.json.j2
+    dest: "{{ home }}/.claude/.mcp.json"
   - src: qwen/extensions/extension-enablement.json.j2
     dest: "{{ home }}/.qwen/extensions/extension-enablement.json"
 
