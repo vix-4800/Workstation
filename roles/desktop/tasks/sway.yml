@@ -33,6 +33,7 @@
       - qt6-wayland
       - swappy
       - wdisplays
+      - wf-recorder
     state: present
   become: true
   tags: [desktop, packages]
