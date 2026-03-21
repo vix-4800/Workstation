@@ -67,9 +67,14 @@ ai_tools_repo_symlinks:
   - { src: codex/agents, dest: "{{ home }}/.codex/agents" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
   - { src: qwen/extensions/catalog.json, dest: "{{ home }}/.qwen/extensions/catalog.json" }
-  - { src: qwen/extensions/extension-enablement.json, dest: "{{ home }}/.qwen/extensions/extension-enablement.json" }
   - { src: qwen/agents, dest: "{{ home }}/.qwen/agents" }
   - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
+
+ai_tools_repo_templates:
+  - src: qwen/extensions/extension-enablement.json.j2
+    dest: "{{ home }}/.qwen/extensions/extension-enablement.json"
+
+ai_tools_qwen_extension_workspace_override: "{{ home }}/*"
 
 ai_tools_home_symlinks:
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.codex/AGENTS.md" }

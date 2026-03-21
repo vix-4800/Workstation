@@ -59,6 +59,7 @@
         (
           (
             ai_tools_repo_symlinks
+            + ai_tools_repo_templates
             + ai_tools_home_symlinks
           )
           | map(attribute='dest')
@@ -81,6 +82,16 @@
     state: link
     force: true
   loop: "{{ ai_tools_repo_symlinks }}"
+  loop_control:
+    label: "{{ item.src }}"
+  tags: [ai-tools, config]
+
+- name: Deploy AI tool repo templates
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0644"
+  loop: "{{ ai_tools_repo_templates }}"
   loop_control:
     label: "{{ item.src }}"
   tags: [ai-tools, config]
