@@ -10,14 +10,7 @@ return {
         show_close_icon = true,
         buffer_close_icon = "󰅖",
         modified_icon = "● ",
-        close_icon = " ",
-        offsets = {
-          {
-            filetype = "NvimTree",
-            text = "",
-            padding = 1,
-          },
-        },
+        close_icon = " ",
         max_name_length = 18,
         hover = {
           enabled = true,
