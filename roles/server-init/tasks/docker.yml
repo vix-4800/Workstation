@@ -4,11 +4,11 @@
     name: docker.io
     state: present
     update_cache: true
-  tags: [server-init, docker]
+  tags: [server-init, docker, packages]
 
 - name: Enable and start Docker service
   ansible.builtin.systemd:
     name: docker
     enabled: true
     state: started
-  tags: [server-init, docker]
+  tags: [server-init, docker, services]
