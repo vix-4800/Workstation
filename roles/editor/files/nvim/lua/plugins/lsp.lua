@@ -18,12 +18,12 @@ return {
           -- LSP Actions
           map("K", vim.lsp.buf.hover, "Hover Documentation")
           map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ctions")
-          map("<leader>cas", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[C]ode [S]ymbols")
-          map("<leader>cad", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-          map("<leader>caD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-          map("<leader>caR", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-          map("<leader>caI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-          map("<leader>caY", require("telescope.builtin").lsp_type_definitions, "[G]oto T[y]pe Definition")
+          map("<leader>cs", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[C]ode [S]ymbols")
+          map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+          map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+          map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+          map("gy", require("telescope.builtin").lsp_type_definitions, "[G]oto T[y]pe Definition")
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client:supports_method("textDocument/inlayHint") then
@@ -149,7 +149,6 @@ return {
                 "**/tools/**",
                 "**/src/www/**",
                 "**/cache/**",
-                "**/tests/**",
                 "**/node_modules/**",
               },
             },
