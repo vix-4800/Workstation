@@ -42,3 +42,5 @@ base_cli_packages:
   - lm_sensors
   - yq
   - arch-audit
+  - lazygit
+  - lazydocker
