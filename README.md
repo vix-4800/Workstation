@@ -291,7 +291,7 @@ inventory/
 | `shell` | Fish, Bash, Alacritty, Tmux, aliases |
 | `editor` | Neovim (with Lua + LuaRocks), VSCode flags, Git config |
 | `audio` | PipeWire, WirePlumber, EasyEffects, multimedia apps |
-| `network` | Firewall (nftables), Bluetooth (nm-applet + blueman tray flow), WireGuard (vault), sing-box, USBGuard, VPN scripts |
+| `network` | Firewall (nftables), Bluetooth (nm-applet + blueman tray flow), WireGuard (vault), sing-box, USBGuard |
 | `desktop` | SwayFX, Waybar, Wofi, SwayNC, GTKLock, Wlogout, polkit-gnome, XDG portals, swappy, wdisplays, qt5/6-wayland |
 | `display-manager` | Greetd + ReGreet |
 | `development` | PHP, Python, Go, Docker, linter configs |
@@ -316,7 +316,7 @@ tags (`packages`, `config`, `services`, `system`), and narrower subgroup tags su
 
 ### Secrets
 
-WireGuard keys and VPN profiles are stored in `vault/secrets.yml`, encrypted with `ansible-vault`. Per-host variables in
+WireGuard keys are stored in `vault/secrets.yml`, encrypted with `ansible-vault`. Per-host variables in
 `host_vars/localhost.yml` and vault variables render the final configs.
 
 ```text
@@ -395,7 +395,7 @@ from vault.
 ### Core Compositor & Shell
 
 - **SwayFX** — Sway fork with blur, shadows, and rounded corners
-- **Waybar** — status bar with custom scripts (weather, VPN, Docker, resources, network, audio)
+- **Waybar** — status bar with custom scripts (weather, Docker, resources, network, audio)
 - **Wofi** — launcher and selection menus used by Waybar scripts
 - **SwayNC** — notification daemon
 - **Greetd + ReGreet** — display manager
@@ -417,7 +417,7 @@ from vault.
 - **NetworkManager** — connection management
 - **network-manager-applet** — tray-based GUI for joining and managing Wi-Fi networks
 - **Blueman** — Bluetooth manager plus tray applet for paired devices
-- **WireGuard / sing-box** — VPN (managed via Waybar VPN module)
+- **WireGuard / sing-box** — VPN
 
 ### Screenshots & Display
 

@@ -41,7 +41,6 @@
     state: link
     force: true
   loop:
-    - { src: vpn, dest: vpn }
     - { src: bluetooth-pair, dest: bluetooth-pair }
     - { src: usbguard-generate-policy, dest: usbguard-generate-policy }
   loop_control:

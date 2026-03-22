@@ -31,7 +31,7 @@
   become: true
   tags: [network, system]
 
-- name: Ensure sing-box is disabled at boot (vpn script controls it)
+- name: Ensure sing-box is disabled at boot
   ansible.builtin.systemd:
     name: sing-box
     enabled: false

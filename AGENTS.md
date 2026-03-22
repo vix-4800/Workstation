@@ -14,7 +14,7 @@ This is a **machine state management repository** for Arch Linux with Sway (Wayl
 - **Ansible roles** (`roles/`) — single tool for packages, configs, services, and secrets
 - **Inventory** (`inventory/`) — checked-in `localhost` inventory with per-machine overrides in local `host_vars/`
 - **Justfile** — UX layer for common commands (`just apply`, `just sync`, `just plan`)
-- **ansible-vault** (`vault/`) — encrypted secrets (WireGuard keys, VPN profiles)
+- **ansible-vault** (`vault/`) — encrypted secrets (WireGuard keys)
 - **Catppuccin Mocha** theme consistently across all applications
 - **Modular Sway config** split into `roles/desktop/files/sway/config.d/*.conf`
 
@@ -82,7 +82,7 @@ just bootstrap
 | `shell` | Fish, Bash, Alacritty, Tmux, aliases |
 | `editor` | Neovim, VSCode flags, Git config |
 | `audio` | PipeWire, WirePlumber, multimedia |
-| `network` | Firewall, Bluetooth, WireGuard, sing-box, VPN script |
+| `network` | Firewall, Bluetooth, WireGuard, sing-box |
 | `desktop` | Sway, Waybar, Wofi, SwayNC, GTKLock, Wlogout, etc. |
 | `display-manager` | Greetd + ReGreet |
 | `development` | PHP, Python, Go, Docker, all linter configs |
