@@ -54,15 +54,16 @@ return {
         },
         stdin = false,
       },
+      prettierd = {
+        env = {
+          PRETTIERD_DEFAULT_CONFIG = configs.getConfig("prettier"),
+        },
+      },
       prettier = {
-        command = "prettier",
-        args = {
+        prepend_args = {
           "--config",
           configs.getConfig("prettier"),
-          "--stdin-filepath",
-          "$FILENAME",
         },
-        stdin = true,
       },
       shfmt = {
         prepend_args = { "-i", "2", "-ci" },

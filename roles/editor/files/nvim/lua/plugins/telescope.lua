@@ -90,5 +90,19 @@ return {
       end,
       desc = "[S]earch [N]otifications",
     },
+    {
+      "<leader>sr",
+      function()
+        require("telescope.builtin").resume()
+      end,
+      desc = "[S]earch [R]esume (last picker)",
+    },
+    {
+      "<leader>so",
+      function()
+        require("telescope.builtin").oldfiles()
+      end,
+      desc = "[S]earch [O]ld (recent) files",
+    },
   },
 }

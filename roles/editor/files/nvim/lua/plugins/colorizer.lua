@@ -1,16 +1,12 @@
 return {
-  "norcalli/nvim-colorizer.lua",
+  "NvChad/nvim-colorizer.lua",
   event = { "BufReadPost", "BufNewFile" },
-  ft = { "css", "scss", "html", "javascript", "typescript", "vue", "lua" },
-  config = function()
-    require("colorizer").setup({
-      "css",
-      "javascript",
-      "html",
-      "typescript",
-      "vue",
-      "lua",
-    }, { mode = "foreground" })
-  end,
-  -- keys = { "<leader>tc", ":ColorizerToggle<CR>", { desc = "[T]oggle [C]olorizer" } },
+  opts = {
+    filetypes = { "css", "scss", "html", "javascript", "typescript", "vue", "lua" },
+    user_default_options = {
+      mode = "virtualtext",
+      names = false,
+      tailwind = false,
+    },
+  },
 }
