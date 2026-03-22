@@ -367,6 +367,7 @@ return {
     event = "InsertEnter",
     dependencies = {
       { "neovim/nvim-lspconfig" },
+      { "Exafunction/windsurf.nvim" },
       {
         "L3MON4D3/LuaSnip",
         version = "v2.*",
@@ -443,8 +444,13 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+        default = { "lsp", "path", "snippets", "buffer", "lazydev", "codeium" },
         providers = {
+          codeium = {
+            name = "Codeium",
+            module = "codeium.blink",
+            async = true,
+          },
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",

@@ -24,7 +24,23 @@ return {
         lualine_a = { "mode" },
         lualine_b = { "filename", "diagnostics" },
         lualine_c = { "branch" },
-        lualine_x = { "filetype" },
+        lualine_x = {
+        {
+          function()
+            local status = require("codeium.virtual_text").status()
+            if status.state == "completions" then
+              return " " .. status.current .. "/" .. status.total
+            elseif status.state == "waiting" then
+              return " *"
+            end
+            return " "
+          end,
+          cond = function()
+            return pcall(require, "codeium.virtual_text")
+          end,
+        },
+        "filetype",
+      },
         lualine_y = { "progress", "searchcount" },
         lualine_z = { "location" },
       },
