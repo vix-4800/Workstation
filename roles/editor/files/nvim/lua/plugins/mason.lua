@@ -35,7 +35,6 @@ return {
         "docker-compose-language-service", -- Docker Compose
         "marksman", -- Markdown
         "fish-lsp", -- Fish
-        "nginx-language-server", -- Nginx
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Formatters                                              │
