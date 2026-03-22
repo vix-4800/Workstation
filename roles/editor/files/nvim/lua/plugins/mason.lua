@@ -42,7 +42,6 @@ return {
         "prettier", -- JS/TS/JSON/CSS/HTML/MD
         "prettierd", -- JS/TS/JSON/CSS/HTML/MD
         "yamlfmt", -- YAML
-        "shfmt", -- Shell
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Linters                                                 │
@@ -50,10 +49,6 @@ return {
         "jsonlint", -- JSON
         "hadolint", -- Dockerfile
         "dotenv-linter", -- .env files
-        "ruff", -- Python
-        "markdownlint", -- Markdown
-        "shellcheck", -- Shell
-        "yamllint", -- YAML
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Other Tools                                             │
