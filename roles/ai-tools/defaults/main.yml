@@ -12,6 +12,7 @@ ai_tools_claude_plugins_present:
   - everything-claude-code@everything-claude-code
   - lua-lsp@claude-plugins-official
   - php-lsp@claude-plugins-official
+  - pyright-lsp@claude-plugins-official
   - security-guidance@claude-plugins-official
   - serena@claude-plugins-official
 

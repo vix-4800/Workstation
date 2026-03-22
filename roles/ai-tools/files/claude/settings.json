@@ -260,7 +260,8 @@
     "lua-lsp@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
-    "serena@claude-plugins-official": true
+    "serena@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "everything-claude-code": {
