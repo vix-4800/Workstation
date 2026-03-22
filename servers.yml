@@ -2,5 +2,9 @@
 - name: Bootstrap remote Ubuntu servers
   hosts: servers
   gather_facts: true
+
+  vars_files:
+    - vault/secrets.yml
+
   roles:
     - { role: server-init, tags: [server-init] }
