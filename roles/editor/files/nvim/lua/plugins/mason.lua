@@ -34,6 +34,8 @@ return {
         "dockerfile-language-server", -- Docker
         "docker-compose-language-service", -- Docker Compose
         "marksman", -- Markdown
+        "fish-lsp", -- Fish
+        "nginx-language-server", -- Nginx
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Formatters                                              │
@@ -49,6 +51,7 @@ return {
         "jsonlint", -- JSON
         "hadolint", -- Dockerfile
         "dotenv-linter", -- .env files
+        "actionlint", -- GitHub Actions
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Other Tools                                             │
