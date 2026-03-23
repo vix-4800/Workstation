@@ -45,7 +45,7 @@
   loop: "{{ ai_tools_shared_skill_target_stats.results }}"
   when: item.stat.islnk | default(false)
   loop_control:
-    label: "{{ item.stat.path }}"
+    label: "{{ item.stat.path | default(item.item) }}"
   tags: [ai-tools, config]
 
 - name: Ensure AI config parent directories exist
@@ -157,11 +157,71 @@
     mode: "0755"
   tags: [ai-tools, config]
 
+- name: List configured Claude marketplaces
+  ansible.builtin.command:
+    argv:
+      - claude
+      - plugin
+      - marketplace
+      - list
+  register: ai_tools_claude_marketplaces_list
+  changed_when: false
+  failed_when: ai_tools_claude_marketplaces_list.rc not in [0, 127]
+  tags: [ai-tools, packages]
+
+- name: Capture configured Claude marketplaces
+  ansible.builtin.set_fact:
+    ai_tools_claude_configured_marketplaces: "{{ ai_tools_claude_marketplaces_list.stdout | regex_findall('(?m)^\\s*>\\s+([^\\s]+)$') }}"
+  when: ai_tools_claude_marketplaces_list.rc == 0
+  tags: [ai-tools, packages]
+
+- name: Add declared Claude marketplaces
+  ansible.builtin.command:
+    argv:
+      - claude
+      - plugin
+      - marketplace
+      - add
+      - "{{ item.source }}"
+  loop: "{{ ai_tools_claude_marketplaces_present }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - ai_tools_claude_configured_marketplaces is defined
+    - item.source is defined
+    - item.name not in ai_tools_claude_configured_marketplaces
+  changed_when: true
+  tags: [ai-tools, packages]
+
+- name: Inspect Claude marketplace catalogs
+  ansible.builtin.stat:
+    path: "{{ home }}/.claude/plugins/marketplaces/{{ item.name }}/.claude-plugin/marketplace.json"
+  loop: "{{ ai_tools_claude_marketplaces_present }}"
+  register: ai_tools_claude_marketplace_catalogs
+  loop_control:
+    label: "{{ item.name }}"
+  tags: [ai-tools, packages]
+
+- name: Sync missing Claude marketplace catalogs
+  ansible.builtin.command:
+    argv:
+      - claude
+      - plugin
+      - marketplace
+      - update
+      - "{{ item.item.name }}"
+  loop: "{{ ai_tools_claude_marketplace_catalogs.results }}"
+  loop_control:
+    label: "{{ item.item.name }}"
+  when: not item.stat.exists
+  changed_when: true
+  tags: [ai-tools, packages]
+
 - name: List installed Claude plugins
   ansible.builtin.command:
     argv:
       - claude
-      - plugins
+      - plugin
       - list
   register: ai_tools_claude_plugins_list
   changed_when: false
@@ -178,7 +238,7 @@
   ansible.builtin.command:
     argv:
       - claude
-      - plugins
+      - plugin
       - install
       - --scope
       - user
@@ -196,7 +256,7 @@
   ansible.builtin.command:
     argv:
       - claude
-      - plugins
+      - plugin
       - uninstall
       - "{{ item }}"
   loop: "{{ ai_tools_claude_plugins_absent }}"
@@ -256,7 +316,7 @@
   ansible.builtin.command:
     argv:
       - claude
-      - plugins
+      - plugin
       - list
   changed_when: false
   when: ai_tools_run_health_checks | bool

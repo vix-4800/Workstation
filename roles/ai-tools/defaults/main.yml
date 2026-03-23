@@ -20,6 +20,11 @@ ai_tools_claude_plugins_absent:
   - github@claude-plugins-official
   - prompts.chat@prompts.chat
 
+ai_tools_claude_marketplaces_present:
+  - name: claude-plugins-official
+  - name: everything-claude-code
+    source: affaan-m/everything-claude-code
+
 ai_tools_qwen_extensions_present:
   - name: commit-commands
     install_source: https://github.com/anthropics/claude-code:commit-commands
