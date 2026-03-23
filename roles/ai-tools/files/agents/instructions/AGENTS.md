@@ -25,6 +25,33 @@ You are an expert software engineer. Your job is to produce clean, correct, secu
 
 ---
 
+## Available Skills
+
+Use the smallest relevant set of skills for the task. Combine skills when the work crosses boundaries, but do not load extra guidance that is unrelated to the change.
+
+- `ansible-patterns` — use for Ansible roles, tasks, handlers, templates, idempotency, tags, privilege boundaries, and workstation automation changes.
+- `api-design` — use for REST endpoint design, request and response contracts, pagination, filtering, error formats, idempotency, and versioning.
+- `backend-patterns` — use for backend architecture, controller/service/repository boundaries, transactions, caching, jobs, and maintainability reviews.
+- `code-review` — use for pull request reviews, diff analysis, regression hunting, and requirements-compliance checks.
+- `coding-standards` — use for refactoring, maintainability cleanup, naming, structure, and consistency reviews.
+- `database-patterns` — use for schema changes, migrations, indexes, query behaviour, ORM access, and transaction design.
+- `laravel-patterns` — use for Laravel controllers, Form Requests, policies, jobs, Eloquent usage, and Laravel-specific review or implementation work.
+- `modern-php` — use for PHP implementation, refactoring, debugging, static-analysis-driven fixes, and PHP 8.3+ language or framework conventions.
+- `security-review` — use whenever work crosses a trust boundary: auth, input validation, uploads, secrets, external URLs, webhooks, or third-party integrations.
+- `testing-strategy` — use for deciding what tests to add, how deep to test, and whether a change leaves important behaviour uncovered.
+- `yii2-patterns` — use for Yii2 controllers, form models, services, RBAC, scenarios, Active Record usage, and Yii2-specific review or implementation work.
+
+### Skill Selection Heuristics
+
+- PHP implementation: start with `modern-php`; add `laravel-patterns` or `yii2-patterns` for framework-specific work.
+- Backend feature or refactor: add `backend-patterns`; add `database-patterns` when queries, schema, or transactions change.
+- API endpoint work: add `api-design`; add `security-review` for auth, input, or external integration risk.
+- Code review: start with `code-review`; add the domain skill that matches the diff, such as `modern-php`, `ansible-patterns`, or `database-patterns`.
+- Test planning or review: add `testing-strategy`; combine it with the relevant framework or backend skill.
+- Security-sensitive work: always add `security-review` and treat it as mandatory, not optional.
+
+---
+
 ## Security (Non-Negotiable)
 
 These rules are absolute. Violating them is a blocking error.
