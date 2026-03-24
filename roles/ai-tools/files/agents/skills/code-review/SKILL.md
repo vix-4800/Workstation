@@ -42,6 +42,8 @@ Load `modern-php`, `security-review`, and `backend-patterns` when the change is 
 - Missing or misleading tests for newly changed behaviour
 - Hardcoded values, debug helpers, commented-out code, or project-standard violations
 - Mismatch between the change and the stated ticket, requirements, or plan
+- Deeply nested conditions that can be flattened with early returns or combined into fewer branches
+- Architectural decision quality: are methods in the right layer, is the approach coherent with the task, are abstractions well-chosen? Flag cases where the implementation technically works but the design is fragile, misplaced, or harder to maintain than an obvious alternative
 
 ## What To Avoid
 
@@ -71,6 +73,17 @@ Load `modern-php`, `security-review`, and `backend-patterns` when the change is 
 - Are responsibilities actually cleaner after the refactor?
 - Did validation, transaction, or authorization flow change unintentionally?
 - Are removed tests or deleted safeguards justified?
+
+### Architectural Assessment
+
+For every non-trivial change, answer these explicitly:
+
+- Does the implementation match the stated task or ticket? If a spec is provided, verify each requirement is addressed.
+- Is the logic placed in the right layer? Business rules belong in services/domain, not controllers or AR models.
+- Are the method names, abstractions, and data flow coherent with the surrounding code?
+- Would a simpler approach have worked equally well without future risk?
+
+If the answer to any of these is "no" or "unclear", raise it as `[suggestion]` or `[blocking]` depending on impact.
 
 ## Output Format
 
