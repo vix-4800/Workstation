@@ -15,16 +15,8 @@ ai_tools_claude_plugins_present:
   - security-guidance@claude-plugins-official
   - serena@claude-plugins-official
 
-ai_tools_claude_plugins_absent:
-  - everything-claude-code@everything-claude-code
-  - github@claude-plugins-official
-  - prompts.chat@prompts.chat
-
 ai_tools_claude_marketplaces_present:
   - name: claude-plugins-official
-
-ai_tools_claude_marketplaces_absent:
-  - everything-claude-code
 
 ai_tools_qwen_extensions_present:
   - name: commit-commands
@@ -39,9 +31,6 @@ ai_tools_qwen_extensions_present:
     install_source: https://github.com/anthropics/claude-code:security-guidance
   - name: serena
     install_source: https://github.com/anthropics/claude-plugins-official:serena
-
-ai_tools_qwen_extensions_absent:
-  - everything-claude-code
 
 ai_tools_shared_skill_names:
   - api-design

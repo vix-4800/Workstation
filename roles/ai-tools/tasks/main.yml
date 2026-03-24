@@ -193,23 +193,6 @@
   changed_when: true
   tags: [ai-tools, packages]
 
-- name: Remove Claude marketplaces removed from target state
-  ansible.builtin.command:
-    argv:
-      - claude
-      - plugin
-      - marketplace
-      - remove
-      - "{{ item }}"
-  loop: "{{ ai_tools_claude_marketplaces_absent }}"
-  loop_control:
-    label: "{{ item }}"
-  when:
-    - ai_tools_claude_configured_marketplaces is defined
-    - item in ai_tools_claude_configured_marketplaces
-  changed_when: true
-  tags: [ai-tools, packages]
-
 - name: Inspect Claude marketplace catalogs
   ansible.builtin.stat:
     path: "{{ home }}/.claude/plugins/marketplaces/{{ item.name }}/.claude-plugin/marketplace.json"
@@ -269,22 +252,6 @@
   changed_when: true
   tags: [ai-tools, packages]
 
-- name: Uninstall Claude plugins removed from target state
-  ansible.builtin.command:
-    argv:
-      - claude
-      - plugin
-      - uninstall
-      - "{{ item }}"
-  loop: "{{ ai_tools_claude_plugins_absent }}"
-  loop_control:
-    label: "{{ item }}"
-  when:
-    - ai_tools_claude_installed_plugins is defined
-    - item in ai_tools_claude_installed_plugins
-  changed_when: true
-  tags: [ai-tools, packages]
-
 - name: List installed Qwen extensions
   ansible.builtin.command:
     argv:
@@ -312,20 +279,6 @@
   loop_control:
     label: "{{ item.name }}"
   when: item.name not in ai_tools_qwen_installed_extensions
-  changed_when: true
-  tags: [ai-tools, packages]
-
-- name: Uninstall Qwen extensions removed from target state
-  ansible.builtin.command:
-    argv:
-      - qwen
-      - extensions
-      - uninstall
-      - "{{ item }}"
-  loop: "{{ ai_tools_qwen_extensions_absent }}"
-  loop_control:
-    label: "{{ item }}"
-  when: item in ai_tools_qwen_installed_extensions
   changed_when: true
   tags: [ai-tools, packages]
 
