@@ -6,6 +6,7 @@ ai_tools_run_health_checks: false
 ai_tools_github_mcp_server_version: "0.32.0"
 
 ai_tools_claude_plugins_present:
+  - frontend-design@claude-plugins-official
   - code-review@claude-plugins-official
   - commit-commands@claude-plugins-official
   - context7@claude-plugins-official
