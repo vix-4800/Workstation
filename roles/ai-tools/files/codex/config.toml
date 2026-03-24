@@ -75,3 +75,7 @@ args = ["-y", "@upstash/context7-mcp@latest"]
 command = "uvx"
 args = ["--with", "fastmcp[tasks]", "mcp-docker"]
 startup_timeout_sec = 30
+
+[mcp_servers.docker.env]
+SECURITY_AUDIT_LOG_ENABLED = "false"
+MCP_DOCKER_LOG_PATH = "/dev/null"
