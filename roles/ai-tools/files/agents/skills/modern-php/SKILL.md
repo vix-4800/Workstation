@@ -247,6 +247,17 @@ $img = sprintf('<img src="%s" alt="%s">', $src, $caption);
 
 Load `references/framework-conventions.md` before implementing framework-specific code paths.
 
+## PHP Runtime Pitfalls To Flag In Review
+
+Flag these as `[blocking]` — they produce silent data loss or fatal errors at runtime.
+
+| Pattern | Problem | Fix |
+|---|---|---|
+| `$model->magicProp->field = $v` | `__get` returns a copy; assignment is silently discarded ("Indirect modification of overloaded property has no effect") | `$r = $model->magicProp; $r->field = $v; $r->save();` |
+| `$a?->b < $threshold` then `$a->c = $v` | Nullsafe in condition does not narrow type afterward; direct access throws "Attempt to assign property on null" | Add explicit `if ($a === null)` guard before any direct access |
+| `$a?->b` compared to a scalar when `$a` is null | Returns `null`, which silently loses the comparison semantics — `null < time()` is `true` | Use explicit null check before the comparison |
+| `json_decode` result used without structural check | Returns `null` or a mixed type when input is malformed | Validate with `json_validate()` first, then check structure |
+
 ## Verification
 
 Run the smallest relevant verification set for the touched scope:
