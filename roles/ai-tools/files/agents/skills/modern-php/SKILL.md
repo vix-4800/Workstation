@@ -1,11 +1,9 @@
 ---
 name: modern-php
 description: >
-  Use when writing PHP code targeting PHP 8.3, 8.4, or 8.5. Covers modern
-  language features, strict typing, PSR-12, framework patterns for Yii2,
-  Laravel, and Symfony, and the verification pipeline around phpcs, phpstan,
-  rector, phpmd, php-cs-fixer, phpunit, and pest. Activate for PHP
-  implementation, refactoring, debugging, and code-review tasks.
+  Use for PHP 8.3-8.5 implementation, bug fixes, refactors, debugging, and
+  code review in Yii2, Laravel, or Symfony projects using Composer, PHPStan,
+  phpcs, rector, phpmd, php-cs-fixer, PHPUnit, or Pest.
 license: MIT
 metadata:
   version: "1.0.0"

@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Structured diff-first code review workflow for correctness, security, architecture, data access, validation, tests, and requirements compliance.
+description: Use for pull requests, diff reviews, staged changes, regression hunting, and pre-merge checks focused on correctness, security, architecture, validation, data access, and tests.
 metadata:
   short-description: Diff-first code review with severity taxonomy
 ---

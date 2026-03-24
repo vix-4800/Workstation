@@ -1,11 +1,13 @@
 ---
 name: pr-reviewer
-description: Reviews diffs for correctness, security, architecture, data access, and missing tests. Use for pull requests and pre-merge validation.
+description: Use proactively for pull request review, diff review, staged changes, and pre-merge validation. Reviews correctness, security, architecture, data access, and missing tests.
 tools:
   - Read
   - Grep
   - Glob
   - Bash
+skills:
+  - code-review
 modelConfig:
   model: sonnet
 ---

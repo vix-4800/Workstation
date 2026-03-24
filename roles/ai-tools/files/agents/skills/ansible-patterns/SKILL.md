@@ -1,6 +1,6 @@
 ---
 name: ansible-patterns
-description: Ansible role and playbook patterns for idempotent workstation and DevOps automation, including structure, tagging, secrets, and validation workflow.
+description: Use for Ansible roles, playbooks, tasks, handlers, templates, defaults, packages, configs, services, vault secrets, and idempotent workstation automation or review.
 metadata:
   short-description: Idempotent Ansible patterns for roles, tasks, and validation
 ---

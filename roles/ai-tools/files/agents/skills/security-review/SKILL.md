@@ -1,6 +1,6 @@
 ---
 name: security-review
-description: Use this skill when implementing authentication, handling user input, working with secrets, exposing HTTP endpoints, processing uploads, or integrating third-party services in PHP applications. Provides a PHP-first security checklist for Yii2, Laravel, and Symfony.
+description: Use for auth, permissions, user input, secrets, tokens, uploads, HTTP endpoints, webhooks, external URLs, and third-party integrations in PHP applications. Provides a PHP security review checklist for Yii2, Laravel, and Symfony.
 metadata:
   short-description: PHP security checklist for web apps and APIs
 ---

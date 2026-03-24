@@ -1,6 +1,6 @@
 ---
 name: backend-patterns
-description: Backend architecture patterns for PHP applications, including controller/service boundaries, data access, transactions, query optimization, caching, background jobs, and error handling across Yii2, Laravel, and Symfony.
+description: Use for PHP backend refactors and reviews involving controllers, services, repositories, transactions, query performance, caching, jobs, and error handling in Yii2, Laravel, or Symfony.
 metadata:
   short-description: Backend architecture patterns for PHP applications
 ---
