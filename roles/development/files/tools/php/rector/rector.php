@@ -10,10 +10,10 @@ use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;
-use Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
+use Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector;
 use Rector\CodeQuality\Rector\If_\CombineIfRector;
 use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector;
 use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
@@ -25,6 +25,7 @@ use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescing
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
+use Rector\CodingStyle\Rector\FuncCall\StrictInArrayRector;
 use Rector\Config\RectorConfig;
 use Rector\Custom\Rules\AddTypedClassConstantRector;
 use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
@@ -50,6 +51,8 @@ use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
 use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
+use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
+use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
@@ -81,8 +84,6 @@ use RectorLaravel\Rector\MethodCall\ResponseHelperCallToJsonResponseRector;
 use RectorLaravel\Rector\MethodCall\ValidationRuleArrayStringValueToArrayRector;
 use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
 use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
-use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
-use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use RectorLaravel\Set\LaravelSetProvider;
 
 $laravelRulesEnabled = false;
@@ -194,6 +195,7 @@ $rules = [
     JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
     AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
     TypedStaticPropertyInBehatContextRector::class,
+    StrictInArrayRector::class,
 
     // Remove dead code
     RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
