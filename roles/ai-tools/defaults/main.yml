@@ -9,7 +9,6 @@ ai_tools_claude_plugins_present:
   - code-review@claude-plugins-official
   - commit-commands@claude-plugins-official
   - context7@claude-plugins-official
-  - everything-claude-code@everything-claude-code
   - lua-lsp@claude-plugins-official
   - php-lsp@claude-plugins-official
   - pyright-lsp@claude-plugins-official
@@ -17,21 +16,21 @@ ai_tools_claude_plugins_present:
   - serena@claude-plugins-official
 
 ai_tools_claude_plugins_absent:
+  - everything-claude-code@everything-claude-code
   - github@claude-plugins-official
   - prompts.chat@prompts.chat
 
 ai_tools_claude_marketplaces_present:
   - name: claude-plugins-official
-  - name: everything-claude-code
-    source: affaan-m/everything-claude-code
+
+ai_tools_claude_marketplaces_absent:
+  - everything-claude-code
 
 ai_tools_qwen_extensions_present:
   - name: commit-commands
     install_source: https://github.com/anthropics/claude-code:commit-commands
   - name: context7
     install_source: https://github.com/anthropics/claude-plugins-official:context7
-  - name: everything-claude-code
-    install_source: https://github.com/affaan-m/everything-claude-code:everything-claude-code
   - name: github
     install_source: https://github.com/anthropics/claude-plugins-official:github
   - name: php-lsp
@@ -41,7 +40,8 @@ ai_tools_qwen_extensions_present:
   - name: serena
     install_source: https://github.com/anthropics/claude-plugins-official:serena
 
-ai_tools_qwen_extensions_absent: []
+ai_tools_qwen_extensions_absent:
+  - everything-claude-code
 
 ai_tools_shared_skill_names:
   - api-design

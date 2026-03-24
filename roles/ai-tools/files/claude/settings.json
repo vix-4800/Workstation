@@ -258,20 +258,11 @@
     "code-review@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "everything-claude-code@everything-claude-code": true,
     "lua-lsp@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
     "serena@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "everything-claude-code": {
-      "source": {
-        "source": "github",
-        "repo": "affaan-m/everything-claude-code"
-      }
-    }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium"

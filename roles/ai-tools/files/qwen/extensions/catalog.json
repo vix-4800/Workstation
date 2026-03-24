@@ -47,14 +47,6 @@
       "source": "https://github.com/anthropics/claude-plugins-official",
       "type": "git",
       "status": "core"
-    },
-    {
-      "name": "everything-claude-code",
-      "pluginName": "everything-claude-code",
-      "installSource": "https://github.com/affaan-m/everything-claude-code:everything-claude-code",
-      "source": "https://github.com/affaan-m/everything-claude-code",
-      "type": "github-release",
-      "status": "transitional"
     }
   ]
 }

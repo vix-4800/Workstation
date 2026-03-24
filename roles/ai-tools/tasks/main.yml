@@ -193,6 +193,23 @@
   changed_when: true
   tags: [ai-tools, packages]
 
+- name: Remove Claude marketplaces removed from target state
+  ansible.builtin.command:
+    argv:
+      - claude
+      - plugin
+      - marketplace
+      - remove
+      - "{{ item }}"
+  loop: "{{ ai_tools_claude_marketplaces_absent }}"
+  loop_control:
+    label: "{{ item }}"
+  when:
+    - ai_tools_claude_configured_marketplaces is defined
+    - item in ai_tools_claude_configured_marketplaces
+  changed_when: true
+  tags: [ai-tools, packages]
+
 - name: Inspect Claude marketplace catalogs
   ansible.builtin.stat:
     path: "{{ home }}/.claude/plugins/marketplaces/{{ item.name }}/.claude-plugin/marketplace.json"
