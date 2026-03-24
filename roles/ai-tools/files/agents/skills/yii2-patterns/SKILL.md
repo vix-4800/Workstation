@@ -33,6 +33,12 @@ Load `modern-php` for language-level guidance, `backend-patterns` for broader ar
 - Keep transactions explicit around multi-write use cases.
 - Prefer dedicated query methods when AR queries become dense or reused.
 
+### AR Runtime Pitfalls
+
+- **Indirect modification of overloaded property**: `$model->relation->field = $value` calls `__get` which returns a copy — the assignment is silently discarded and PHP emits "Indirect modification of overloaded property has no effect". Always assign the relation to a local variable first: `$rel = $model->relation; $rel->field = $value; $rel->save()`.
+- **Null safety inconsistency**: A nullsafe chain `$model->relation?->field` in a condition does not guarantee `$model->relation` is non-null on the next line. Direct `$model->relation->field = $value` will throw "Attempt to assign property on null". Add an explicit null guard before any direct access.
+- **Stale relation after re-assignment**: After modifying and saving a related model, the parent's in-memory relation cache may be stale. Do not read `$parent->relation->field` after mutating it through a local variable without refreshing.
+
 ## Review Checklist
 
 - Is validation explicit at the boundary?
@@ -40,3 +46,6 @@ Load `modern-php` for language-level guidance, `backend-patterns` for broader ar
 - Are controllers thin and services carrying workflow logic?
 - Are Active Record queries eager-loaded and bounded appropriately?
 - Do tests cover the relevant request, validation, and persistence flow?
+- Are AR relation accesses free of indirect modification and null safety inconsistencies?
+- Does the implementation match the stated task requirements — are the right abstractions used, is logic placed in the right layer, and are the architectural decisions sound?
+- Can deeply nested conditions be flattened with early returns or combined into a single condition?
