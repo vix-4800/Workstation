@@ -131,7 +131,9 @@
       "Bash(xargs *)",
       "Bash(yamllint)",
       "Bash(yamllint *)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:laravel.com)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [
       "Bash(curl *)",
