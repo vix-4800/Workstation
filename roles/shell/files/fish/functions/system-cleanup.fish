@@ -100,15 +100,23 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     # Step 6: Clean uv (Python) cache
     _cleanup_step "Cleaning uv cache..."
     if command -v uv >/dev/null
-        set -l uv_out (uv cache clean 2>&1)
-        set -l uv_status $status
-        if test $uv_status -eq 0
-            _cleanup_ok "uv cache cleared"
-        else if string match -q "*in-use*" $uv_out
+        set -l uv_tmp (mktemp)
+        uv cache clean >$uv_tmp 2>&1 &
+        set -l uv_pid $last_pid
+        sleep 1
+        if grep -q 'in-use' $uv_tmp
+            kill $uv_pid 2>/dev/null
+            rm -f $uv_tmp
             _cleanup_skip "uv cache is in use by another process, skipping"
         else
-            echo $uv_out
-            _cleanup_err "uv cache clean failed"
+            wait $uv_pid
+            set -l uv_status $status
+            rm -f $uv_tmp
+            if test $uv_status -eq 0
+                _cleanup_ok "uv cache cleared"
+            else
+                _cleanup_err "uv cache clean failed"
+            end
         end
     else
         _cleanup_skip "uv not installed, skipping"
