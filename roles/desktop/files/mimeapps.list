@@ -55,3 +55,4 @@ inode/directory=thunar.desktop
 
 # Telegram
 x-scheme-handler/tg=telegram-desktop.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
