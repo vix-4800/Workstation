@@ -63,7 +63,8 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     # Step 3: Clean yay / AUR build cache
     _cleanup_step "Cleaning yay AUR build cache..."
     if command -v yay >/dev/null
-        if yay -Sc --noconfirm
+        yay -Sc --noconfirm 2>&1 | grep -Ev 'could not open file.*/download-'
+        if test $pipestatus[1] -eq 0
             _cleanup_ok "Yay cache cleaned"
         else
             _cleanup_err "Yay cache clean failed"
@@ -99,9 +100,14 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     # Step 6: Clean uv (Python) cache
     _cleanup_step "Cleaning uv cache..."
     if command -v uv >/dev/null
-        if uv cache clean
+        set -l uv_out (uv cache clean 2>&1)
+        set -l uv_status $status
+        if test $uv_status -eq 0
             _cleanup_ok "uv cache cleared"
+        else if string match -q "*in-use*" $uv_out
+            _cleanup_skip "uv cache is in use by another process, skipping"
         else
+            echo $uv_out
             _cleanup_err "uv cache clean failed"
         end
     else
