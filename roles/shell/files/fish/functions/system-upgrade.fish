@@ -1,6 +1,6 @@
-function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak, fish plugins, and pipx packages'
+function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak, fish plugins, pipx packages, and claude'
     set -l step 1
-    set -l total_steps 9
+    set -l total_steps 10
 
     # Colors
     set -l RED (set_color red)
@@ -161,7 +161,19 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         print_warning "Composer not installed, skipping"
     end
 
-    # Step 9: Clean up orphaned packages
+    # Step 9: Update Claude CLI
+    print_step "Updating Claude CLI..."
+    if command -v claude >/dev/null
+        if claude update
+            print_success "Claude CLI updated"
+        else
+            print_warning "Claude CLI update had issues"
+        end
+    else
+        print_warning "Claude CLI not installed, skipping"
+    end
+
+    # Step 10: Clean up orphaned packages
     print_step "Cleaning up orphaned packages..."
     set -l orphans (pacman -Qtdq 2>/dev/null)
     if test -n "$orphans"
