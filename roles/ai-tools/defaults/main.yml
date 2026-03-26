@@ -59,6 +59,7 @@ ai_tools_repo_symlinks:
   - { src: claude/agents, dest: "{{ home }}/.claude/agents" }
   - { src: claude/rules, dest: "{{ home }}/.claude/rules" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
+  - { src: codex/rules/workstation.rules, dest: "{{ home }}/.codex/rules/workstation.rules" }
   - { src: codex/agents, dest: "{{ home }}/.codex/agents" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
   - { src: qwen/extensions/catalog.json, dest: "{{ home }}/.qwen/extensions/catalog.json" }

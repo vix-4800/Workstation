@@ -1,0 +1,102 @@
+# Codex rules only apply to commands that would run outside the sandbox.
+# Unlike Claude's permissions model, they do not support path-based read rules,
+# so broad file-reading commands stay prompt-gated instead of being allowlisted.
+
+SAFE_INSPECTION_COMMANDS = [
+    ["ansible-lint"],
+    ["composer", ["info", "show", "validate"]],
+    ["docker", ["images", "info", "inspect", "logs", "ps", "stats", "version"]],
+    ["docker", "compose", ["logs", "ps"]],
+    ["gh", "pr", ["diff", "view"]],
+    ["git", ["branch", "diff", "log", "ls-files", "rev-parse", "show", "status"]],
+    ["git", "remote", "-v"],
+    ["php", ["--version", "-m"]],
+    ["php", "artisan", ["list", "route:list"]],
+]
+
+for pattern in SAFE_INSPECTION_COMMANDS:
+    prefix_rule(
+        pattern = pattern,
+        decision = "allow",
+        justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+    )
+
+PROMPT_COMMANDS = [
+    ["awk"],
+    ["basename"],
+    ["cat"],
+    ["chmod"],
+    ["composer", ["install", "remove", "require", "update"]],
+    ["cut"],
+    ["diff"],
+    ["dirname"],
+    ["docker", ["exec", "pull", "run", "start"]],
+    ["docker", "compose", ["exec", "pull"]],
+    ["echo"],
+    ["env"],
+    ["file"],
+    ["find"],
+    ["git", ["checkout", "commit", "fetch", "pull", "restore", "stash", "switch", "tag"]],
+    ["go", ["build", "fmt", "test", "vet"]],
+    ["gofmt"],
+    ["grep"],
+    ["head"],
+    ["jq"],
+    ["ls"],
+    ["luac"],
+    ["npm", ["install", "update"]],
+    ["php", "-l"],
+    ["pip", "install"],
+    ["pnpm", ["add", "install", "update"]],
+    ["pwd"],
+    ["readlink"],
+    ["realpath"],
+    ["rg"],
+    ["sed"],
+    ["shellcheck"],
+    ["sort"],
+    ["stat"],
+    ["tail"],
+    ["tree"],
+    ["uniq"],
+    ["wc"],
+    ["which"],
+    ["xargs"],
+    ["yamllint"],
+    ["yarn", ["add", "install"]],
+]
+
+for pattern in PROMPT_COMMANDS:
+    prefix_rule(
+        pattern = pattern,
+        decision = "prompt",
+        justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    )
+
+BLOCKED_COMMANDS = [
+    ["curl"],
+    ["doas"],
+    ["git", ["am", "apply", "cherry-pick", "clean", "merge", "push", "rebase", "reset"]],
+    ["nc"],
+    ["netcat"],
+    ["php", "artisan", "tinker"],
+    ["rm"],
+    ["rsync"],
+    ["scp"],
+    ["sftp"],
+    ["ssh"],
+    ["sudo"],
+    ["wget"],
+    ["docker", ["kill", "restart", "rm", "rmi", "stop"]],
+    ["docker", "compose", ["build", "down", "restart", "up"]],
+    ["docker", "network", "rm"],
+    ["docker", "system", "prune"],
+    ["docker", "volume", "rm"],
+]
+
+for pattern in BLOCKED_COMMANDS:
+    prefix_rule(
+        pattern = pattern,
+        decision = "forbidden",
+        justification = "Blocked for safety. Use a reviewed manual workflow instead.",
+    )
