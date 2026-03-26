@@ -116,3 +116,11 @@
     state: link
     force: true
   tags: [appearance, config]
+
+- name: Deploy btop themes
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/appearance/files/btop"
+    dest: "{{ home }}/.config/btop"
+    state: link
+    force: true
+  tags: [appearance, config]
