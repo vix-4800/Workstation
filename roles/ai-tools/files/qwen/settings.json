@@ -57,7 +57,8 @@
   },
   "general": {
     "preferredEditor": "neovim",
-    "gitCoAuthor": true
+    "gitCoAuthor": true,
+    "language": "auto"
   },
   "ui": {
     "theme": "Catppuccin Mocha",
@@ -79,14 +80,14 @@
         "DiffAdded": "#a6e3a1",
         "DiffRemoved": "#f38ba8",
         "DiffModified": "#89b4fa",
-        "GradientColors": [
-          "#89b4fa",
-          "#cba6f7",
-          "#f5c2e7"
-        ]
+        "GradientColors": ["#89b4fa", "#cba6f7", "#f5c2e7"]
       }
     },
-    "hideTips": false
+    "hideTips": true,
+    "enableUserFeedback": false,
+    "accessibility": {
+      "enableLoadingPhrases": false
+    }
   },
   "privacy": {
     "usageStatisticsEnabled": false
