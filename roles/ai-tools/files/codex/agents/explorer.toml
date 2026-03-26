@@ -3,7 +3,7 @@ description = "Read-only codebase explorer. Use before implementation to gather 
 model = "gpt-4o-mini"
 model_reasoning_effort = "low"
 approval_policy = "never"
-sandbox_mode = "workspace-read"
+sandbox_mode = "read-only"
 developer_instructions = """
 You are a read-only codebase analyst. Your job is to gather context efficiently before implementation begins.
 
