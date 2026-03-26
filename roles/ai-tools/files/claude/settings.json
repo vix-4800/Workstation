@@ -2,8 +2,18 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-4-5-20251001",
-    "MCP_TIMEOUT": "60000"
+    "MCP_TIMEOUT": "60000",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "75",
+    "ENABLE_TOOL_SEARCH": "auto:5",
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1"
   },
+  "plansDirectory": "./docs/plans",
+  "language": "russian",
+  "showTurnDuration": false,
+  "spinnerTipsEnabled": false,
+  "terminalProgressBarEnabled": false,
+  "respectGitignore": true,
   "permissions": {
     "allow": [
       "Bash(ansible-lint)",
@@ -132,9 +142,14 @@
       "Bash(yamllint)",
       "Bash(yamllint *)",
       "WebSearch",
-      "WebFetch(domain:laravel.com)",
+      "WebFetch(domain:anthropic.com)",
+      "WebFetch(domain:claude.com)",
+      "WebFetch(domain:ansible.com)",
       "WebFetch(domain:github.com)",
+      "WebFetch(domain:laravel.com)",
       "WebFetch(domain:openai.com)",
+      "WebFetch(domain:packagist.org)",
+      "WebFetch(domain:php.net)",
       "mcp__plugin_serena_serena__read_file",
       "mcp__plugin_serena_serena__get_symbols_overview",
       "mcp__plugin_serena_serena__list_dir",
@@ -218,6 +233,15 @@
     ],
     "defaultMode": "acceptEdits"
   },
+  "cleanupPeriodDays": 7,
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  },
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
+    "pr": ""
+  },
   "enabledMcpjsonServers": [
     "github"
   ],
@@ -235,7 +259,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash(git commit*)",
         "hooks": [
           {
             "type": "command",
