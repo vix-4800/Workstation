@@ -1,5 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "respectGitignore": true,
+  "cleanupPeriodDays": 7,
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "claude-haiku-4-5-20251001",
     "MCP_TIMEOUT": "60000",
@@ -8,12 +10,10 @@
     "DISABLE_TELEMETRY": "1",
     "DISABLE_ERROR_REPORTING": "1"
   },
-  "plansDirectory": "./docs/plans",
-  "language": "russian",
-  "showTurnDuration": false,
-  "spinnerTipsEnabled": false,
-  "terminalProgressBarEnabled": false,
-  "respectGitignore": true,
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash(ansible-lint)",
@@ -233,15 +233,6 @@
     ],
     "defaultMode": "acceptEdits"
   },
-  "cleanupPeriodDays": 7,
-  "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": true
-  },
-  "attribution": {
-    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
-    "pr": ""
-  },
   "enabledMcpjsonServers": [
     "github"
   ],
@@ -297,6 +288,15 @@
     "pyright-lsp@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true
   },
+  "language": "russian",
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  },
+  "spinnerTipsEnabled": false,
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium"
+  "effortLevel": "medium",
+  "plansDirectory": "./docs/plans",
+  "showTurnDuration": false,
+  "terminalProgressBarEnabled": false
 }
