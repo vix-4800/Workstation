@@ -11,6 +11,11 @@ export PATH="/usr/local/go/bin:${HOME}/go/bin:${PATH}"
 # Add Composer global vendor bin
 export PATH="${HOME}/.config/composer/vendor/bin:${PATH}"
 
+# Add Cargo bin
+if [[ -d "${HOME}/.cargo/bin" ]]; then
+    export PATH="${HOME}/.cargo/bin:${PATH}"
+fi
+
 # Add Neovim AppImage path
 export PATH="/opt/nvim-linux-x86_64/bin:${PATH}"
 

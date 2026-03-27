@@ -11,6 +11,10 @@ if test -d $HOME/.config/composer/vendor/bin
     fish_add_path -g $HOME/.config/composer/vendor/bin
 end
 
+if test -d $HOME/.cargo/bin
+    fish_add_path -g $HOME/.cargo/bin
+end
+
 if test -d $HOME/.local/pipx/venvs
     set -gx PIPX_HOME $HOME/.local/pipx
 end
