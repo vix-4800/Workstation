@@ -252,6 +252,39 @@
   changed_when: true
   tags: [ai-tools, packages]
 
+- name: List configured Claude user MCP servers
+  ansible.builtin.command:
+    argv:
+      - claude
+      - mcp
+      - list
+  register: ai_tools_claude_mcp_list
+  changed_when: false
+  failed_when: ai_tools_claude_mcp_list.rc not in [0, 127]
+  tags: [ai-tools, packages]
+
+- name: Capture configured Claude user MCP server names
+  ansible.builtin.set_fact:
+    ai_tools_claude_mcp_configured: "{{ ai_tools_claude_mcp_list.stdout | regex_findall('(?m)^(\\S+):') }}"
+  when: ai_tools_claude_mcp_list.rc == 0
+  tags: [ai-tools, packages]
+
+- name: Add declared Claude user MCP servers
+  ansible.builtin.command:
+    argv: >-
+      {{
+        ['claude', 'mcp', 'add', '--scope', 'user', item.name, item.command]
+        + (['--'] + item.args if item.args | default([]) | length > 0 else [])
+      }}
+  loop: "{{ ai_tools_claude_mcp_servers_present }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - ai_tools_claude_mcp_configured is defined
+    - item.name not in ai_tools_claude_mcp_configured
+  changed_when: true
+  tags: [ai-tools, packages]
+
 - name: List installed Qwen extensions
   ansible.builtin.command:
     argv:

@@ -5,6 +5,16 @@ ai_tools_health_timeout_seconds: 30
 ai_tools_run_health_checks: false
 ai_tools_github_mcp_server_version: "0.32.0"
 
+ai_tools_claude_mcp_servers_present:
+  - name: github
+    command: "{{ home }}/.local/bin/github-mcp-server-with-auth"
+    args: []
+  - name: sequential-thinking
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-sequential-thinking"
+
 ai_tools_claude_plugins_present:
   - frontend-design@claude-plugins-official
   - code-review@claude-plugins-official
@@ -67,8 +77,6 @@ ai_tools_repo_symlinks:
   - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
 
 ai_tools_repo_templates:
-  - src: claude/.mcp.json.j2
-    dest: "{{ home }}/.claude/.mcp.json"
   - src: qwen/extensions/extension-enablement.json.j2
     dest: "{{ home }}/.qwen/extensions/extension-enablement.json"
 
