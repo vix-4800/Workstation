@@ -32,6 +32,7 @@ Load `modern-php` for language-level guidance, `backend-patterns` for broader ar
 - Use `with()` or `joinWith()` intentionally to prevent N+1 queries.
 - Keep transactions explicit around multi-write use cases.
 - Prefer dedicated query methods when AR queries become dense or reused.
+- Always use `limit(1)` when fetching a single record via `one()`.
 
 ### AR Runtime Pitfalls
 
