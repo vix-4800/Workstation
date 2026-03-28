@@ -1,18 +1,4 @@
 ---
-- name: Check whether legacy Docker apt source exists
-  ansible.builtin.stat:
-    path: /etc/apt/sources.list.d/docker.list
-  register: server_init_docker_repo_stat
-  tags: [server-init, update, config]
-
-- name: Remove invalid Docker apt source for Ubuntu bookworm
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list.d/docker.list
-    regexp: '^deb\s+.*https://download\.docker\.com/linux/ubuntu\s+bookworm\s+stable\s*$'
-    state: absent
-  when: server_init_docker_repo_stat.stat.exists
-  tags: [server-init, update, config]
-
 - name: Update apt cache
   ansible.builtin.apt:
     update_cache: true

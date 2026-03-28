@@ -6,19 +6,6 @@
   become: true
   tags: [desktop, packages]
 
-- name: Check if waybar config dir is a symlink
-  ansible.builtin.stat:
-    path: "{{ home }}/.config/waybar"
-  register: desktop_waybar_stat
-  tags: [desktop, config]
-
-- name: Remove old waybar directory symlink if present
-  ansible.builtin.file:
-    path: "{{ home }}/.config/waybar"
-    state: absent
-  when: desktop_waybar_stat.stat.exists and desktop_waybar_stat.stat.islnk
-  tags: [desktop, config]
-
 - name: Ensure waybar config directory exists
   ansible.builtin.file:
     path: "{{ home }}/.config/waybar"

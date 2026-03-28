@@ -6,33 +6,6 @@
   become: true
   tags: [apps, packages]
 
-- name: Check for legacy system pip packages that conflict with pacman waypaper stack
-  ansible.builtin.command:
-    cmd: python -m pip show {{ item }}
-  loop: "{{ apps_waypaper_legacy_pip_packages }}"
-  loop_control:
-    label: "{{ item }}"
-  register: apps_waypaper_pip_show
-  changed_when: false
-  failed_when: false
-  when: apps_waypaper_aur_packages | length > 0
-  tags: [apps, packages]
-
-- name: Remove legacy system pip packages before pacman install
-  ansible.builtin.command:
-    cmd: python -m pip uninstall --break-system-packages -y {{ item.item }}
-  loop: "{{ apps_waypaper_pip_show.results | default([]) }}"
-  loop_control:
-    label: "{{ item.item }}"
-  become: true
-  when:
-    - apps_waypaper_aur_packages | length > 0
-    - item.rc == 0
-    - "'Location: /usr/lib/python' in item.stdout"
-  register: apps_waypaper_pip_uninstall
-  changed_when: true
-  tags: [apps, packages]
-
 - name: Install applications
   community.general.pacman:
     name: "{{ apps_packages }}"
