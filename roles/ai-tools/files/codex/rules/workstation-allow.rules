@@ -1,0 +1,57 @@
+# Codex rules only apply to commands that would run outside the sandbox.
+# Unlike Claude's permissions model, they do not support path-based read rules,
+# so broad file-reading commands stay prompt-gated instead of being allowlisted.
+
+prefix_rule(
+    pattern = ["ansible-lint"],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["composer", ["info", "show", "validate"]],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["docker", ["images", "info", "inspect", "logs", "ps", "stats", "version"]],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["docker", "compose", ["logs", "ps"]],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", ["diff", "view"]],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["git", ["branch", "diff", "log", "ls-files", "rev-parse", "show", "status"]],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["git", "remote", "-v"],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["php", ["--version", "-m"]],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["php", "artisan", ["list", "route:list"]],
+    decision = "allow",
+    justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
