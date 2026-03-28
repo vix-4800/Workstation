@@ -3,7 +3,9 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: roles/desktop/files/waypaper/config.ini
       - id: end-of-file-fixer
+        exclude: roles/desktop/files/waypaper/config.ini
       - id: check-yaml
       - id: check-json
       - id: check-toml
