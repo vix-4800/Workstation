@@ -62,9 +62,6 @@ ai_tools_shared_skill_targets:
   - "{{ home }}/.codex/skills"
   - "{{ home }}/.qwen/skills"
 
-ai_tools_legacy_repo_paths:
-  - "{{ home }}/.codex/rules/workstation.rules"
-
 ai_tools_repo_symlinks:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
   - { src: claude/claude-powerline.json, dest: "{{ home }}/.claude/claude-powerline.json" }
@@ -72,9 +69,9 @@ ai_tools_repo_symlinks:
   - { src: claude/agents, dest: "{{ home }}/.claude/agents" }
   - { src: claude/rules, dest: "{{ home }}/.claude/rules" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
-  - { src: codex/rules/workstation-allow.rules, dest: "{{ home }}/.codex/rules/workstation-allow.rules" }
-  - { src: codex/rules/workstation-prompt.rules, dest: "{{ home }}/.codex/rules/workstation-prompt.rules" }
-  - { src: codex/rules/workstation-deny.rules, dest: "{{ home }}/.codex/rules/workstation-deny.rules" }
+  - { src: codex/rules/allow.rules, dest: "{{ home }}/.codex/rules/allow.rules" }
+  - { src: codex/rules/prompt.rules, dest: "{{ home }}/.codex/rules/prompt.rules" }
+  - { src: codex/rules/deny.rules, dest: "{{ home }}/.codex/rules/deny.rules" }
   - { src: codex/agents, dest: "{{ home }}/.codex/agents" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
   - { src: qwen/extensions/catalog.json, dest: "{{ home }}/.qwen/extensions/catalog.json" }

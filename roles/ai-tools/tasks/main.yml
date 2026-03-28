@@ -48,15 +48,6 @@
     label: "{{ item.stat.path | default(item.item) }}"
   tags: [ai-tools, config]
 
-- name: Remove legacy AI repo paths
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: absent
-  loop: "{{ ai_tools_legacy_repo_paths }}"
-  loop_control:
-    label: "{{ item }}"
-  tags: [ai-tools, config]
-
 - name: Ensure AI config parent directories exist
   ansible.builtin.file:
     path: "{{ item }}"
