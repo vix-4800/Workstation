@@ -14,19 +14,6 @@
     force: true
   tags: [services, config]
 
-- name: Check if systemd user dir is a directory symlink
-  ansible.builtin.stat:
-    path: "{{ home }}/.config/systemd/user"
-  register: services_systemd_stat
-  tags: [services, config]
-
-- name: Remove old directory symlink if present
-  ansible.builtin.file:
-    path: "{{ home }}/.config/systemd/user"
-    state: absent
-  when: services_systemd_stat.stat.exists and services_systemd_stat.stat.islnk
-  tags: [services, config]
-
 - name: Ensure systemd user directory exists
   ansible.builtin.file:
     path: "{{ home }}/.config/systemd/user"

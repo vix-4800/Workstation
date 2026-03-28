@@ -28,26 +28,6 @@
   become: false
   tags: [ai-tools, packages]
 
-- name: Inspect AI shared skill targets
-  ansible.builtin.stat:
-    path: "{{ item }}"
-    follow: false
-  loop: "{{ ai_tools_shared_skill_targets }}"
-  register: ai_tools_shared_skill_target_stats
-  loop_control:
-    label: "{{ item }}"
-  tags: [ai-tools, config]
-
-- name: Remove legacy AI shared skill symlinks
-  ansible.builtin.file:
-    path: "{{ item.stat.path }}"
-    state: absent
-  loop: "{{ ai_tools_shared_skill_target_stats.results }}"
-  when: item.stat.islnk | default(false)
-  loop_control:
-    label: "{{ item.stat.path | default(item.item) }}"
-  tags: [ai-tools, config]
-
 - name: Ensure AI config parent directories exist
   ansible.builtin.file:
     path: "{{ item }}"
