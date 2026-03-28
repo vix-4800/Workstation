@@ -12,7 +12,7 @@
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1"
   },
   "attribution": {
-    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
+    "commit": "Co-authored-by: Claude <noreply@anthropic.com>",
     "pr": ""
   },
   "permissions": {
@@ -241,7 +241,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "notify-send 'Claude Code' 'Claude Code needs your attention'"
+            "command": "notify-send 'Claude Code' 'Claude Code needs your attention' -u normal -i dialog-warning",
+            "timeout": 5
           }
         ]
       }
