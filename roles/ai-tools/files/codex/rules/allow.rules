@@ -27,9 +27,23 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["gh", "pr", ["diff", "view"]],
+    pattern = ["gh", "pr", "diff"],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["gh", "pr", "view"],
+    decision = "allow",
+    justification = "Viewing PRs is allowed without user approval",
+    match = [
+        "gh pr view",
+        "gh pr view *",
+        "gh pr view * --repo",
+        "gh pr view * --repo *",
+        "gh pr view * --repo * --json",
+        "gh pr view * --repo * --json *",
+    ]
 )
 
 prefix_rule(
