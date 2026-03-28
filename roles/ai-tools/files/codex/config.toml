@@ -79,6 +79,21 @@ startup_timeout_sec = 30.0
 MCP_DOCKER_LOG_PATH = "/dev/null"
 SECURITY_AUDIT_LOG_ENABLED = "false"
 
+[mcp_servers.docker.tools.docker_version]
+approval_mode = "approve"
+
+[mcp_servers.docker.tools.docker_list_containers]
+approval_mode = "approve"
+
+[mcp_servers.docker.tools.docker_list_images]
+approval_mode = "approve"
+
+[mcp_servers.docker.tools.docker_container_logs]
+approval_mode = "approve"
+
+[mcp_servers.docker.tools.docker_container_stats]
+approval_mode = "approve"
+
 [mcp_servers.sequential-thinking]
 enabled = false
 command = "npx"
