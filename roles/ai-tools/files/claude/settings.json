@@ -273,7 +273,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=custom --config=$HOME/.claude/claude-powerline.json"
+    "command": "npx -y @owloops/claude-powerline@latest --style=capsule --theme=custom --config=$HOME/.claude/claude-powerline.json"
   },
   "enabledPlugins": {
     "code-review@claude-plugins-official": true,

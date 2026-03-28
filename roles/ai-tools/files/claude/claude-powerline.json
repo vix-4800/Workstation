@@ -2,7 +2,6 @@
   "theme": "custom",
   "display": {
     "colorCompatibility": "auto",
-    "padding": 0,
     "lines": [
       {
         "segments": {
@@ -18,18 +17,9 @@
           "model": {
             "enabled": true
           },
-          "session": {
-            "enabled": true,
-            "type": "both",
-            "costSource": "official"
-          },
-          "today": {
-            "enabled": true,
-            "type": "both"
-          },
           "context": {
             "enabled": true,
-            "displayStyle": "capped"
+            "displayStyle": "blocks"
           }
         }
       }
@@ -49,17 +39,9 @@
         "bg": "#cba6f7",
         "fg": "#1e1e2e"
       },
-      "session": {
-        "bg": "#a6e3a1",
-        "fg": "#1e1e2e"
-      },
-      "today": {
-        "bg": "#fab387",
-        "fg": "#1e1e2e"
-      },
       "context": {
-        "bg": "#45475a",
-        "fg": "#cdd6f4"
+        "bg": "#89b4fa",
+        "fg": "#1e1e2e"
       }
     }
   }
