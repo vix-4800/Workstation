@@ -2,6 +2,24 @@ model = "gpt-5.4"
 web_search = "cached"
 personality = "pragmatic"
 model_reasoning_effort = "medium"
+plan_mode_reasoning_effort = "xhigh"
+model_verbosity = "low"
+sandbox_mode = "workspace-write"
+file_opener = "vscode"
+notify = [
+  "notify-send",
+  "Codex",
+  "Codex needs your attention",
+  "-u",
+  "normal",
+  "-i",
+  "dialog-warning",
+]
+commit_attribution = "Codex <codex@openai.com>"
+disable_paste_burst = true
+
+[shell_environment_policy]
+inherit = "core"
 
 [analytics]
 enabled = false
@@ -11,6 +29,10 @@ enabled = false
 
 [features]
 multi_agent = true
+apps = true
+codex_hooks = true
+fast_mode = false
+shell_snapshot = true
 
 [agents]
 max_threads = 6
@@ -18,6 +40,8 @@ max_depth = 2
 
 [tui]
 theme = "catppuccin-mocha"
+notifications = true
+status_line = ["current-dir", "git-branch", "model-with-reasoning", "context-remaining"]
 
 [profiles.default]
 model = "gpt-5.4"
@@ -95,7 +119,6 @@ approval_mode = "approve"
 approval_mode = "approve"
 
 [mcp_servers.sequential-thinking]
-enabled = false
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
 
