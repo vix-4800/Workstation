@@ -142,6 +142,7 @@
       "Bash(xargs *)",
       "Bash(yamllint)",
       "Bash(yamllint *)",
+      "Bash(npm test:*)",
       "WebSearch",
       "WebFetch(domain:anthropic.com)",
       "WebFetch(domain:claude.com)",
