@@ -45,6 +45,8 @@ ai_tools_qwen_extensions_present:
     install_source: https://github.com/anthropics/claude-plugins-official:serena
   - name: gopls-lsp
     install_source: https://github.com/anthropics/claude-plugins-official:gopls-lsp
+  - name: lua-lsp
+    install_source: https://github.com/anthropics/claude-plugins-official:lua-lsp
 
 ai_tools_shared_skill_names:
   - api-design
