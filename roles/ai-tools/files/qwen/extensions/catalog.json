@@ -47,6 +47,14 @@
       "source": "https://github.com/anthropics/claude-plugins-official",
       "type": "git",
       "status": "core"
+    },
+    {
+      "name": "gopls-lsp",
+      "pluginName": "gopls-lsp",
+      "installSource": "https://github.com/anthropics/claude-plugins-official:gopls-lsp",
+      "source": "https://github.com/anthropics/claude-plugins-official",
+      "type": "git",
+      "status": "core"
     }
   ]
 }

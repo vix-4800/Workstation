@@ -25,6 +25,7 @@ ai_tools_claude_plugins_present:
   - pyright-lsp@claude-plugins-official
   - security-guidance@claude-plugins-official
   - serena@claude-plugins-official
+  - gopls-lsp@claude-plugins-official
 
 ai_tools_claude_marketplaces_present:
   - name: claude-plugins-official
@@ -42,6 +43,8 @@ ai_tools_qwen_extensions_present:
     install_source: https://github.com/anthropics/claude-code:security-guidance
   - name: serena
     install_source: https://github.com/anthropics/claude-plugins-official:serena
+  - name: gopls-lsp
+    install_source: https://github.com/anthropics/claude-plugins-official:gopls-lsp
 
 ai_tools_shared_skill_names:
   - api-design

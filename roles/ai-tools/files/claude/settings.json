@@ -303,7 +303,8 @@
     "security-guidance@claude-plugins-official": true,
     "serena@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true
+    "frontend-design@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true
   },
   "language": "russian",
   "sandbox": {
@@ -312,8 +313,8 @@
   },
   "spinnerTipsEnabled": false,
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
   "plansDirectory": "./docs/plans",
   "showTurnDuration": false,
-  "terminalProgressBarEnabled": false,
-  "effortLevel": "high"
+  "terminalProgressBarEnabled": false
 }
