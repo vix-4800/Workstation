@@ -90,6 +90,9 @@ args = [
   "False",
 ]
 
+[mcp_servers.serena.tools.write_memory]
+approval_mode = "approve"
+
 [mcp_servers.context7]
 command = "npx"
 args = ["-y", "@upstash/context7-mcp@latest"]
