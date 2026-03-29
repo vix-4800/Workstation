@@ -251,6 +251,7 @@
     ],
     "defaultMode": "acceptEdits"
   },
+  "model": "opusplan",
   "hooks": {
     "Notification": [
       {
@@ -311,9 +312,8 @@
   },
   "spinnerTipsEnabled": false,
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
   "plansDirectory": "./docs/plans",
   "showTurnDuration": false,
   "terminalProgressBarEnabled": false,
-  "model": "opusplan"
+  "effortLevel": "high"
 }
