@@ -314,5 +314,6 @@
   "effortLevel": "medium",
   "plansDirectory": "./docs/plans",
   "showTurnDuration": false,
-  "terminalProgressBarEnabled": false
+  "terminalProgressBarEnabled": false,
+  "model": "opusplan"
 }
