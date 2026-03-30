@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+monitor_cmd='top'
+
+if command -v btop >/dev/null 2>&1; then
+  monitor_cmd='btop'
+elif command -v htop >/dev/null 2>&1; then
+  monitor_cmd='htop'
+fi
+
+exec alacritty -e "${monitor_cmd}"
