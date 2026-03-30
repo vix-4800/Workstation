@@ -177,6 +177,8 @@
       "mcp__plugin_serena_serena__find_symbol",
       "mcp__plugin_serena_serena__search_for_pattern",
       "mcp__plugin_serena_serena__find_file",
+      "mcp__github__pull_request_read",
+      "mcp__github__get_me",
       "mcp__mysql__query",
       "mcp__mysql__connect_db",
       "mcp__docker__docker_list_containers",
