@@ -70,6 +70,7 @@
       "Bash(file *)",
       "Bash(find)",
       "Bash(find *)",
+      "Bash(find:*)",
       "Bash(go build)",
       "Bash(go build *)",
       "Bash(go fmt)",
@@ -103,6 +104,7 @@
       "Bash(git status *)",
       "Bash(grep)",
       "Bash(grep *)",
+      "Bash(grep:*)",
       "Bash(head)",
       "Bash(head *)",
       "Bash(jq)",
@@ -174,7 +176,11 @@
       "mcp__plugin_serena_serena__activate_project",
       "mcp__plugin_serena_serena__find_symbol",
       "mcp__plugin_serena_serena__search_for_pattern",
-      "mcp__plugin_serena_serena__find_file"
+      "mcp__plugin_serena_serena__find_file",
+      "mcp__mysql__query",
+      "mcp__mysql__connect_db",
+      "mcp__docker__docker_list_containers",
+      "mcp__sequential-thinking__sequentialthinking"
     ],
     "deny": [
       "Bash(curl *)",
@@ -247,7 +253,8 @@
       "Bash(pnpm install *)",
       "Bash(pnpm update *)",
       "Bash(yarn add *)",
-      "Bash(yarn install *)"
+      "Bash(yarn install *)",
+      "mcp__docker__docker_exec_command"
     ],
     "defaultMode": "acceptEdits"
   },
