@@ -4,7 +4,6 @@ personality = "pragmatic"
 model_reasoning_effort = "high"
 plan_mode_reasoning_effort = "xhigh"
 model_verbosity = "low"
-sandbox_mode = "workspace-write"
 file_opener = "vscode"
 notify = [
   "notify-send",
