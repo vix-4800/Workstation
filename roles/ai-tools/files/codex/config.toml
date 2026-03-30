@@ -76,6 +76,9 @@ sandbox_mode = "workspace-write"
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-github"]
 
+[mcp_servers.github.tools.get_file_contents]
+approval_mode = "approve"
+
 [mcp_servers.serena]
 command = "uvx"
 args = [
