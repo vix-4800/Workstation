@@ -9,11 +9,6 @@ ai_tools_claude_mcp_servers_present:
   - name: github
     command: "{{ home }}/.local/bin/github-mcp-server-with-auth"
     args: []
-  - name: sequential-thinking
-    command: npx
-    args:
-      - "-y"
-      - "@modelcontextprotocol/server-sequential-thinking"
 
 ai_tools_claude_plugins_present:
   - frontend-design@claude-plugins-official
