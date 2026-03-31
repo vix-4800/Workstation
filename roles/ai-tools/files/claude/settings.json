@@ -322,7 +322,7 @@
   },
   "spinnerTipsEnabled": false,
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "plansDirectory": "./docs/plans",
   "showTurnDuration": false,
   "terminalProgressBarEnabled": false
