@@ -1,0 +1,8 @@
+*
+!.gitignore
+!opencode.json
+!tui.json
+!themes/
+!themes/**
+!agents/
+!agents/**

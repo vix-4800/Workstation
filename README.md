@@ -298,7 +298,7 @@ inventory/
 | `appearance` | GTK themes (nwg-look), fonts, cursors, icons, wallpapers, plymouth |
 | `apps` | Obsidian, Bitwarden, file-roller, gvfs-goa, Flatpak + Flathub, waypaper, auto-cpufreq (battery only) |
 | `services` | All systemd user services and timers (xdg-user-dirs, etc.) |
-| `ai-tools` | Codex, Qwen, MCP/Serena, agent skills |
+| `ai-tools` | Claude Code, Codex, OpenCode, Qwen, MCP/Serena, agent skills |
 
 ### Tags
 

@@ -9,6 +9,13 @@
   become: false
   tags: [ai-tools, packages]
 
+- name: Install OpenCode
+  community.general.pacman:
+    name: opencode
+    state: present
+  become: true
+  tags: [ai-tools, packages]
+
 - name: Install Qwen CLI
   ansible.builtin.shell:
     cmd: |

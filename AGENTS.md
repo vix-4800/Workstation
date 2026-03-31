@@ -88,7 +88,7 @@ just bootstrap
 | `development` | PHP, Python, Go, Docker, all linter configs |
 | `appearance` | GTK, fonts, cursors, icons, wallpapers, themes |
 | `services` | All systemd user services and timers |
-| `ai-tools` | Codex, Qwen, MCP/Serena, agent skills |
+| `ai-tools` | Codex, OpenCode, Qwen, MCP/Serena, agent skills |
 
 ## Code Style Guidelines
 

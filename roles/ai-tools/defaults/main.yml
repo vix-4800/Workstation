@@ -68,6 +68,7 @@ ai_tools_repo_symlinks:
   - { src: claude/hooks, dest: "{{ home }}/.claude/hooks" }
   - { src: claude/agents, dest: "{{ home }}/.claude/agents" }
   - { src: claude/rules, dest: "{{ home }}/.claude/rules" }
+  - { src: opencode, dest: "{{ home }}/.config/opencode" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
   - { src: codex/rules/allow.rules, dest: "{{ home }}/.codex/rules/allow.rules" }
   - { src: codex/rules/prompt.rules, dest: "{{ home }}/.codex/rules/prompt.rules" }
@@ -88,3 +89,4 @@ ai_tools_home_symlinks:
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.codex/AGENTS.md" }
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.claude/CLAUDE.md" }
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.qwen/AGENTS.md" }
+  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.config/opencode/AGENTS.md" }
