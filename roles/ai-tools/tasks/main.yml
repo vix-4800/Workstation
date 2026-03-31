@@ -10,10 +10,13 @@
   tags: [ai-tools, packages]
 
 - name: Install OpenCode
-  community.general.pacman:
-    name: opencode
-    state: present
-  become: true
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      curl -fsSL https://opencode.ai/install | bash
+    creates: "{{ home }}/.local/bin/opencode"
+    executable: /bin/bash
+  become: false
   tags: [ai-tools, packages]
 
 - name: Install Qwen CLI

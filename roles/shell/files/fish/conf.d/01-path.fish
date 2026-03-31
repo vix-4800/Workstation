@@ -1,5 +1,6 @@
 # ======= PATH =======
 fish_add_path $HOME/.fuelup/bin
+fish_add_path $HOME/.opencode/bin
 
 if test -d $HOME/go/bin
     set -gx GOPATH $HOME/go
