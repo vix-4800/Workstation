@@ -30,14 +30,6 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
     },
-    "docker": {
-      "command": ["uvx", "--with", "fastmcp[tasks]", "mcp-docker"],
-      "environment": {
-        "MCP_DOCKER_LOG_PATH": "/dev/null",
-        "SECURITY_AUDIT_LOG_ENABLED": "false"
-      },
-      "type": "local"
-    },
     "github": {
       "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
       "type": "local"

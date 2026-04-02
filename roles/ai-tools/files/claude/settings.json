@@ -182,8 +182,7 @@
       "mcp__github__pull_request_read",
       "mcp__github__get_me",
       "mcp__mysql__query",
-      "mcp__mysql__connect_db",
-      "mcp__docker__docker_list_containers"
+      "mcp__mysql__connect_db"
     ],
     "deny": [
       "Bash(curl *)",
@@ -256,8 +255,7 @@
       "Bash(pnpm install *)",
       "Bash(pnpm update *)",
       "Bash(yarn add *)",
-      "Bash(yarn install *)",
-      "mcp__docker__docker_exec_command"
+      "Bash(yarn install *)"
     ],
     "defaultMode": "acceptEdits"
   },

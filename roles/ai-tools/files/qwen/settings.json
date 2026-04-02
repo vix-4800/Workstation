@@ -40,19 +40,6 @@
         "-y",
         "@upstash/context7-mcp@latest"
       ]
-    },
-    "docker": {
-      "command": "uvx",
-      "args": [
-        "--with",
-        "fastmcp[tasks]",
-        "mcp-docker"
-      ],
-      "timeout": 30000,
-      "env": {
-        "SECURITY_AUDIT_LOG_ENABLED": "false",
-        "MCP_DOCKER_LOG_PATH": "/dev/null"
-      }
     }
   },
   "general": {
