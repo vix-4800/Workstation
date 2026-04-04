@@ -1,10 +1,19 @@
 ---
 - name: Install PHP
   community.general.pacman:
-    name: [php, composer]
+    name: [php, composer, xdebug]
     state: present
   become: true
   tags: [development, packages]
+
+- name: Deploy xdebug config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/roles/development/files/tools/php/xdebug/xdebug.ini"
+    dest: /etc/php/conf.d/xdebug.ini
+    state: link
+    force: true
+  become: true
+  tags: [development, config]
 
 - name: Install global Composer packages
   community.general.composer:
