@@ -9,6 +9,12 @@ ai_tools_claude_mcp_servers_present:
   - name: github
     command: "{{ home }}/.local/bin/github-mcp-server-with-auth"
     args: []
+  - name: playwright
+    command: npx
+    args:
+      - -y
+      - "@playwright/mcp@latest"
+      - --browser=firefox
 
 ai_tools_claude_plugins_present:
   - frontend-design@claude-plugins-official
