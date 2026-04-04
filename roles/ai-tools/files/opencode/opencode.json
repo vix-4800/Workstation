@@ -51,6 +51,10 @@
     "playwright": {
       "command": ["npx", "-y", "@playwright/mcp@latest", "--browser=firefox"],
       "type": "local"
+    },
+    "filesystem": {
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/home/vix/Code"],
+      "type": "local"
     }
   },
   "model": "openai/gpt-5.4",

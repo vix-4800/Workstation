@@ -103,5 +103,9 @@ args = ["-y", "@upstash/context7-mcp@latest"]
 command = "npx"
 args = ["-y", "@playwright/mcp@latest", "--browser=firefox"]
 
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "/home/vix/Code"]
+
 [plugins."github@openai-curated"]
 enabled = true

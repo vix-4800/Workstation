@@ -48,6 +48,14 @@
         "@playwright/mcp@latest",
         "--browser=firefox"
       ]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/vix/Code"
+      ]
     }
   },
   "general": {
