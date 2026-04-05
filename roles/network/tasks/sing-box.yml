@@ -6,16 +6,25 @@
   become: false
   tags: [network, packages]
 
-- name: Enable IP forwarding for TUN mode
-  ansible.posix.sysctl:
-    name: "{{ item }}"
-    value: "1"
-    sysctl_set: true
-    reload: true
-  loop:
-    - net.ipv4.ip_forward
-    - net.ipv6.conf.all.forwarding
+- name: Configure IP forwarding sysctl for TUN mode
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/99-sing-box-forwarding.conf
+    content: |
+      net.ipv4.ip_forward=1
+      net.ipv6.conf.all.forwarding=1
+    owner: root
+    group: root
+    mode: "0644"
+  register: network_singbox_sysctl_config
   become: true
+  tags: [network, system]
+
+- name: Apply sysctl settings for TUN mode
+  ansible.builtin.command:
+    cmd: sysctl --system
+  become: true
+  when: network_singbox_sysctl_config.changed
+  changed_when: true
   tags: [network, system]
 
 - name: Add sudoers rules for passwordless sing-box management
