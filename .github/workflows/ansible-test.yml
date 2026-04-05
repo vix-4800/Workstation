@@ -1,0 +1,92 @@
+name: Ansible Test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint & Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Ansible tools
+        run: pip install ansible-core ansible-lint
+
+      - name: Install Ansible collections
+        run: ansible-galaxy collection install -r requirements.yml
+
+      - name: Create vault password file
+        run: echo "ci" > .vault-password && chmod 600 .vault-password
+
+      - name: Create mock secrets
+        run: cp vault/secrets.yml.example vault/secrets.yml
+
+      - name: Create mock host vars
+        run: cp inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
+
+      - name: Syntax check
+        run: ansible-playbook site.yml --syntax-check
+
+      - name: ansible-lint
+        run: ansible-lint site.yml
+
+  dry-run:
+    name: Dry Run (Arch Linux)
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - name: Install git and sudo
+        run: pacman -Syu --noconfirm git sudo
+
+      - uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: pacman -S --noconfirm ansible
+
+      - name: Install Ansible collections system-wide
+        run: ansible-galaxy collection install -r requirements.yml -p /usr/share/ansible/collections
+
+      - name: Create CI user with passwordless sudo
+        run: |
+          useradd -m ci
+          echo "ci ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ci
+
+      - name: Create vault password file
+        run: |
+          echo "ci" > .vault-password
+          chmod 600 .vault-password
+          chown ci:ci .vault-password
+
+      - name: Create mock secrets
+        run: cp vault/secrets.yml.example vault/secrets.yml
+
+      - name: Create CI host vars
+        run: |
+          cat > inventory/host_vars/localhost.yml << 'EOF'
+          ---
+          username: ci
+          hostname: ci-runner
+          cpu_vendor: intel
+          gpu_vendor: none
+          has_battery: false
+          base_timezone: UTC
+          usbguard_mode: audit
+          git_user_name: CI Runner
+          git_user_email: ci@example.com
+          EOF
+
+      - name: Set workspace permissions for CI user
+        run: chown -R ci:ci "$GITHUB_WORKSPACE"
+
+      - name: Run playbook in check mode
+        run: sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True ansible-playbook site.yml --check --diff
