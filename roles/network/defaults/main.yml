@@ -2,3 +2,7 @@
 usbguard_mode: audit
 usbguard_rules: []
 bluetooth_pairing_timeout_seconds: 180
+dpi_bypass_provider: spoofdpi
+spoofdpi_package_name: spoofdpi-bin
+spoofdpi_args: ""
+spoofdpi_service_enabled: true
