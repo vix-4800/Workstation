@@ -34,6 +34,7 @@
       - swappy
       - wdisplays
       - wf-recorder
+      - hyprpicker
     state: present
   become: true
   tags: [desktop, packages]
