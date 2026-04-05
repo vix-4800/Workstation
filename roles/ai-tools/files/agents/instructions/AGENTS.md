@@ -37,11 +37,6 @@ Use the smallest relevant set for the task.
 - Sanitise output for context: HTML-escape for HTML, shell-escape for shell.
 - No custom crypto. Validate file uploads server-side. Guard against SSRF.
 
-## PHP
-
-- PSR-1/4/12. Single-quoted strings for literals. Named arguments when they aid clarity.
-- Use `modern-php` skill; `security-review` at trust boundaries. See `rules/php.md`.
-
 ## Version Control
 
 - Conventional Commits: `feat:`, `fix:`, `refactor:`, `chore:`, `test:`, `docs:`.
