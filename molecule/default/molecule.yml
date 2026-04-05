@@ -1,0 +1,29 @@
+---
+dependency:
+  name: galaxy
+  options:
+    requirements-file: requirements.yml
+
+driver:
+  name: docker
+
+platforms:
+  - name: workstation-test
+    image: archlinux/archlinux:latest
+    pre_build_image: true
+    command: /bin/sleep infinity
+    volumes:
+      - "${MOLECULE_PROJECT_DIRECTORY}:/workstation:ro"
+
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        username: molecule
+        hostname: molecule-test
+        home: /home/molecule
+        dotfiles_dir: /workstation
+
+verifier:
+  name: ansible

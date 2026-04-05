@@ -48,6 +48,10 @@ vault-init:
 services:
     systemctl --user list-units --type=service --type=timer --state=running --no-pager
 
+# Run molecule tests (requires: pip install -r requirements-dev.txt)
+molecule:
+    molecule test
+
 # Lint all playbooks and roles
 lint:
     ansible-lint {{yml_file}}
