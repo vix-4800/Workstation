@@ -34,6 +34,13 @@
       tags: [network]
   tags: [network, sing-box]
 
+- name: Configure DPI bypass tool
+  ansible.builtin.include_tasks:
+    file: dpi-bypass.yml
+    apply:
+      tags: [network]
+  tags: [network, dpi-bypass]
+
 - name: Deploy network helper scripts
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/network/scripts/{{ item.src }}"
