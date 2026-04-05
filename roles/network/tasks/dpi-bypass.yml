@@ -11,7 +11,7 @@
 
 - name: Resolve SpoofDPI release architecture
   ansible.builtin.set_fact:
-    spoofdpi_release_arch: "{{ spoofdpi_arch_map.get(ansible_architecture, '') }}"
+    spoofdpi_release_arch: "{{ spoofdpi_arch_map.get(ansible_facts['architecture'], '') }}"
   when: dpi_bypass_provider == 'spoofdpi'
   changed_when: false
   tags: [network, system]
@@ -20,7 +20,7 @@
   ansible.builtin.assert:
     that:
       - spoofdpi_release_arch | length > 0
-    fail_msg: "Unsupported architecture for SpoofDPI: {{ ansible_architecture }}"
+    fail_msg: "Unsupported architecture for SpoofDPI: {{ ansible_facts['architecture'] }}"
   when: dpi_bypass_provider == 'spoofdpi'
   tags: [network, system]
 
