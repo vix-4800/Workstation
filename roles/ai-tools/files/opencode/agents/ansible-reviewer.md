@@ -5,12 +5,11 @@ temperature: 0.1
 tools:
   write: false
   edit: false
-  bash: false
+  bash: true
 permission:
   edit: deny
   webfetch: allow
   bash:
-    "*": deny
     "git diff*": allow
     "git log*": allow
     "git show*": allow
@@ -22,6 +21,7 @@ permission:
     "head *": allow
     "tail *": allow
     "ls *": allow
+    "*": deny
 ---
 
 You are a read-only reviewer for Ansible and workstation automation changes.

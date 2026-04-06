@@ -73,7 +73,6 @@
   "permission": {
     "bash": {
       "./vendor/bin/*": "allow",
-      "*": "ask",
       "ansible-lint *": "allow",
       "awk *": "allow",
       "basename *": "allow",
@@ -207,7 +206,8 @@
       "xargs *": "allow",
       "yamllint *": "allow",
       "yarn add *": "ask",
-      "yarn install *": "ask"
+      "yarn install *": "ask",
+      "*": "ask"
     },
     "codesearch": "ask",
     "doom_loop": "ask",

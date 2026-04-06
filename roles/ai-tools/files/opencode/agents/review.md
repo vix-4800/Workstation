@@ -5,17 +5,18 @@ temperature: 0.1
 tools:
   write: false
   edit: false
-  bash: false
+  bash: true
 permission:
   edit: deny
   webfetch: allow
   bash:
-    "*": deny
     "git diff*": allow
     "git log*": allow
     "git show*": allow
     "git status*": allow
     "git branch*": allow
+    "gh pr diff*": allow
+    "gh pr view*": allow
     "git stash list*": allow
     "git tag*": allow
     "grep *": allow
@@ -29,6 +30,7 @@ permission:
     "wc *": allow
     "ls *": allow
     "eza *": allow
+    "*": deny
 ---
 
 # Code Reviewer
