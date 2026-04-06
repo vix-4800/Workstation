@@ -1,8 +1,8 @@
 ---
-usbguard_mode: audit
-usbguard_rules: []
-bluetooth_pairing_timeout_seconds: 180
-dpi_bypass_provider: spoofdpi
-spoofdpi_version: "1.3.1"
-spoofdpi_args: ""
-spoofdpi_service_enabled: true
+network_usbguard_mode: audit
+network_usbguard_rules: []
+network_bluetooth_pairing_timeout_seconds: 180
+network_dpi_bypass_provider: spoofdpi
+network_spoofdpi_version: "1.3.1"
+network_spoofdpi_args: ""
+network_spoofdpi_service_enabled: true

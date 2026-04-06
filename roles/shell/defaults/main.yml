@@ -5,7 +5,7 @@ shell_packages:
   - tmux
   - nodejs
 
-node_global_packages:
+shell_node_global_packages:
   - markdownlint-cli2
   - "@commitlint/cli"
   - "@commitlint/config-conventional"

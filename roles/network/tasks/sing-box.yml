@@ -15,16 +15,8 @@
     owner: root
     group: root
     mode: "0644"
-  register: network_singbox_sysctl_config
   become: true
-  tags: [network, system]
-
-- name: Apply sysctl settings for TUN mode
-  ansible.builtin.command:
-    cmd: sysctl --system
-  become: true
-  when: network_singbox_sysctl_config.changed
-  changed_when: true
+  notify: apply sysctl settings
   tags: [network, system]
 
 - name: Add sudoers rules for passwordless sing-box management

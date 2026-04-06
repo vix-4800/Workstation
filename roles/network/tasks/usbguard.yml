@@ -9,16 +9,16 @@
 - name: Validate usbguard mode
   ansible.builtin.assert:
     that:
-      - usbguard_mode in ['audit', 'enforce']
-    fail_msg: "usbguard_mode must be either 'audit' or 'enforce'"
+      - network_usbguard_mode in ['audit', 'enforce']
+    fail_msg: "network_usbguard_mode must be either 'audit' or 'enforce'"
   tags: [network, config]
 
 - name: Require usbguard rules in enforce mode
   ansible.builtin.assert:
     that:
-      - usbguard_rules | length > 0
-    fail_msg: "usbguard_rules must be set in host_vars when usbguard_mode is 'enforce'"
-  when: usbguard_mode == 'enforce'
+      - network_usbguard_rules | length > 0
+    fail_msg: "network_usbguard_rules must be set in host_vars when network_usbguard_mode is 'enforce'"
+  when: network_usbguard_mode == 'enforce'
   tags: [network, config]
 
 - name: Deploy usbguard allowlist rules
@@ -29,7 +29,7 @@
     owner: root
     group: root
   become: true
-  when: usbguard_mode == 'enforce'
+  when: network_usbguard_mode == 'enforce'
   tags: [network, config]
 
 - name: Disable usbguard service in audit mode
@@ -38,7 +38,7 @@
     enabled: false
     state: stopped
   become: true
-  when: usbguard_mode == 'audit'
+  when: network_usbguard_mode == 'audit'
   failed_when: false
   tags: [network, services]
 
@@ -48,5 +48,5 @@
     enabled: true
     state: started
   become: true
-  when: usbguard_mode == 'enforce'
+  when: network_usbguard_mode == 'enforce'
   tags: [network, services]

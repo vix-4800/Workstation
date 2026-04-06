@@ -1,0 +1,9 @@
+---
+- name: extract github-mcp-server
+  ansible.builtin.unarchive:
+    src: "/tmp/github-mcp-server_{{ ai_tools_github_mcp_server_version }}.tar.gz"
+    dest: "{{ home }}/.local/bin"
+    include:
+      - github-mcp-server
+    remote_src: true
+    mode: "0755"
