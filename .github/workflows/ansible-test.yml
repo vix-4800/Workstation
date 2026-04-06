@@ -80,7 +80,7 @@ jobs:
           gpu_vendor: none
           has_battery: false
           base_timezone: UTC
-          usbguard_mode: audit
+          network_usbguard_mode: audit
           git_user_name: CI Runner
           git_user_email: ci@example.com
           EOF

@@ -25,6 +25,7 @@
 - name: Set hostname
   ansible.builtin.hostname:
     name: "{{ hostname }}"
+    use: generic
   become: true
   tags: [base, system]
 

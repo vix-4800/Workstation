@@ -56,7 +56,7 @@
       nvm use --silent lts >/dev/null;
       npm list --global --depth=0 {{ item }} >/dev/null 2>&1;
       or npm install --global {{ item }}"
-  loop: "{{ node_global_packages }}"
+  loop: "{{ shell_node_global_packages }}"
   loop_control:
     label: "{{ item }}"
   register: shell_node_global_install

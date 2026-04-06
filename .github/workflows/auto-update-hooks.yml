@@ -1,7 +1,6 @@
 name: Auto-update pre-commit hooks
 permissions:
   contents: write
-  pull-requests: write
 
 on:
   schedule:
@@ -27,14 +26,15 @@ jobs:
       - name: Update pre-commit hooks
         run: pre-commit autoupdate
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v8
-        with:
-          commit-message: 'chore: update pre-commit hooks'
-          title: 'chore: update pre-commit hooks'
-          body: |
-            Auto-generated PR to update pre-commit hooks to their latest versions.
-
-            Please review the changes and merge if everything looks good.
-          branch: auto-update/pre-commit-hooks
-          delete-branch: true
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git checkout -B auto-update/pre-commit-hooks
+            git add .pre-commit-config.yaml
+            git commit -m "chore: update pre-commit hooks"
+            git push --force origin auto-update/pre-commit-hooks
+          fi

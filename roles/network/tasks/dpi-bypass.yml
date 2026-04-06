@@ -1,27 +1,27 @@
 ---
 - name: Define SpoofDPI release architecture map
   ansible.builtin.set_fact:
-    spoofdpi_arch_map:
+    network_spoofdpi_arch_map:
       x86_64: x86_64
       aarch64: arm64
       armv7l: armv7
-  when: dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'spoofdpi'
   changed_when: false
   tags: [network, system]
 
 - name: Resolve SpoofDPI release architecture
   ansible.builtin.set_fact:
-    spoofdpi_release_arch: "{{ spoofdpi_arch_map.get(ansible_facts['architecture'], '') }}"
-  when: dpi_bypass_provider == 'spoofdpi'
+    network_spoofdpi_release_arch: "{{ network_spoofdpi_arch_map.get(ansible_facts['architecture'], '') }}"
+  when: network_dpi_bypass_provider == 'spoofdpi'
   changed_when: false
   tags: [network, system]
 
 - name: Validate SpoofDPI architecture support
   ansible.builtin.assert:
     that:
-      - spoofdpi_release_arch | length > 0
+      - network_spoofdpi_release_arch | length > 0
     fail_msg: "Unsupported architecture for SpoofDPI: {{ ansible_facts['architecture'] }}"
-  when: dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'spoofdpi'
   tags: [network, system]
 
 - name: Ensure SpoofDPI install directory exists
@@ -32,28 +32,28 @@
     group: root
     mode: "0755"
   become: true
-  when: dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'spoofdpi'
   tags: [network, system]
 
 - name: Download SpoofDPI release archive
   ansible.builtin.get_url:
-    url: "https://github.com/xvzc/SpoofDPI/releases/download/v{{ spoofdpi_version }}/spoofdpi_{{ spoofdpi_version }}_linux_{{ spoofdpi_release_arch }}.tar.gz"
-    dest: "/tmp/spoofdpi_{{ spoofdpi_version }}_linux_{{ spoofdpi_release_arch }}.tar.gz"
+    url: "https://github.com/xvzc/SpoofDPI/releases/download/v{{ network_spoofdpi_version }}/spoofdpi_{{ network_spoofdpi_version }}_linux_{{ network_spoofdpi_release_arch }}.tar.gz"
+    dest: "/tmp/spoofdpi_{{ network_spoofdpi_version }}_linux_{{ network_spoofdpi_release_arch }}.tar.gz"
     mode: "0644"
   become: true
-  when: dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'spoofdpi'
   tags: [network, packages]
 
 - name: Extract SpoofDPI release archive
   ansible.builtin.unarchive:
-    src: "/tmp/spoofdpi_{{ spoofdpi_version }}_linux_{{ spoofdpi_release_arch }}.tar.gz"
+    src: "/tmp/spoofdpi_{{ network_spoofdpi_version }}_linux_{{ network_spoofdpi_release_arch }}.tar.gz"
     dest: /opt/spoofdpi
     remote_src: true
     owner: root
     group: root
     mode: "0755"
   become: true
-  when: dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'spoofdpi'
   tags: [network, packages]
 
 - name: Install SpoofDPI binary
@@ -65,7 +65,7 @@
     mode: "0755"
     remote_src: true
   become: true
-  when: dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'spoofdpi'
   tags: [network, packages]
 
 - name: Deploy SpoofDPI systemd service
@@ -76,15 +76,15 @@
     group: root
     mode: "0644"
   become: true
-  when: dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'spoofdpi'
   tags: [network, config]
 
 - name: Enable SpoofDPI systemd service
   ansible.builtin.systemd:
     name: spoofdpi.service
-    enabled: "{{ spoofdpi_service_enabled | bool }}"
-    state: "{{ 'started' if spoofdpi_service_enabled else 'stopped' }}"
+    enabled: "{{ network_spoofdpi_service_enabled | bool }}"
+    state: "{{ 'started' if network_spoofdpi_service_enabled else 'stopped' }}"
     daemon_reload: true
   become: true
-  when: dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'spoofdpi'
   tags: [network, services]
