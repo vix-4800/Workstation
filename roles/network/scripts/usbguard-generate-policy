@@ -15,7 +15,7 @@ Candidate USBGuard policy written to:
 
 Copy the rules you want into inventory/host_vars/localhost.yml:
 
-usbguard_mode: enforce
-usbguard_rules:
+network_usbguard_mode: enforce
+network_usbguard_rules:
 ${yaml_rules}
 EOF
