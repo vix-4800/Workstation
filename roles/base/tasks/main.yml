@@ -23,12 +23,8 @@
   tags: [base, system]
 
 - name: Set hostname
-  ansible.builtin.copy:
-    dest: /etc/hostname
-    content: "{{ hostname }}\n"
-    owner: root
-    group: root
-    mode: "0644"
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
   become: true
   tags: [base, system]
 
