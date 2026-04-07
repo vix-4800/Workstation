@@ -3,7 +3,8 @@
 ## Behaviour
 
 - When a task is ambiguous, ask one targeted question — do not assume and implement both paths.
-- For file and codebase operations (search, read, list), use MCP tools first — `filesystem` for raw file access, `serena` for symbol-aware navigation. Fall back to Bash (`grep`, `find`, `cat`) only if the MCP tool is unavailable or fails.
+- Read existing code before modifying. When Serena MCP is available, prefer `get_symbols_overview` and `find_symbol`
+  over reading whole files.
 - Do not summarise what you just did. State what changed and why in one or two sentences.
 - Never use emojis in code, comments, or commit messages.
 

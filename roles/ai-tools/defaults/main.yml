@@ -15,12 +15,6 @@ ai_tools_claude_mcp_servers_present:
       - -y
       - "@playwright/mcp@latest"
       - --browser=firefox
-  - name: filesystem
-    command: npx
-    args:
-      - -y
-      - "@modelcontextprotocol/server-filesystem"
-      - /home/vix/Code
 
 ai_tools_claude_plugins_present:
   - frontend-design@claude-plugins-official

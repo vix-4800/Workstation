@@ -183,13 +183,6 @@
       "mcp__github__get_me",
       "mcp__mysql__query",
       "mcp__mysql__connect_db",
-      "mcp__filesystem__read_file",
-      "mcp__filesystem__read_multiple_files",
-      "mcp__filesystem__list_directory",
-      "mcp__filesystem__list_directory_with_sizes",
-      "mcp__filesystem__search_files",
-      "mcp__filesystem__get_file_info",
-      "mcp__filesystem__list_allowed_directories",
       "mcp__playwright__browser_navigate"
     ],
     "deny": [
