@@ -20,6 +20,8 @@ Create and edit valid Obsidian Flavored Markdown. Obsidian extends CommonMark an
 
 > Do not use emojis, stickers, or other visual noise. Avoid decorative formatting that adds no meaning.
 
+> In code blocks always use tabs for indentation, not 2 or 4 spaces. Tab is 4 spaces.
+
 > When choosing between wikilinks and Markdown links: use `[[wikilinks]]` for notes within the vault (Obsidian tracks renames automatically) and `[text](url)` for external URLs only.
 
 ## Internal Links (Wikilinks)
