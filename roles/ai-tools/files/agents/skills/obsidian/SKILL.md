@@ -99,12 +99,12 @@ See [CALLOUTS.md](references/CALLOUTS.md) for the full list with aliases, nestin
 title: My Note
 date: 2024-01-15
 tags:
-  - project
-  - active
+    - project
+    - active
 aliases:
-  - Alternative Name
+    - Alternative Name
 cssclasses:
-  - custom-class
+    - custom-class
 ---
 ```
 
@@ -180,8 +180,8 @@ Inline footnote.^[This is inline.]
 title: Project Alpha
 date: 2024-01-15
 tags:
-  - project
-  - active
+    - project
+    - active
 status: in-progress
 ---
 
@@ -196,8 +196,8 @@ This project aims to [[improve workflow]] using modern techniques.
 
 - [x] Initial planning
 - [ ] Development phase
-  - [ ] Backend implementation
-  - [ ] Frontend design
+    - [ ] Backend implementation
+    - [ ] Frontend design
 
 ## Notes
 
