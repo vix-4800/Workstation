@@ -9,12 +9,16 @@ Create and edit valid Obsidian Flavored Markdown. Obsidian extends CommonMark an
 
 ## Workflow: Creating an Obsidian Note
 
-1. **Add frontmatter** with properties (title, tags, aliases) at the top of the file. See [PROPERTIES.md](references/PROPERTIES.md) for all property types.
-2. **Write content** using standard Markdown for structure, plus Obsidian-specific syntax below.
-3. **Link related notes** using wikilinks (`[[Note]]`) for internal vault connections, or standard Markdown links for external URLs.
-4. **Embed content** from other notes, images, or PDFs using the `![[embed]]` syntax. See [EMBEDS.md](references/EMBEDS.md) for all embed types.
-5. **Add callouts** for highlighted information using `> [!type]` syntax. See [CALLOUTS.md](references/CALLOUTS.md) for all callout types.
-6. **Verify** the note renders correctly in Obsidian's reading view.
+1. **Check for existing notes** before creating — look for a closely related entry that already covers the topic.
+2. **One note, one topic** — keep each file focused on a single clear subject; the title must match the note's main subject.
+3. **Add frontmatter** with properties (title, tags, aliases) at the top of the file. See [PROPERTIES.md](references/PROPERTIES.md) for all property types.
+4. **Write content** using standard Markdown for structure, plus Obsidian-specific syntax below. Use headings and lists — avoid long walls of text.
+5. **Link related notes** using wikilinks (`[[Note]]`) for internal vault connections, or standard Markdown links for external URLs. Only add wikilinks that are meaningful and contextually related.
+6. **Embed content** from other notes, images, or PDFs using the `![[embed]]` syntax. See [EMBEDS.md](references/EMBEDS.md) for all embed types.
+7. **Add callouts** for highlighted information using `> [!type]` syntax. See [CALLOUTS.md](references/CALLOUTS.md) for all callout types.
+8. **Verify** the note renders correctly in Obsidian's reading view.
+
+> Do not use emojis, stickers, or other visual noise. Avoid decorative formatting that adds no meaning.
 
 > When choosing between wikilinks and Markdown links: use `[[wikilinks]]` for notes within the vault (Obsidian tracks renames automatically) and `[text](url)` for external URLs only.
 
@@ -27,6 +31,19 @@ Create and edit valid Obsidian Flavored Markdown. Obsidian extends CommonMark an
 [[Note Name#^block-id]]                Link to block
 [[#Heading in same note]]              Same-note heading link
 ```
+
+In table cells, escape the pipe character to avoid breaking the table:
+
+```markdown
+| Column |
+| --- |
+| [[Note#Heading\|Display]] |
+```
+
+**Linking guidance:**
+- Do not add wikilinks inside code blocks — they are not rendered there and should remain plain text.
+- When a concept lives in a specific section of a note, prefer `[[Note#Heading]]` over linking to the note root.
+- Only add wikilinks that are meaningful and contextually related; do not link every mention.
 
 Define a block ID by appending `^block-id` to any paragraph:
 
@@ -101,6 +118,8 @@ See [PROPERTIES.md](references/PROPERTIES.md) for all property types, tag syntax
 ```
 
 Tags can contain letters, numbers (not first character), underscores, hyphens, and forward slashes. Tags can also be defined in frontmatter under the `tags` property.
+
+Keep tags short and systematic. Do not create tags that simply restate the note title or duplicate its meaning.
 
 ## Comments
 
