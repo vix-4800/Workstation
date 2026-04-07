@@ -2,7 +2,7 @@
 # Machine-specific variables for this host.
 # Copy this file to localhost.yml and fill in the values.
 
-username: vix        # local user account name
+username: dev        # local user account name
 hostname: workstation
 cpu_vendor: intel   # intel | amd
 gpu_vendor: nvidia  # nvidia | amd | none

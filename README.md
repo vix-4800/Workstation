@@ -120,7 +120,7 @@ After encryption, the file must start with `$ANSIBLE_VAULT;`.
 
 ### 6. Install Ansible collections
 
-This repository depends on Galaxy collections declared in [requirements.yml](/home/vix/Code/Workstation/requirements.yml),
+This repository depends on Galaxy collections declared in [requirements.yml](/requirements.yml),
 including `kewlfft.aur`. On a clean system install them before the first apply:
 
 ```bash
