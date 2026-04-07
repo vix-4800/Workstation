@@ -67,6 +67,7 @@ ai_tools_shared_skill_names:
   - testing-strategy
   - laravel-patterns
   - yii2-patterns
+  - obsidian
 
 ai_tools_shared_skill_targets:
   - "{{ home }}/.agents/skills"
