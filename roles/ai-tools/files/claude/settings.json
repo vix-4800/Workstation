@@ -220,7 +220,6 @@
       "Bash(docker system prune *)",
       "Bash(docker volume rm *)",
       "Read(./.env)",
-      "Read(./.env.*)",
       "Read(./inventory/host_vars/**)",
       "Read(./secrets/**)",
       "Read(./vault/**)",
