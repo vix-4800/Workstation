@@ -1,6 +1,14 @@
-function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak, fish plugins, pipx packages, and claude'
+function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak, fish plugins, pipx packages, and CLI tools'
     set -l step 1
-    set -l total_steps 10
+    set -l simple_update_specs \
+        "Updating pacman mirrors with reflector...|reflector|sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist|Mirrors updated successfully|Failed to update mirrors, continuing anyway...|Reflector not installed, skipping mirror update|false" \
+        "Updating official packages (pacman)...|pacman|sudo pacman -Syu --noconfirm|Official packages updated|Pacman update failed|Pacman not installed, cannot continue|true" \
+        "Updating AUR packages (yay)...|yay|yay -Syu --noconfirm|AUR packages updated|Some AUR packages failed to update|Yay not installed, skipping AUR updates|false" \
+        "Updating Flatpak packages...|flatpak|flatpak update -y|Flatpak packages updated|Flatpak update had issues|Flatpak not installed, skipping|false" \
+        "Updating Fish shell plugins...|fisher|fisher update|Fish plugins updated|Fish plugin update had issues|Fisher not installed, skipping plugin updates|false" \
+        "Updating Claude CLI...|claude|claude update|Claude CLI updated|Claude CLI update had issues|Claude CLI not installed, skipping|false" \
+        "Updating OpenCode CLI...|opencode|opencode upgrade|OpenCode CLI updated|OpenCode CLI update had issues|OpenCode CLI not installed, skipping|false"
+    set -l total_steps (math (count $simple_update_specs) + 4)
 
     # Colors
     set -l RED (set_color red)
@@ -30,68 +38,52 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         echo "$RED✗$OFF $argv"
     end
 
+    function run_simple_update_step
+        set -l spec $argv[1]
+        set -l parts (string split '|' -- $spec)
+        set -l title $parts[1]
+        set -l command_name $parts[2]
+        set -l run_command $parts[3]
+        set -l success_message $parts[4]
+        set -l failure_message $parts[5]
+        set -l missing_message $parts[6]
+        set -l fatal_on_failure $parts[7]
+
+        print_step $title
+        if command -v $command_name >/dev/null
+            if eval $run_command
+                print_success $success_message
+            else
+                if test "$fatal_on_failure" = "true"
+                    print_error $failure_message
+                    return 1
+                end
+
+                print_warning $failure_message
+            end
+        else
+            if test "$fatal_on_failure" = "true"
+                print_error $missing_message
+                return 1
+            end
+
+            print_warning $missing_message
+        end
+
+        return 0
+    end
+
     echo "$BOLD$CYN╔════════════════════════════════════════╗$OFF"
     echo "$BOLD$CYN║     Full System Upgrade Started        ║$OFF"
     echo "$BOLD$CYN╚════════════════════════════════════════╝$OFF"
 
-    # Step 1: Update pacman mirrors with reflector
-    print_step "Updating pacman mirrors with reflector..."
-    if command -v reflector >/dev/null
-        if sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-            print_success "Mirrors updated successfully"
-        else
-            print_warning "Failed to update mirrors, continuing anyway..."
+    for simple_update_spec in $simple_update_specs
+        if not run_simple_update_step $simple_update_spec
+            return 1
         end
-    else
-        print_warning "Reflector not installed, skipping mirror update"
     end
 
-    # Step 2: Update official packages with pacman
-    print_step "Updating official packages (pacman)..."
-    if sudo pacman -Syu --noconfirm
-        print_success "Official packages updated"
-    else
-        print_error "Pacman update failed"
-        return 1
-    end
-
-    # Step 3: Update AUR packages with yay
-    print_step "Updating AUR packages (yay)..."
-    if command -v yay >/dev/null
-        if yay -Syu --noconfirm
-            print_success "AUR packages updated"
-        else
-            print_warning "Some AUR packages failed to update"
-        end
-    else
-        print_warning "Yay not installed, skipping AUR updates"
-    end
-
-    # Step 4: Update flatpak packages
-    print_step "Updating Flatpak packages..."
-    if command -v flatpak >/dev/null
-        if flatpak update -y
-            print_success "Flatpak packages updated"
-        else
-            print_warning "Flatpak update had issues"
-        end
-    else
-        print_warning "Flatpak not installed, skipping"
-    end
-
-    # Step 5: Update fish plugins
-    print_step "Updating Fish shell plugins..."
-    if command -v fisher >/dev/null
-        if fisher update
-            print_success "Fish plugins updated"
-        else
-            print_warning "Fish plugin update had issues"
-        end
-    else
-        print_warning "Fisher not installed, skipping plugin updates"
-    end
-
-    # Step 6: Reinstall pipx packages (handles Python version updates)
+    # Reinstall pipx packages (handles Python version updates)
     print_step "Checking and reinstalling pipx packages..."
     if command -v pipx >/dev/null
         set -l pipx_status (pipx list 2>&1)
@@ -114,7 +106,7 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         print_warning "Pipx not installed, skipping"
     end
 
-    # Step 7: Update npm global packages
+    # Update npm global packages
     print_step "Updating global npm packages..."
     if command -v npm >/dev/null
         set -l outdated_pkgs (npm -g outdated --parseable --depth=0 | string split '\n' | string map 'string split ":" $argv[0]' | string map '$argv[0]')
@@ -135,7 +127,7 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         print_warning "NPM not installed, skipping"
     end
 
-    # Step 8: Update PHP composer global packages
+    # Update PHP composer global packages
     print_step "Updating global Composer packages..."
     if command -v composer >/dev/null
         set -l composer_home (composer config --global home)
@@ -161,19 +153,7 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         print_warning "Composer not installed, skipping"
     end
 
-    # Step 9: Update Claude CLI
-    print_step "Updating Claude CLI..."
-    if command -v claude >/dev/null
-        if claude update
-            print_success "Claude CLI updated"
-        else
-            print_warning "Claude CLI update had issues"
-        end
-    else
-        print_warning "Claude CLI not installed, skipping"
-    end
-
-    # Step 10: Clean up orphaned packages
+    # Clean up orphaned packages
     print_step "Cleaning up orphaned packages..."
     set -l orphans (pacman -Qtdq 2>/dev/null)
     if test -n "$orphans"
