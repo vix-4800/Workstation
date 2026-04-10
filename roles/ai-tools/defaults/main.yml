@@ -75,15 +75,18 @@ ai_tools_repo_symlinks:
   - { src: claude/hooks, dest: "{{ home }}/.claude/hooks" }
   - { src: claude/agents, dest: "{{ home }}/.claude/agents" }
   - { src: claude/rules, dest: "{{ home }}/.claude/rules" }
+  - { src: agents/commands, dest: "{{ home }}/.claude/commands" }
   - { src: opencode, dest: "{{ home }}/.config/opencode" }
   - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
   - { src: codex/rules/allow.rules, dest: "{{ home }}/.codex/rules/allow.rules" }
   - { src: codex/rules/prompt.rules, dest: "{{ home }}/.codex/rules/prompt.rules" }
   - { src: codex/rules/deny.rules, dest: "{{ home }}/.codex/rules/deny.rules" }
   - { src: codex/agents, dest: "{{ home }}/.codex/agents" }
+  - { src: agents/commands, dest: "{{ home }}/.codex/commands" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
   - { src: qwen/extensions/catalog.json, dest: "{{ home }}/.qwen/extensions/catalog.json" }
   - { src: qwen/agents, dest: "{{ home }}/.qwen/agents" }
+  - { src: agents/commands, dest: "{{ home }}/.qwen/commands" }
   - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
 
 ai_tools_repo_templates:
