@@ -10,7 +10,7 @@ Create and edit valid Obsidian Flavored Markdown. Obsidian extends CommonMark an
 ## Workflow: Creating an Obsidian Note
 
 1. **Check for existing notes** before creating — look for a closely related entry that already covers the topic.
-2. **One note, one topic** — keep each file focused on a single clear subject; the title must match the note's main subject.
+2. **One note, one topic** — keep each file focused on a single clear subject; the title must match the note's main subject. Note filenames must not contain `/`, `\`, or `:` — Obsidian forbids these characters in note names.
 3. **Add frontmatter** with properties (title, tags, aliases) at the top of the file. See [PROPERTIES.md](references/PROPERTIES.md) for all property types.
 4. **Write content** using standard Markdown for structure, plus Obsidian-specific syntax below. Use headings and lists — avoid long walls of text.
 5. **Link related notes** using wikilinks (`[[Note]]`) for internal vault connections, or standard Markdown links for external URLs. Only add wikilinks that are meaningful and contextually related.
