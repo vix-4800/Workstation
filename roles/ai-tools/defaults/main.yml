@@ -84,6 +84,7 @@ ai_tools_repo_symlinks:
   - { src: codex/agents, dest: "{{ home }}/.codex/agents" }
   - { src: agents/commands, dest: "{{ home }}/.codex/commands" }
   - { src: copilot/config.json, dest: "{{ home }}/.copilot/config.json" }
+  - { src: copilot/lsp-config.json, dest: "{{ home }}/.copilot/lsp-config.json" }
   - { src: copilot/mcp-config.json, dest: "{{ home }}/.copilot/mcp-config.json" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
   - { src: qwen/extensions/catalog.json, dest: "{{ home }}/.qwen/extensions/catalog.json" }
