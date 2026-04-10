@@ -7,7 +7,8 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         "Updating Flatpak packages...|flatpak|flatpak update -y|Flatpak packages updated|Flatpak update had issues|Flatpak not installed, skipping|false" \
         "Updating Fish shell plugins...|fisher|fisher update|Fish plugins updated|Fish plugin update had issues|Fisher not installed, skipping plugin updates|false" \
         "Updating Claude CLI...|claude|claude update|Claude CLI updated|Claude CLI update had issues|Claude CLI not installed, skipping|false" \
-        "Updating OpenCode CLI...|opencode|opencode upgrade|OpenCode CLI updated|OpenCode CLI update had issues|OpenCode CLI not installed, skipping|false"
+        "Updating OpenCode CLI...|opencode|opencode upgrade|OpenCode CLI updated|OpenCode CLI update had issues|OpenCode CLI not installed, skipping|false" \
+        "Updating Copilot CLI...|copilot|copilot update|Copilot CLI updated|Copilot CLI update had issues|Copilot CLI not installed, skipping|false"
     set -l total_steps (math (count $simple_update_specs) + 4)
 
     # Colors

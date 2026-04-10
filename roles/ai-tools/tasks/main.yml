@@ -19,6 +19,16 @@
   become: false
   tags: [ai-tools, packages]
 
+- name: Install Copilot CLI
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      curl -fsSL https://gh.io/copilot-install | bash
+    creates: "{{ home }}/.local/bin/copilot"
+    executable: /bin/bash
+  become: false
+  tags: [ai-tools, packages]
+
 - name: Install Qwen CLI
   ansible.builtin.shell:
     cmd: |
@@ -346,6 +356,15 @@
       - qwen
       - mcp
       - list
+  changed_when: false
+  when: ai_tools_run_health_checks | bool
+  tags: [ai-tools, config]
+
+- name: Verify Copilot CLI health
+  ansible.builtin.command:
+    argv:
+      - copilot
+      - --version
   changed_when: false
   when: ai_tools_run_health_checks | bool
   tags: [ai-tools, config]

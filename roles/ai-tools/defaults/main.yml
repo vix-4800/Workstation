@@ -83,6 +83,8 @@ ai_tools_repo_symlinks:
   - { src: codex/rules/deny.rules, dest: "{{ home }}/.codex/rules/deny.rules" }
   - { src: codex/agents, dest: "{{ home }}/.codex/agents" }
   - { src: agents/commands, dest: "{{ home }}/.codex/commands" }
+  - { src: copilot/config.json, dest: "{{ home }}/.copilot/config.json" }
+  - { src: copilot/mcp-config.json, dest: "{{ home }}/.copilot/mcp-config.json" }
   - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
   - { src: qwen/extensions/catalog.json, dest: "{{ home }}/.qwen/extensions/catalog.json" }
   - { src: qwen/agents, dest: "{{ home }}/.qwen/agents" }
@@ -98,5 +100,6 @@ ai_tools_qwen_extension_workspace_override: "{{ home }}/*"
 ai_tools_home_symlinks:
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.codex/AGENTS.md" }
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.claude/CLAUDE.md" }
+  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.copilot/copilot-instructions.md" }
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.qwen/AGENTS.md" }
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.config/opencode/AGENTS.md" }

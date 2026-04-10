@@ -1,0 +1,14 @@
+{
+  "autoUpdate": true,
+  "banner": "never",
+  "effortLevel": "medium",
+  "includeCoAuthoredBy": true,
+  "logLevel": "error",
+  "model": "claude-sonnet-4.6",
+  "renderMarkdown": true,
+  "respectGitignore": true,
+  "stream": true,
+  "theme": "dark",
+  "firstLaunchAt": "2026-03-11T00:00:00.000Z",
+  "experimental": true
+}
