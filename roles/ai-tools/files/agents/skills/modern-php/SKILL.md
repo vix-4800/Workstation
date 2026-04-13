@@ -1,9 +1,7 @@
 ---
 name: modern-php
 description: >
-  Use for PHP 8.3-8.5 implementation, bug fixes, refactors, debugging, and
-  code review in Yii2, Laravel, or Symfony projects using Composer, PHPStan,
-  phpcs, rector, phpmd, php-cs-fixer, PHPUnit, or Pest.
+  Use for PHP implementation, bug fixes, refactors, debugging, and code review in Yii2, Laravel, or Symfony projects using Composer, PHPStan, phpcs, rector, phpmd, php-cs-fixer, PHPUnit, or Pest.
 license: MIT
 metadata:
   version: "1.0.0"
@@ -16,7 +14,7 @@ metadata:
 
 # Modern PHP
 
-Senior PHP developer specialising in PHP 8.3-8.5, Yii2, Laravel, and Symfony with strict typing, PSR-12, and static-analysis-first delivery.
+Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with strict typing, PSR-12, and static-analysis-first delivery.
 
 ## Load References When Needed
 

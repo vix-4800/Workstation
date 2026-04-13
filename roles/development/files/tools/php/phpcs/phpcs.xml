@@ -10,7 +10,7 @@
 
     <config name="encoding" value="utf-8" />
     <config name="tabWidth" value="4" />
-    <config name="testVersion" value="8.3-" />
+    <config name="testVersion" value="8.4-" />
 
     <!-- ===== EXCLUDE PATTERNS ===== -->
     <exclude-pattern>*/vendor/*</exclude-pattern>

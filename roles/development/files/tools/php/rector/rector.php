@@ -152,7 +152,7 @@ $config = RectorConfig::configure()
         '_ide_helper_models.php',
         'bootstrap/cache',
     ])
-    ->withPhpSets(php83: true)
+    ->withPhpSets(php84: true)
     ->withTypeCoverageLevel(2)
     ->withDeadCodeLevel(2)
     ->withCodeQualityLevel(3)
