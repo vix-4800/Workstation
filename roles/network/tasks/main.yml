@@ -27,12 +27,12 @@
       tags: [network]
   tags: [network, wireguard]
 
-- name: Configure sing-box
+- name: Configure v2raya
   ansible.builtin.include_tasks:
-    file: sing-box.yml
+    file: v2raya.yml
     apply:
       tags: [network]
-  tags: [network, sing-box]
+  tags: [network, v2raya]
 
 - name: Configure DPI bypass tool
   ansible.builtin.include_tasks:
@@ -61,10 +61,3 @@
     state: link
     force: true
   tags: [network, config]
-
-- name: Install v2rayN
-  kewlfft.aur.aur:
-    name: "v2rayN"
-    state: present
-  become: false
-  tags: [network, packages]

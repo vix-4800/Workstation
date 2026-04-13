@@ -1,0 +1,18 @@
+---
+- name: Install v2raya and xray
+  kewlfft.aur.aur:
+    name:
+      - v2raya
+      - xray
+    state: present
+  become: false
+  tags: [network, packages]
+
+- name: Enable and start v2raya service
+  ansible.builtin.systemd:
+    name: v2raya
+    enabled: true
+    state: started
+    daemon_reload: true
+  become: true
+  tags: [network, services]

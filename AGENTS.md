@@ -82,7 +82,7 @@ just bootstrap
 | `shell` | Fish, Bash, Alacritty, Tmux, aliases |
 | `editor` | Neovim, VSCode flags, Git config |
 | `audio` | PipeWire, WirePlumber, multimedia |
-| `network` | Firewall, Bluetooth, WireGuard, sing-box |
+| `network` | Firewall, Bluetooth, WireGuard, V2RayA |
 | `desktop` | Sway, Waybar, Wofi, SwayNC, GTKLock, Wlogout, etc. |
 | `display-manager` | Greetd + ReGreet |
 | `development` | PHP, Python, Go, Docker, all linter configs |
