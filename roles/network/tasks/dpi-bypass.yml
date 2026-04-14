@@ -1,90 +1,120 @@
 ---
-- name: Define SpoofDPI release architecture map
-  ansible.builtin.set_fact:
-    network_spoofdpi_arch_map:
-      x86_64: x86_64
-      aarch64: arm64
-      armv7l: armv7
-  when: network_dpi_bypass_provider == 'spoofdpi'
-  changed_when: false
-  tags: [network, system]
+- name: Stop and disable spoofdpi service
+  ansible.builtin.systemd:
+    name: spoofdpi.service
+    enabled: false
+    state: stopped
+  become: true
+  failed_when: false
+  when: network_dpi_bypass_provider != 'spoofdpi'
+  tags: [network, services]
 
-- name: Resolve SpoofDPI release architecture
-  ansible.builtin.set_fact:
-    network_spoofdpi_release_arch: "{{ network_spoofdpi_arch_map.get(ansible_facts['architecture'], '') }}"
-  when: network_dpi_bypass_provider == 'spoofdpi'
-  changed_when: false
-  tags: [network, system]
-
-- name: Validate SpoofDPI architecture support
-  ansible.builtin.assert:
-    that:
-      - network_spoofdpi_release_arch | length > 0
-    fail_msg: "Unsupported architecture for SpoofDPI: {{ ansible_facts['architecture'] }}"
-  when: network_dpi_bypass_provider == 'spoofdpi'
-  tags: [network, system]
-
-- name: Ensure SpoofDPI install directory exists
+- name: Remove spoofdpi artifacts
   ansible.builtin.file:
-    path: /opt/spoofdpi
+    path: "{{ item }}"
+    state: absent
+  become: true
+  loop:
+    - /etc/systemd/system/spoofdpi.service
+    - /usr/local/bin/spoofdpi
+    - /opt/spoofdpi
+  when: network_dpi_bypass_provider != 'spoofdpi'
+  tags: [network, packages]
+
+- name: Install zapret2 runtime dependencies
+  community.general.pacman:
+    name:
+      - nftables
+      - libnetfilter_queue
+    state: present
+  become: true
+  when: network_dpi_bypass_provider == 'zapret2'
+  tags: [network, packages]
+
+- name: Download zapret2 release archive
+  ansible.builtin.get_url:
+    url: "https://github.com/bol-van/zapret2/releases/download/v{{ network_zapret2_version }}/zapret2-v{{ network_zapret2_version }}.tar.gz"
+    dest: "/tmp/zapret2-v{{ network_zapret2_version }}.tar.gz"
+    mode: "0644"
+  become: true
+  when: network_dpi_bypass_provider == 'zapret2'
+  tags: [network, packages]
+
+- name: Ensure /opt/zapret2 directory exists
+  ansible.builtin.file:
+    path: /opt/zapret2
     state: directory
     owner: root
     group: root
     mode: "0755"
   become: true
-  when: network_dpi_bypass_provider == 'spoofdpi'
-  tags: [network, system]
-
-- name: Download SpoofDPI release archive
-  ansible.builtin.get_url:
-    url: "https://github.com/xvzc/SpoofDPI/releases/download/v{{ network_spoofdpi_version }}/spoofdpi_{{ network_spoofdpi_version }}_linux_{{ network_spoofdpi_release_arch }}.tar.gz"
-    dest: "/tmp/spoofdpi_{{ network_spoofdpi_version }}_linux_{{ network_spoofdpi_release_arch }}.tar.gz"
-    mode: "0644"
-  become: true
-  when: network_dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'zapret2'
   tags: [network, packages]
 
-- name: Extract SpoofDPI release archive
+- name: Extract zapret2 release archive
   ansible.builtin.unarchive:
-    src: "/tmp/spoofdpi_{{ network_spoofdpi_version }}_linux_{{ network_spoofdpi_release_arch }}.tar.gz"
-    dest: /opt/spoofdpi
+    src: "/tmp/zapret2-v{{ network_zapret2_version }}.tar.gz"
+    dest: /opt/zapret2
     remote_src: true
+    extra_opts: ["--strip-components=1"]
+    owner: root
+    group: root
+    creates: /opt/zapret2/init.d/sysv/zapret2
+  become: true
+  when: network_dpi_bypass_provider == 'zapret2'
+  tags: [network, packages]
+
+- name: Ensure zapret2 custom.d directory exists
+  ansible.builtin.file:
+    path: /opt/zapret2/init.d/sysv/custom.d
+    state: directory
     owner: root
     group: root
     mode: "0755"
   become: true
-  when: network_dpi_bypass_provider == 'spoofdpi'
-  tags: [network, packages]
-
-- name: Install SpoofDPI binary
-  ansible.builtin.copy:
-    src: /opt/spoofdpi/spoofdpi
-    dest: /usr/local/bin/spoofdpi
-    owner: root
-    group: root
-    mode: "0755"
-    remote_src: true
-  become: true
-  when: network_dpi_bypass_provider == 'spoofdpi'
-  tags: [network, packages]
-
-- name: Deploy SpoofDPI systemd service
-  ansible.builtin.template:
-    src: spoofdpi.service.j2
-    dest: /etc/systemd/system/spoofdpi.service
-    owner: root
-    group: root
-    mode: "0644"
-  become: true
-  when: network_dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'zapret2'
   tags: [network, config]
 
-- name: Enable SpoofDPI systemd service
+- name: Deploy zapret2 config
+  ansible.builtin.template:
+    src: zapret2.config.j2
+    dest: /opt/zapret2/config
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  when: network_dpi_bypass_provider == 'zapret2'
+  tags: [network, config]
+
+- name: Deploy zapret2 QUIC custom script
+  ansible.builtin.copy:
+    src: zapret2/custom.d/50-quic4all
+    dest: /opt/zapret2/init.d/sysv/custom.d/50-quic4all
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+  when: network_dpi_bypass_provider == 'zapret2'
+  tags: [network, config]
+
+- name: Install zapret2 systemd service
+  ansible.builtin.copy:
+    src: /opt/zapret2/init.d/systemd/zapret2.service
+    dest: /etc/systemd/system/zapret2.service
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: true
+  become: true
+  when: network_dpi_bypass_provider == 'zapret2'
+  tags: [network, config]
+
+- name: Enable zapret2 systemd service
   ansible.builtin.systemd:
-    name: spoofdpi.service
-    enabled: "{{ network_spoofdpi_service_enabled | bool }}"
-    state: "{{ 'started' if network_spoofdpi_service_enabled else 'stopped' }}"
+    name: zapret2.service
+    enabled: "{{ network_zapret2_service_enabled | bool }}"
+    state: "{{ 'started' if network_zapret2_service_enabled else 'stopped' }}"
     daemon_reload: true
   become: true
-  when: network_dpi_bypass_provider == 'spoofdpi'
+  when: network_dpi_bypass_provider == 'zapret2'
   tags: [network, services]

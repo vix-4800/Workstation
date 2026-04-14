@@ -1,0 +1,67 @@
+# zapret2 configuration
+# managed by ansible — do not edit manually
+
+# firewall backend: iptables, nftables, ipfw
+FWTYPE={{ network_zapret2_fwtype }}
+
+# mark bit used by nfqws to prevent loop
+DESYNC_MARK=0x40000000
+DESYNC_MARK_POSTNAT=0x20000000
+
+# options for ipsets
+SET_MAXELEM=522288
+IPSET_OPT="hashsize 262144 maxelem $SET_MAXELEM"
+
+# options for ip2net
+IP2NET_OPT4="--prefix-length=22-30 --v4-threshold=3/4"
+IP2NET_OPT6="--prefix-length=56-64 --v6-threshold=5"
+
+# options for auto hostlist
+AUTOHOSTLIST_INCOMING_MAXSEQ=4096
+AUTOHOSTLIST_RETRANS_MAXSEQ=32768
+AUTOHOSTLIST_RETRANS_RESET=1
+AUTOHOSTLIST_RETRANS_THRESHOLD=3
+AUTOHOSTLIST_FAIL_THRESHOLD=3
+AUTOHOSTLIST_FAIL_TIME=60
+AUTOHOSTLIST_UDP_IN=1
+AUTOHOSTLIST_UDP_OUT=4
+AUTOHOSTLIST_DEBUGLOG=0
+
+MDIG_THREADS=30
+MDIG_EAGAIN=10
+MDIG_EAGAIN_DELAY=500
+
+GZIP_LISTS=1
+
+# none, ipset, hostlist, autohostlist
+MODE_FILTER={{ network_zapret2_mode_filter }}
+
+# donttouch, none, software, hardware
+FLOWOFFLOAD=donttouch
+
+# desktop mode: leave IFACE_LAN/WAN commented to apply OUTPUT rules (not FORWARD)
+{% if network_zapret2_iface_wan | trim %}
+IFACE_WAN={{ network_zapret2_iface_wan }}
+{% endif %}
+
+# enable main nfqws2 daemon for TCP 80/443 and UDP 443
+NFQWS2_ENABLE={{ '1' if network_zapret2_nfqws2_enable else '0' }}
+NFQWS2_PORTS_TCP=80,443
+NFQWS2_PORTS_UDP=443
+NFQWS2_TCP_PKT_OUT=20
+NFQWS2_TCP_PKT_IN=10
+NFQWS2_UDP_PKT_OUT=5
+NFQWS2_UDP_PKT_IN=3
+NFQWS2_OPT="
+--filter-tcp=80 --filter-l7=http <HOSTLIST> --payload=http_req --lua-desync=fake:blob=fake_default_http:tcp_md5 --lua-desync=multisplit:pos=method+2 --new
+--filter-tcp=443 --filter-l7=tls <HOSTLIST> --payload=tls_client_hello --lua-desync=fake:blob=fake_default_tls:tcp_md5:tcp_seq=-10000 --lua-desync=multidisorder:pos=1,midsld --new
+--filter-udp=443 --filter-l7=quic <HOSTLIST_NOAUTO> --payload=quic_initial --lua-desync=fake:blob=fake_default_quic:repeats=6
+"
+
+INIT_APPLY_FW=1
+
+{% if network_zapret2_disable_ipv6 %}
+DISABLE_IPV6=1
+{% endif %}
+
+FILTER_TTL_EXPIRED_ICMP=1
