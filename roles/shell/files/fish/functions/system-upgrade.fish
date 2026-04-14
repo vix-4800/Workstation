@@ -51,7 +51,7 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         set -l fatal_on_failure $parts[7]
 
         print_step $title
-        if command -v $command_name >/dev/null
+        if command -v $command_name >/dev/null 2>&1; or functions -q $command_name
             if eval $run_command
                 print_success $success_message
             else
@@ -110,7 +110,7 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
     # Update npm global packages
     print_step "Updating global npm packages..."
     if command -v npm >/dev/null
-        set -l outdated_pkgs (npm -g outdated --parseable --depth=0 | string split '\n' | string map 'string split ":" $argv[0]' | string map '$argv[0]')
+        set -l outdated_pkgs (npm -g outdated --json --depth=0 2>/dev/null | jq -r 'keys[]' 2>/dev/null)
         if test (count $outdated_pkgs) -gt 0
             echo "$YLW  Found outdated npm packages:$OFF"
             for pkg in $outdated_pkgs
