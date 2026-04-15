@@ -86,13 +86,65 @@
   become: true
   tags: [appearance, system]
 
-- name: Deploy Plymouth theme
-  ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/themes/plymouth/catppuccin-mocha"
-    dest: /usr/share/plymouth/themes/catppuccin-mocha
-    state: link
-    force: true
+- name: Check if Plymouth theme destination is a symlink
+  ansible.builtin.stat:
+    path: /usr/share/plymouth/themes/catppuccin-mocha
+  register: plymouth_theme_stat
   become: true
+  tags: [appearance, system]
+
+- name: Remove Plymouth theme symlink
+  ansible.builtin.file:
+    path: /usr/share/plymouth/themes/catppuccin-mocha
+    state: absent
+  when: plymouth_theme_stat.stat.exists and plymouth_theme_stat.stat.islnk
+  become: true
+  tags: [appearance, system]
+
+- name: Deploy Plymouth theme
+  ansible.builtin.copy:
+    src: "{{ dotfiles_dir }}/roles/appearance/files/themes/plymouth/catppuccin-mocha/"
+    dest: /usr/share/plymouth/themes/catppuccin-mocha/
+    owner: root
+    group: root
+    remote_src: true
+  become: true
+  notify: rebuild initramfs
+  tags: [appearance, system]
+
+- name: Get current Plymouth default theme
+  ansible.builtin.command:
+    cmd: plymouth-set-default-theme
+  become: true
+  register: plymouth_current_theme
+  changed_when: false
+  failed_when: false
+  tags: [appearance, system]
+
+- name: Set Plymouth default theme
+  ansible.builtin.command:
+    cmd: plymouth-set-default-theme catppuccin-mocha
+  become: true
+  when: plymouth_current_theme.stdout | trim != 'catppuccin-mocha'
+  notify: rebuild initramfs
+  tags: [appearance, system]
+
+- name: Add plymouth hook to mkinitcpio
+  ansible.builtin.replace:
+    path: /etc/mkinitcpio.conf
+    regexp: '^(HOOKS=\([^)]*\budev\b)(?! plymouth)'
+    replace: '\1 plymouth'
+  become: true
+  notify: rebuild initramfs
+  tags: [appearance, system]
+
+- name: Add splash parameter to GRUB kernel cmdline
+  ansible.builtin.replace:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT="(?!.*\bsplash\b)[^"]*)"$'
+    replace: '\1 splash"'
+  become: true
+  notify: regenerate grub config
   tags: [appearance, system]
 
 - name: Deploy avatar
