@@ -3,6 +3,8 @@ QWEN.md
 AGENTS.md
 SKILL.md
 .serena/**
+**/commands/*.md
+**/references/*.md
 
 CHANGELOG.md
 LICENSE
