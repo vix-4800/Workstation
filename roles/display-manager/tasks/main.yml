@@ -44,12 +44,29 @@
   become: true
   tags: [display-manager, system]
 
-- name: Deploy ReGreet wallpaper
+- name: Check if ReGreet wallpaper destination is a symlink
+  ansible.builtin.stat:
+    path: "/usr/share/backgrounds/{{ wallpaper_file }}"
+  register: wallpaper_stat
+  become: true
+  tags: [display-manager, system]
+
+- name: Remove ReGreet wallpaper symlink
   ansible.builtin.file:
+    path: "/usr/share/backgrounds/{{ wallpaper_file }}"
+    state: absent
+  when: wallpaper_stat.stat.exists and wallpaper_stat.stat.islnk
+  become: true
+  tags: [display-manager, system]
+
+- name: Deploy ReGreet wallpaper
+  ansible.builtin.copy:
     src: "{{ dotfiles_dir }}/roles/appearance/files/wallpapers/{{ wallpaper_file }}"
     dest: "/usr/share/backgrounds/{{ wallpaper_file }}"
-    state: link
-    force: true
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: true
   become: true
   tags: [display-manager, system]
 
