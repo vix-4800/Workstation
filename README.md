@@ -457,5 +457,6 @@ from vault.
 | `just vault-init`    | Create vault password file  |
 | `just vault-encrypt` | Encrypt `vault/secrets.yml` |
 | `just services`      | Show running user services  |
+| `just molecule`      | Run molecule tests          |
 | `just lint`          | Lint playbooks and roles    |
 | `just check`         | Syntax check only           |

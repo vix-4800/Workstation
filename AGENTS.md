@@ -34,15 +34,21 @@ just role desktop network   # Multiple roles
 
 ```bash
 just vault-init         # Create .vault-password (first time)
+just vault-encrypt      # Encrypt vault/secrets.yml (after adding secrets in plain YAML)
 just vault-edit         # Edit encrypted secrets
 ```
 
 ### Bootstrap from scratch
 
 ```bash
-sudo pacman -S --needed git ansible just
+sudo pacman -Syu --needed sudo vim git ansible just base-devel
 git clone <repo> ~/Code/Workstation && cd ~/Code/Workstation
-just bootstrap
+cp inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
+cp vault/secrets.yml.example vault/secrets.yml
+just vault-init
+just vault-encrypt
+just deps
+just apply
 ```
 
 ## Project Structure
@@ -87,8 +93,9 @@ just bootstrap
 | `display-manager` | Greetd + ReGreet |
 | `development` | PHP, Python, Go, Docker, all linter configs |
 | `appearance` | GTK, fonts, cursors, icons, wallpapers, themes |
+| `apps` | Obsidian, Bitwarden, Flatpak, waypaper, auto-cpufreq (battery only) |
 | `services` | All systemd user services and timers |
-| `ai-tools` | Codex, OpenCode, Qwen, MCP/Serena, agent skills |
+| `ai-tools` | Claude Code, Copilot CLI, OpenCode, Qwen, github-mcp-server, agent skills |
 
 ## Code Style Guidelines
 
@@ -132,6 +139,7 @@ just bootstrap
 just lint               # ansible-lint on all roles
 just check              # Syntax check only
 just plan               # Dry-run (--check --diff)
+just molecule           # Run molecule tests
 pre-commit run -a       # All pre-commit hooks
 shellcheck roles/*/scripts/*   # Lint scripts
 ```
@@ -160,7 +168,7 @@ shellcheck roles/*/scripts/*   # Lint scripts
 1. Clone the repo onto the new machine
 2. Copy `inventory/host_vars/localhost.yml.example` to `inventory/host_vars/localhost.yml` on that machine and fill in its machine-specific vars
 3. Add that machine's vault secrets in `vault/secrets.yml`
-4. On the new machine: `just bootstrap`
+4. On the new machine: `just deps && just apply`
 
 ## Common Gotchas
 
