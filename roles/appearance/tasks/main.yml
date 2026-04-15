@@ -89,7 +89,7 @@
 - name: Check if Plymouth theme destination is a symlink
   ansible.builtin.stat:
     path: /usr/share/plymouth/themes/catppuccin-mocha
-  register: plymouth_theme_stat
+  register: appearance_plymouth_theme_stat
   become: true
   tags: [appearance, system]
 
@@ -97,7 +97,7 @@
   ansible.builtin.file:
     path: /usr/share/plymouth/themes/catppuccin-mocha
     state: absent
-  when: plymouth_theme_stat.stat.exists and plymouth_theme_stat.stat.islnk
+  when: appearance_plymouth_theme_stat.stat.exists and appearance_plymouth_theme_stat.stat.islnk
   become: true
   tags: [appearance, system]
 
@@ -107,6 +107,7 @@
     dest: /usr/share/plymouth/themes/catppuccin-mocha/
     owner: root
     group: root
+    mode: "0644"
     remote_src: true
   become: true
   notify: rebuild initramfs
@@ -116,7 +117,7 @@
   ansible.builtin.command:
     cmd: plymouth-set-default-theme
   become: true
-  register: plymouth_current_theme
+  register: appearance_plymouth_current_theme
   changed_when: false
   failed_when: false
   tags: [appearance, system]
@@ -125,7 +126,8 @@
   ansible.builtin.command:
     cmd: plymouth-set-default-theme catppuccin-mocha
   become: true
-  when: plymouth_current_theme.stdout | trim != 'catppuccin-mocha'
+  when: appearance_plymouth_current_theme.stdout | trim != 'catppuccin-mocha'
+  changed_when: true
   notify: rebuild initramfs
   tags: [appearance, system]
 
