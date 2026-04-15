@@ -1,4 +1,13 @@
 ---
+- name: Install v2raya sync dependencies
+  community.general.pacman:
+    name:
+      - v2ray
+      - yarn
+    state: present
+  become: true
+  tags: [network, packages]
+
 - name: Install v2raya and xray
   kewlfft.aur.aur:
     name:
