@@ -11,7 +11,7 @@ Use the `obsidian` skill throughout this task for all note formatting, frontmatt
 
 ## Step 1: Read the source note
 
-Read `$ARGUMENTS.md`. If not found at that exact path, search the vault for a file matching that name and read it from wherever it is.
+Read `$ARGUMENTS`. If not found at that exact path, search the vault for a file matching that name and read it from wherever it is.
 
 ## Step 2: Analyse the content
 
