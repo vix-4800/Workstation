@@ -170,6 +170,8 @@
       "WebFetch(domain:php.net)",
       "WebFetch(domain:githubusercontent.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:docs.github.com)",
+      "WebFetch(domain:gh.io)",
       "mcp__github__search_repositories",
       "mcp__plugin_serena_serena__read_file",
       "mcp__plugin_serena_serena__get_symbols_overview",
