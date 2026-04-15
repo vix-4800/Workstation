@@ -198,12 +198,6 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["sed"],
-    decision = "allow",
-    justification = "Read-only text processing when used without -i; no side effects.",
-)
-
-prefix_rule(
     pattern = ["shellcheck"],
     decision = "allow",
     justification = "Read-only shell script linter; no side effects.",
@@ -249,12 +243,6 @@ prefix_rule(
     pattern = ["which"],
     decision = "allow",
     justification = "Read-only binary lookup; no side effects.",
-)
-
-prefix_rule(
-    pattern = ["xargs"],
-    decision = "allow",
-    justification = "Read-only argument processing; no side effects.",
 )
 
 prefix_rule(

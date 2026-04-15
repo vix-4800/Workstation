@@ -47,6 +47,18 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["sed"],
+    decision = "prompt",
+    justification = "Can modify files in-place with -i; keep approval-gated outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["xargs"],
+    decision = "prompt",
+    justification = "Executes arbitrary commands from input; keep approval-gated outside the sandbox.",
+)
+
+prefix_rule(
     pattern = ["yarn", ["add", "install"]],
     decision = "prompt",
     justification = "Modifies node_modules; keep approval-gated outside the sandbox.",
