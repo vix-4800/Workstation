@@ -28,7 +28,7 @@
         "serena",
         "start-mcp-server",
         "--context",
-        "codex",
+        "claude-code",
         "--open-web-dashboard",
         "False"
       ],
