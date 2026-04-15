@@ -1,6 +1,7 @@
 # Codex rules only apply to commands that would run outside the sandbox.
-# Unlike Claude's permissions model, they do not support path-based read rules,
-# so broad file-reading commands stay prompt-gated instead of being allowlisted.
+# Unlike Claude's permissions model, they do not support path-based read rules.
+# Read-only inspection commands are allowlisted here; mutating operations remain
+# in prompt.rules so the user keeps explicit control outside the sandbox.
 
 prefix_rule(
     pattern = ["ansible-lint"],
@@ -9,9 +10,45 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["awk"],
+    decision = "allow",
+    justification = "Read-only text processing; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["basename"],
+    decision = "allow",
+    justification = "Read-only path utility; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["cat"],
+    decision = "allow",
+    justification = "Read-only file display; no side effects.",
+)
+
+prefix_rule(
     pattern = ["composer", ["info", "show", "validate"]],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["cut"],
+    decision = "allow",
+    justification = "Read-only text processing; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["diff"],
+    decision = "allow",
+    justification = "Read-only comparison; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["dirname"],
+    decision = "allow",
+    justification = "Read-only path utility; no side effects.",
 )
 
 prefix_rule(
@@ -24,6 +61,30 @@ prefix_rule(
     pattern = ["docker", "compose", ["logs", "ps"]],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["echo"],
+    decision = "allow",
+    justification = "Read-only output command; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["env"],
+    decision = "allow",
+    justification = "Read-only environment inspection; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["file"],
+    decision = "allow",
+    justification = "Read-only file type detection; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["find"],
+    decision = "allow",
+    justification = "Read-only filesystem search; no side effects.",
 )
 
 prefix_rule(
@@ -47,7 +108,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", ["branch", "diff", "log", "ls-files", "rev-parse", "show", "status"]],
+    pattern = ["git", ["branch", "diff", "grep", "log", "ls-files", "rev-parse", "show", "status"]],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
 )
@@ -59,7 +120,49 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["php", ["--version", "-m"]],
+    pattern = ["go", ["build", "fmt", "test", "vet"]],
+    decision = "allow",
+    justification = "Standard Go toolchain commands; no destructive side effects.",
+)
+
+prefix_rule(
+    pattern = ["gofmt"],
+    decision = "allow",
+    justification = "Standard Go formatter; consistent with go fmt.",
+)
+
+prefix_rule(
+    pattern = ["grep"],
+    decision = "allow",
+    justification = "Read-only search; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["head"],
+    decision = "allow",
+    justification = "Read-only file preview; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["jq"],
+    decision = "allow",
+    justification = "Read-only JSON processing; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["ls"],
+    decision = "allow",
+    justification = "Read-only directory listing; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["luac"],
+    decision = "allow",
+    justification = "Read-only Lua syntax check; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["php", ["--version", "-l", "-m"]],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
 )
@@ -68,4 +171,82 @@ prefix_rule(
     pattern = ["php", "artisan", ["list", "route:list"]],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["pwd"],
+    decision = "allow",
+    justification = "Read-only working directory display; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["readlink"],
+    decision = "allow",
+    justification = "Read-only symlink inspection; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["realpath"],
+    decision = "allow",
+    justification = "Read-only path resolution; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["rg"],
+    decision = "allow",
+    justification = "Read-only search; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["shellcheck"],
+    decision = "allow",
+    justification = "Read-only shell script linter; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["sort"],
+    decision = "allow",
+    justification = "Read-only text sorting; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["stat"],
+    decision = "allow",
+    justification = "Read-only file metadata; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["tail"],
+    decision = "allow",
+    justification = "Read-only file preview; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["tree"],
+    decision = "allow",
+    justification = "Read-only directory tree; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["uniq"],
+    decision = "allow",
+    justification = "Read-only text deduplication; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["wc"],
+    decision = "allow",
+    justification = "Read-only line/word/byte count; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["which"],
+    decision = "allow",
+    justification = "Read-only binary lookup; no side effects.",
+)
+
+prefix_rule(
+    pattern = ["yamllint"],
+    decision = "allow",
+    justification = "Read-only YAML linter; no side effects.",
 )

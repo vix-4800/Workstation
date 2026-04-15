@@ -12,3 +12,5 @@ paths:
 - Prefer dependency injection over service location or static access.
 - Never use `empty()`, `isset()` for type-checking — use explicit comparisons.
 - Never use `@` error suppression.
+- Prefer `vendor/bin/phpcs`, `vendor/bin/phpstan`, and `vendor/bin/rector` after changes when available.
+- Use `modern-php` skill for implementation; `security-review` for input, output, auth, and secrets.

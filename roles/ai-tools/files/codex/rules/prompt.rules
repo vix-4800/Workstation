@@ -1,251 +1,65 @@
 prefix_rule(
-    pattern = ["awk"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["basename"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["cat"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
     pattern = ["chmod"],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Modifies file permissions; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["composer", ["install", "remove", "require", "update"]],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["cut"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["diff"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["dirname"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Modifies vendor directory; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["docker", ["exec", "pull", "run", "start"]],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Mutates container state; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["docker", "compose", ["exec", "pull"]],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["echo"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["env"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["file"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["find"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Mutates container state; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["git", ["checkout", "commit", "fetch", "pull", "restore", "stash", "switch", "tag"]],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["go", ["build", "fmt", "test", "vet"]],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["gofmt"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["grep"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["head"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["jq"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["ls"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["luac"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Mutates git state; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["npm", ["install", "update"]],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["php", "-l"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Modifies node_modules; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["pip", "install"],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Modifies Python environment; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["pnpm", ["add", "install", "update"]],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["pwd"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["readlink"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["realpath"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["rg"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Modifies node_modules; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["sed"],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["shellcheck"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["sort"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["stat"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["tail"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["tree"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["uniq"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["wc"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["which"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Can modify files in-place with -i; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["xargs"],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
-)
-
-prefix_rule(
-    pattern = ["yamllint"],
-    decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Executes arbitrary commands from input; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["yarn", ["add", "install"]],
     decision = "prompt",
-    justification = "Keep this command approval-gated when Codex needs to leave the sandbox.",
+    justification = "Modifies node_modules; keep approval-gated outside the sandbox.",
 )

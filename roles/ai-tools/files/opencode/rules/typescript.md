@@ -6,9 +6,10 @@ paths:
   - '**/*.jsx'
 ---
 
-- Enable strict mode in tsconfig.json (`strict: true`).
-- Never use `any` — use `unknown` when the type is truly dynamic.
-- Default to `const` for variable declarations.
-- Prefer async/await over raw Promise chains.
-- Use `===` and `!==` exclusively (no `==` or `!=`).
-- Keep components and functions small and focused on a single responsibility.
+- strict: true in tsconfig. No `any` without explicit justification.
+- Do not use `var` unless a specific runtime, toolchain, or compatibility constraint requires it.
+- Use `const` by default; use `let` only when reassignment is necessary.
+- async/await over promise chains. Always handle rejections.
+- === not ==. No implicit type coercion.
+- Keep components (React/Vue/Svelte) small and focused on a single responsibility.
+- Run the project's linter and type-checker after changes when available.

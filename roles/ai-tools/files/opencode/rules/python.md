@@ -3,8 +3,9 @@ paths:
   - '**/*.py'
 ---
 
-- Use type annotations everywhere (mypy --strict compatible).
-- Prefer dataclasses or pydantic models for data structures.
-- Use context managers for resource management (files, connections, locks).
-- Raise specific exceptions — never bare `Exception`.
-- Explicit is better than implicit — prefer clarity over cleverness.
+- Type-annotate all function signatures. mypy --strict must pass without errors.
+- Use dataclasses or pydantic models instead of raw dicts for structured data.
+- Context managers (with) for all resource management: files, DB connections, locks.
+- Raise specific exceptions from the built-in hierarchy or domain exceptions. Never use bare `except Exception:`.
+- Prefer explicit over implicit. Avoid *args and **kwargs unless building generic utilities.
+- Run mypy and the project's test suite after changes when available.
