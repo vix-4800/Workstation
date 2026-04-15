@@ -41,7 +41,7 @@
       {{
         network_wg_connections.stdout_lines
         | select('match', '^wg0:[^:]+:wireguard$')
-        | map('regex_replace', '^wg0:([^:]+):wireguard$', '\\1')
+        | map('regex_replace', '^wg0:([^:]+):wireguard$', '\1')
         | list
       }}
   changed_when: false
