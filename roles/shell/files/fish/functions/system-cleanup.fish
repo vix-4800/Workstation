@@ -63,7 +63,7 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     # Step 3: Clean yay / AUR build cache
     _cleanup_step "Cleaning yay AUR build cache..."
     if command -v yay >/dev/null
-        yay -Sc --noconfirm 2>&1 | grep -Ev 'could not open file.*/download-'
+        yay -Sc --noconfirm 2>&1 | command grep -Ev 'could not open file.*/download-'
         if test $pipestatus[1] -eq 0
             _cleanup_ok "Yay cache cleaned"
         else
