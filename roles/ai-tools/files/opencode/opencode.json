@@ -24,11 +24,8 @@
   },
   "mcp": {
     "context7": {
-      "headers": {
-        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
-      },
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp"
+      "command": ["npx", "-y", "@upstash/context7-mcp@latest"],
+      "type": "local"
     },
     "github": {
       "command": ["npx", "-y", "@modelcontextprotocol/server-github"],

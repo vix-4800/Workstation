@@ -17,6 +17,14 @@
       "status": "core"
     },
     {
+      "name": "frontend-design",
+      "pluginName": "frontend-design",
+      "installSource": "https://github.com/anthropics/claude-plugins-official:frontend-design",
+      "source": "https://github.com/anthropics/claude-plugins-official",
+      "type": "git",
+      "status": "core"
+    },
+    {
       "name": "github",
       "pluginName": "github",
       "installSource": "https://github.com/anthropics/claude-plugins-official:github",
@@ -28,6 +36,14 @@
       "name": "php-lsp",
       "pluginName": "php-lsp",
       "installSource": "https://github.com/anthropics/claude-plugins-official:php-lsp",
+      "source": "https://github.com/anthropics/claude-plugins-official",
+      "type": "git",
+      "status": "core"
+    },
+    {
+      "name": "pyright-lsp",
+      "pluginName": "pyright-lsp",
+      "installSource": "https://github.com/anthropics/claude-plugins-official:pyright-lsp",
       "source": "https://github.com/anthropics/claude-plugins-official",
       "type": "git",
       "status": "core"
