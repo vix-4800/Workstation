@@ -210,6 +210,9 @@
         </properties>
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.Classes.TraitUseOrder">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Classes.RequireSelfReference" />
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing">
         <properties>
@@ -255,6 +258,9 @@
         <severity>0</severity>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility" />
+    <rule ref="SlevomatCodingStandard.Classes.ClassKeywordOrder">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature">
         <properties>
             <property name="maxLineLength" value="120" />
@@ -424,6 +430,9 @@
     <!-- ===== PHP SECURITY AND BEST PRACTICES ===== -->
     <rule ref="SlevomatCodingStandard.PHP.UselessParentheses">
         <type>warning</type>
+        <properties>
+            <property name="enableCheckAroundNew" value="true" />
+        </properties>
     </rule>
     <rule ref="Generic.PHP.NoSilencedErrors">
         <type>error</type>
@@ -432,6 +441,9 @@
 
     <!-- ===== EXCEPTIONS ===== -->
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch" />
+    <rule ref="SlevomatCodingStandard.Exceptions.CatchExceptionsOrder">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch">
         <type>warning</type>
     </rule>
@@ -478,6 +490,9 @@
         <exclude-pattern>*/views/*</exclude-pattern>
     </rule>
     <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration" />
+    <rule ref="SlevomatCodingStandard.Commenting.ThrowsAnnotationsOrder">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments">
         <properties>
             <property name="forbiddenCommentPatterns" type="array">

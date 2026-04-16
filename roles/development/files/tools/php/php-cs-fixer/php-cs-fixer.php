@@ -54,7 +54,8 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────
         // Base preset
         // ─────────────────────────────────────────────────────────────
-        '@PSR12' => true, // General PSR-12 formatting (indentation, braces, naming, etc.)
+        '@PER-CS' => true, // PHP-FIG PER Coding Style (successor to PSR-12)
+        '@PHP84Migration' => true, // Applies PHP 8.4 language modernisation fixes
 
         // ─────────────────────────────────────────────────────────────
         // Modern PHP & Performance optimizations
@@ -178,6 +179,7 @@ return (new Config())
         'yoda_style' => false, // Disables Yoda conditions
         'concat_space' => ['spacing' => 'one'],
         'binary_operator_spaces' => ['default' => 'single_space'],
+        'no_whitespace_in_blank_line' => true, // Removes trailing whitespace from blank lines
         'no_extra_blank_lines' => ['tokens' => [
             'extra',
             'break',
@@ -292,6 +294,7 @@ return (new Config())
         ], // Enforces order of class elements
         'single_class_element_per_statement' => ['elements' => ['const', 'property']], // Enforces single class element per statement
         'single_trait_insert_per_statement' => true,
+        'multiline_promoted_properties' => true, // Puts each promoted property in a constructor on its own line when there are multiple
 
         // ─────────────────────────────────────────────────────────────────────────
         // Functions, signatures & arguments
