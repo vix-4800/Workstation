@@ -21,7 +21,9 @@ use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
+use Rector\CodeQuality\Rector\NullCoalesce\CoalesceToTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
+use Rector\CodeQuality\Rector\Ternary\RemoveUselessTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
@@ -60,6 +62,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector;
 use RectorLaravel\Rector\ArrayDimFetch\EnvVariableToEnvHelperRector;
 use RectorLaravel\Rector\ArrayDimFetch\RequestVariablesToRequestFacadeRector;
@@ -153,9 +156,11 @@ $config = RectorConfig::configure()
         'bootstrap/cache',
     ])
     ->withPhpSets(php84: true)
-    ->withTypeCoverageLevel(2)
-    ->withDeadCodeLevel(2)
-    ->withCodeQualityLevel(3)
+    ->withTypeCoverageLevel(5)
+    ->withDeadCodeLevel(5)
+    ->withCodeQualityLevel(5)
+    ->withCodingStyleLevel(3)
+    ->withTypeCoverageDocblockLevel(3)
     ->withPreparedSets(
         codingStyle: true,
         privatization: true,
@@ -231,6 +236,13 @@ $rules = [
     LogicalToBooleanRector::class,
 
     ExplicitNullableParamTypeRector::class,
+
+    // Ternary & coalescing
+    RemoveUselessTernaryRector::class, // Removes ternary expressions that are redundant or do not impact logic
+    CoalesceToTernaryRector::class, // Converts ?? to ternary ?: where appropriate for code clarity
+
+    // Strict types
+    SafeDeclareStrictTypesRector::class, // Adds declare(strict_types=1) only when the file is already type-safe
 
     // Custom code quality rules
     AddTypedClassConstantRector::class, // Add explicit type to class constants inferred from scalar literals (PHP 8.3+)
