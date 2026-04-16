@@ -23,7 +23,6 @@ storage/
 .git/
 
 # IDE
-.vscode/
 .idea/
 
 # OS
