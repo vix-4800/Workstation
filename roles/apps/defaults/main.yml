@@ -36,6 +36,7 @@ apps_packages:
   - python-poetry-core
   - libreoffice-still
   - gimp
+  - thunderbird
 
 apps_waypaper_legacy_pip_packages:
   - waypaper

@@ -40,6 +40,17 @@ inode/directory=thunar.desktop
 x-scheme-handler/tg=telegram-desktop.desktop
 x-scheme-handler/claude-cli=claude-code-url-handler.desktop
 text/plain=code.desktop
+x-scheme-handler/mailto=userapp-Thunderbird-0HCAO3.desktop
+message/rfc822=userapp-Thunderbird-0HCAO3.desktop
+x-scheme-handler/mid=userapp-Thunderbird-0HCAO3.desktop
+x-scheme-handler/webcal=userapp-Thunderbird-E3WAO3.desktop
+text/calendar=userapp-Thunderbird-E3WAO3.desktop
+application/x-extension-ics=userapp-Thunderbird-E3WAO3.desktop
+x-scheme-handler/webcals=userapp-Thunderbird-E3WAO3.desktop
 
 [Added Associations]
 text/plain=code.desktop;
+x-scheme-handler/mailto=userapp-Thunderbird-0HCAO3.desktop;
+x-scheme-handler/mid=userapp-Thunderbird-0HCAO3.desktop;
+x-scheme-handler/webcal=userapp-Thunderbird-E3WAO3.desktop;
+x-scheme-handler/webcals=userapp-Thunderbird-E3WAO3.desktop;
