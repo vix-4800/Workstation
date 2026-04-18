@@ -4,11 +4,11 @@ alias vi nvim
 alias neovim nvim
 
 if command -v rg >/dev/null
-    alias grep rg
+    # alias grep rg
 end
 
 if command -v fd >/dev/null
-    alias find fd
+    # alias find fd
 end
 
 if command -v eza >/dev/null
@@ -22,7 +22,7 @@ else
 end
 
 if command -v bat >/dev/null
-    alias cat='bat --style=auto'
+    # alias cat='bat --style=auto'
 end
 
 # Only for wayland
