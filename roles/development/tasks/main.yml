@@ -36,6 +36,7 @@
       - shellcheck
       - shfmt
       - hadolint
+      - editorconfig-checker
       - stylua
     state: present
   become: true
@@ -74,6 +75,7 @@
     - { src: css/stylelint/.stylelintrc.json, dest: "{{ home }}/.stylelintrc.json" }
     - { src: html/htmlhint/.htmlhintrc, dest: "{{ home }}/.htmlhintrc" }
     - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
+    - { src: editorconfig/.editorconfig-checker.json, dest: "{{ home }}/.editorconfig-checker.json" }
     - { src: json/jsonlint/.jsonlintrc, dest: "{{ home }}/.jsonlintrc" }
     - { src: make/checkmake, dest: "{{ home }}/.config/checkmake" }
   loop_control:
