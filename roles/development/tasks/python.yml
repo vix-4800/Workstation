@@ -14,5 +14,6 @@
     - pre-commit
     - ruff
     - mypy
+    - sqlfluff
   become: false
   tags: [development, packages]

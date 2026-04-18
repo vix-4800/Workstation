@@ -61,6 +61,7 @@
     - { src: prettier/.prettierrc, dest: "{{ home }}/.prettierrc" }
     - { src: prettier/.prettierignore, dest: "{{ home }}/.prettierignore" }
     - { src: docker/hadolint.yaml, dest: "{{ home }}/.config/hadolint.yaml" }
+    - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
   loop_control:
     label: "{{ item.src }}"
   tags: [development, config]

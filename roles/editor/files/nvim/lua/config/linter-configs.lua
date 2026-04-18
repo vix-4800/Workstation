@@ -38,6 +38,9 @@ M.configs = {
 
   -- Docker
   hadolint = vim.fn.expand("~/.config/hadolint.yaml"),
+
+  -- SQL
+  sqlfluff = vim.fn.expand("~/.sqlfluff"),
 }
 
 function M.getConfig(tool)
