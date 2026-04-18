@@ -38,6 +38,7 @@
       - hadolint
       - libxml2
       - editorconfig-checker
+      - actionlint
       - stylua
     state: present
   become: true
