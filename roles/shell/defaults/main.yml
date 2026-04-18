@@ -10,6 +10,7 @@ shell_node_global_packages:
   - "@commitlint/cli"
   - "@commitlint/config-conventional"
   - "@openai/codex"
+  - "@prantlf/jsonlint"
   - stylelint
   - htmlhint
 

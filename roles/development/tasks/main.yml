@@ -66,6 +66,7 @@
     - { src: css/stylelint/.stylelintrc.json, dest: "{{ home }}/.stylelintrc.json" }
     - { src: html/htmlhint/.htmlhintrc, dest: "{{ home }}/.htmlhintrc" }
     - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
+    - { src: json/jsonlint/.jsonlintrc, dest: "{{ home }}/.jsonlintrc" }
   loop_control:
     label: "{{ item.src }}"
   tags: [development, config]
