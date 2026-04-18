@@ -28,7 +28,7 @@ M.configs = {
   prettier_ignore = vim.fn.expand("~/.prettierignore"),
   eslint = vim.fn.expand("~/.config/eslint/eslint.config.js"),
   stylelint = vim.fn.expand("~/.stylelintrc.json"),
-  htmlhint = vim.fn.expand("~/.htmlhintrc"),
+  linthtml = vim.fn.expand("~/.linthtmlrc"),
   jsonlintrc = vim.fn.expand("~/.jsonlintrc"),
 
   -- Shell

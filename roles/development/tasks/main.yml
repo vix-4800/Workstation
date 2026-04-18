@@ -75,7 +75,7 @@
     - { src: docker/hadolint.yaml, dest: "{{ home }}/.config/hadolint.yaml" }
     - { src: lua/stylua, dest: "{{ home }}/.config/stylua" }
     - { src: css/stylelint/.stylelintrc.json, dest: "{{ home }}/.stylelintrc.json" }
-    - { src: html/htmlhint/.htmlhintrc, dest: "{{ home }}/.htmlhintrc" }
+    - { src: html/linthtml/.linthtmlrc, dest: "{{ home }}/.linthtmlrc" }
     - { src: ansible/ansible-lint/.ansible-lint, dest: "{{ home }}/.ansible-lint" }
     - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
     - { src: editorconfig/.editorconfig-checker.json, dest: "{{ home }}/.editorconfig-checker.json" }

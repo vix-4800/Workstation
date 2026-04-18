@@ -39,7 +39,7 @@ return {
       css = { "stylelint" },
       scss = { "stylelint" },
       less = { "stylelint" },
-      html = { "htmlhint" },
+      html = { "linthtml" },
       sql = { "sqlfluff" },
       make = { "checkmake" },
       ["yaml.ansible"] = { "ansible_lint" },
@@ -187,18 +187,42 @@ return {
       end,
     }
 
-    -- Configure htmlhint to use global config
-    lint.linters.htmlhint.args = {
-      "--config",
-      configs.getConfig("htmlhint"),
-      "--format",
-      "json",
-      "--nocolor",
-      function()
-        return vim.api.nvim_buf_get_name(0)
+    -- Configure linthtml (custom linter, not built into nvim-lint)
+    lint.linters.linthtml = {
+      cmd = "linthtml",
+      stdin = false,
+      args = {
+        "--config",
+        configs.getConfig("linthtml"),
+        "--no-color",
+        function()
+          return vim.api.nvim_buf_get_name(0)
+        end,
+      },
+      stream = "stdout",
+      ignore_exitcode = true,
+      parser = function(output)
+        local diagnostics = {}
+        for line in output:gmatch("[^\r\n]+") do
+          local lnum, col, severity, message, rule =
+            line:match("^%s*(%d+):(%d+)%s+(error|warning)%s+(.-)%s%s+(%S+)%s*$")
+          if not lnum then
+            lnum, col, severity, message, rule =
+              line:match("^%s*(%d+):(%d+)%s+(%w+)%s+(.-)%s%s+(%S+)%s*$")
+          end
+          if lnum then
+            table.insert(diagnostics, {
+              lnum = tonumber(lnum) - 1,
+              col = tonumber(col) - 1,
+              message = vim.trim(message) .. " [" .. rule .. "]",
+              severity = severity == "error" and vim.diagnostic.severity.ERROR or vim.diagnostic.severity.WARN,
+              source = "linthtml",
+            })
+          end
+        end
+        return diagnostics
       end,
     }
-    lint.linters.htmlhint.stdin = false
 
     -- Configure jsonlint
     lint.linters.jsonlint.args = {

@@ -1,0 +1,33 @@
+{
+    "rules": {
+        "doctype-first": true,
+        "doctype-html5": true,
+        "html-req-lang": true,
+        "head-req-title": true,
+        "attr-name-style": [
+            "error",
+            "lowercase"
+        ],
+        "attr-no-dup": true,
+        "attr-no-unsafe-char": true,
+        "attr-quote-style": [
+            "error",
+            "double"
+        ],
+        "attr-req-value": false,
+        "attr-validate": true,
+        "img-req-alt": true,
+        "input-req-label": true,
+        "tag-close": true,
+        "tag-self-close": false,
+        "tag-name-lowercase": true,
+        "img-req-src": true,
+        "id-no-dup": true,
+        "no-inline-style": true,
+        "indent-style": [
+            "error",
+            "spaces"
+        ],
+        "spec-char-escape": true
+    }
+}
