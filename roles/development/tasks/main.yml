@@ -74,6 +74,7 @@
     - { src: lua/stylua, dest: "{{ home }}/.config/stylua" }
     - { src: css/stylelint/.stylelintrc.json, dest: "{{ home }}/.stylelintrc.json" }
     - { src: html/htmlhint/.htmlhintrc, dest: "{{ home }}/.htmlhintrc" }
+    - { src: ansible/ansible-lint/.ansible-lint, dest: "{{ home }}/.ansible-lint" }
     - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
     - { src: editorconfig/.editorconfig-checker.json, dest: "{{ home }}/.editorconfig-checker.json" }
     - { src: json/jsonlint/.jsonlintrc, dest: "{{ home }}/.jsonlintrc" }

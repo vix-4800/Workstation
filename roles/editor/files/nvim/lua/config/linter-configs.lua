@@ -48,6 +48,9 @@ M.configs = {
   -- SQL
   sqlfluff = vim.fn.expand("~/.sqlfluff"),
 
+  -- Ansible
+  ansible_lint = vim.fn.expand("~/.ansible-lint"),
+
   -- Make
   checkmake = vim.fn.expand("~/.config/checkmake/checkmake.ini"),
 }

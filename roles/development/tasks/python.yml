@@ -14,6 +14,7 @@
     - pre-commit
     - ruff
     - mypy
+    - ansible-lint
     - sqlfluff
   become: false
   tags: [development, packages]
