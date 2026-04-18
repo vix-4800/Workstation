@@ -54,6 +54,9 @@ M.configs = {
 
   -- Make
   checkmake = vim.fn.expand("~/.config/checkmake/checkmake.ini"),
+
+  -- EditorConfig
+  editorconfig_checker = vim.fn.expand("~/.editorconfig-checker.json"),
 }
 
 function M.getConfig(tool)

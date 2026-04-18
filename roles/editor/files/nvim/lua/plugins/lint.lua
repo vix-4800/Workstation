@@ -265,6 +265,38 @@ return {
       end,
     }
 
+    -- Configure editorconfig-checker (runs on all filetypes)
+    lint.linters.editorconfig_checker = {
+      cmd = "editorconfig-checker",
+      stdin = false,
+      args = {
+        "--no-color",
+        "--config",
+        configs.getConfig("editorconfig_checker"),
+        function()
+          return vim.api.nvim_buf_get_name(0)
+        end,
+      },
+      stream = "stdout",
+      ignore_exitcode = true,
+      parser = function(output)
+        local diagnostics = {}
+        for line in output:gmatch("[^\r\n]+") do
+          local lnum, msg = line:match("^\t(%d+): (.+)")
+          if lnum and msg then
+            table.insert(diagnostics, {
+              lnum = tonumber(lnum) - 1,
+              col = 0,
+              message = msg,
+              severity = vim.diagnostic.severity.WARN,
+              source = "editorconfig-checker",
+            })
+          end
+        end
+        return diagnostics
+      end,
+    }
+
     -- Conditional actionlint for GitHub Actions workflow files
     vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
       pattern = { "*.yml", "*.yaml" },
@@ -288,6 +320,10 @@ return {
       callback = function()
         if vim.bo.modifiable and vim.g.linting_enabled then
           lint.try_lint(get_active_linters())
+          -- Run editorconfig-checker on all file types
+          if not disabled_linters["editorconfig_checker"] then
+            lint.try_lint({ "editorconfig_checker" })
+          end
         end
       end,
     })
