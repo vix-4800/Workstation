@@ -41,6 +41,9 @@ M.configs = {
   -- Docker
   hadolint = vim.fn.expand("~/.config/hadolint.yaml"),
 
+  -- Lua
+  stylua = vim.fn.expand("~/.config/stylua/stylua.toml"),
+
   -- SQL
   sqlfluff = vim.fn.expand("~/.sqlfluff"),
 }

@@ -45,6 +45,12 @@ return {
       xml = {}, -- Use LSP formatter (lemminx)
     },
     formatters = {
+      stylua = {
+        prepend_args = {
+          "--config-path",
+          configs.getConfig("stylua"),
+        },
+      },
       php_cs_fixer = {
         command = vim.fn.expand("~/.config/composer/vendor/bin/php-cs-fixer"),
         args = {
