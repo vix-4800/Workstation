@@ -90,6 +90,5 @@ return {
         vim.cmd("checktime")
       end,
     },
-
   },
 }

@@ -207,8 +207,7 @@ return {
           local lnum, col, severity, message, rule =
             line:match("^%s*(%d+):(%d+)%s+(error|warning)%s+(.-)%s%s+(%S+)%s*$")
           if not lnum then
-            lnum, col, severity, message, rule =
-              line:match("^%s*(%d+):(%d+)%s+(%w+)%s+(.-)%s%s+(%S+)%s*$")
+            lnum, col, severity, message, rule = line:match("^%s*(%d+):(%d+)%s+(%w+)%s+(.-)%s%s+(%S+)%s*$")
           end
           if lnum then
             table.insert(diagnostics, {
@@ -421,7 +420,9 @@ return {
       vim.ui.select(items, {
         prompt = "Toggle linter (" .. ft .. "):",
       }, function(choice, idx)
-        if not choice or not idx then return end
+        if not choice or not idx then
+          return
+        end
         local name = linters[idx]
         if disabled_linters[name] then
           disabled_linters[name] = nil
