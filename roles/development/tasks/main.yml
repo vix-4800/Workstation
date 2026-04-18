@@ -35,7 +35,6 @@
       - luarocks
       - shellcheck
       - shfmt
-      - hadolint
       - libxml2
       - editorconfig-checker
       - actionlint
@@ -44,9 +43,11 @@
   become: true
   tags: [development, packages]
 
-- name: Install checkmake (AUR)
+- name: Install additional dev tools (AUR)
   kewlfft.aur.aur:
-    name: checkmake
+    name:
+      - hadolint
+      - checkmake
     state: present
   become: false
   tags: [development, packages]
