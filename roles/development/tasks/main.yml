@@ -85,6 +85,16 @@
     label: "{{ item.src }}"
   tags: [development, config]
 
+- name: Install ESLint config dependencies
+  ansible.builtin.command:
+    cmd: >-
+      fish -lc
+      "nvm use --silent lts >/dev/null;
+      cd {{ home }}/.config/eslint && npm install --silent"
+  register: eslint_deps_install
+  changed_when: "'added' in eslint_deps_install.stdout"
+  tags: [development, packages]
+
 - name: Deploy helper scripts
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/development/scripts/{{ item }}"
