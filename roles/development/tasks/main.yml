@@ -40,6 +40,13 @@
   become: true
   tags: [development, packages]
 
+- name: Install checkmake (AUR)
+  kewlfft.aur.aur:
+    name: checkmake
+    state: present
+  become: false
+  tags: [development, packages]
+
 - name: Deploy tool configs
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/development/files/tools/{{ item.src }}"
@@ -67,6 +74,7 @@
     - { src: html/htmlhint/.htmlhintrc, dest: "{{ home }}/.htmlhintrc" }
     - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
     - { src: json/jsonlint/.jsonlintrc, dest: "{{ home }}/.jsonlintrc" }
+    - { src: make/checkmake, dest: "{{ home }}/.config/checkmake" }
   loop_control:
     label: "{{ item.src }}"
   tags: [development, config]

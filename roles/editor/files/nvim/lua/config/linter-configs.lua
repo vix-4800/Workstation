@@ -47,6 +47,9 @@ M.configs = {
 
   -- SQL
   sqlfluff = vim.fn.expand("~/.sqlfluff"),
+
+  -- Make
+  checkmake = vim.fn.expand("~/.config/checkmake/checkmake.ini"),
 }
 
 function M.getConfig(tool)
