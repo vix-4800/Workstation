@@ -11,6 +11,7 @@ shell_node_global_packages:
   - "@commitlint/config-conventional"
   - "@openai/codex"
   - "@prantlf/jsonlint"
+  - eslint
   - stylelint
   - htmlhint
 
