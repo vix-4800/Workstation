@@ -849,6 +849,195 @@
   "json.validate.enable": true,
   "keyboard.dispatch": "code",
   "linthtml.configFile": "~/.linthtmlrc",
+  "lintRunner.linters": [
+    {
+      "args": ["--format", "json", "${file}"],
+      "command": "shellcheck",
+      "filePatterns": ["*.sh"],
+      "name": "shellcheck",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["--format", "json", "${file}", "--config", "~/.config/hadolint.yaml"],
+      "command": "hadolint",
+      "filePatterns": ["Dockerfile", "Dockerfile.*"],
+      "name": "hadolint",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--json", "${file}"],
+      "command": "markdownlint",
+      "filePatterns": ["*.md"],
+      "name": "markdownlint",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["--format", "parsable", "--config-file", "~/.config/yamllint/config", "${file}"],
+      "command": "yamllint",
+      "filePatterns": ["*.yml", "*.yaml"],
+      "name": "yamllint",
+      "parser": "parsable",
+      "run": "onSave"
+    },
+    {
+      "args": [
+        "check",
+        "--config=~/.config/ruff/pyproject.toml",
+        "--output-format",
+        "json",
+        "${file}"
+      ],
+      "command": "ruff",
+      "filePatterns": ["*.py"],
+      "name": "ruff",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["check", "--format", "json", "${file}"],
+      "command": "dotenv-linter",
+      "filePatterns": [".env", ".env.*"],
+      "name": "dotenv-linter",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["--config", "~/.config/eslint/eslint.config.js", "--format", "json", "${file}"],
+      "command": "eslint",
+      "filePatterns": ["*.js", "*.ts", "*.jsx", "*.tsx", "*.vue"],
+      "name": "eslint",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["--config", "~/.stylelintrc.json", "--formatter", "json", "${file}"],
+      "command": "stylelint",
+      "filePatterns": ["*.css", "*.scss", "*.less"],
+      "name": "stylelint",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["--config", "~/.linthtmlrc", "--no-color", "${file}"],
+      "command": "linthtml",
+      "filePatterns": ["*.html"],
+      "name": "linthtml",
+      "parser": "linthtml",
+      "run": "onSave"
+    },
+    {
+      "args": [
+        "lint",
+        "--config",
+        "~/.sqlfluff",
+        "--format",
+        "json",
+        "--dialect",
+        "mysql",
+        "${file}"
+      ],
+      "command": "sqlfluff",
+      "filePatterns": ["*.sql"],
+      "name": "sqlfluff",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["--config=~/.config/checkmake/checkmake.ini", "-o", "json", "${file}"],
+      "command": "checkmake",
+      "filePatterns": ["Makefile", "*.mk"],
+      "name": "checkmake",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["-c", "~/.ansible-lint", "--format", "json", "--nocolor", "${file}"],
+      "command": "ansible-lint",
+      "filePatterns": ["*.yml", "*.yaml"],
+      "name": "ansible-lint",
+      "parser": "ansible-lint",
+      "run": "onSave"
+    },
+    {
+      "args": ["--noout", "${file}"],
+      "command": "xmllint",
+      "filePatterns": ["*.xml"],
+      "name": "xmllint",
+      "parser": "xmllint",
+      "run": "onSave"
+    },
+    {
+      "args": ["-f", "~/.jsonlintrc", "${file}"],
+      "command": "~/.local/share/nvm/v24.15.0/bin/jsonlint",
+      "filePatterns": ["*.json", "*.jsonc"],
+      "name": "jsonlint",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": [
+        "--no-color",
+        "-format",
+        "gcc",
+        "--config",
+        "~/.editorconfig-checker.json",
+        "${file}"
+      ],
+      "command": "editorconfig-checker",
+      "filePatterns": [".editorconfig", "**/.editorconfig"],
+      "name": "editorconfig-checker",
+      "parser": "parsable",
+      "run": "onSave"
+    },
+    {
+      "args": ["-format", "{{json .}}", "${file}"],
+      "command": "actionlint",
+      "filePatterns": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
+      "name": "actionlint",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": [
+        "analyse",
+        "--error-format=json",
+        "--no-progress",
+        "--memory-limit=2G",
+        "--configuration=~/.config/phpstan/phpstan.neon",
+        "${file}"
+      ],
+      "command": "~/.config/composer/vendor/bin/phpstan",
+      "filePatterns": ["*.php"],
+      "name": "phpstan",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": [
+        "--standard=~/.config/phpcs/phpcs.xml",
+        "--report=json",
+        "--ignore=*/vendor/*",
+        "-q",
+        "${file}"
+      ],
+      "command": "~/.config/composer/vendor/bin/phpcs",
+      "filePatterns": ["*.php"],
+      "name": "phpcs",
+      "parser": "json",
+      "run": "onSave"
+    },
+    {
+      "args": ["${file}", "json", "~/.config/phpmd/phpmd.xml"],
+      "command": "~/.config/composer/vendor/bin/phpmd",
+      "filePatterns": ["*.php"],
+      "name": "phpmd",
+      "parser": "json",
+      "run": "onSave"
+    }
+  ],
   "liveServer.settings.donotShowInfoMsg": true,
   "liveServer.settings.donotVerifyTags": true,
   "markdown.extension.bold.indicator": "**",
