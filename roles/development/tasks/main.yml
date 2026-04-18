@@ -36,6 +36,7 @@
       - shellcheck
       - shfmt
       - hadolint
+      - libxml2
       - editorconfig-checker
       - stylua
     state: present
