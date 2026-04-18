@@ -31,8 +31,19 @@ return {
       sh = { "shellcheck" },
       bash = { "shellcheck" },
       dotenv = { "dotenv_linter" },
-      javascript = {},
-      typescript = {},
+      javascript = { "eslint" },
+      typescript = { "eslint" },
+      javascriptreact = { "eslint" },
+      typescriptreact = { "eslint" },
+      vue = { "eslint" },
+      css = { "stylelint" },
+      scss = { "stylelint" },
+      less = { "stylelint" },
+      html = { "htmlhint" },
+      sql = { "sqlfluff" },
+      make = { "checkmake" },
+      ["yaml.ansible"] = { "ansible_lint" },
+      xml = { "xmllint" },
     }
 
     -- Configure shellcheck to use custom config
@@ -151,8 +162,122 @@ return {
       end,
     }
 
+    -- Configure ESLint to use global config
+    lint.linters.eslint.args = {
+      "--config",
+      configs.getConfig("eslint"),
+      "--format",
+      "json",
+      "--stdin",
+      "--stdin-filename",
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
+    }
+
+    -- Configure stylelint to use global config
+    lint.linters.stylelint.args = {
+      "--config",
+      configs.getConfig("stylelint"),
+      "--formatter",
+      "json",
+      "--stdin-filename",
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
+    }
+
+    -- Configure htmlhint to use global config
+    lint.linters.htmlhint.args = {
+      "--config",
+      configs.getConfig("htmlhint"),
+      "--format",
+      "json",
+      "--nocolor",
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
+    }
+    lint.linters.htmlhint.stdin = false
+
+    -- Configure jsonlint
+    lint.linters.jsonlint.args = {
+      "--config",
+      configs.getConfig("jsonlintrc"),
+      "--compact",
+      "--quiet",
+    }
+
+    -- Configure sqlfluff to use global config
+    lint.linters.sqlfluff.args = {
+      "lint",
+      "--config",
+      configs.getConfig("sqlfluff"),
+      "--format",
+      "json",
+      "--dialect",
+      "mysql",
+      "-",
+    }
+
+    -- Configure checkmake
+    lint.linters.checkmake.args = {
+      "--config=" .. configs.getConfig("checkmake"),
+      "--format={{.LineNumber}}:{{.Rule}}:{{.Violation}}\n",
+    }
+    lint.linters.checkmake.stdin = false
+
+    -- Configure ansible-lint
+    lint.linters.ansible_lint.args = {
+      "-c",
+      configs.getConfig("ansible_lint"),
+      "--format",
+      "json",
+      "--nocolor",
+      "-f",
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
+    }
+
+    -- Configure xmllint (custom linter using libxml2)
+    lint.linters.xmllint = {
+      cmd = "xmllint",
+      stdin = true,
+      args = { "--noout", "-" },
+      stream = "stderr",
+      ignore_exitcode = true,
+      parser = function(output)
+        local diagnostics = {}
+        for line in output:gmatch("[^\r\n]+") do
+          local lnum, msg = line:match("^%-:(%d+):%s*(.*)")
+          if lnum and msg then
+            table.insert(diagnostics, {
+              lnum = tonumber(lnum) - 1,
+              col = 0,
+              message = msg,
+              severity = vim.diagnostic.severity.ERROR,
+              source = "xmllint",
+            })
+          end
+        end
+        return diagnostics
+      end,
+    }
+
+    -- Conditional actionlint for GitHub Actions workflow files
+    vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+      pattern = { "*.yml", "*.yaml" },
+      callback = function()
+        local path = vim.fn.expand("%:p")
+        if path:match("%.github/workflows/") then
+          lint.try_lint({ "actionlint" })
+        end
+      end,
+    })
+
     -- Filetypes with heavy linters that should only run on save
-    local heavy_fts = { php = true }
+    local heavy_fts = { php = true, sql = true, ["yaml.ansible"] = true }
 
     -- Create autocommands for linting
     local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
