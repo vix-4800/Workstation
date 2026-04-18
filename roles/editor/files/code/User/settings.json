@@ -11,6 +11,9 @@
     "editor.formatOnType": true
   },
   "[css]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.stylelint": "explicit"
+    },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
@@ -37,7 +40,8 @@
     "editor.formatOnSave": true
   },
   "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.formatOnSave": true
   },
   "[go]": {
     "editor.defaultFormatter": "golang.go"
@@ -84,7 +88,8 @@
     "editor.defaultFormatter": "nefrob.vscode-just-syntax"
   },
   "[lua]": {
-    "editor.defaultFormatter": "sumneko.lua"
+    "editor.defaultFormatter": "JohnnyMorganz.stylua",
+    "editor.formatOnSave": true
   },
   "[markdown]": {
     "diffEditor.ignoreTrimWhitespace": true,
@@ -123,7 +128,11 @@
     "editor.formatOnSave": true
   },
   "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.codeActionsOnSave": {
+      "source.fixAll.stylelint": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
   "[shellscript]": {
     "editor.defaultFormatter": "mkhl.shfmt",
@@ -133,7 +142,8 @@
     "diffEditor.ignoreTrimWhitespace": true
   },
   "[sql]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "sqlfluff.vscode-sqlfluff",
+    "editor.formatOnSave": true
   },
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml",
@@ -513,6 +523,7 @@
     "Успешно",
     "хелпер"
   ],
+  "css.validate": true,
   "database-client.autoSync": true,
   "database-client.telemetry.usesOnlineServices": false,
   "diffEditor.codeLens": true,
@@ -681,9 +692,8 @@
   "githubPullRequests.pullBranch": "never",
   "go.formatTool": "goimports",
   "go.useLanguageServer": true,
-  "stylelint.configFile": "~/.stylelintrc.json",
-  "hadolint.hadolintPath": "hadolint",
   "hadolint.cliOptions": ["--no-color", "--config", "~/.config/hadolint.yaml"],
+  "hadolint.hadolintPath": "hadolint",
   "html.autoClosingTags": true,
   "html.format.wrapAttributes": "force-aligned",
   "inlineChat.defaultModel": "Claude Sonnet 4.6 (copilot)",
@@ -910,6 +920,7 @@
     "GitHub.vscode-pull-request-github"
   ],
   "scm.repositories.explorer": true,
+  "scss.validate": true,
   "search.exclude": {
     "**/.git": true,
     "**/.next": true,
@@ -923,6 +934,10 @@
   "search.followSymlinks": false,
   "security.workspace.trust.untrustedFiles": "prompt",
   "settingsSync.ignoredExtensions": ["ms-playwright.playwright"],
+  "sqlfluff.config": "~/.sqlfluff",
+  "stylelint.configFile": "~/.stylelintrc.json",
+  "stylua.configPath": "~/.config/stylua/stylua.toml",
+  "stylua.styluaPath": "/usr/bin/stylua",
   "task.allowAutomaticTasks": "on",
   "task.autoDetect": "on",
   "task.problemMatchers.neverPrompt": true,
