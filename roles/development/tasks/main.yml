@@ -46,7 +46,7 @@
 - name: Install additional dev tools (AUR)
   kewlfft.aur.aur:
     name:
-      - hadolint
+      - hadolint-bin
       - checkmake
     state: present
   become: false
