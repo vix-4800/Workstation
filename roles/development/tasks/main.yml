@@ -35,6 +35,7 @@
       - luarocks
       - shellcheck
       - shfmt
+      - hadolint
       - stylua
     state: present
   become: true
