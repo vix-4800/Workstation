@@ -345,7 +345,7 @@
     "https://getrector.com": true
   },
   "chat.useAgentSkills": true,
-  "chat.useClaudeMdFile": false,
+  "chat.useClaudeMdFile": true,
   "chat.useNestedAgentsMdFiles": true,
   "chat.viewSessions.orientation": "stacked",
   "chatgpt.followUpQueueMode": "steer",
