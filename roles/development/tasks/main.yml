@@ -62,6 +62,7 @@
     - { src: prettier/.prettierignore, dest: "{{ home }}/.prettierignore" }
     - { src: docker/hadolint.yaml, dest: "{{ home }}/.config/hadolint.yaml" }
     - { src: css/stylelint/.stylelintrc.json, dest: "{{ home }}/.stylelintrc.json" }
+    - { src: html/htmlhint/.htmlhintrc, dest: "{{ home }}/.htmlhintrc" }
     - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
   loop_control:
     label: "{{ item.src }}"
