@@ -39,7 +39,6 @@ return {
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Formatters                                              │
         -- ╰─────────────────────────────────────────────────────────╯
-        "stylua", -- Lua
         "prettier", -- JS/TS/JSON/CSS/HTML/MD
         "prettierd", -- JS/TS/JSON/CSS/HTML/MD
         "yamlfmt", -- YAML
@@ -48,15 +47,7 @@ return {
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Linters                                                 │
         -- ╰─────────────────────────────────────────────────────────╯
-        "jsonlint", -- JSON
-        "hadolint", -- Dockerfile
         "dotenv-linter", -- .env files
-        "actionlint", -- GitHub Actions
-
-        -- ╭─────────────────────────────────────────────────────────╮
-        -- │ Other Tools                                             │
-        -- ╰─────────────────────────────────────────────────────────╯
-        "editorconfig-checker", -- EditorConfig
       },
       auto_update = true,
       run_on_start = true,
