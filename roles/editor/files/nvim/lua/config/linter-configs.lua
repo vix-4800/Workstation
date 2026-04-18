@@ -26,6 +26,7 @@ M.configs = {
   -- JavaScript/TypeScript/JSON/CSS/HTML/Markdown
   prettier = vim.fn.expand("~/.prettierrc"),
   prettier_ignore = vim.fn.expand("~/.prettierignore"),
+  stylelint = vim.fn.expand("~/.stylelintrc.json"),
 
   -- Shell
   shellcheck = vim.fn.expand("~/.shellcheckrc"),

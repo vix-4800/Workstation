@@ -10,6 +10,7 @@ shell_node_global_packages:
   - "@commitlint/cli"
   - "@commitlint/config-conventional"
   - "@openai/codex"
+  - stylelint
 
 shell_configs:
   - { src: fish, dest: "{{ home }}/.config/fish" }
