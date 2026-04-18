@@ -1,26 +1,4 @@
 ---
-- name: Stop and disable spoofdpi service
-  ansible.builtin.systemd:
-    name: spoofdpi.service
-    enabled: false
-    state: stopped
-  become: true
-  failed_when: false
-  when: network_dpi_bypass_provider != 'spoofdpi'
-  tags: [network, services]
-
-- name: Remove spoofdpi artifacts
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: absent
-  become: true
-  loop:
-    - /etc/systemd/system/spoofdpi.service
-    - /usr/local/bin/spoofdpi
-    - /opt/spoofdpi
-  when: network_dpi_bypass_provider != 'spoofdpi'
-  tags: [network, packages]
-
 - name: Install zapret2 runtime dependencies
   community.general.pacman:
     name:
