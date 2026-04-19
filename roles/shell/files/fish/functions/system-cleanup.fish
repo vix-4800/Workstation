@@ -9,7 +9,7 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     set -l OFF (set_color normal)
 
     set -l step 1
-    set -l total_steps 10
+    set -l total_steps 11
     set -l freed 0
 
     function _cleanup_step
@@ -176,7 +176,30 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
         _cleanup_ok "No workstation backup directory found"
     end
 
-    # Step 11 (optional): Docker cleanup
+    # Step 11: Empty trash and clean /tmp
+    _cleanup_step "Emptying trash and cleaning /tmp..."
+    if command -v trash-empty >/dev/null
+        if trash-empty
+            _cleanup_ok "Trash emptied"
+        else
+            _cleanup_err "trash-empty failed"
+        end
+    else
+        _cleanup_skip "trash-empty not installed, skipping trash"
+    end
+
+    set -l tmp_entries (find /tmp -mindepth 1 -maxdepth 1 -xdev 2>/dev/null)
+    if test (count $tmp_entries) -gt 0
+        if sudo find /tmp -mindepth 1 -maxdepth 1 -xdev -exec rm -rf -- '{}' +
+            _cleanup_ok "/tmp contents removed"
+        else
+            _cleanup_err "Failed to clean /tmp"
+        end
+    else
+        _cleanup_ok "/tmp is already empty"
+    end
+
+    # Optional: Docker cleanup
     echo
     if command -v docker >/dev/null
         read -l docker_confirm -P "$BOLD$YLW?$OFF $BOLD""[Optional]$OFF Clean Docker images & volumes? [y/N] "
