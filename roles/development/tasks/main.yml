@@ -75,6 +75,7 @@
       - { src: html/linthtml/.linthtmlrc, dest: "{{ home }}/.linthtmlrc" }
       - { src: ansible/ansible-lint/.ansible-lint, dest: "{{ home }}/.ansible-lint" }
       - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
+      - { src: nginx/nginx-lint/.nginx-lint.toml, dest: "{{ home }}/.config/nginx-lint/.nginx-lint.toml" }
       - {
           src: editorconfig/.editorconfig-checker.json,
           dest: "{{ home }}/.editorconfig-checker.json",

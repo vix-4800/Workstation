@@ -41,6 +41,7 @@ return {
       less = { "stylelint" },
       html = { "linthtml" },
       sql = { "sqlfluff" },
+      nginx = { "nginx_lint" },
       make = { "checkmake" },
       ["yaml.ansible"] = { "ansible_lint" },
       xml = { "xmllint" },
@@ -249,6 +250,47 @@ return {
       "--format={{.LineNumber}}:{{.Rule}}:{{.Violation}}\n",
     }
     lint.linters.checkmake.stdin = false
+
+    -- Configure nginx-lint
+    lint.linters.nginx_lint = {
+      cmd = "nginx-lint",
+      stdin = false,
+      args = {
+        "--format",
+        "json",
+        "--no-color",
+        "--config",
+        configs.getConfig("nginx_lint"),
+        function()
+          return vim.api.nvim_buf_get_name(0)
+        end,
+      },
+      stream = "stdout",
+      ignore_exitcode = true,
+      parser = function(output)
+        local diagnostics = {}
+        local ok, decoded = pcall(vim.json.decode, output)
+        if not ok or type(decoded) ~= "table" or type(decoded.errors) ~= "table" then
+          return diagnostics
+        end
+
+        for _, item in ipairs(decoded.errors) do
+          local line = tonumber(item.line) or 1
+          local column = tonumber(item.column) or 1
+          local severity = item.severity == "Error" and vim.diagnostic.severity.ERROR or vim.diagnostic.severity.WARN
+          local rule = item.category and item.rule and (" [" .. item.category .. "/" .. item.rule .. "]") or ""
+
+          table.insert(diagnostics, {
+            lnum = line - 1,
+            col = column - 1,
+            message = item.message .. rule,
+            severity = severity,
+            source = "nginx-lint",
+          })
+        end
+        return diagnostics
+      end,
+    }
 
     -- Configure ansible-lint
     lint.linters.ansible_lint.args = {

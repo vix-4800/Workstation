@@ -12,3 +12,10 @@
     creates: "{{ home }}/.cargo/bin/just-lsp"
   become: false
   tags: [development, packages]
+
+- name: Install nginx-lint via Cargo
+  ansible.builtin.command:
+    cmd: cargo install --git https://github.com/walf443/nginx-lint --tag v0.10.5 nginx-lint
+    creates: "{{ home }}/.cargo/bin/nginx-lint"
+  become: false
+  tags: [development, packages]

@@ -954,6 +954,21 @@
       "run": "onSave"
     },
     {
+      "args": [
+        "--format",
+        "errorformat",
+        "--no-color",
+        "--config",
+        "~/.config/nginx-lint/.nginx-lint.toml",
+        "${file}"
+      ],
+      "command": "nginx-lint",
+      "filePatterns": ["nginx.conf", "**/nginx/**/*.conf", "**/sites-available/*", "**/sites-enabled/*"],
+      "name": "nginx-lint",
+      "parser": "parsable",
+      "run": "onSave"
+    },
+    {
       "args": ["-c", "~/.ansible-lint", "--format", "json", "--nocolor", "${file}"],
       "command": "ansible-lint",
       "filePatterns": ["*.yml", "*.yaml"],

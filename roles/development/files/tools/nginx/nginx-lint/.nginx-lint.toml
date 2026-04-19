@@ -1,0 +1,103 @@
+# nginx-lint configuration
+# See: https://github.com/walf443/nginx-lint
+
+[color]
+ui = "never"
+error = "red"
+warning = "yellow"
+
+[rules.indent]
+enabled = true
+indent_size = "auto"
+
+[rules.trailing-whitespace]
+enabled = true
+
+[rules.space-before-semicolon]
+enabled = true
+
+[rules.block-lines]
+enabled = true
+max_block_lines = 100
+
+[rules.duplicate-directive]
+enabled = true
+
+[rules.unmatched-braces]
+enabled = true
+
+[rules.unclosed-quote]
+enabled = true
+
+[rules.missing-semicolon]
+enabled = true
+
+[rules.invalid-directive-context]
+enabled = true
+
+[rules.include-path-exists]
+enabled = true
+
+[rules.deprecated-ssl-protocol]
+enabled = true
+allowed_protocols = ["TLSv1.2", "TLSv1.3"]
+
+[rules.server-tokens-enabled]
+enabled = true
+
+[rules.autoindex-enabled]
+enabled = true
+
+[rules.weak-ssl-ciphers]
+enabled = true
+weak_ciphers = [
+  "NULL",
+  "EXPORT",
+  "DES",
+  "RC4",
+  "MD5",
+  "aNULL",
+  "eNULL",
+  "ADH",
+  "AECDH",
+  "PSK",
+  "SRP",
+  "CAMELLIA",
+]
+required_exclusions = ["!aNULL", "!eNULL", "!EXPORT", "!DES", "!RC4", "!MD5"]
+
+[rules.gzip-not-enabled]
+enabled = false
+
+[rules.missing-error-log]
+enabled = false
+
+[rules.proxy-pass-domain]
+enabled = true
+
+[rules.upstream-server-no-resolve]
+enabled = true
+
+[rules.directive-inheritance]
+enabled = true
+
+[rules.root-in-location]
+enabled = true
+
+[rules.alias-location-slash-mismatch]
+enabled = true
+
+[rules.proxy-pass-with-uri]
+enabled = true
+
+[rules.proxy-keepalive]
+enabled = true
+
+[rules.try-files-with-proxy]
+enabled = true
+
+[rules.if-is-evil-in-location]
+enabled = true
+
+[parser]
+block_directives = []

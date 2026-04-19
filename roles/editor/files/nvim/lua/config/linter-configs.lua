@@ -49,6 +49,9 @@ M.configs = {
   -- SQL
   sqlfluff = vim.fn.expand("~/.sqlfluff"),
 
+  -- NGINX
+  nginx_lint = vim.fn.expand("~/.config/nginx-lint/.nginx-lint.toml"),
+
   -- Ansible
   ansible_lint = vim.fn.expand("~/.ansible-lint"),
 
