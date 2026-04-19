@@ -19,3 +19,7 @@ end
 if test -d $HOME/.local/pipx/venvs
     set -gx PIPX_HOME $HOME/.local/pipx
 end
+
+if test -d $HOME/yandex-cloud/bin
+    fish_add_path -g $HOME/yandex-cloud/bin
+end
