@@ -145,10 +145,7 @@ return (new Config())
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
         // ─────────────────────────────────────────────────────────────────────────
-        'ordered_imports' => [
-            'imports_order' => ['class', 'function', 'const'],
-            'sort_algorithm' => 'alpha',
-        ], // Orders imports: class, function, const
+        'ordered_imports' => ['sort_algorithm' => 'alpha'], // Orders imports
         'single_import_per_statement' => ['group_to_single_imports' => true], // Each import must be on a separate line
         'global_namespace_import' => [
             'import_classes' => true,
@@ -163,8 +160,6 @@ return (new Config())
         // Arrays & collections
         // ─────────────────────────────────────────────────────────────────────────
         'array_push' => true, // Replaces array_push() with [] for adding elements to arrays
-        'array_indentation' => true, // Indentation within arrays
-        'array_syntax' => ['syntax' => 'short'], // Uses [] instead of array()
         'list_syntax' => ['syntax' => 'short'], // Uses [] instead of list()
         'trim_array_spaces' => true, // Trims spaces inside array brackets
         'no_trailing_comma_in_singleline' => true, // No trailing comma in single-line arrays
@@ -177,9 +172,7 @@ return (new Config())
         // Spacing, operators, and general style
         // ─────────────────────────────────────────────────────────────────────────
         'yoda_style' => false, // Disables Yoda conditions
-        'concat_space' => ['spacing' => 'one'],
         'binary_operator_spaces' => ['default' => 'single_space'],
-        'no_whitespace_in_blank_line' => true, // Removes trailing whitespace from blank lines
         'no_extra_blank_lines' => ['tokens' => [
             'extra',
             'break',
@@ -195,7 +188,6 @@ return (new Config())
             'default',
         ]], // Removes extra blank lines
         'single_quote' => true, // Converts double quotes to single quotes
-        'cast_spaces' => true, // Consistent spacing in casts
         'combine_consecutive_issets' => true, // Combines isset($a) && isset($b)
         'combine_consecutive_unsets' => true, // Combines unset($a); unset($b);
         'explicit_string_variable' => true, // Use {$var} instead of $var in strings
@@ -221,13 +213,13 @@ return (new Config())
                 'while',
             ],
         ], // Requires a blank line before statements (return, throw, continue)
-        'single_space_around_construct' => true, // Ensures single space around constructs
+        'single_space_around_construct' => [
+            'constructs_preceded_by_a_single_space' => ['as', 'else', 'elseif', 'use_lambda'],
+        ], // Ensures single space around constructs
         'simplified_if_return' => true, // Simplifies if return statements
         'simplified_null_return' => true, // Simplifies null return statements
         'return_assignment' => true, // Simplifies return assignments
-        'nullable_type_declaration' => ['syntax' => 'question_mark'], // Uses ? for nullable types
         'is_null' => true, // Replaces is_null($var) expression with null === $var
-        'types_spaces' => ['space' => 'none'], // Consistent spacing in types
         'no_useless_concat_operator' => true, // Removes unnecessary concatenation of strings
         'no_unneeded_control_parentheses' => [
             'statements' => [
@@ -261,7 +253,6 @@ return (new Config())
         // -────────────────────────────────────────────────────────────────────────
         // Attributes
         // ─────────────────────────────────────────────────────────────────────────
-        'attribute_block_no_spaces' => true, // Removes spaces between attribute blocks
         'attribute_empty_parentheses' => true, // Removes empty parentheses from attributes
         'ordered_attributes' => true, // Orders attributes alphabetically
 
@@ -292,21 +283,16 @@ return (new Config())
                 // 'method_private',
             ],
         ], // Enforces order of class elements
-        'single_class_element_per_statement' => ['elements' => ['const', 'property']], // Enforces single class element per statement
-        'single_trait_insert_per_statement' => true,
         'multiline_promoted_properties' => true, // Puts each promoted property in a constructor on its own line when there are multiple
 
         // ─────────────────────────────────────────────────────────────────────────
         // Functions, signatures & arguments
         // ─────────────────────────────────────────────────────────────────────────
         'method_argument_space' => [
-            'on_multiline' => 'ensure_fully_multiline',
             'after_heredoc' => true,
             'attribute_placement' => 'same_line',
-            'keep_multiple_spaces_after_comma' => false,
         ], // Ensures fully multiline arguments
         'nullable_type_declaration_for_default_null_value' => true,
-        'new_with_parentheses' => true,
         'unary_operator_spaces' => true, // Ensures consistent spacing for unary operators
 
         // ─────────────────────────────────────────────────────────────────────────
@@ -336,7 +322,6 @@ return (new Config())
         'modernize_types_casting' => true, // Uses (int), (float), (string), (bool) for type casting
         'no_alias_functions' => true, // Disallow the use of alias functions
         'random_api_migration' => true, // Replaces deprecated random number generation functions with modern ones
-        'modifier_keywords' => ['elements' => ['property', 'method', 'const']], // Enforces visibility for all class properties and methods
         'self_accessor' => true, // Enforces the use of self:: for accessing static properties and methods
         'self_static_accessor' => true, // In final/anonymous classes, replaces static:: with self::
         'phpdoc_return_self_reference' => true, // Normalises @return $self, @return @this etc. to self/$this
@@ -380,7 +365,6 @@ return (new Config())
         'no_alias_language_construct_call' => true, // Removes calls to alias language constructs
         'get_class_to_class_keyword' => true, // Replaces get_class() calls with the class keyword
         'no_useless_sprintf' => true, // Removes useless sprintf calls
-        'operator_linebreak' => true, // Ensures operators are at the beginning of the line in multiline expressions
         'integer_literal_case' => true, // Normalizes integer literal casing (0x1A → 0x1a)
         'standardize_increment' => true, // Standardizes increment and decrement operators
         'long_to_shorthand_operator' => true, // Converts long-form assignment operators to their shorthand versions (e.g., $a = $a + 1 → $a += 1)
