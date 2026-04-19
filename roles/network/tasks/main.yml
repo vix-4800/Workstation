@@ -41,6 +41,16 @@
       tags: [network]
   tags: [network, dpi-bypass]
 
+- name: Ensure network config parent directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ home }}/.config/geoclue"
+    - "{{ home }}/.local/bin"
+  tags: [network, config]
+
 - name: Deploy network helper scripts
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/network/scripts/{{ item.src }}"

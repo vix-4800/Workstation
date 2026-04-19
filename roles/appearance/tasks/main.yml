@@ -61,6 +61,13 @@
   changed_when: false
   tags: [appearance, config]
 
+- name: Ensure pictures directory exists
+  ansible.builtin.file:
+    path: "{{ home }}/Pictures"
+    state: directory
+    mode: "0755"
+  tags: [appearance, config]
+
 - name: Deploy wallpapers
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/appearance/files/wallpapers"

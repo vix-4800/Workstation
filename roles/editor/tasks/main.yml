@@ -13,6 +13,24 @@
   become: false
   tags: [editor, packages]
 
+- name: Ensure editor config parent directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop: >-
+    {{
+      (editor_configs + editor_templates)
+      | map(attribute='dest')
+      | map('dirname')
+      | reject('equalto', home)
+      | unique
+      | list
+    }}
+  loop_control:
+    label: "{{ item }}"
+  tags: [editor, config]
+
 - name: Deploy editor configs
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/editor/files/{{ item.src }}"

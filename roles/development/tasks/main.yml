@@ -52,42 +52,63 @@
   become: false
   tags: [development, packages]
 
-- name: Deploy tool configs
-  ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/development/files/tools/{{ item.src }}"
-    dest: "{{ item.dest }}"
-    state: link
-    force: true
-  loop:
-    - { src: php/phpstan, dest: "{{ home }}/.config/phpstan" }
-    - { src: php/rector, dest: "{{ home }}/.config/rector" }
-    - { src: php/php-cs-fixer, dest: "{{ home }}/.config/php-cs-fixer" }
-    - { src: php/pint, dest: "{{ home }}/.config/pint" }
-    - { src: php/phpcs, dest: "{{ home }}/.config/phpcs" }
-    - { src: php/phpmd, dest: "{{ home }}/.config/phpmd" }
-    - { src: python/ruff, dest: "{{ home }}/.config/ruff" }
-    - { src: javascript/eslint, dest: "{{ home }}/.config/eslint" }
-    - { src: shellcheck/.shellcheckrc, dest: "{{ home }}/.shellcheckrc" }
-    - { src: yaml/yamllint.yml, dest: "{{ home }}/.config/yamllint/config" }
-    - { src: markdown/markdownlint, dest: "{{ home }}/.config/markdownlint" }
-    - { src: commitlint, dest: "{{ home }}/.config/commitlint" }
-    - { src: prettier/.prettierrc, dest: "{{ home }}/.prettierrc" }
-    - { src: prettier/.prettierignore, dest: "{{ home }}/.prettierignore" }
-    - { src: docker/hadolint.yaml, dest: "{{ home }}/.config/hadolint.yaml" }
-    - { src: lua/stylua, dest: "{{ home }}/.config/stylua" }
-    - { src: css/stylelint/.stylelintrc.json, dest: "{{ home }}/.stylelintrc.json" }
-    - { src: html/linthtml/.linthtmlrc, dest: "{{ home }}/.linthtmlrc" }
-    - { src: ansible/ansible-lint/.ansible-lint, dest: "{{ home }}/.ansible-lint" }
-    - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
-    - {
-        src: editorconfig/.editorconfig-checker.json,
-        dest: "{{ home }}/.editorconfig-checker.json",
-      }
-    - { src: json/jsonlint/.jsonlintrc, dest: "{{ home }}/.jsonlintrc" }
-    - { src: make/checkmake, dest: "{{ home }}/.config/checkmake" }
-  loop_control:
-    label: "{{ item.src }}"
+- name: Deploy development tool configs
+  vars:
+    development_tool_configs:
+      - { src: php/phpstan, dest: "{{ home }}/.config/phpstan" }
+      - { src: php/rector, dest: "{{ home }}/.config/rector" }
+      - { src: php/php-cs-fixer, dest: "{{ home }}/.config/php-cs-fixer" }
+      - { src: php/pint, dest: "{{ home }}/.config/pint" }
+      - { src: php/phpcs, dest: "{{ home }}/.config/phpcs" }
+      - { src: php/phpmd, dest: "{{ home }}/.config/phpmd" }
+      - { src: python/ruff, dest: "{{ home }}/.config/ruff" }
+      - { src: javascript/eslint, dest: "{{ home }}/.config/eslint" }
+      - { src: shellcheck/.shellcheckrc, dest: "{{ home }}/.shellcheckrc" }
+      - { src: yaml/yamllint.yml, dest: "{{ home }}/.config/yamllint/config" }
+      - { src: markdown/markdownlint, dest: "{{ home }}/.config/markdownlint" }
+      - { src: commitlint, dest: "{{ home }}/.config/commitlint" }
+      - { src: prettier/.prettierrc, dest: "{{ home }}/.prettierrc" }
+      - { src: prettier/.prettierignore, dest: "{{ home }}/.prettierignore" }
+      - { src: docker/hadolint.yaml, dest: "{{ home }}/.config/hadolint.yaml" }
+      - { src: lua/stylua, dest: "{{ home }}/.config/stylua" }
+      - { src: css/stylelint/.stylelintrc.json, dest: "{{ home }}/.stylelintrc.json" }
+      - { src: html/linthtml/.linthtmlrc, dest: "{{ home }}/.linthtmlrc" }
+      - { src: ansible/ansible-lint/.ansible-lint, dest: "{{ home }}/.ansible-lint" }
+      - { src: sql/sqlfluff/.sqlfluff, dest: "{{ home }}/.sqlfluff" }
+      - {
+          src: editorconfig/.editorconfig-checker.json,
+          dest: "{{ home }}/.editorconfig-checker.json",
+        }
+      - { src: json/jsonlint/.jsonlintrc, dest: "{{ home }}/.jsonlintrc" }
+      - { src: make/checkmake, dest: "{{ home }}/.config/checkmake" }
   tags: [development, config]
+  block:
+    - name: Ensure development config parent directories exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop: >-
+        {{
+          development_tool_configs
+          | map(attribute='dest')
+          | map('dirname')
+          | reject('equalto', home)
+          | unique
+          | list
+        }}
+      loop_control:
+        label: "{{ item }}"
+
+    - name: Deploy tool configs
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/roles/development/files/tools/{{ item.src }}"
+        dest: "{{ item.dest }}"
+        state: link
+        force: true
+      loop: "{{ development_tool_configs }}"
+      loop_control:
+        label: "{{ item.src }}"
 
 - name: Install ESLint config dependencies
   ansible.builtin.command:
@@ -95,9 +116,16 @@
       fish -lc
       "nvm use --silent lts >/dev/null;
       cd {{ home }}/.config/eslint && npm install --silent"
-  register: eslint_deps_install
-  changed_when: "'added' in eslint_deps_install.stdout"
+  register: development_eslint_deps_install
+  changed_when: "'added' in development_eslint_deps_install.stdout"
   tags: [development, packages]
+
+- name: Ensure development script directory exists
+  ansible.builtin.file:
+    path: "{{ home }}/.local/bin"
+    state: directory
+    mode: "0755"
+  tags: [development, config]
 
 - name: Deploy helper scripts
   ansible.builtin.file:

@@ -1,4 +1,11 @@
 ---
+- name: Ensure AI tools binary directory exists
+  ansible.builtin.file:
+    path: "{{ home }}/.local/bin"
+    state: directory
+    mode: "0755"
+  tags: [ai-tools, config]
+
 - name: Install Claude CLI
   ansible.builtin.shell:
     cmd: |
