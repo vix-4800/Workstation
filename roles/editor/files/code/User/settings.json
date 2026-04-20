@@ -899,6 +899,11 @@
           "name": "Markdown Lint",
           "command": "markdownlint",
           "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"]
+        },
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
     },
@@ -919,6 +924,13 @@
           "name": "Ansible Lint",
           "parser": "ansible-lint",
           "run": "onSave"
+        }
+      ],
+      "fixers": [
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
     },
@@ -974,6 +986,77 @@
       ]
     },
     {
+      "name": "INI",
+      "filePatterns": [
+        "*.ini",
+        "*.cfg",
+        ".editorconfig",
+        "**/swayidle/config",
+        "**/swaylock/config",
+        "**/wofi/config"
+      ],
+      "fixers": [
+        {
+          "name": "inifmt",
+          "command": "inifmt",
+          "args": ["--write", "${file}"]
+        }
+      ]
+    },
+    {
+      "name": "Lua",
+      "filePatterns": ["*.lua"],
+      "fixers": [
+        {
+          "name": "StyLua",
+          "command": "stylua",
+          "args": ["--config-path", "/home/vix/.config/stylua/stylua.toml", "${file}"]
+        }
+      ]
+    },
+    {
+      "name": "TOML",
+      "filePatterns": ["*.toml"],
+      "linters": [
+        {
+          "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
+          "command": "taplo",
+          "name": "Taplo",
+          "parser": "parsable",
+          "run": "onSave"
+        }
+      ],
+      "fixers": [
+        {
+          "name": "Taplo",
+          "command": "taplo",
+          "args": ["fmt", "--config", "~/.config/taplo/taplo.toml", "${file}"]
+        }
+      ]
+    },
+    {
+      "name": "Go",
+      "filePatterns": ["*.go"],
+      "fixers": [
+        {
+          "name": "gofmt",
+          "command": "gofmt",
+          "args": ["-w", "${file}"]
+        }
+      ]
+    },
+    {
+      "name": "Fish",
+      "filePatterns": ["*.fish"],
+      "fixers": [
+        {
+          "name": "fish_indent",
+          "command": "fish_indent",
+          "args": ["-w", "${file}"]
+        }
+      ]
+    },
+    {
       "name": "JavaScript/TypeScript/Vue",
       "filePatterns": ["*.js", "*.ts", "*.jsx", "*.tsx", "*.vue"],
       "linters": [
@@ -990,6 +1073,11 @@
           "name": "ESLint",
           "command": "eslint",
           "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"]
+        },
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
     },
@@ -1010,6 +1098,11 @@
           "name": "Style Lint",
           "command": "~/.local/share/nvm/v24.15.0/bin/stylelint",
           "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"]
+        },
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
     },
@@ -1036,6 +1129,13 @@
           "name": "HTML Hint",
           "parser": "json",
           "run": "onSave"
+        }
+      ],
+      "fixers": [
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
     },
@@ -1093,7 +1193,7 @@
         {
           "name": "Nginx Test",
           "command": "nginx",
-          "args": ["-t", "${file}"]
+          "args": ["-t", "-c", "${file}"]
         }
       ],
       "linters": [
@@ -1136,6 +1236,13 @@
           "name": "JSON Lint",
           "parser": "jsonlint",
           "run": "onSave"
+        }
+      ],
+      "fixers": [
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
     },
