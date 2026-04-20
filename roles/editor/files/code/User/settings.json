@@ -1074,7 +1074,7 @@
   "php-docblocker.returnGap": true,
   "php-docblocker.returnVoid": true,
   "php-docblocker.useShortNames": true,
-  "phpmd.enabled": false,
+  "phpmd.enabled": true,
   "phpmd.executablePath": "phpmd",
   "phpmd.lintOnSave": true,
   "phpmd.rulesets": "~/.config/phpmd/phpmd.xml",
