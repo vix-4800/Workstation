@@ -860,6 +860,13 @@
           "parser": "json",
           "run": "onSave"
         }
+      ],
+      "fixers": [
+        {
+          "name": "shfmt",
+          "command": "shfmt",
+          "args": ["-w", "${file}"]
+        }
       ]
     },
     {
@@ -932,6 +939,18 @@
           "parser": "json",
           "run": "onSave"
         }
+      ],
+      "fixers": [
+        {
+          "name": "Ruff Fix",
+          "command": "ruff",
+          "args": ["check", "--fix", "--config=~/.config/ruff/pyproject.toml", "${file}"]
+        },
+        {
+          "name": "Ruff Format",
+          "command": "ruff",
+          "args": ["format", "--config=~/.config/ruff/pyproject.toml", "${file}"]
+        }
       ]
     },
     {
@@ -945,6 +964,13 @@
           "parser": "json",
           "run": "onSave"
         }
+      ],
+      "fixers": [
+        {
+          "name": "Dotenv Linter",
+          "command": "dotenv-linter",
+          "args": ["fix", "${file}"]
+        }
       ]
     },
     {
@@ -957,6 +983,13 @@
           "name": "ESLint",
           "parser": "json",
           "run": "onSave"
+        }
+      ],
+      "fixers": [
+        {
+          "name": "ESLint",
+          "command": "eslint",
+          "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"]
         }
       ]
     },
@@ -1031,7 +1064,7 @@
         {
           "name": "Sql Fluff",
           "command": "sqlfluff",
-          "args": ["fix", "${file}"]
+          "args": ["fix", "--config", "~/.sqlfluff", "--dialect", "mysql", "${file}"]
         }
       ]
     },
