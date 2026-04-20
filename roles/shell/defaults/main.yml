@@ -8,6 +8,7 @@ shell_packages:
 shell_node_global_packages:
   - blade-formatter
   - markdownlint-cli2
+  - nginxbeautifier
   - "@commitlint/cli"
   - "@commitlint/config-conventional"
   - "@openai/codex"

@@ -49,7 +49,6 @@
     name:
       - hadolint
       - checkmake
-      - nginxbeautifier
     state: present
   become: false
   tags: [development, packages]
