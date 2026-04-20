@@ -1,6 +1,15 @@
 # ======= PATH =======
+fish_add_path $HOME/.local/bin
 fish_add_path $HOME/.fuelup/bin
 fish_add_path $HOME/.opencode/bin
+
+set -l nvm_dir $HOME/.local/share/nvm
+if test -d $nvm_dir
+    set -l nvm_node (ls -1 $nvm_dir | sort -V | tail -1)
+    if test -n "$nvm_node"
+        fish_add_path -g $nvm_dir/$nvm_node/bin
+    end
+end
 
 if test -d $HOME/go/bin
     set -gx GOPATH $HOME/go

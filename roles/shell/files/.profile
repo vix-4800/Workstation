@@ -19,9 +19,13 @@ fi
 # Add Neovim AppImage path
 export PATH="/opt/nvim-linux-x86_64/bin:${PATH}"
 
-# Add Node.js path (if using nvm or manual installation)
-if [[ -d "${HOME}/.local/share/nvm/v24.7.0/bin" ]]; then
-    export PATH="${HOME}/.local/share/nvm/v24.7.0/bin:${PATH}"
+# Add Node.js path (nvm - resolve latest installed version)
+nvm_dir="${HOME}/.local/share/nvm"
+if [[ -d "${nvm_dir}" ]]; then
+    nvm_node=$(ls -1 "${nvm_dir}" 2>/dev/null | sort -V | tail -1)
+    if [[ -n "${nvm_node}" ]]; then
+        export PATH="${nvm_dir}/${nvm_node}/bin:${PATH}"
+    fi
 fi
 
 # ======= Environment Variables =======
