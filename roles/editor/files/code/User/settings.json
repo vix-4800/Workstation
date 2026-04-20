@@ -970,7 +970,14 @@
       ],
       "name": "nginx-lint",
       "parser": "parsable",
-      "run": "onSave"
+      "run": "onSave",
+      "preCommands": [
+        {
+          "name": "nginx -t",
+          "command": "nginx",
+          "args": ["-t", "${file}"]
+        }
+      ]
     },
     {
       "args": ["-c", "~/.ansible-lint", "--format", "json", "--nocolor", "${file}"],
@@ -1006,7 +1013,7 @@
         "${file}"
       ],
       "command": "editorconfig-checker",
-      "filePatterns": [".editorconfig", "**/.editorconfig"],
+      "filePatterns": ["*"],
       "name": "editorconfig-checker",
       "parser": "parsable",
       "run": "onSave"
@@ -1032,7 +1039,14 @@
       "filePatterns": ["*.php"],
       "name": "phpstan",
       "parser": "json",
-      "run": "onSave"
+      "run": "onSave",
+      "preCommands": [
+        {
+          "name": "php -l",
+          "command": "php",
+          "args": ["-l", "${file}"]
+        }
+      ]
     },
     {
       "args": [
@@ -1040,13 +1054,23 @@
         "--report=json",
         "--ignore=*/vendor/*",
         "-q",
+        "--ignore-annotations",
+        "--parallel=8",
         "${file}"
       ],
       "command": "~/.config/composer/vendor/bin/phpcs",
       "filePatterns": ["*.php"],
       "name": "phpcs",
       "parser": "json",
-      "run": "onSave"
+      "run": "onSave",
+      "preCommands": [
+        {
+          "name": "php -l",
+          "command": "php",
+          "args": ["-l", "${file}"]
+        }
+      ],
+      "showDiagnosticCodes": false
     },
     {
       "args": ["${file}", "json", "~/.config/phpmd/phpmd.xml"],
@@ -1054,7 +1078,15 @@
       "filePatterns": ["*.php"],
       "name": "phpmd",
       "parser": "json",
-      "run": "onSave"
+      "run": "onSave",
+      "preCommands": [
+        {
+          "name": "php -l",
+          "command": "php",
+          "args": ["-l", "${file}"]
+        }
+      ],
+      "showDiagnosticCodes": false
     }
   ],
   "liveServer.settings.donotShowInfoMsg": true,
