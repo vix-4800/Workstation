@@ -39,6 +39,7 @@ return {
       jsonc = { "prettierd", "prettier", stop_after_first = true },
       yaml = { "yamlfmt" },
       markdown = { "prettierd", "prettier", stop_after_first = true },
+      dosini = { "inifmt" },
       go = { "gofmt" },
       sh = { "shfmt" },
       bash = { "shfmt" },
@@ -71,6 +72,10 @@ return {
           "--config",
           configs.getConfig("prettier"),
         },
+      },
+      inifmt = {
+        command = "inifmt",
+        stdin = true,
       },
       shfmt = {
         prepend_args = { "-i", "2", "-ci" },

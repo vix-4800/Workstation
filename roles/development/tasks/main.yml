@@ -52,6 +52,13 @@
   become: false
   tags: [development, packages]
 
+- name: Install inifmt via Go
+  ansible.builtin.command:
+    cmd: go install github.com/thecrazygm/inifmt@latest
+    creates: "{{ home }}/go/bin/inifmt"
+  become: false
+  tags: [development, packages]
+
 - name: Deploy development tool configs
   vars:
     development_tool_configs:
