@@ -7,6 +7,9 @@ set -g fish_greeting ""
 set -x EDITOR nvim
 set -x VISUAL $EDITOR
 
+# Tool configs
+set -gx TAPLO_CONFIG $HOME/.config/taplo/taplo.toml
+
 # Terminal type
 set -gx TERM xterm-256color
 

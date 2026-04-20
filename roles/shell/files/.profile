@@ -27,6 +27,7 @@ fi
 # ======= Environment Variables =======
 export EDITOR="nvim"
 export VISUAL="${EDITOR}"
+export TAPLO_CONFIG="${HOME}/.config/taplo/taplo.toml"
 
 # ======= Load shell-agnostic aliases =======
 if [[ -f "${HOME}/.aliases" ]]; then

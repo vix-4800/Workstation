@@ -64,6 +64,7 @@
       - { src: python/ruff, dest: "{{ home }}/.config/ruff" }
       - { src: javascript/eslint, dest: "{{ home }}/.config/eslint" }
       - { src: shellcheck/.shellcheckrc, dest: "{{ home }}/.shellcheckrc" }
+      - { src: toml/taplo.toml, dest: "{{ home }}/.config/taplo/taplo.toml" }
       - { src: yaml/yamllint.yml, dest: "{{ home }}/.config/yamllint/config" }
       - { src: markdown/markdownlint, dest: "{{ home }}/.config/markdownlint" }
       - { src: commitlint, dest: "{{ home }}/.config/commitlint" }

@@ -37,6 +37,9 @@ M.configs = {
   -- YAML
   yamllint = vim.fn.expand("~/.config/yamllint/config"),
 
+  -- TOML
+  taplo = vim.fn.expand("~/.config/taplo/taplo.toml"),
+
   -- Markdown
   markdownlint = vim.fn.expand("~/.config/markdownlint/.markdownlint.jsonc"),
 

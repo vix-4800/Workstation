@@ -42,6 +42,7 @@ return {
       go = { "gofmt" },
       sh = { "shfmt" },
       bash = { "shfmt" },
+      toml = { "taplo" },
       xml = {}, -- Use LSP formatter (lemminx)
     },
     formatters = {
@@ -73,6 +74,16 @@ return {
       },
       shfmt = {
         prepend_args = { "-i", "2", "-ci" },
+      },
+      taplo = {
+        command = "taplo",
+        args = {
+          "fmt",
+          "--config",
+          configs.getConfig("taplo"),
+          "-",
+        },
+        stdin = true,
       },
       ruff_format = {
         command = "ruff",
