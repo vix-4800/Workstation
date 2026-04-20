@@ -29,6 +29,7 @@ return {
     formatters_by_ft = {
       lua = { "stylua" },
       php = { "php_cs_fixer" },
+      blade = { "blade_formatter" },
       python = { "ruff_format", "ruff_organize_imports" },
       javascript = { "prettierd", "prettier", stop_after_first = true },
       typescript = { "prettierd", "prettier", stop_after_first = true },
@@ -44,6 +45,7 @@ return {
       sh = { "shfmt" },
       bash = { "shfmt" },
       toml = { "taplo" },
+      nginx = { "nginxbeautifier" },
       xml = {}, -- Use LSP formatter (lemminx)
     },
     formatters = {
@@ -60,6 +62,20 @@ return {
           "--config=" .. configs.getConfig("php_cs_fixer"),
           "$FILENAME",
         },
+        stdin = false,
+      },
+      blade_formatter = {
+        command = "blade-formatter",
+        args = {
+          "--stdin",
+          "--config",
+          configs.getConfig("blade_formatter"),
+        },
+        stdin = true,
+      },
+      nginxbeautifier = {
+        command = "nginxbeautifier",
+        args = { "-s", "4", "-i", "$FILENAME" },
         stdin = false,
       },
       prettierd = {

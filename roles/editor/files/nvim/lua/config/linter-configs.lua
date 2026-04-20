@@ -19,6 +19,7 @@ M.configs = {
   phpmd = vim.fn.expand("~/.config/phpmd/phpmd.xml"),
   rector = vim.fn.expand("~/.config/rector/rector.php"),
   pint = vim.fn.expand("~/.config/pint/pint.json"),
+  blade_formatter = vim.fn.expand("~/.config/blade-formatter/.bladeformatterrc.json"),
 
   -- Python
   ruff = vim.fn.expand("~/.config/ruff/pyproject.toml"),

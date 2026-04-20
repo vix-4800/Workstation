@@ -42,7 +42,6 @@ return {
         "prettier", -- JS/TS/JSON/CSS/HTML/MD
         "prettierd", -- JS/TS/JSON/CSS/HTML/MD
         "yamlfmt", -- YAML
-        "nginx-config-formatter", -- NGINX
 
         -- ╭─────────────────────────────────────────────────────────╮
         -- │ Linters                                                 │

@@ -463,7 +463,10 @@
     "*.neon.dist": "neon",
     "*.toml": "toml",
     "**/.env*": "dotenv",
+    "**/nginx/**/*.conf": "nginx",
     "**/secrets/*": "plaintext",
+    "**/sites-available/*": "nginx",
+    "**/sites-enabled/*": "nginx",
     "**/sway/config": "sway",
     "**/sway/config.d/*": "sway",
     "**/swayidle/config": "dosini",
@@ -829,13 +832,7 @@
     },
     {
       "name": "INI",
-      "filePatterns": [
-        "*.ini",
-        "*.cfg",
-        ".editorconfig",
-        ".gitconfig",
-        ".gitignore",
-      ],
+      "filePatterns": ["*.ini", "*.cfg", ".editorconfig", ".gitconfig", ".gitignore"],
       "fixers": [
         {
           "name": "inifmt",
@@ -1051,6 +1048,13 @@
           "name": "Nginx Lint",
           "parser": "parsable",
           "run": "onOpen"
+        }
+      ],
+      "fixers": [
+        {
+          "name": "Nginx Beautifier",
+          "command": "nginxbeautifier",
+          "args": ["-s", "4", "-i", "${file}"]
         }
       ]
     },
