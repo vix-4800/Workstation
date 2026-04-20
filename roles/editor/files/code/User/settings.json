@@ -1,25 +1,15 @@
 {
   "[ansible]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
     "editor.tabSize": 2
   },
   "[blade]": {
-    "editor.autoClosingBrackets": "always",
-    "editor.defaultFormatter": "shufo.vscode-blade-formatter",
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true
+    "editor.autoClosingBrackets": "always"
   },
   "[css]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.stylelint": "explicit"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.defaultColorDecorators": "never"
   },
   "[dockercompose]": {
     "editor.autoIndent": "advanced",
-    "editor.defaultFormatter": "redhat.vscode-yaml",
     "editor.insertSpaces": true,
     "editor.quickSuggestions": {
       "comments": false,
@@ -28,75 +18,18 @@
     },
     "editor.tabSize": 2
   },
-  "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-containers"
-  },
-  "[dotenv]": {
-    "editor.defaultFormatter": "lkrms.inifmt",
-    "editor.formatOnSave": true
-  },
-  "[fish]": {
-    "editor.defaultFormatter": "bmalehorn.vscode-fish",
-    "editor.formatOnSave": true
-  },
-  "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml",
-    "editor.formatOnSave": true
-  },
-  "[go]": {
-    "editor.defaultFormatter": "golang.go"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true
-  },
-  "[ignore]": {
-    "editor.defaultFormatter": "lkrms.inifmt",
-    "editor.formatOnSave": true
-  },
-  "[ini]": {
-    "editor.defaultFormatter": "lkrms.inifmt",
-    "editor.formatOnSave": true
-  },
   "[instructions]": {
     "diffEditor.ignoreTrimWhitespace": false
   },
-  "[javascript]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true
-  },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
     "editor.quickSuggestions": {
       "strings": true
     },
     "editor.suggest.insertMode": "replace",
     "editor.wordWrap": "wordWrapColumn"
   },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "[just]": {
-    "editor.defaultFormatter": "nefrob.vscode-just-syntax"
-  },
-  "[lua]": {
-    "editor.defaultFormatter": "JohnnyMorganz.stylua",
-    "editor.formatOnSave": true
-  },
   "[markdown]": {
     "diffEditor.ignoreTrimWhitespace": true,
-    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
     "editor.quickSuggestions": {
       "comments": false,
       "other": true,
@@ -104,76 +37,23 @@
     },
     "editor.wordWrap": "wordWrapColumn"
   },
-  "[nginx]": {
-    "editor.defaultFormatter": "raynigon.nginx-formatter",
-    "editor.formatOnSave": true
-  },
   "[php]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.fixAll.phpsab": "never",
-      "source.organizeImports": "explicit"
-    },
-    "editor.defaultFormatter": "junstyle.php-cs-fixer",
     "editor.inlayHints.enabled": "onUnlessPressed",
     "editor.suggest.showUnits": true
   },
   "[python]": {
-    "diffEditor.ignoreTrimWhitespace": false,
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    },
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.formatOnSave": true
-  },
-  "[scss]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.stylelint": "explicit"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "[shellscript]": {
-    "editor.defaultFormatter": "mkhl.shfmt",
-    "editor.formatOnSave": true
+    "diffEditor.ignoreTrimWhitespace": false
   },
   "[skill]": {
     "diffEditor.ignoreTrimWhitespace": true
   },
-  "[sql]": {
-    "editor.defaultFormatter": "sqlfluff.vscode-sqlfluff",
-    "editor.formatOnSave": true
-  },
   "[toml]": {
-    "editor.defaultFormatter": "tamasfe.even-better-toml",
-    "editor.formatOnSave": true,
     "editor.tabSize": 2
-  },
-  "[typescript]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true
-  },
-  "[vue]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit"
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[xml]": {
-    "editor.defaultFormatter": "redhat.vscode-xml",
-    "editor.formatOnSave": true
   },
   "[yaml]": {
     "diffEditor.ignoreTrimWhitespace": false,
     "editor.autoIndent": "keep",
     "editor.defaultColorDecorators": "never",
-    "editor.formatOnSave": true,
     "editor.insertSpaces": true,
     "editor.quickSuggestions": {
       "comments": false,
@@ -349,7 +229,7 @@
   "chat.useNestedAgentsMdFiles": true,
   "chat.viewSessions.orientation": "stacked",
   "chatgpt.followUpQueueMode": "steer",
-    "containers.containers.description": ["Image", "Status"],
+  "containers.containers.description": ["Image", "Status"],
   "containers.containers.label": "ContainerName",
   "containers.containers.sortBy": "Label",
   "containers.volumes.description": ["CreatedTime"],
@@ -572,7 +452,7 @@
   "errorLens.messageTemplate": "($count) $message",
   "errorLens.padding": "0 4px",
   "errorLens.problemRangeDecorationEnabled": true,
-    "explorer.compactFolders": false,
+  "explorer.compactFolders": false,
   "explorer.confirmDelete": true,
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmPasteNative": false,
@@ -955,7 +835,7 @@
         ".editorconfig",
         ".gitconfig",
         ".gitignore",
-              ],
+      ],
       "fixers": [
         {
           "name": "inifmt",
@@ -1311,8 +1191,8 @@
   "markdown.extension.italic.indicator": "*",
   "markdown.extension.orderedList.marker": "ordered",
   "markdown.validate.enabled": true,
-    "network.meteredConnection": "off",
-    "php-docblocker.alignParams": true,
+  "network.meteredConnection": "off",
+  "php-docblocker.alignParams": true,
   "php-docblocker.alignReturn": false,
   "php-docblocker.author": {
     "email": "Gordan.ei@protonmail.ch",
@@ -1323,10 +1203,10 @@
   "php-docblocker.returnGap": true,
   "php-docblocker.returnVoid": true,
   "php-docblocker.useShortNames": true,
-    "phpmnd.enable": true,
+  "phpmnd.enable": true,
   "phpmnd.ignoreNumbers": ["0", "1", "-1"],
   "phpmnd.ignoreStrings": [],
-    "phpTypeHints.enabled": true,
+  "phpTypeHints.enabled": true,
   "phpTypeHints.hideWhenArgumentMatchesName": false,
   "problems.autoReveal": false,
   "python.analysis.typeCheckingMode": "strict",
@@ -1361,7 +1241,7 @@
   "search.followSymlinks": false,
   "security.workspace.trust.untrustedFiles": "prompt",
   "settingsSync.ignoredExtensions": ["ms-playwright.playwright"],
-    "task.allowAutomaticTasks": "on",
+  "task.allowAutomaticTasks": "on",
   "task.autoDetect": "on",
   "task.problemMatchers.neverPrompt": true,
   "telemetry.editStats.enabled": false,
