@@ -902,7 +902,7 @@
         },
         {
           "name": "Prettier",
-          "command": "prettier",
+          "command": "~/.local/share/nvim/mason/bin/prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -929,7 +929,7 @@
       "fixers": [
         {
           "name": "Prettier",
-          "command": "prettier",
+          "command": "~/.local/share/nvim/mason/bin/prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -1020,9 +1020,9 @@
       "linters": [
         {
           "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
-          "command": "taplo",
+          "command": "~/.serena/language_servers/static/TaploServer/taplo/taplo",
           "name": "Taplo",
-          "parser": "parsable",
+          "parser": "taplo",
           "run": "onSave"
         }
       ],
@@ -1076,7 +1076,7 @@
         },
         {
           "name": "Prettier",
-          "command": "prettier",
+          "command": "~/.local/share/nvim/mason/bin/prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -1101,7 +1101,7 @@
         },
         {
           "name": "Prettier",
-          "command": "prettier",
+          "command": "~/.local/share/nvim/mason/bin/prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -1134,7 +1134,7 @@
       "fixers": [
         {
           "name": "Prettier",
-          "command": "prettier",
+          "command": "~/.local/share/nvim/mason/bin/prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -1241,8 +1241,9 @@
       "fixers": [
         {
           "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
+          "command": "~/.local/share/nvim/mason/bin/prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "run": "onSave"
         }
       ]
     },
