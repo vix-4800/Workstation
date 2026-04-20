@@ -50,6 +50,7 @@ M.configs = {
 
   -- Lua
   stylua = vim.fn.expand("~/.config/stylua/stylua.toml"),
+  luacheck = vim.fn.expand("~/.config/luacheck/.luacheckrc"),
 
   -- SQL
   sqlfluff = vim.fn.expand("~/.sqlfluff"),

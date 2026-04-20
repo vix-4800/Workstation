@@ -844,6 +844,22 @@
     {
       "name": "Lua",
       "filePatterns": ["*.lua"],
+      "linters": [
+        {
+          "args": [
+            "--config",
+            "~/.config/luacheck/.luacheckrc",
+            "--formatter",
+            "plain",
+            "--codes",
+            "${file}"
+          ],
+          "command": "luacheck",
+          "name": "LuaCheck",
+          "parser": "parsable",
+          "run": "onOpen"
+        }
+      ],
       "fixers": [
         {
           "name": "StyLua",

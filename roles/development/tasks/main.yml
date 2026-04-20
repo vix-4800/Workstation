@@ -33,6 +33,7 @@
       - go
       - lua
       - luarocks
+      - luacheck
       - shellcheck
       - shfmt
       - libxml2
@@ -92,6 +93,7 @@
       - { src: prettier/.prettierignore, dest: "{{ home }}/.prettierignore" }
       - { src: docker/hadolint.yaml, dest: "{{ home }}/.config/hadolint.yaml" }
       - { src: lua/stylua, dest: "{{ home }}/.config/stylua" }
+      - { src: lua/luacheck/.luacheckrc, dest: "{{ home }}/.config/luacheck/.luacheckrc" }
       - { src: css/stylelint/.stylelintrc.json, dest: "{{ home }}/.stylelintrc.json" }
       - { src: html/htmlhint/.htmlhintrc, dest: "{{ home }}/.htmlhintrc" }
       - { src: html/linthtml/.linthtmlrc, dest: "{{ home }}/.linthtmlrc" }

@@ -28,6 +28,7 @@ return {
       json = { "jsonlint" },
       yaml = { "yamllint" },
       python = { "ruff" },
+      lua = { "luacheck" },
       sh = { "shellcheck" },
       bash = { "shellcheck" },
       dotenv = { "dotenv_linter" },
@@ -53,6 +54,19 @@ return {
       "--rcfile=" .. configs.getConfig("shellcheck"),
       "-",
     }
+
+    -- Configure luacheck to use custom config
+    lint.linters.luacheck.args = {
+      "--config",
+      configs.getConfig("luacheck"),
+      "--formatter",
+      "plain",
+      "--codes",
+      function()
+        return vim.api.nvim_buf_get_name(0)
+      end,
+    }
+    lint.linters.luacheck.stdin = false
 
     -- Configure yamllint to use custom config
     lint.linters.yamllint.args = {
