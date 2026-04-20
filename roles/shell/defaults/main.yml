@@ -6,6 +6,7 @@ shell_packages:
   - nodejs
 
 shell_node_global_packages:
+  - blade-formatter
   - markdownlint-cli2
   - "@commitlint/cli"
   - "@commitlint/config-conventional"

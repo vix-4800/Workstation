@@ -1122,6 +1122,22 @@
       ]
     },
     {
+      "name": "Blade",
+      "filePatterns": ["*.blade.php"],
+      "fixers": [
+        {
+          "name": "Blade Formatter",
+          "command": "blade-formatter",
+          "args": [
+            "--write",
+            "--config",
+            "~/.config/blade-formatter/.bladeformatterrc.json",
+            "${file}"
+          ]
+        }
+      ]
+    },
+    {
       "name": "PHP",
       "filePatterns": ["*.php"],
       "preCommands": [
