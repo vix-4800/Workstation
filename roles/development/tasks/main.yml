@@ -60,6 +60,13 @@
   become: false
   tags: [development, packages]
 
+- name: Install yamlfmt via Go
+  ansible.builtin.command:
+    cmd: go install github.com/google/yamlfmt/cmd/yamlfmt@latest
+    creates: "{{ home }}/go/bin/yamlfmt"
+  become: false
+  tags: [development, packages]
+
 - name: Deploy development tool configs
   vars:
     development_tool_configs:
@@ -78,6 +85,7 @@
       - { src: shellcheck/.shellcheckrc, dest: "{{ home }}/.shellcheckrc" }
       - { src: toml/taplo.toml, dest: "{{ home }}/.config/taplo/taplo.toml" }
       - { src: yaml/yamllint.yml, dest: "{{ home }}/.config/yamllint/config" }
+      - { src: yaml/yamlfmt/.yamlfmt, dest: "{{ home }}/.config/yamlfmt/.yamlfmt" }
       - { src: markdown/markdownlint, dest: "{{ home }}/.config/markdownlint" }
       - { src: commitlint, dest: "{{ home }}/.config/commitlint" }
       - { src: prettier/.prettierrc, dest: "{{ home }}/.prettierrc" }

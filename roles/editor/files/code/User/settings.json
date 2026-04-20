@@ -773,9 +773,9 @@
       ],
       "fixers": [
         {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
+          "name": "yamlfmt",
+          "command": "yamlfmt",
+          "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"]
         }
       ]
     },

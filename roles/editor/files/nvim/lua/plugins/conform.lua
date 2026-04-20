@@ -106,6 +106,15 @@ return {
         },
         stdin = true,
       },
+      yamlfmt = {
+        command = "yamlfmt",
+        args = {
+          "-conf",
+          configs.getConfig("yamlfmt"),
+          "-",
+        },
+        stdin = true,
+      },
       ruff_format = {
         command = "ruff",
         args = {

@@ -35,18 +35,6 @@ return {
         "docker-compose-language-service", -- Docker Compose
         "marksman", -- Markdown
         "fish-lsp", -- Fish
-
-        -- ╭─────────────────────────────────────────────────────────╮
-        -- │ Formatters                                              │
-        -- ╰─────────────────────────────────────────────────────────╯
-        "prettier", -- JS/TS/JSON/CSS/HTML/MD
-        "prettierd", -- JS/TS/JSON/CSS/HTML/MD
-        "yamlfmt", -- YAML
-
-        -- ╭─────────────────────────────────────────────────────────╮
-        -- │ Linters                                                 │
-        -- ╰─────────────────────────────────────────────────────────╯
-        "dotenv-linter", -- .env files
       },
       auto_update = true,
       run_on_start = true,
