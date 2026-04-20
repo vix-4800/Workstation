@@ -696,8 +696,7 @@
   "hadolint.hadolintPath": "hadolint",
   "html.autoClosingTags": true,
   "html.format.wrapAttributes": "force-aligned",
-  "inlineChat.defaultModel": "Claude Sonnet 4.6 (copilot)",
-  "inlineChat.enableV2": true,
+    "inlineChat.enableV2": true,
   "intelephense.codeLens.implementations.enable": true,
   "intelephense.codeLens.overrides.enable": true,
   "intelephense.codeLens.parent.enable": true,
@@ -1205,5 +1204,8 @@
   "workbench.tree.indent": 15,
   "yaml.format.enable": true,
   "yaml.schemaStore.enable": true,
-  "yaml.validate": true
+  "yaml.validate": true,
+  "chat.agentSkillsLocations": {
+    "~/.claude/skills": false
+  }
 }
