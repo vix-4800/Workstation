@@ -804,6 +804,18 @@
           "args": ["check", "--fix", "--config=~/.config/ruff/pyproject.toml", "${file}"]
         },
         {
+          "name": "Ruff Organize Imports",
+          "command": "ruff",
+          "args": [
+            "check",
+            "--select",
+            "I",
+            "--fix",
+            "--config=~/.config/ruff/pyproject.toml",
+            "${file}"
+          ]
+        },
+        {
           "name": "Ruff Format",
           "command": "ruff",
           "args": ["format", "--config=~/.config/ruff/pyproject.toml", "${file}"]
