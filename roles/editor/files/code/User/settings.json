@@ -858,7 +858,7 @@
           "command": "shellcheck",
           "name": "Shell Check",
           "parser": "json",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ],
       "fixers": [
@@ -878,7 +878,7 @@
           "command": "hadolint",
           "name": "HadoLint",
           "parser": "json",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ]
     },
@@ -891,7 +891,7 @@
           "command": "markdownlint",
           "name": "Markdown Lint",
           "parser": "json",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ],
       "fixers": [
@@ -916,7 +916,7 @@
           "command": "yamllint",
           "name": "YAML Lint",
           "parser": "parsable",
-          "run": "onSave"
+          "run": "onOpen"
         },
         {
           "args": ["-c", "~/.ansible-lint", "--format", "json", "--nocolor", "${file}"],
@@ -974,7 +974,7 @@
           "command": "dotenv-linter",
           "name": "Dotenv Linter",
           "parser": "parsable",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ],
       "fixers": [
@@ -1157,7 +1157,7 @@
           "command": "sqlfluff",
           "name": "Sql Fluff",
           "parser": "json",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ],
       "fixers": [
@@ -1177,7 +1177,7 @@
           "command": "checkmake",
           "name": "Check Make",
           "parser": "json",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ]
     },
@@ -1209,7 +1209,7 @@
           "command": "nginx-lint",
           "name": "Nginx Lint",
           "parser": "parsable",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ]
     },
@@ -1222,7 +1222,7 @@
           "command": "xmllint",
           "name": "XML Lint",
           "parser": "xmllint",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ]
     },
@@ -1235,7 +1235,7 @@
           "command": "~/.local/share/nvm/v24.15.0/bin/jsonlint",
           "name": "JSON Lint",
           "parser": "jsonlint",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ],
       "fixers": [
@@ -1263,7 +1263,7 @@
           "command": "editorconfig-checker",
           "name": "EditorConfig Checker",
           "parser": "parsable",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ]
     },
