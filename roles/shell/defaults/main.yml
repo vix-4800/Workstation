@@ -12,6 +12,7 @@ shell_node_global_packages:
   - "@openai/codex"
   - "@prantlf/jsonlint"
   - eslint
+  - htmlhint
   - stylelint
   - "@linthtml/linthtml"
 
