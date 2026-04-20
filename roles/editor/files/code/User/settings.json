@@ -958,10 +958,10 @@
       "filePatterns": [".env", ".env.*"],
       "linters": [
         {
-          "args": ["check", "--format", "json", "${file}"],
+          "args": ["--plain", "check", "--skip-updates", "${file}"],
           "command": "dotenv-linter",
           "name": "Dotenv Linter",
-          "parser": "json",
+          "parser": "parsable",
           "run": "onSave"
         }
       ],
@@ -969,7 +969,7 @@
         {
           "name": "Dotenv Linter",
           "command": "dotenv-linter",
-          "args": ["fix", "${file}"]
+          "args": ["--plain", "fix", "--no-backup", "${file}"]
         }
       ]
     },

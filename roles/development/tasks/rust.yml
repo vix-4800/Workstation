@@ -19,3 +19,10 @@
     creates: "{{ home }}/.cargo/bin/nginx-lint"
   become: false
   tags: [development, packages]
+
+- name: Install dotenv-linter via Cargo
+  ansible.builtin.command:
+    cmd: cargo install dotenv-linter --version 4.0.0
+    creates: "{{ home }}/.cargo/bin/dotenv-linter"
+  become: false
+  tags: [development, packages]

@@ -140,24 +140,22 @@ return {
     lint.linters["dotenv_linter"] = {
       cmd = "dotenv-linter",
       stdin = false,
-      args = { "check", "--format", "json", "$FILENAME" },
-      stream = "stderr",
+      args = { "--plain", "check", "--skip-updates", "$FILENAME" },
+      stream = "stdout",
       ignore_exitcode = true,
       parser = function(output)
         local diagnostics = {}
-        local ok, decoded = pcall(vim.json.decode, output)
-        if not ok or type(decoded) ~= "table" then
-          return diagnostics
-        end
-
-        for _, item in ipairs(decoded) do
-          table.insert(diagnostics, {
-            lnum = (item.line - 1) or 0,
-            col = 0,
-            message = item.message,
-            severity = vim.diagnostic.severity.WARN,
-            source = "dotenv-linter",
-          })
+        for line in output:gmatch("[^\r\n]+") do
+          local _, lnum, check, message = line:match("^(.+):(%d+) ([%w_]+): (.+)$")
+          if lnum then
+            table.insert(diagnostics, {
+              lnum = tonumber(lnum) - 1,
+              col = 0,
+              message = message .. " [" .. check .. "]",
+              severity = vim.diagnostic.severity.WARN,
+              source = "dotenv-linter",
+            })
+          end
         end
         return diagnostics
       end,
