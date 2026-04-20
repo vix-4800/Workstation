@@ -962,7 +962,12 @@
         "${file}"
       ],
       "command": "nginx-lint",
-      "filePatterns": ["nginx.conf", "**/nginx/**/*.conf", "**/sites-available/*", "**/sites-enabled/*"],
+      "filePatterns": [
+        "nginx.conf",
+        "**/nginx/**/*.conf",
+        "**/sites-available/*",
+        "**/sites-enabled/*"
+      ],
       "name": "nginx-lint",
       "parser": "parsable",
       "run": "onSave"
