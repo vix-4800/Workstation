@@ -902,7 +902,7 @@
         },
         {
           "name": "Prettier",
-          "command": "~/.local/share/nvim/mason/bin/prettier",
+          "command": "prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -929,7 +929,7 @@
       "fixers": [
         {
           "name": "Prettier",
-          "command": "~/.local/share/nvim/mason/bin/prettier",
+          "command": "prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -1020,10 +1020,10 @@
       "linters": [
         {
           "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
-          "command": "~/.serena/language_servers/static/TaploServer/taplo/taplo",
+          "command": "taplo",
           "name": "Taplo",
           "parser": "taplo",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ],
       "fixers": [
@@ -1076,7 +1076,7 @@
         },
         {
           "name": "Prettier",
-          "command": "~/.local/share/nvim/mason/bin/prettier",
+          "command": "prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -1087,21 +1087,21 @@
       "linters": [
         {
           "args": ["--config", "~/.stylelintrc.json", "--formatter", "json", "${file}"],
-          "command": "~/.local/share/nvm/v24.15.0/bin/stylelint",
+          "command": "stylelint",
           "name": "Style Lint",
           "parser": "json",
-          "run": "onSave"
+          "run": "onOpen"
         }
       ],
       "fixers": [
         {
           "name": "Style Lint",
-          "command": "~/.local/share/nvm/v24.15.0/bin/stylelint",
+          "command": "stylelint",
           "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"]
         },
         {
           "name": "Prettier",
-          "command": "~/.local/share/nvim/mason/bin/prettier",
+          "command": "prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -1113,7 +1113,7 @@
         {
           "args": [
             "-lc",
-            "cd \"$1\" && ~/.local/share/nvm/v24.15.0/bin/linthtml --config ~/.linthtmlrc --no-color \"$2\"",
+            "cd \"$1\" && linthtml --config ~/.linthtmlrc --no-color \"$2\"",
             "linthtml",
             "${fileDirname}",
             "${fileBasename}"
@@ -1125,7 +1125,7 @@
         },
         {
           "args": ["--config", "~/.htmlhintrc", "--format", "json", "${file}"],
-          "command": "~/.local/share/nvm/v24.15.0/bin/htmlhint",
+          "command": "htmlhint",
           "name": "HTML Hint",
           "parser": "json",
           "run": "onSave"
@@ -1134,7 +1134,7 @@
       "fixers": [
         {
           "name": "Prettier",
-          "command": "~/.local/share/nvim/mason/bin/prettier",
+          "command": "prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
       ]
@@ -1232,7 +1232,7 @@
       "linters": [
         {
           "args": ["-f", "~/.jsonlintrc", "${file}"],
-          "command": "~/.local/share/nvm/v24.15.0/bin/jsonlint",
+          "command": "jsonlint",
           "name": "JSON Lint",
           "parser": "jsonlint",
           "run": "onOpen"
@@ -1241,7 +1241,7 @@
       "fixers": [
         {
           "name": "Prettier",
-          "command": "~/.local/share/nvim/mason/bin/prettier",
+          "command": "prettier",
           "args": ["--write", "--config", "~/.prettierrc", "${file}"],
           "run": "onSave"
         }
