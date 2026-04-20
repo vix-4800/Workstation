@@ -14,6 +14,7 @@ use CustomFixer\NumericLiteralSeparatorFixer;
 use CustomFixer\RemoveUnusedCatchVariableFixer;
 use CustomFixer\RemoveUnusedForeachKeyFixer;
 use CustomFixer\PhpDocOpeningLineFixer;
+use CustomFixer\PhpDocSeparateThrowsFixer;
 use CustomFixer\PhpDocSelfReferenceFixer;
 use CustomFixer\RemoveDocBlockTagsFixer;
 use CustomFixer\RequireNullSafeOperatorFixer;
@@ -28,6 +29,7 @@ require_once __DIR__ . '/Fixer/CatchExceptionToThrowableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedCatchVariableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedForeachKeyFixer.php';
 require_once __DIR__ . '/Fixer/PhpDocOpeningLineFixer.php';
+require_once __DIR__ . '/Fixer/PhpDocSeparateThrowsFixer.php';
 require_once __DIR__ . '/Fixer/PhpDocSelfReferenceFixer.php';
 require_once __DIR__ . '/Fixer/RequireNullSafeOperatorFixer.php';
 require_once __DIR__ . '/Fixer/RemoveDocBlockTagsFixer.php';
@@ -46,6 +48,7 @@ return (new Config())
         new RemoveUnusedCatchVariableFixer(),
         new RemoveUnusedForeachKeyFixer(),
         new PhpDocOpeningLineFixer(),
+        new PhpDocSeparateThrowsFixer(),
         new PhpDocSelfReferenceFixer(),
         new RequireNullSafeOperatorFixer(),
         new RemoveDocBlockTagsFixer(),
@@ -348,6 +351,7 @@ return (new Config())
         'CustomFixer/remove_unused_catch_variable' => true, // Removes unused variables in catch blocks (PHP 8.0+ non-capturing catch)
         'CustomFixer/remove_unused_foreach_key' => true, // Removes unused key variables from foreach loops
         'CustomFixer/phpdoc_opening_line' => true, // Ensures multi-line PHPDoc /** is on its own line
+        'CustomFixer/phpdoc_separate_throws' => true, // Splits @throws A|B into separate @throws tags
         'CustomFixer/phpdoc_self_reference' => true, // Replaces class name with self in PHPDoc @var/@param/@return inside the class
         'CustomFixer/require_null_safe_operator' => true, // Converts $x !== null ? $x->method() : null to $x?->method()
 
