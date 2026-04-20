@@ -775,7 +775,8 @@
         {
           "name": "yamlfmt",
           "command": "yamlfmt",
-          "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"]
+          "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"],
+          "run": "onSave"
         }
       ]
     },
@@ -1082,7 +1083,8 @@
         {
           "name": "Nginx Beautifier",
           "command": "nginxbeautifier",
-          "args": ["-s", "4", "-i", "${file}"]
+          "args": ["-s", "4", "-i", "${file}"],
+          "run": "onSave"
         }
       ]
     },
