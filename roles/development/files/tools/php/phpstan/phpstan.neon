@@ -82,15 +82,8 @@ parameters:
     checkMissingOverridePropertyAttribute: true
     polluteScopeWithBlock: false
 
-    # Unused parameter checks
-    checkUnusedFunctionParameters: true
-    checkUnusedFunctionParametersVariadics: true
-
     # Reference parameter checks
     checkArgumentsPassedByReference: true
-
-    # Generic/template type checks
-    checkMissingTemplateTypeInInterfacePhpDoc: true
 
     exceptions:
         implicitThrows: false
