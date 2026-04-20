@@ -36,25 +36,6 @@
   become: false
   tags: [ai-tools, packages]
 
-- name: Install Qwen CLI
-  ansible.builtin.shell:
-    cmd: |
-      set -o pipefail
-      if command -v qwen >/dev/null 2>&1; then
-        exit 0
-      fi
-      curl -fsSL https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/installation/install-qwen.sh | bash
-    executable: /bin/bash
-  register: qwen_cli_install
-  changed_when: "'Qwen Code installed successfully!' in qwen_cli_install.stdout"
-  failed_when: >
-    qwen_cli_install.rc != 0 and (
-      'No input provided via stdin' not in qwen_cli_install.stderr or
-      'Qwen Code installed successfully!' not in qwen_cli_install.stdout
-    )
-  become: false
-  tags: [ai-tools, packages]
-
 - name: Ensure AI config parent directories exist
   ansible.builtin.file:
     path: "{{ item }}"
@@ -281,36 +262,6 @@
   changed_when: true
   tags: [ai-tools, packages]
 
-- name: List installed Qwen extensions
-  ansible.builtin.command:
-    argv:
-      - qwen
-      - extensions
-      - list
-  register: ai_tools_qwen_extensions_list
-  changed_when: false
-  tags: [ai-tools, packages]
-
-- name: Capture installed Qwen extensions
-  ansible.builtin.set_fact:
-    ai_tools_qwen_installed_extensions: "{{ ai_tools_qwen_extensions_list.stdout | regex_findall('(?m)^[^\\w\\s]\\s+([^\\s]+)\\s+\\(') }}"
-  tags: [ai-tools, packages]
-
-- name: Install declared Qwen extensions
-  ansible.builtin.command:
-    argv:
-      - qwen
-      - extensions
-      - install
-      - --consent
-      - "{{ item.install_source }}"
-  loop: "{{ ai_tools_qwen_extensions_present }}"
-  loop_control:
-    label: "{{ item.name }}"
-  when: item.name not in ai_tools_qwen_installed_extensions
-  changed_when: true
-  tags: [ai-tools, packages]
-
 - name: Verify Claude plugin state
   ansible.builtin.command:
     argv:
@@ -339,28 +290,6 @@
       - timeout
       - "{{ ai_tools_health_timeout_seconds }}s"
       - codex
-      - mcp
-      - list
-  changed_when: false
-  when: ai_tools_run_health_checks | bool
-  tags: [ai-tools, config]
-
-- name: Verify Qwen extension state
-  ansible.builtin.command:
-    argv:
-      - qwen
-      - extensions
-      - list
-  changed_when: false
-  when: ai_tools_run_health_checks | bool
-  tags: [ai-tools, config]
-
-- name: Verify Qwen MCP health
-  ansible.builtin.command:
-    argv:
-      - timeout
-      - "{{ ai_tools_health_timeout_seconds }}s"
-      - qwen
       - mcp
       - list
   changed_when: false

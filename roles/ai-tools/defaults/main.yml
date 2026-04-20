@@ -31,28 +31,6 @@ ai_tools_claude_plugins_present:
 ai_tools_claude_marketplaces_present:
   - name: claude-plugins-official
 
-ai_tools_qwen_extensions_present:
-  - name: commit-commands
-    install_source: https://github.com/anthropics/claude-code:commit-commands
-  - name: context7
-    install_source: https://github.com/anthropics/claude-plugins-official:context7
-  - name: frontend-design
-    install_source: https://github.com/anthropics/claude-plugins-official:frontend-design
-  - name: github
-    install_source: https://github.com/anthropics/claude-plugins-official:github
-  - name: php-lsp
-    install_source: https://github.com/anthropics/claude-plugins-official:php-lsp
-  - name: pyright-lsp
-    install_source: https://github.com/anthropics/claude-plugins-official:pyright-lsp
-  - name: security-guidance
-    install_source: https://github.com/anthropics/claude-code:security-guidance
-  - name: serena
-    install_source: https://github.com/anthropics/claude-plugins-official:serena
-  - name: gopls-lsp
-    install_source: https://github.com/anthropics/claude-plugins-official:gopls-lsp
-  - name: lua-lsp
-    install_source: https://github.com/anthropics/claude-plugins-official:lua-lsp
-
 ai_tools_shared_skill_names:
   - api-design
   - backend-patterns
@@ -71,7 +49,6 @@ ai_tools_shared_skill_targets:
   - "{{ home }}/.agents/skills"
   - "{{ home }}/.claude/skills"
   - "{{ home }}/.codex/skills"
-  - "{{ home }}/.qwen/skills"
 
 ai_tools_repo_symlinks:
   - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
@@ -89,24 +66,14 @@ ai_tools_repo_symlinks:
   - { src: agents/commands, dest: "{{ home }}/.codex/commands" }
   - { src: copilot/config.json, dest: "{{ home }}/.copilot/config.json" }
   - { src: copilot/mcp-config.json, dest: "{{ home }}/.copilot/mcp-config.json" }
-  - { src: qwen/settings.json, dest: "{{ home }}/.qwen/settings.json" }
-  - { src: qwen/extensions/catalog.json, dest: "{{ home }}/.qwen/extensions/catalog.json" }
-  - { src: qwen/agents, dest: "{{ home }}/.qwen/agents" }
-  - { src: opencode/rules, dest: "{{ home }}/.qwen/rules" }
-  - { src: agents/commands, dest: "{{ home }}/.qwen/commands" }
   - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
 
 ai_tools_repo_templates:
-  - src: qwen/extensions/extension-enablement.json.j2
-    dest: "{{ home }}/.qwen/extensions/extension-enablement.json"
   - src: copilot/lsp-config.json.j2
     dest: "{{ home }}/.copilot/lsp-config.json"
-
-ai_tools_qwen_extension_workspace_override: "{{ home }}/*"
 
 ai_tools_home_symlinks:
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.codex/AGENTS.md" }
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.claude/CLAUDE.md" }
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.copilot/copilot-instructions.md" }
-  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.qwen/AGENTS.md" }
   - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.config/opencode/AGENTS.md" }
