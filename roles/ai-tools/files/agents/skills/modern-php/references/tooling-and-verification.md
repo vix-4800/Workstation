@@ -72,8 +72,6 @@ vendor/bin/rector process --dry-run --config=rector.php
 
 Key thresholds:
 
-- Cyclomatic complexity: 10.
-- NPath complexity: 200.
 - Method length: 100 lines.
 - Parameter count: 8.
 - Class length: 1000 lines.

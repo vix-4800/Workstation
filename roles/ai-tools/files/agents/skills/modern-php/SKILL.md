@@ -46,7 +46,7 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 9. Prefer explicit null/empty checks such as `=== null` and `$items === []`.
 10. Use early returns and keep nesting shallow.
 11. Use `JSON_THROW_ON_ERROR` for JSON encoding and decoding unless the surrounding API already guarantees exception-safe wrappers.
-12. Keep cyclomatic complexity, method length, and parameter count within the local tool thresholds.
+12. Keep method length, and parameter count within the local tool thresholds.
 13. Use `password_hash($plainTextPassword, PASSWORD_ARGON2ID)` for password storage unless the framework already wraps this safely.
 14. Prefer repository-local binaries and config files for verification over global defaults.
 15. Use `json_validate($input)` as an early guard before `json_decode()` whenever the input crosses a trust boundary (HTTP, file, external API). Reject and return immediately if validation fails; do not attempt to decode invalid JSON.
