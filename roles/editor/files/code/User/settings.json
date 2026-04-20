@@ -853,7 +853,7 @@
       "args": ["--format", "json", "${file}"],
       "command": "shellcheck",
       "filePatterns": ["*.sh"],
-      "name": "shellcheck",
+      "name": "Shell Check",
       "parser": "json",
       "run": "onSave"
     },
@@ -861,7 +861,7 @@
       "args": ["--format", "json", "${file}", "--config", "~/.config/hadolint.yaml"],
       "command": "hadolint",
       "filePatterns": ["Dockerfile", "Dockerfile.*"],
-      "name": "hadolint",
+      "name": "HadoLint",
       "parser": "json",
       "run": "onSave"
     },
@@ -869,15 +869,19 @@
       "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--json", "${file}"],
       "command": "markdownlint",
       "filePatterns": ["*.md"],
-      "name": "markdownlint",
+      "name": "Markdown Lint",
       "parser": "json",
-      "run": "onSave"
+      "run": "onSave",
+      "fixCommand": {
+        "command": "markdownlint",
+        "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"]
+      }
     },
     {
       "args": ["--format", "parsable", "--config-file", "~/.config/yamllint/config", "${file}"],
       "command": "yamllint",
       "filePatterns": ["*.yml", "*.yaml"],
-      "name": "yamllint",
+      "name": "YAML Lint",
       "parser": "parsable",
       "run": "onSave"
     },
@@ -891,7 +895,7 @@
       ],
       "command": "ruff",
       "filePatterns": ["*.py"],
-      "name": "ruff",
+      "name": "Ruff",
       "parser": "json",
       "run": "onSave"
     },
@@ -899,7 +903,7 @@
       "args": ["check", "--format", "json", "${file}"],
       "command": "dotenv-linter",
       "filePatterns": [".env", ".env.*"],
-      "name": "dotenv-linter",
+      "name": "Dotenv Linter",
       "parser": "json",
       "run": "onSave"
     },
@@ -907,24 +911,41 @@
       "args": ["--config", "~/.config/eslint/eslint.config.js", "--format", "json", "${file}"],
       "command": "eslint",
       "filePatterns": ["*.js", "*.ts", "*.jsx", "*.tsx", "*.vue"],
-      "name": "eslint",
+      "name": "ESLint",
       "parser": "json",
       "run": "onSave"
     },
     {
       "args": ["--config", "~/.stylelintrc.json", "--formatter", "json", "${file}"],
-      "command": "stylelint",
+      "command": "~/.local/share/nvm/v24.15.0/bin/stylelint",
       "filePatterns": ["*.css", "*.scss", "*.less"],
-      "name": "stylelint",
+      "name": "Style Lint",
       "parser": "json",
+      "run": "onSave",
+      "fixCommand": {
+        "command": "~/.local/share/nvm/v24.15.0/bin/stylelint",
+        "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"]
+      }
+    },
+    {
+      "args": [
+        "-lc",
+        "cd \"$(dirname \"$1\")\" && ~/.local/share/nvm/v24.15.0/bin/linthtml --config ~/.linthtmlrc --no-color \"$(basename \"$1\")\"",
+        "linthtml",
+        "${file}"
+      ],
+      "command": "bash",
+      "filePatterns": ["*.html"],
+      "name": "Lint HTML",
+      "parser": "linthtml",
       "run": "onSave"
     },
     {
-      "args": ["--config", "~/.linthtmlrc", "--no-color", "${file}"],
-      "command": "linthtml",
+      "args": ["--config", "~/.htmlhintrc", "--format", "json", "${file}"],
+      "command": "~/.local/share/nvm/v24.15.0/bin/htmlhint",
       "filePatterns": ["*.html"],
-      "name": "linthtml",
-      "parser": "linthtml",
+      "name": "HTML Hint",
+      "parser": "json",
       "run": "onSave"
     },
     {
@@ -940,15 +961,19 @@
       ],
       "command": "sqlfluff",
       "filePatterns": ["*.sql"],
-      "name": "sqlfluff",
+      "name": "Sql Fluff",
       "parser": "json",
-      "run": "onSave"
+      "run": "onSave",
+      "fixCommand": {
+        "command": "sqlfluff",
+        "args": ["${file}"]
+      }
     },
     {
       "args": ["--config=~/.config/checkmake/checkmake.ini", "-o", "json", "${file}"],
       "command": "checkmake",
       "filePatterns": ["Makefile", "*.mk"],
-      "name": "checkmake",
+      "name": "Check Make",
       "parser": "json",
       "run": "onSave"
     },
@@ -968,7 +993,7 @@
         "**/sites-available/*",
         "**/sites-enabled/*"
       ],
-      "name": "nginx-lint",
+      "name": "Nginx Lint",
       "parser": "parsable",
       "run": "onSave",
       "preCommands": [
@@ -983,7 +1008,7 @@
       "args": ["-c", "~/.ansible-lint", "--format", "json", "--nocolor", "${file}"],
       "command": "ansible-lint",
       "filePatterns": ["*.yml", "*.yaml"],
-      "name": "ansible-lint",
+      "name": "Ansible Lint",
       "parser": "ansible-lint",
       "run": "onSave"
     },
@@ -991,7 +1016,7 @@
       "args": ["--noout", "${file}"],
       "command": "xmllint",
       "filePatterns": ["*.xml"],
-      "name": "xmllint",
+      "name": "XML Lint",
       "parser": "xmllint",
       "run": "onSave"
     },
@@ -999,8 +1024,8 @@
       "args": ["-f", "~/.jsonlintrc", "${file}"],
       "command": "~/.local/share/nvm/v24.15.0/bin/jsonlint",
       "filePatterns": ["*.json", "*.jsonc"],
-      "name": "jsonlint",
-      "parser": "json",
+      "name": "JSON Lint",
+      "parser": "jsonlint",
       "run": "onSave"
     },
     {
@@ -1014,7 +1039,7 @@
       ],
       "command": "editorconfig-checker",
       "filePatterns": ["*"],
-      "name": "editorconfig-checker",
+      "name": "EditorConfig Checker",
       "parser": "parsable",
       "run": "onSave"
     },
@@ -1022,7 +1047,7 @@
       "args": ["-format", "{{json .}}", "${file}"],
       "command": "actionlint",
       "filePatterns": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
-      "name": "actionlint",
+      "name": "Action Lint",
       "parser": "json",
       "run": "onSave"
     },
@@ -1037,7 +1062,7 @@
       ],
       "command": "~/.config/composer/vendor/bin/phpstan",
       "filePatterns": ["*.php"],
-      "name": "phpstan",
+      "name": "PHPStan",
       "parser": "json",
       "run": "onSave",
       "preCommands": [
@@ -1060,7 +1085,7 @@
       ],
       "command": "~/.config/composer/vendor/bin/phpcs",
       "filePatterns": ["*.php"],
-      "name": "phpcs",
+      "name": "PHP CodeSniffer",
       "parser": "json",
       "run": "onSave",
       "preCommands": [
@@ -1070,13 +1095,17 @@
           "args": ["-l", "${file}"]
         }
       ],
-      "showDiagnosticCodes": false
+      "showDiagnosticCodes": false,
+      "fixCommand": {
+        "command": "~/.config/composer/vendor/bin/phpcbf",
+        "args": ["${file}"]
+      }
     },
     {
       "args": ["${file}", "json", "~/.config/phpmd/phpmd.xml"],
       "command": "~/.config/composer/vendor/bin/phpmd",
       "filePatterns": ["*.php"],
-      "name": "phpmd",
+      "name": "PHP Mess Detector",
       "parser": "json",
       "run": "onSave",
       "preCommands": [
