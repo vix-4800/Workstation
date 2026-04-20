@@ -1335,6 +1335,11 @@
           "name": "PHP Code Beautifier and Fixer",
           "command": "~/.config/composer/vendor/bin/phpcbf",
           "args": ["${file}"]
+        },
+        {
+          "name": "PHP CS Fixer",
+          "command": "~/.config/composer/vendor/bin/php-cs-fixer",
+          "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"]
         }
       ]
     }
