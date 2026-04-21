@@ -763,13 +763,6 @@
           "parser": "parsable",
           "run": "onOpen"
         },
-        {
-          "args": ["-c", "~/.ansible-lint", "--format", "json", "--nocolor", "${file}"],
-          "command": "ansible-lint",
-          "name": "Ansible Lint",
-          "parser": "ansible-lint",
-          "run": "onSave"
-        }
       ],
       "fixers": [
         {
