@@ -1184,7 +1184,7 @@
             "--error-format=json",
             "--no-progress",
             "--memory-limit=2G",
-            "--configuration=~/.config/phpstan/phpstan.neon",
+            "--configuration=${workspaceFolder}/phpstan.neon",
             "${file}"
           ],
           "command": "~/.config/composer/vendor/bin/phpstan",
