@@ -30,7 +30,7 @@ return {
       lua = { "stylua" },
       php = { "php_cs_fixer" },
       blade = { "blade_formatter" },
-      python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
+      python = { "ruff_fix", "ruff_format" },
       javascript = { "eslint_fix", "prettier" },
       typescript = { "eslint_fix", "prettier" },
       javascriptreact = { "eslint_fix", "prettier" },
@@ -178,18 +178,6 @@ return {
         command = "ruff",
         args = {
           "check",
-          "--fix",
-          "--config=" .. configs.getConfig("ruff"),
-          "$FILENAME",
-        },
-        stdin = false,
-      },
-      ruff_organize_imports = {
-        command = "ruff",
-        args = {
-          "check",
-          "--select",
-          "I",
           "--fix",
           "--config=" .. configs.getConfig("ruff"),
           "$FILENAME",
