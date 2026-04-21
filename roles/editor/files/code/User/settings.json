@@ -699,11 +699,11 @@
       "filePatterns": ["*.sh"],
       "linters": [
         {
-          "args": ["--format", "json", "${file}"],
+          "args": ["-x", "--format", "json", "${file}"],
           "command": "shellcheck",
           "name": "Shell Check",
           "parser": "json",
-          "run": "onOpen"
+          "run": "onSave"
         }
       ],
       "fixers": [
@@ -744,12 +744,12 @@
           "name": "Markdown Lint",
           "command": "markdownlint",
           "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"]
-        },
-        {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
+        // {
+        //   "name": "Prettier",
+        //   "command": "prettier",
+        //   "args": ["--write", "--config", "~/.prettierrc", "${file}"]
+        // }
       ]
     },
     {
@@ -781,6 +781,27 @@
       ]
     },
     {
+      "name": "Ansible",
+      "filePatterns": [
+        "ansible/**/*.yml",
+        "roles/**/tasks/*.yml",
+        "roles/**/handlers/*.yml",
+        "roles/**/meta/*.yml",
+        "roles/**/defaults/*.yml",
+        "roles/**/vars/*.yml",
+        "playbooks/**/*.yml"
+      ],
+      "linters": [
+        {
+          "args": ["-c", "~/.ansible-lint", "--format", "json", "--nocolor", "${file}"],
+          "command": "ansible-lint",
+          "name": "Ansible Lint",
+          "parser": "ansible-lint",
+          "run": "onSave"
+        }
+      ]
+    },
+    {
       "name": "Python",
       "filePatterns": ["*.py"],
       "linters": [
@@ -803,18 +824,6 @@
           "name": "Ruff Fix",
           "command": "ruff",
           "args": ["check", "--fix", "--config=~/.config/ruff/pyproject.toml", "${file}"]
-        },
-        {
-          "name": "Ruff Organize Imports",
-          "command": "ruff",
-          "args": [
-            "check",
-            "--select",
-            "I",
-            "--fix",
-            "--config=~/.config/ruff/pyproject.toml",
-            "${file}"
-          ]
         },
         {
           "name": "Ruff Format",
@@ -845,7 +854,7 @@
     },
     {
       "name": "INI",
-      "filePatterns": ["*.ini", "*.cfg", ".editorconfig", ".gitconfig", ".gitignore"],
+      "filePatterns": ["*.ini", "*.cfg", ".editorconfig", ".gitconfig"],
       "fixers": [
         {
           "name": "inifmt",
@@ -884,9 +893,16 @@
     {
       "name": "TOML",
       "filePatterns": ["*.toml"],
+      "preCommands": [
+        {
+          "name": "Taplo",
+          "command": "taplo",
+          "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"]
+        }
+      ],
       "linters": [
         {
-          "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
+          "args": ["fmt", "--check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
           "command": "taplo",
           "name": "Taplo",
           "parser": "taplo",
@@ -940,12 +956,12 @@
           "name": "ESLint",
           "command": "eslint",
           "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"]
-        },
-        {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
+        // {
+        //   "name": "Prettier",
+        //   "command": "prettier",
+        //   "args": ["--write", "--config", "~/.prettierrc", "${file}"]
+        // }
       ]
     },
     {
@@ -965,12 +981,12 @@
           "name": "Style Lint",
           "command": "stylelint",
           "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"]
-        },
-        {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
         }
+        // {
+        //   "name": "Prettier",
+        //   "command": "prettier",
+        //   "args": ["--write", "--config", "~/.prettierrc", "${file}"]
+        // }
       ]
     },
     {
@@ -1123,26 +1139,6 @@
       ]
     },
     {
-      "name": "EditorConfig",
-      "filePatterns": ["*"],
-      "linters": [
-        {
-          "args": [
-            "--no-color",
-            "-format",
-            "gcc",
-            "--config",
-            "~/.editorconfig-checker.json",
-            "${file}"
-          ],
-          "command": "editorconfig-checker",
-          "name": "EditorConfig Checker",
-          "parser": "parsable",
-          "run": "onOpen"
-        }
-      ]
-    },
-    {
       "name": "GitHub Actions",
       "filePatterns": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
       "linters": [
@@ -1194,7 +1190,7 @@
           "command": "~/.config/composer/vendor/bin/phpstan",
           "name": "PHPStan",
           "parser": "json",
-          "run": "onSave"
+          "run": "manual"
         },
         {
           "args": [
@@ -1222,11 +1218,11 @@
         }
       ],
       "fixers": [
-        {
-          "name": "PHP Code Beautifier and Fixer",
-          "command": "~/.config/composer/vendor/bin/phpcbf",
-          "args": ["${file}"]
-        },
+        // {
+        //   "name": "PHP Code Beautifier and Fixer",
+        //   "command": "~/.config/composer/vendor/bin/phpcbf",
+        //   "args": ["${file}"]
+        // },
         {
           "name": "PHP CS Fixer",
           "command": "~/.config/composer/vendor/bin/php-cs-fixer",
