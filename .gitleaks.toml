@@ -4,31 +4,31 @@
 title = "Dotfiles Gitleaks Config"
 
 [allowlist]
-  description = "Allowlist for known false positives"
+description = "Allowlist for known false positives"
 
-  # Ignore commits by specific authors (if needed)
-  # commits = ["commit-sha"]
+# Ignore commits by specific authors (if needed)
+# commits = ["commit-sha"]
 
-  # Ignore specific paths that are known to be safe
-  paths = [
-    '''config/git/gitconfig''',  # May contain example emails/names
-    '''themes/''',               # Theme files may have placeholder tokens
-    '''wallpapers/''',           # Image files
-    '''\.png$''',
-    '''\.jpg$''',
-    '''\.svg$''',
-  ]
+# Ignore specific paths that are known to be safe
+paths = [
+  '''config/git/gitconfig''', # May contain example emails/names
+  '''themes/''',              # Theme files may have placeholder tokens
+  '''wallpapers/''',          # Image files
+  '''\.png$''',
+  '''\.jpg$''',
+  '''\.svg$''',
+]
 
-  # Ignore specific regexes
-  regexes = [
-    # Example placeholders in configs
-    '''user@example\.com''',
-    '''YOUR_.*_HERE''',
-    '''<your-''',
-    '''placeholder''',
-    # Catppuccin color codes (hex colors that might look like secrets)
-    '''#[0-9a-fA-F]{6}''',
-  ]
+# Ignore specific regexes
+regexes = [
+  # Example placeholders in configs
+  '''user@example\.com''',
+  '''YOUR_.*_HERE''',
+  '''<your-''',
+  '''placeholder''',
+  # Catppuccin color codes (hex colors that might look like secrets)
+  '''#[0-9a-fA-F]{6}''',
+]
 
 # Custom rules can be added here if needed
 # [[rules]]
