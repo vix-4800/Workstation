@@ -32,8 +32,8 @@
     name:
       - go
       - lua
+      - lua54
       - luarocks
-      - luacheck
       - shellcheck
       - shfmt
       - libxml2
@@ -154,6 +154,13 @@
     mode: "0755"
   tags: [development, config]
 
+- name: Install LuaCheck via LuaRocks for Lua 5.4
+  ansible.builtin.command:
+    cmd: luarocks --lua-version 5.4 install --local luacheck
+    creates: '{{ home }}/.luarocks/bin/luacheck'
+  become: false
+  tags: [development, packages]
+
 - name: Deploy helper scripts
   ansible.builtin.file:
     src: "{{ dotfiles_dir }}/roles/development/scripts/{{ item }}"
@@ -163,4 +170,5 @@
   loop:
     - check-composer-updates
     - check-dotfiles-updates
+    - luacheck
   tags: [development, config]
