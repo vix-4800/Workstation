@@ -11,12 +11,12 @@ use CustomFixer\CatchExceptionToThrowableFixer;
 use CustomFixer\IssetCoalesceFixer;
 use CustomFixer\NoYodaComparisonFixer;
 use CustomFixer\NumericLiteralSeparatorFixer;
+use CustomFixer\PhpDocOpeningLineFixer;
+use CustomFixer\PhpDocSelfReferenceFixer;
+use CustomFixer\PhpDocSeparateThrowsFixer;
+use CustomFixer\RemoveDocBlockTagsFixer;
 use CustomFixer\RemoveUnusedCatchVariableFixer;
 use CustomFixer\RemoveUnusedForeachKeyFixer;
-use CustomFixer\PhpDocOpeningLineFixer;
-use CustomFixer\PhpDocSeparateThrowsFixer;
-use CustomFixer\PhpDocSelfReferenceFixer;
-use CustomFixer\RemoveDocBlockTagsFixer;
 use CustomFixer\RequireNullSafeOperatorFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
@@ -34,7 +34,7 @@ require_once __DIR__ . '/Fixer/PhpDocSelfReferenceFixer.php';
 require_once __DIR__ . '/Fixer/RequireNullSafeOperatorFixer.php';
 require_once __DIR__ . '/Fixer/RemoveDocBlockTagsFixer.php';
 
-return (new Config())
+return new Config()
     ->setRiskyAllowed(true)
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setUsingCache(false)
