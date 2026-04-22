@@ -1,46 +1,54 @@
 ---
 - name: Ensure AI tools binary directory exists
   ansible.builtin.file:
-    path: "{{ home }}/.local/bin"
+    path: '{{ home }}/.local/bin'
     state: directory
-    mode: "0755"
-  tags: [ai-tools, config]
+    mode: '0755'
+  tags:
+    - ai-tools
+    - config
 
 - name: Install Claude CLI
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
       curl -fsSL https://claude.ai/install.sh | bash
-    creates: "{{ home }}/.local/bin/claude"
+    creates: '{{ home }}/.local/bin/claude'
     executable: /bin/bash
   become: false
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Install OpenCode
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
       curl -fsSL https://opencode.ai/install | bash
-    creates: "{{ home }}/.local/bin/opencode"
+    creates: '{{ home }}/.local/bin/opencode'
     executable: /bin/bash
   become: false
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Install Copilot CLI
   ansible.builtin.shell:
     cmd: |
       set -o pipefail
       curl -fsSL https://gh.io/copilot-install | bash
-    creates: "{{ home }}/.local/bin/copilot"
+    creates: '{{ home }}/.local/bin/copilot'
     executable: /bin/bash
   become: false
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Ensure AI config parent directories exist
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: '{{ item }}'
     state: directory
-    mode: "0755"
+    mode: '0755'
   loop: >-
     {{
       (
@@ -60,51 +68,61 @@
       | list
     }}
   loop_control:
-    label: "{{ item }}"
-  tags: [ai-tools, config]
+    label: '{{ item }}'
+  tags:
+    - ai-tools
+    - config
 
 - name: Deploy AI tool repo symlinks
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/ai-tools/files/{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: '{{ dotfiles_dir }}/roles/ai-tools/files/{{ item.src }}'
+    dest: '{{ item.dest }}'
     state: link
     force: true
-  loop: "{{ ai_tools_repo_symlinks }}"
+  loop: '{{ ai_tools_repo_symlinks }}'
   loop_control:
-    label: "{{ item.src }}"
-  tags: [ai-tools, config]
+    label: '{{ item.src }}'
+  tags:
+    - ai-tools
+    - config
 
 - name: Deploy AI tool repo templates
   ansible.builtin.template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "0644"
-  loop: "{{ ai_tools_repo_templates }}"
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '0644'
+  loop: '{{ ai_tools_repo_templates }}'
   loop_control:
-    label: "{{ item.src }}"
-  tags: [ai-tools, config]
+    label: '{{ item.src }}'
+  tags:
+    - ai-tools
+    - config
 
 - name: Deploy AI tool home symlinks
   ansible.builtin.file:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
     state: link
     force: true
-  loop: "{{ ai_tools_home_symlinks }}"
+  loop: '{{ ai_tools_home_symlinks }}'
   loop_control:
-    label: "{{ item.dest }}"
-  tags: [ai-tools, config]
+    label: '{{ item.dest }}'
+  tags:
+    - ai-tools
+    - config
 
 - name: Deploy AI tool shared skill symlinks
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/ai-tools/files/agents/skills/{{ item.1 }}"
-    dest: "{{ item.0 }}/{{ item.1 }}"
+    src: '{{ dotfiles_dir }}/roles/ai-tools/files/agents/skills/{{ item.1 }}'
+    dest: '{{ item.0 }}/{{ item.1 }}'
     state: link
     force: true
-  loop: "{{ ai_tools_shared_skill_targets | product(ai_tools_shared_skill_names) | list }}"
+  loop: '{{ ai_tools_shared_skill_targets | product(ai_tools_shared_skill_names) | list }}'
   loop_control:
-    label: "{{ item.0 }}/{{ item.1 }}"
-  tags: [ai-tools, config]
+    label: '{{ item.0 }}/{{ item.1 }}'
+  tags:
+    - ai-tools
+    - config
 
 - name: Get github-mcp-server installed version
   ansible.builtin.command:
@@ -114,25 +132,31 @@
   register: ai_tools_github_mcp_installed_version
   changed_when: false
   failed_when: false
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Download github-mcp-server binary
   ansible.builtin.get_url:
-    url: "https://github.com/github/github-mcp-server/releases/download/v{{ ai_tools_github_mcp_server_version }}/github-mcp-server_Linux_x86_64.tar.gz"
-    dest: "/tmp/github-mcp-server_{{ ai_tools_github_mcp_server_version }}.tar.gz"
-    mode: "0644"
+    url: 'https://github.com/github/github-mcp-server/releases/download/v{{ ai_tools_github_mcp_server_version }}/github-mcp-server_Linux_x86_64.tar.gz'
+    dest: /tmp/github-mcp-server_{{ ai_tools_github_mcp_server_version }}.tar.gz
+    mode: '0644'
   when: >
-    ai_tools_github_mcp_installed_version.rc != 0 or
-    ai_tools_github_mcp_server_version not in (ai_tools_github_mcp_installed_version.stdout | default(''))
+    ai_tools_github_mcp_installed_version.rc != 0 or ai_tools_github_mcp_server_version not in (ai_tools_github_mcp_installed_version.stdout
+    | default(''))
   notify: extract github-mcp-server
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Deploy github-mcp-server auth wrapper script
   ansible.builtin.copy:
     src: claude/scripts/github-mcp-server-with-auth
-    dest: "{{ home }}/.local/bin/github-mcp-server-with-auth"
-    mode: "0755"
-  tags: [ai-tools, config]
+    dest: '{{ home }}/.local/bin/github-mcp-server-with-auth'
+    mode: '0755'
+  tags:
+    - ai-tools
+    - config
 
 - name: List configured Claude marketplaces
   ansible.builtin.command:
@@ -144,13 +168,18 @@
   register: ai_tools_claude_marketplaces_list
   changed_when: false
   failed_when: ai_tools_claude_marketplaces_list.rc not in [0, 127]
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Capture configured Claude marketplaces
   ansible.builtin.set_fact:
-    ai_tools_claude_configured_marketplaces: "{{ ai_tools_claude_marketplaces_list.stdout | regex_findall('(?m)^\\s*>\\s+([^\\s]+)$') }}"
+    ai_tools_claude_configured_marketplaces: '{{ ai_tools_claude_marketplaces_list.stdout | regex_findall(''(?m)^\s*>\s+([^\s]+)$'')
+      }}'
   when: ai_tools_claude_marketplaces_list.rc == 0
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Add declared Claude marketplaces
   ansible.builtin.command:
@@ -159,25 +188,29 @@
       - plugin
       - marketplace
       - add
-      - "{{ item.source }}"
-  loop: "{{ ai_tools_claude_marketplaces_present }}"
+      - '{{ item.source }}'
+  loop: '{{ ai_tools_claude_marketplaces_present }}'
   loop_control:
-    label: "{{ item.name }}"
+    label: '{{ item.name }}'
   when:
     - ai_tools_claude_configured_marketplaces is defined
     - item.source is defined
     - item.name not in ai_tools_claude_configured_marketplaces
   changed_when: true
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Inspect Claude marketplace catalogs
   ansible.builtin.stat:
-    path: "{{ home }}/.claude/plugins/marketplaces/{{ item.name }}/.claude-plugin/marketplace.json"
-  loop: "{{ ai_tools_claude_marketplaces_present }}"
+    path: '{{ home }}/.claude/plugins/marketplaces/{{ item.name }}/.claude-plugin/marketplace.json'
+  loop: '{{ ai_tools_claude_marketplaces_present }}'
   register: ai_tools_claude_marketplace_catalogs
   loop_control:
-    label: "{{ item.name }}"
-  tags: [ai-tools, packages]
+    label: '{{ item.name }}'
+  tags:
+    - ai-tools
+    - packages
 
 - name: Sync missing Claude marketplace catalogs
   ansible.builtin.command:
@@ -186,13 +219,15 @@
       - plugin
       - marketplace
       - update
-      - "{{ item.item.name }}"
-  loop: "{{ ai_tools_claude_marketplace_catalogs.results }}"
+      - '{{ item.item.name }}'
+  loop: '{{ ai_tools_claude_marketplace_catalogs.results }}'
   loop_control:
-    label: "{{ item.item.name }}"
+    label: '{{ item.item.name }}'
   when: not item.stat.exists
   changed_when: true
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: List installed Claude plugins
   ansible.builtin.command:
@@ -203,13 +238,18 @@
   register: ai_tools_claude_plugins_list
   changed_when: false
   failed_when: ai_tools_claude_plugins_list.rc not in [0, 127]
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Capture installed Claude plugins
   ansible.builtin.set_fact:
-    ai_tools_claude_installed_plugins: "{{ ai_tools_claude_plugins_list.stdout | regex_findall('(?m)^\\s*>\\s+([^\\s]+)$') }}"
+    ai_tools_claude_installed_plugins: '{{ ai_tools_claude_plugins_list.stdout | regex_findall(''(?m)^\s*>\s+([^\s]+)$'')
+      }}'
   when: ai_tools_claude_plugins_list.rc == 0
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Install declared Claude plugins
   ansible.builtin.command:
@@ -219,15 +259,17 @@
       - install
       - --scope
       - user
-      - "{{ item }}"
-  loop: "{{ ai_tools_claude_plugins_present }}"
+      - '{{ item }}'
+  loop: '{{ ai_tools_claude_plugins_present }}'
   loop_control:
-    label: "{{ item }}"
+    label: '{{ item }}'
   when:
     - ai_tools_claude_installed_plugins is defined
     - item not in ai_tools_claude_installed_plugins
   changed_when: true
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: List configured Claude user MCP servers
   ansible.builtin.command:
@@ -238,13 +280,17 @@
   register: ai_tools_claude_mcp_list
   changed_when: false
   failed_when: ai_tools_claude_mcp_list.rc not in [0, 127]
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Capture configured Claude user MCP server names
   ansible.builtin.set_fact:
-    ai_tools_claude_mcp_configured: "{{ ai_tools_claude_mcp_list.stdout | regex_findall('(?m)^(\\S+):') }}"
+    ai_tools_claude_mcp_configured: '{{ ai_tools_claude_mcp_list.stdout | regex_findall(''(?m)^(\S+):'') }}'
   when: ai_tools_claude_mcp_list.rc == 0
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Add declared Claude user MCP servers
   ansible.builtin.command:
@@ -253,14 +299,16 @@
         ['claude', 'mcp', 'add', '--scope', 'user', item.name, item.command]
         + (['--'] + item.args if item.args | default([]) | length > 0 else [])
       }}
-  loop: "{{ ai_tools_claude_mcp_servers_present }}"
+  loop: '{{ ai_tools_claude_mcp_servers_present }}'
   loop_control:
-    label: "{{ item.name }}"
+    label: '{{ item.name }}'
   when:
     - ai_tools_claude_mcp_configured is defined
     - item.name not in ai_tools_claude_mcp_configured
   changed_when: true
-  tags: [ai-tools, packages]
+  tags:
+    - ai-tools
+    - packages
 
 - name: Verify Claude plugin state
   ansible.builtin.command:
@@ -270,31 +318,37 @@
       - list
   changed_when: false
   when: ai_tools_run_health_checks | bool
-  tags: [ai-tools, config]
+  tags:
+    - ai-tools
+    - config
 
 - name: Verify Claude MCP health
   ansible.builtin.command:
     argv:
       - timeout
-      - "{{ ai_tools_health_timeout_seconds }}s"
+      - '{{ ai_tools_health_timeout_seconds }}s'
       - claude
       - mcp
       - list
   changed_when: false
   when: ai_tools_run_health_checks | bool
-  tags: [ai-tools, config]
+  tags:
+    - ai-tools
+    - config
 
 - name: Verify Codex MCP health
   ansible.builtin.command:
     argv:
       - timeout
-      - "{{ ai_tools_health_timeout_seconds }}s"
+      - '{{ ai_tools_health_timeout_seconds }}s'
       - codex
       - mcp
       - list
   changed_when: false
   when: ai_tools_run_health_checks | bool
-  tags: [ai-tools, config]
+  tags:
+    - ai-tools
+    - config
 
 - name: Verify Copilot CLI health
   ansible.builtin.command:
@@ -303,4 +357,6 @@
       - --version
   changed_when: false
   when: ai_tools_run_health_checks | bool
-  tags: [ai-tools, config]
+  tags:
+    - ai-tools
+    - config

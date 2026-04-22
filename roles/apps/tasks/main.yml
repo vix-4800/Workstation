@@ -4,80 +4,96 @@
     name: exfat-utils
     state: absent
   become: true
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages
 
 - name: Install applications
   community.general.pacman:
-    name: "{{ apps_packages }}"
+    name: '{{ apps_packages }}'
     state: present
   become: true
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages
 
 - name: Install AUR applications
   kewlfft.aur.aur:
-    name: "{{ item }}"
+    name: '{{ item }}'
     state: present
   become: false
-  loop: "{{ apps_aur_packages }}"
+  loop: '{{ apps_aur_packages }}'
   loop_control:
-    label: "{{ item }}"
-  tags: [apps, packages]
+    label: '{{ item }}'
+  tags:
+    - apps
+    - packages
 
 - name: Check if waypaper AUR packages are installed and intact
   ansible.builtin.command:
     cmd: pacman -Qkk {{ item }}
-  loop: "{{ apps_waypaper_aur_packages }}"
+  loop: '{{ apps_waypaper_aur_packages }}'
   loop_control:
-    label: "{{ item }}"
+    label: '{{ item }}'
   register: apps_waypaper_installed
   changed_when: false
   failed_when: false
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages
 
 - name: Ensure temporary build directory exists for waypaper stack
   ansible.builtin.file:
     path: /tmp/aur-build
     state: directory
-    mode: "0755"
-  tags: [apps, packages]
+    mode: '0755'
+  tags:
+    - apps
+    - packages
 
 - name: Clone waypaper AUR repositories
   ansible.builtin.git:
-    repo: "https://aur.archlinux.org/{{ item.item }}.git"
-    dest: "/tmp/aur-build/{{ item.item }}"
+    repo: https://aur.archlinux.org/{{ item.item }}.git
+    dest: /tmp/aur-build/{{ item.item }}
     version: master
     update: true
     force: true
-  loop: "{{ apps_waypaper_installed.results }}"
+  loop: '{{ apps_waypaper_installed.results }}'
   loop_control:
-    label: "{{ item.item }}"
+    label: '{{ item.item }}'
   when: item.rc != 0
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages
 
 - name: Determine package archive paths for waypaper stack
   ansible.builtin.command:
     cmd: makepkg --packagelist --nodeps
-    chdir: "/tmp/aur-build/{{ item.item }}"
-  loop: "{{ apps_waypaper_installed.results }}"
+    chdir: /tmp/aur-build/{{ item.item }}
+  loop: '{{ apps_waypaper_installed.results }}'
   loop_control:
-    label: "{{ item.item }}"
+    label: '{{ item.item }}'
   when: item.rc != 0
   register: apps_waypaper_packagelist
   changed_when: false
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages
 
 - name: Build waypaper AUR packages without helper sudo
   ansible.builtin.command:
     cmd: makepkg --nodeps --noconfirm --force --clean --cleanbuild
-    chdir: "/tmp/aur-build/{{ item.item.item }}"
-  loop: "{{ apps_waypaper_packagelist.results | default([]) }}"
+    chdir: /tmp/aur-build/{{ item.item.item }}
+  loop: '{{ apps_waypaper_packagelist.results | default([]) }}'
   loop_control:
-    label: "{{ item.item.item }}"
+    label: '{{ item.item.item }}'
   when:
     - item.skipped is not defined
     - item.stdout_lines | length > 0
   changed_when: true
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages
 
 - name: Install built waypaper AUR packages
   ansible.builtin.command:
@@ -85,16 +101,18 @@
       - pacman
       - -U
       - --noconfirm
-      - "{{ item.stdout_lines[0] }}"
-  loop: "{{ apps_waypaper_packagelist.results | default([]) }}"
+      - '{{ item.stdout_lines[0] }}'
+  loop: '{{ apps_waypaper_packagelist.results | default([]) }}'
   loop_control:
-    label: "{{ item.item.item }}"
+    label: '{{ item.item.item }}'
   become: true
   when:
     - item.skipped is not defined
     - item.stdout_lines | length > 0
   changed_when: true
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages
 
 - name: Verify waypaper binary is available after install
   ansible.builtin.command:
@@ -105,7 +123,9 @@
   changed_when: false
   failed_when: apps_waypaper_binary.rc != 0
   when: apps_waypaper_aur_packages | length > 0
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages
 
 - name: Enable auto-cpufreq service
   ansible.builtin.systemd:
@@ -114,7 +134,9 @@
     state: started
   become: true
   when: has_battery | default(false)
-  tags: [apps, services]
+  tags:
+    - apps
+    - services
 
 - name: Add Flathub remote
   community.general.flatpak_remote:
@@ -122,4 +144,6 @@
     state: present
     flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
     method: user
-  tags: [apps, packages]
+  tags:
+    - apps
+    - packages

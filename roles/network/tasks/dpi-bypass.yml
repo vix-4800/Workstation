@@ -7,16 +7,20 @@
     state: present
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, packages]
+  tags:
+    - network
+    - packages
 
 - name: Download zapret2 release archive
   ansible.builtin.get_url:
-    url: "https://github.com/bol-van/zapret2/releases/download/v{{ network_zapret2_version }}/zapret2-v{{ network_zapret2_version }}.tar.gz"
-    dest: "/tmp/zapret2-v{{ network_zapret2_version }}.tar.gz"
-    mode: "0644"
+    url: https://github.com/bol-van/zapret2/releases/download/v{{ network_zapret2_version }}/zapret2-v{{ network_zapret2_version }}.tar.gz
+    dest: /tmp/zapret2-v{{ network_zapret2_version }}.tar.gz
+    mode: '0644'
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, packages]
+  tags:
+    - network
+    - packages
 
 - name: Ensure /opt/zapret2 directory exists
   ansible.builtin.file:
@@ -24,23 +28,28 @@
     state: directory
     owner: root
     group: root
-    mode: "0755"
+    mode: '0755'
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, packages]
+  tags:
+    - network
+    - packages
 
 - name: Extract zapret2 release archive
   ansible.builtin.unarchive:
-    src: "/tmp/zapret2-v{{ network_zapret2_version }}.tar.gz"
+    src: /tmp/zapret2-v{{ network_zapret2_version }}.tar.gz
     dest: /opt/zapret2
     remote_src: true
-    extra_opts: ["--strip-components=1"]
+    extra_opts:
+      - --strip-components=1
     owner: root
     group: root
     creates: /opt/zapret2/init.d/sysv/zapret2
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, packages]
+  tags:
+    - network
+    - packages
 
 - name: Ensure zapret2 custom.d directory exists
   ansible.builtin.file:
@@ -48,10 +57,12 @@
     state: directory
     owner: root
     group: root
-    mode: "0755"
+    mode: '0755'
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, config]
+  tags:
+    - network
+    - config
 
 - name: Deploy zapret2 config
   ansible.builtin.template:
@@ -59,10 +70,12 @@
     dest: /opt/zapret2/config
     owner: root
     group: root
-    mode: "0644"
+    mode: '0644'
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, config]
+  tags:
+    - network
+    - config
 
 - name: Deploy zapret2 QUIC custom script
   ansible.builtin.copy:
@@ -70,10 +83,12 @@
     dest: /opt/zapret2/init.d/sysv/custom.d/50-quic4all
     owner: root
     group: root
-    mode: "0755"
+    mode: '0755'
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, config]
+  tags:
+    - network
+    - config
 
 - name: Install zapret2 systemd service
   ansible.builtin.copy:
@@ -81,18 +96,22 @@
     dest: /etc/systemd/system/zapret2.service
     owner: root
     group: root
-    mode: "0644"
+    mode: '0644'
     remote_src: true
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, config]
+  tags:
+    - network
+    - config
 
 - name: Enable zapret2 systemd service
   ansible.builtin.systemd:
     name: zapret2.service
-    enabled: "{{ network_zapret2_service_enabled | bool }}"
-    state: "{{ 'started' if network_zapret2_service_enabled else 'stopped' }}"
+    enabled: '{{ network_zapret2_service_enabled | bool }}'
+    state: '{{ ''started'' if network_zapret2_service_enabled else ''stopped'' }}'
     daemon_reload: true
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
-  tags: [network, services]
+  tags:
+    - network
+    - services

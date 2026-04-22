@@ -17,88 +17,112 @@
       - fontconfig
     state: present
   become: true
-  tags: [appearance, packages]
+  tags:
+    - appearance
+    - packages
 
 - name: Install cursor theme
   kewlfft.aur.aur:
     name: catppuccin-cursors-mocha
     state: present
   become: false
-  tags: [appearance, packages]
+  tags:
+    - appearance
+    - packages
 
 - name: Install icon theme
   community.general.pacman:
     name: papirus-icon-theme
     state: present
   become: true
-  tags: [appearance, packages]
+  tags:
+    - appearance
+    - packages
 
 - name: Install plymouth
   community.general.pacman:
     name: plymouth
     state: present
   become: true
-  tags: [appearance, packages]
+  tags:
+    - appearance
+    - packages
 
 - name: Install nwg-look (AUR)
   kewlfft.aur.aur:
     name: nwg-look
     state: present
   become: false
-  tags: [appearance, packages]
+  tags:
+    - appearance
+    - packages
 
 - name: Deploy bat config and themes
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/bat"
-    dest: "{{ home }}/.config/bat"
+    src: '{{ dotfiles_dir }}/roles/appearance/files/bat'
+    dest: '{{ home }}/.config/bat'
     state: link
     force: true
-  tags: [appearance, config]
+  tags:
+    - appearance
+    - config
 
 - name: Build bat cache
   ansible.builtin.command:
     cmd: bat cache --build
   changed_when: false
-  tags: [appearance, config]
+  tags:
+    - appearance
+    - config
 
 - name: Ensure pictures directory exists
   ansible.builtin.file:
-    path: "{{ home }}/Pictures"
+    path: '{{ home }}/Pictures'
     state: directory
-    mode: "0755"
-  tags: [appearance, config]
+    mode: '0755'
+  tags:
+    - appearance
+    - config
 
 - name: Deploy wallpapers
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/wallpapers"
-    dest: "{{ home }}/Pictures/Wallpapers"
+    src: '{{ dotfiles_dir }}/roles/appearance/files/wallpapers'
+    dest: '{{ home }}/Pictures/Wallpapers'
     state: link
     force: true
-  tags: [appearance, config]
+  tags:
+    - appearance
+    - config
 
 - name: Deploy themes directory
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/themes"
-    dest: "{{ home }}/.config/themes"
+    src: '{{ dotfiles_dir }}/roles/appearance/files/themes'
+    dest: '{{ home }}/.config/themes'
     state: link
     force: true
-  tags: [appearance, config]
+  tags:
+    - appearance
+    - config
 
 - name: Deploy GRUB theme
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/themes/grub/catppuccin-mocha-grub-theme"
+    src: '{{ dotfiles_dir }}/roles/appearance/files/themes/grub/catppuccin-mocha-grub-theme'
     dest: /boot/grub/themes/catppuccin-mocha
     state: link
     force: true
   become: true
-  tags: [appearance, system]
+  tags:
+    - appearance
+    - system
 
 - name: Check if Plymouth theme destination is a symlink
   ansible.builtin.stat:
     path: /usr/share/plymouth/themes/catppuccin-mocha
   register: appearance_plymouth_theme_stat
   become: true
-  tags: [appearance, system]
+  tags:
+    - appearance
+    - system
 
 - name: Remove Plymouth theme symlink
   ansible.builtin.file:
@@ -106,19 +130,23 @@
     state: absent
   when: appearance_plymouth_theme_stat.stat.exists and appearance_plymouth_theme_stat.stat.islnk
   become: true
-  tags: [appearance, system]
+  tags:
+    - appearance
+    - system
 
 - name: Deploy Plymouth theme
   ansible.builtin.copy:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/themes/plymouth/catppuccin-mocha/"
+    src: '{{ dotfiles_dir }}/roles/appearance/files/themes/plymouth/catppuccin-mocha/'
     dest: /usr/share/plymouth/themes/catppuccin-mocha/
     owner: root
     group: root
-    mode: "0644"
+    mode: '0644'
     remote_src: true
   become: true
   notify: rebuild initramfs
-  tags: [appearance, system]
+  tags:
+    - appearance
+    - system
 
 - name: Get current Plymouth default theme
   ansible.builtin.command:
@@ -127,7 +155,9 @@
   register: appearance_plymouth_current_theme
   changed_when: false
   failed_when: false
-  tags: [appearance, system]
+  tags:
+    - appearance
+    - system
 
 - name: Set Plymouth default theme
   ansible.builtin.command:
@@ -136,38 +166,48 @@
   when: appearance_plymouth_current_theme.stdout | trim != 'catppuccin-mocha'
   changed_when: true
   notify: rebuild initramfs
-  tags: [appearance, system]
+  tags:
+    - appearance
+    - system
 
 - name: Add plymouth hook to mkinitcpio
   ansible.builtin.replace:
     path: /etc/mkinitcpio.conf
-    regexp: '^(HOOKS=\([^)]*\budev\b)(?! plymouth)'
-    replace: '\1 plymouth'
+    regexp: ^(HOOKS=\([^)]*\budev\b)(?! plymouth)
+    replace: \1 plymouth
   become: true
   notify: rebuild initramfs
-  tags: [appearance, system]
+  tags:
+    - appearance
+    - system
 
 - name: Add splash parameter to GRUB kernel cmdline
   ansible.builtin.replace:
     path: /etc/default/grub
-    regexp: '^(GRUB_CMDLINE_LINUX_DEFAULT="(?!.*\bsplash\b)[^"]*)"$'
-    replace: '\1 splash"'
+    regexp: ^(GRUB_CMDLINE_LINUX_DEFAULT="(?!.*\bsplash\b)[^"]*)"$'
+    replace: \1 splash"
   become: true
   notify: regenerate grub config
-  tags: [appearance, system]
+  tags:
+    - appearance
+    - system
 
 - name: Deploy avatar
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/avatar.jpg"
-    dest: "{{ home }}/.face"
+    src: '{{ dotfiles_dir }}/roles/appearance/files/avatar.jpg'
+    dest: '{{ home }}/.face'
     state: link
     force: true
-  tags: [appearance, config]
+  tags:
+    - appearance
+    - config
 
 - name: Deploy btop themes
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/appearance/files/btop"
-    dest: "{{ home }}/.config/btop"
+    src: '{{ dotfiles_dir }}/roles/appearance/files/btop'
+    dest: '{{ home }}/.config/btop'
     state: link
     force: true
-  tags: [appearance, config]
+  tags:
+    - appearance
+    - config

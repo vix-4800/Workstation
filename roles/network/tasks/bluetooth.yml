@@ -8,16 +8,20 @@
       - network-manager-applet
     state: present
   become: true
-  tags: [network, packages]
+  tags:
+    - network
+    - packages
 
 - name: Deploy bluetooth config
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/network/files/bluetooth/main.conf"
+    src: '{{ dotfiles_dir }}/roles/network/files/bluetooth/main.conf'
     dest: /etc/bluetooth/main.conf
     state: link
     force: true
   become: true
-  tags: [network, system]
+  tags:
+    - network
+    - system
 
 - name: Enable bluetooth service
   ansible.builtin.systemd:
@@ -25,4 +29,6 @@
     enabled: true
     state: started
   become: true
-  tags: [network, services]
+  tags:
+    - network
+    - services

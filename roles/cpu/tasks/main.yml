@@ -5,7 +5,9 @@
     state: present
   become: true
   when: cpu_vendor == 'amd'
-  tags: [cpu, packages]
+  tags:
+    - cpu
+    - packages
 
 - name: Install Intel microcode
   community.general.pacman:
@@ -13,7 +15,9 @@
     state: present
   become: true
   when: cpu_vendor == 'intel'
-  tags: [cpu, packages]
+  tags:
+    - cpu
+    - packages
 
 - name: Install thermald (Intel thermal management)
   community.general.pacman:
@@ -21,7 +25,9 @@
     state: present
   become: true
   when: cpu_vendor == 'intel'
-  tags: [cpu, packages]
+  tags:
+    - cpu
+    - packages
 
 - name: Enable thermald service
   ansible.builtin.systemd:
@@ -30,4 +36,6 @@
     state: started
   become: true
   when: cpu_vendor == 'intel'
-  tags: [cpu, services]
+  tags:
+    - cpu
+    - services

@@ -36,5 +36,7 @@ audio_multimedia_packages:
   - libdvdread
 
 audio_configs:
-  - { src: pipewire, dest: "{{ home }}/.config/pipewire" }
-  - { src: wireplumber, dest: "{{ home }}/.config/wireplumber" }
+  - src: pipewire
+    dest: '{{ home }}/.config/pipewire'
+  - src: wireplumber
+    dest: '{{ home }}/.config/wireplumber'

@@ -4,36 +4,46 @@
     name: waybar
     state: present
   become: true
-  tags: [desktop, packages]
+  tags:
+    - desktop
+    - packages
 
 - name: Ensure waybar config directory exists
   ansible.builtin.file:
-    path: "{{ home }}/.config/waybar"
+    path: '{{ home }}/.config/waybar'
     state: directory
-    mode: "0755"
-  tags: [desktop, config]
+    mode: '0755'
+  tags:
+    - desktop
+    - config
 
 - name: Deploy static waybar files
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/desktop/files/waybar/{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: '{{ dotfiles_dir }}/roles/desktop/files/waybar/{{ item.src }}'
+    dest: '{{ item.dest }}'
     state: link
     force: true
-  loop: "{{ desktop_waybar_files }}"
+  loop: '{{ desktop_waybar_files }}'
   loop_control:
-    label: "{{ item.src }}"
-  tags: [desktop, config]
+    label: '{{ item.src }}'
+  tags:
+    - desktop
+    - config
 
 - name: Deploy waybar weather location
   ansible.builtin.template:
     src: waybar/weather-location.j2
-    dest: "{{ home }}/.config/waybar/weather-location"
-    mode: "0644"
-  tags: [desktop, config]
+    dest: '{{ home }}/.config/waybar/weather-location'
+    mode: '0644'
+  tags:
+    - desktop
+    - config
 
 - name: Deploy waybar config
   ansible.builtin.template:
     src: waybar/config.jsonc.j2
-    dest: "{{ home }}/.config/waybar/config.jsonc"
-    mode: "0644"
-  tags: [desktop, config]
+    dest: '{{ home }}/.config/waybar/config.jsonc'
+    mode: '0644'
+  tags:
+    - desktop
+    - config

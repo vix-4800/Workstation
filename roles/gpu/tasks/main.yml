@@ -1,37 +1,45 @@
 ---
 - name: Install NVIDIA drivers
   community.general.pacman:
-    name: "{{ gpu_nvidia_packages }}"
+    name: '{{ gpu_nvidia_packages }}'
     state: present
   become: true
   when: gpu_vendor == 'nvidia'
-  tags: [gpu, packages]
+  tags:
+    - gpu
+    - packages
 
 - name: Deploy NVIDIA modprobe config
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/gpu/files/modprobe.d/nvidia.conf"
+    src: '{{ dotfiles_dir }}/roles/gpu/files/modprobe.d/nvidia.conf'
     dest: /etc/modprobe.d/nvidia.conf
     state: link
     force: true
   become: true
   when: gpu_vendor == 'nvidia'
-  tags: [gpu, config]
+  tags:
+    - gpu
+    - config
 
 - name: Ensure /etc/environment.d exists
   ansible.builtin.file:
     path: /etc/environment.d
     state: directory
-    mode: "0755"
+    mode: '0755'
   become: true
   when: gpu_vendor == 'nvidia'
-  tags: [gpu, config]
+  tags:
+    - gpu
+    - config
 
 - name: Deploy NVIDIA environment variables
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/gpu/files/environment.d/nvidia.conf"
+    src: '{{ dotfiles_dir }}/roles/gpu/files/environment.d/nvidia.conf'
     dest: /etc/environment.d/nvidia.conf
     state: link
     force: true
   become: true
   when: gpu_vendor == 'nvidia'
-  tags: [gpu, config]
+  tags:
+    - gpu
+    - config

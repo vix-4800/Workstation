@@ -9,23 +9,30 @@ shell_node_global_packages:
   - blade-formatter
   - markdownlint-cli2
   - nginxbeautifier
-  - "@commitlint/cli"
-  - "@commitlint/config-conventional"
-  - "@openai/codex"
-  - "@prantlf/jsonlint"
-  - "@fsouza/prettierd"
+  - '@commitlint/cli'
+  - '@commitlint/config-conventional'
+  - '@openai/codex'
+  - '@prantlf/jsonlint'
+  - '@fsouza/prettierd'
   - eslint
   - htmlhint
   - prettier
   - stylelint
-  - "@taplo/cli"
-  - "@linthtml/linthtml"
+  - '@taplo/cli'
+  - '@linthtml/linthtml'
 
 shell_configs:
-  - { src: fish, dest: "{{ home }}/.config/fish" }
-  - { src: alacritty, dest: "{{ home }}/.config/alacritty" }
-  - { src: tmux, dest: "{{ home }}/.config/tmux" }
-  - { src: shell/aliases, dest: "{{ home }}/.aliases" }
-  - { src: .profile, dest: "{{ home }}/.profile" }
-  - { src: bash/.bash_profile, dest: "{{ home }}/.bash_profile" }
-  - { src: bash/bashrc, dest: "{{ home }}/.bashrc" }
+  - src: fish
+    dest: '{{ home }}/.config/fish'
+  - src: alacritty
+    dest: '{{ home }}/.config/alacritty'
+  - src: tmux
+    dest: '{{ home }}/.config/tmux'
+  - src: shell/aliases
+    dest: '{{ home }}/.aliases'
+  - src: .profile
+    dest: '{{ home }}/.profile'
+  - src: bash/.bash_profile
+    dest: '{{ home }}/.bash_profile'
+  - src: bash/bashrc
+    dest: '{{ home }}/.bashrc'

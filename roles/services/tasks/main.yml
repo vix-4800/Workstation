@@ -1,55 +1,66 @@
 ---
 - name: Ensure ~/.local/bin exists
   ansible.builtin.file:
-    path: "{{ home }}/.local/bin"
+    path: '{{ home }}/.local/bin'
     state: directory
-    mode: "0755"
-  tags: [services, config]
+    mode: '0755'
+  tags:
+    - services
+    - config
 
 - name: Deploy arch-audit-check script
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/services/files/arch-audit-check.sh"
-    dest: "{{ home }}/.local/bin/arch-audit-check.sh"
+    src: '{{ dotfiles_dir }}/roles/services/files/arch-audit-check.sh'
+    dest: '{{ home }}/.local/bin/arch-audit-check.sh'
     state: link
     force: true
-  tags: [services, config]
+  tags:
+    - services
+    - config
 
 - name: Ensure systemd user directory exists
   ansible.builtin.file:
-    path: "{{ home }}/.config/systemd/user"
+    path: '{{ home }}/.config/systemd/user'
     state: directory
-    mode: "0755"
-  tags: [services, config]
+    mode: '0755'
+  tags:
+    - services
+    - config
 
 - name: Find service and timer files
   ansible.builtin.find:
-    paths: "{{ dotfiles_dir }}/roles/services/files"
+    paths: '{{ dotfiles_dir }}/roles/services/files'
     file_type: file
   register: services_unit_files
-  tags: [services, config]
+  tags:
+    - services
+    - config
 
 - name: Deploy systemd user service and timer files
   ansible.builtin.file:
-    src: "{{ item.path }}"
-    dest: "{{ home }}/.config/systemd/user/{{ item.path | basename }}"
+    src: '{{ item.path }}'
+    dest: '{{ home }}/.config/systemd/user/{{ item.path | basename }}'
     state: link
     force: true
-  loop: "{{ services_unit_files.files }}"
+  loop: '{{ services_unit_files.files }}'
   loop_control:
-    label: "{{ item.path | basename }}"
+    label: '{{ item.path | basename }}'
   notify: reload systemd user
-  tags: [services, config]
+  tags:
+    - services
+    - config
 
 - name: Reload systemd user daemon before enabling units
   ansible.builtin.meta: flush_handlers
 
 - name: Enable common services
   ansible.builtin.systemd:
-    name: "{{ item }}"
+    name: '{{ item }}'
     scope: user
     enabled: true
-  loop: "{{ services_common }}"
-  tags: [services]
+  loop: '{{ services_common }}'
+  tags:
+    - services
 
 - name: Enable batsignal (battery monitoring)
   ansible.builtin.systemd:
@@ -58,13 +69,15 @@
     enabled: true
     state: started
   when: has_battery | default(false)
-  tags: [services]
+  tags:
+    - services
 
 - name: Enable host-specific services
   ansible.builtin.systemd:
-    name: "{{ item }}"
+    name: '{{ item }}'
     scope: user
     enabled: true
-  loop: "{{ services_host }}"
+  loop: '{{ services_host }}'
   when: services_host | length > 0
-  tags: [services]
+  tags:
+    - services

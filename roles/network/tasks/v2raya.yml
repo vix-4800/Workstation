@@ -6,7 +6,9 @@
       - yarn
     state: present
   become: true
-  tags: [network, packages]
+  tags:
+    - network
+    - packages
 
 - name: Install v2raya and xray
   kewlfft.aur.aur:
@@ -15,7 +17,9 @@
       - xray
     state: present
   become: false
-  tags: [network, packages]
+  tags:
+    - network
+    - packages
 
 - name: Enable and start v2raya service
   ansible.builtin.systemd:
@@ -24,4 +28,6 @@
     state: started
     daemon_reload: true
   become: true
-  tags: [network, services]
+  tags:
+    - network
+    - services

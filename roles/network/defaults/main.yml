@@ -3,10 +3,10 @@ network_usbguard_mode: audit
 network_usbguard_rules: []
 network_bluetooth_pairing_timeout_seconds: 180
 network_dpi_bypass_provider: zapret2
-network_zapret2_version: "0.9.5"
+network_zapret2_version: 0.9.5
 network_zapret2_service_enabled: true
 network_zapret2_fwtype: nftables
-network_zapret2_iface_wan: ""
+network_zapret2_iface_wan: ''
 network_zapret2_nfqws2_enable: true
 network_zapret2_mode_filter: none
 network_zapret2_disable_ipv6: true

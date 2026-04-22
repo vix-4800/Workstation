@@ -1,36 +1,44 @@
 ---
 - name: Install audio packages
   community.general.pacman:
-    name: "{{ audio_packages }}"
+    name: '{{ audio_packages }}'
     state: present
   become: true
-  tags: [audio, packages]
+  tags:
+    - audio
+    - packages
 
 - name: Install multimedia packages
   community.general.pacman:
-    name: "{{ audio_multimedia_packages }}"
+    name: '{{ audio_multimedia_packages }}'
     state: present
   become: true
-  tags: [audio, packages]
+  tags:
+    - audio
+    - packages
 
 - name: Deploy audio configs
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/audio/files/{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: '{{ dotfiles_dir }}/roles/audio/files/{{ item.src }}'
+    dest: '{{ item.dest }}'
     state: link
     force: true
-  loop: "{{ audio_configs }}"
+  loop: '{{ audio_configs }}'
   loop_control:
-    label: "{{ item.src }}"
-  tags: [audio, config]
+    label: '{{ item.src }}'
+  tags:
+    - audio
+    - config
 
 - name: Enable PipeWire user services
   ansible.builtin.systemd:
-    name: "{{ item }}"
+    name: '{{ item }}'
     scope: user
     enabled: true
   loop:
     - pipewire.service
     - pipewire-pulse.service
     - wireplumber.service
-  tags: [audio, services]
+  tags:
+    - audio
+    - services

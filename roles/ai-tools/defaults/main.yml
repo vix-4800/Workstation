@@ -1,19 +1,19 @@
 ---
 ai_tools_global_instruction_repo_src: agents/instructions/AGENTS.md
-ai_tools_global_instruction_home_path: "{{ home }}/.agents/instructions/AGENTS.md"
+ai_tools_global_instruction_home_path: '{{ home }}/.agents/instructions/AGENTS.md'
 ai_tools_health_timeout_seconds: 30
 ai_tools_run_health_checks: false
-ai_tools_github_mcp_server_version: "0.32.0"
+ai_tools_github_mcp_server_version: 0.32.0
 
 ai_tools_claude_mcp_servers_present:
   - name: github
-    command: "{{ home }}/.local/bin/github-mcp-server-with-auth"
+    command: '{{ home }}/.local/bin/github-mcp-server-with-auth'
     args: []
   - name: playwright
     command: npx
     args:
       - -y
-      - "@playwright/mcp@latest"
+      - '@playwright/mcp@latest'
       - --browser=firefox
 
 ai_tools_claude_plugins_present:
@@ -46,34 +46,54 @@ ai_tools_shared_skill_names:
   - obsidian
 
 ai_tools_shared_skill_targets:
-  - "{{ home }}/.agents/skills"
-  - "{{ home }}/.claude/skills"
-  - "{{ home }}/.codex/skills"
+  - '{{ home }}/.agents/skills'
+  - '{{ home }}/.claude/skills'
+  - '{{ home }}/.codex/skills'
 
 ai_tools_repo_symlinks:
-  - { src: claude/settings.json, dest: "{{ home }}/.claude/settings.json" }
-  - { src: claude/claude-powerline.json, dest: "{{ home }}/.claude/claude-powerline.json" }
-  - { src: claude/hooks, dest: "{{ home }}/.claude/hooks" }
-  - { src: claude/agents, dest: "{{ home }}/.claude/agents" }
-  - { src: claude/rules, dest: "{{ home }}/.claude/rules" }
-  - { src: agents/commands, dest: "{{ home }}/.claude/commands" }
-  - { src: opencode, dest: "{{ home }}/.config/opencode" }
-  - { src: codex/config.toml, dest: "{{ home }}/.codex/config.toml" }
-  - { src: codex/rules/allow.rules, dest: "{{ home }}/.codex/rules/allow.rules" }
-  - { src: codex/rules/prompt.rules, dest: "{{ home }}/.codex/rules/prompt.rules" }
-  - { src: codex/rules/deny.rules, dest: "{{ home }}/.codex/rules/deny.rules" }
-  - { src: codex/agents, dest: "{{ home }}/.codex/agents" }
-  - { src: agents/commands, dest: "{{ home }}/.codex/commands" }
-  - { src: copilot/config.json, dest: "{{ home }}/.copilot/config.json" }
-  - { src: copilot/mcp-config.json, dest: "{{ home }}/.copilot/mcp-config.json" }
-  - { src: "{{ ai_tools_global_instruction_repo_src }}", dest: "{{ ai_tools_global_instruction_home_path }}" }
+  - src: claude/settings.json
+    dest: '{{ home }}/.claude/settings.json'
+  - src: claude/claude-powerline.json
+    dest: '{{ home }}/.claude/claude-powerline.json'
+  - src: claude/hooks
+    dest: '{{ home }}/.claude/hooks'
+  - src: claude/agents
+    dest: '{{ home }}/.claude/agents'
+  - src: claude/rules
+    dest: '{{ home }}/.claude/rules'
+  - src: agents/commands
+    dest: '{{ home }}/.claude/commands'
+  - src: opencode
+    dest: '{{ home }}/.config/opencode'
+  - src: codex/config.toml
+    dest: '{{ home }}/.codex/config.toml'
+  - src: codex/rules/allow.rules
+    dest: '{{ home }}/.codex/rules/allow.rules'
+  - src: codex/rules/prompt.rules
+    dest: '{{ home }}/.codex/rules/prompt.rules'
+  - src: codex/rules/deny.rules
+    dest: '{{ home }}/.codex/rules/deny.rules'
+  - src: codex/agents
+    dest: '{{ home }}/.codex/agents'
+  - src: agents/commands
+    dest: '{{ home }}/.codex/commands'
+  - src: copilot/config.json
+    dest: '{{ home }}/.copilot/config.json'
+  - src: copilot/mcp-config.json
+    dest: '{{ home }}/.copilot/mcp-config.json'
+  - src: '{{ ai_tools_global_instruction_repo_src }}'
+    dest: '{{ ai_tools_global_instruction_home_path }}'
 
 ai_tools_repo_templates:
   - src: copilot/lsp-config.json.j2
-    dest: "{{ home }}/.copilot/lsp-config.json"
+    dest: '{{ home }}/.copilot/lsp-config.json'
 
 ai_tools_home_symlinks:
-  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.codex/AGENTS.md" }
-  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.claude/CLAUDE.md" }
-  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.copilot/copilot-instructions.md" }
-  - { src: "{{ ai_tools_global_instruction_home_path }}", dest: "{{ home }}/.config/opencode/AGENTS.md" }
+  - src: '{{ ai_tools_global_instruction_home_path }}'
+    dest: '{{ home }}/.codex/AGENTS.md'
+  - src: '{{ ai_tools_global_instruction_home_path }}'
+    dest: '{{ home }}/.claude/CLAUDE.md'
+  - src: '{{ ai_tools_global_instruction_home_path }}'
+    dest: '{{ home }}/.copilot/copilot-instructions.md'
+  - src: '{{ ai_tools_global_instruction_home_path }}'
+    dest: '{{ home }}/.config/opencode/AGENTS.md'

@@ -3,14 +3,20 @@
   ansible.builtin.apt:
     name: cron
     state: present
-  tags: [server-init, monitor, packages]
+  tags:
+    - server-init
+    - monitor
+    - packages
 
 - name: Enable and start cron service
   ansible.builtin.systemd:
     name: cron
     enabled: true
     state: started
-  tags: [server-init, monitor, services]
+  tags:
+    - server-init
+    - monitor
+    - services
 
 - name: Deploy server monitor script
   ansible.builtin.template:
@@ -19,7 +25,9 @@
     mode: '0755'
     owner: root
     group: root
-  tags: [server-init, monitor]
+  tags:
+    - server-init
+    - monitor
 
 - name: Schedule daily monitor cron job at 09:00
   ansible.builtin.cron:
@@ -29,4 +37,6 @@
     job: /usr/local/bin/server_monitor
     user: root
     state: present
-  tags: [server-init, monitor]
+  tags:
+    - server-init
+    - monitor

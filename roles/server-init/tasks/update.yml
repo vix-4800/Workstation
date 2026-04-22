@@ -3,10 +3,16 @@
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 0
-  tags: [server-init, update, packages]
+  tags:
+    - server-init
+    - update
+    - packages
 
 - name: Upgrade all packages
   ansible.builtin.apt:
     upgrade: dist
     autoremove: true
-  tags: [server-init, update, packages]
+  tags:
+    - server-init
+    - update
+    - packages
