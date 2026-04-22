@@ -384,6 +384,7 @@
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma">
         <exclude-pattern>*/config/*</exclude-pattern>
+        <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement">
         <type>warning</type>
