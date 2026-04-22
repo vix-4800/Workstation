@@ -87,9 +87,7 @@
             name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification" />
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue" />
-    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint" />
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint" />
 
     <!-- ===== CONTROL STRUCTURES ===== -->
@@ -108,6 +106,7 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses" />
+    <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses" />
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireSingleLineCondition">
         <properties>
             <property name="maxLineLength" value="120" />
@@ -267,6 +266,12 @@
         </properties>
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature">
+        <properties>
+            <property name="minLineLength" value="121" />
+        </properties>
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition" />
     <rule ref="SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition" />
     <rule ref="SlevomatCodingStandard.Classes.ConstantSpacing">
@@ -327,6 +332,10 @@
         <exclude-pattern>*/config/*</exclude-pattern>
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse">
+        <exclude-pattern>*/config/*</exclude-pattern>
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">
         <properties>
             <property name="spacesCountAfterKeyword" value="0" />
@@ -342,7 +351,6 @@
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/views/*</exclude-pattern>
         <type>warning</type>
-        <severity>0</severity>
     </rule>
     <rule ref="SlevomatCodingStandard.Functions.StaticClosure">
         <type>warning</type>
@@ -376,7 +384,6 @@
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma">
         <exclude-pattern>*/config/*</exclude-pattern>
-        <severity>0</severity>
     </rule>
     <rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement">
         <type>warning</type>
@@ -444,9 +451,7 @@
     <rule ref="SlevomatCodingStandard.Exceptions.CatchExceptionsOrder">
         <type>warning</type>
     </rule>
-    <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch">
-        <type>warning</type>
-    </rule>
+    <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch" />
     <rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
         <type>warning</type>
     </rule>
