@@ -762,11 +762,11 @@
           "name": "YAML Lint",
           "parser": "parsable",
           "run": "onOpen"
-        },
+        }
       ],
       "fixers": [
         {
-          "name": "yamlfmt",
+          "name": "YAML Format",
           "command": "yamlfmt",
           "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"],
           "run": "onSave"

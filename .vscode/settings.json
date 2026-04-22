@@ -24,5 +24,8 @@
     "love.filesystem.load": "loadfile"
   },
   "Lua.workspace.checkThirdParty": false,
-  "ansible.mcpServer.enabled": true
+  "ansible.mcpServer.enabled": true,
+  "yaml.schemas": {
+    "https://www.schemastore.org/yamllint.json": "file:///home/vix/Code/Workstation/roles/development/files/tools/yaml/yamllint.yml"
+  }
 }
