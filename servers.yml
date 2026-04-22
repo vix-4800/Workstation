@@ -7,4 +7,6 @@
     - vault/secrets.yml
 
   roles:
-    - { role: server-init, tags: [server-init] }
+    - role: server-init
+      tags:
+        - server-init

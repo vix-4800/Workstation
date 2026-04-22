@@ -1,10 +1,14 @@
 ---
 - name: Install firewall packages
   community.general.pacman:
-    name: [nftables, firewalld]
+    name:
+      - nftables
+      - firewalld
     state: present
   become: true
-  tags: [network, packages]
+  tags:
+    - network
+    - packages
 
 - name: Disable standalone nftables service (managed by firewalld)
   ansible.builtin.systemd:
@@ -13,7 +17,9 @@
     state: stopped
   become: true
   failed_when: false
-  tags: [network, services]
+  tags:
+    - network
+    - services
 
 - name: Enable firewalld service
   ansible.builtin.systemd:
@@ -21,4 +27,6 @@
     enabled: true
     state: started
   become: true
-  tags: [network, services]
+  tags:
+    - network
+    - services

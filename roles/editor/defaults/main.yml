@@ -4,15 +4,25 @@ editor_packages:
   - neovim
 
 editor_configs:
-  - { src: nvim, dest: "{{ home }}/.config/nvim" }
-  - { src: code/code-flags.conf, dest: "{{ home }}/.config/code-flags.conf" }
-  - { src: code/User/settings.json, dest: "{{ home }}/.config/Code/User/settings.json" }
-  - { src: code/User/keybindings.json, dest: "{{ home }}/.config/Code/User/keybindings.json" }
-  - { src: code/User/tasks.json, dest: "{{ home }}/.config/Code/User/tasks.json" }
-  - { src: code/User/mcp.json, dest: "{{ home }}/.config/Code/User/mcp.json" }
-  - { src: code/User/prompts, dest: "{{ home }}/.config/Code/User/prompts" }
-  - { src: git/delta.gitconfig, dest: "{{ home }}/.gitconfig.delta" }
-  - { src: git/gitconfig, dest: "{{ home }}/.gitconfig" }
+  - src: nvim
+    dest: '{{ home }}/.config/nvim'
+  - src: code/code-flags.conf
+    dest: '{{ home }}/.config/code-flags.conf'
+  - src: code/User/settings.json
+    dest: '{{ home }}/.config/Code/User/settings.json'
+  - src: code/User/keybindings.json
+    dest: '{{ home }}/.config/Code/User/keybindings.json'
+  - src: code/User/tasks.json
+    dest: '{{ home }}/.config/Code/User/tasks.json'
+  - src: code/User/mcp.json
+    dest: '{{ home }}/.config/Code/User/mcp.json'
+  - src: code/User/prompts
+    dest: '{{ home }}/.config/Code/User/prompts'
+  - src: git/delta.gitconfig
+    dest: '{{ home }}/.gitconfig.delta'
+  - src: git/gitconfig
+    dest: '{{ home }}/.gitconfig'
 
 editor_templates:
-  - { src: git/gitconfig.user.j2, dest: "{{ home }}/.gitconfig.user" }
+  - src: git/gitconfig.user.j2
+    dest: '{{ home }}/.gitconfig.user'

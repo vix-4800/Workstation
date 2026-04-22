@@ -1,23 +1,27 @@
 ---
 - name: Install editor packages
   community.general.pacman:
-    name: "{{ editor_packages }}"
+    name: '{{ editor_packages }}'
     state: present
   become: true
-  tags: [editor, packages]
+  tags:
+    - editor
+    - packages
 
 - name: Install Visual Studio Code (AUR)
   kewlfft.aur.aur:
     name: visual-studio-code-bin
     state: present
   become: false
-  tags: [editor, packages]
+  tags:
+    - editor
+    - packages
 
 - name: Ensure editor config parent directories exist
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: '{{ item }}'
     state: directory
-    mode: "0755"
+    mode: '0755'
   loop: >-
     {{
       (editor_configs + editor_templates)
@@ -28,26 +32,32 @@
       | list
     }}
   loop_control:
-    label: "{{ item }}"
-  tags: [editor, config]
+    label: '{{ item }}'
+  tags:
+    - editor
+    - config
 
 - name: Deploy editor configs
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/editor/files/{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: '{{ dotfiles_dir }}/roles/editor/files/{{ item.src }}'
+    dest: '{{ item.dest }}'
     state: link
     force: true
-  loop: "{{ editor_configs }}"
+  loop: '{{ editor_configs }}'
   loop_control:
-    label: "{{ item.src }}"
-  tags: [editor, config]
+    label: '{{ item.src }}'
+  tags:
+    - editor
+    - config
 
 - name: Deploy editor templates
   ansible.builtin.template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "0644"
-  loop: "{{ editor_templates }}"
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '0644'
+  loop: '{{ editor_templates }}'
   loop_control:
-    label: "{{ item.src }}"
-  tags: [editor, config]
+    label: '{{ item.src }}'
+  tags:
+    - editor
+    - config

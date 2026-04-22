@@ -2,107 +2,133 @@
 - name: Set locale
   ansible.builtin.lineinfile:
     path: /etc/locale.gen
-    regexp: "^#?{{ base_locale }}"
-    line: "{{ base_locale }} UTF-8"
+    regexp: ^#?{{ base_locale }}
+    line: '{{ base_locale }} UTF-8'
   become: true
   notify: generate locale
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Deploy locale.conf
   ansible.builtin.copy:
     dest: /etc/locale.conf
-    content: "LANG={{ base_locale }}\n"
-    mode: "0644"
+    content: LANG={{ base_locale }}
+    mode: '0644'
   become: true
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Set timezone
   community.general.timezone:
-    name: "{{ base_timezone }}"
+    name: '{{ base_timezone }}'
   become: true
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Set hostname
   ansible.builtin.hostname:
-    name: "{{ hostname }}"
+    name: '{{ hostname }}'
     use: systemd
   become: true
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Install essential packages
   community.general.pacman:
-    name: "{{ base_essential_packages }}"
+    name: '{{ base_essential_packages }}'
     state: present
   become: true
-  tags: [base, packages]
+  tags:
+    - base
+    - packages
 
 - name: Install modern CLI tools
   community.general.pacman:
-    name: "{{ base_cli_packages }}"
+    name: '{{ base_cli_packages }}'
     state: present
   become: true
-  tags: [base, packages]
+  tags:
+    - base
+    - packages
 
 - name: Update mirror list with reflector
   ansible.builtin.command:
     cmd: reflector --country {{ base_reflector_country }} --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
   become: true
   changed_when: false
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Deploy environment variables
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/base/files/environment"
+    src: '{{ dotfiles_dir }}/roles/base/files/environment'
     dest: /etc/environment
     state: link
     force: true
   become: true
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Deploy user-dirs config
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/base/files/user-dirs.dirs"
-    dest: "{{ home }}/.config/user-dirs.dirs"
+    src: '{{ dotfiles_dir }}/roles/base/files/user-dirs.dirs'
+    dest: '{{ home }}/.config/user-dirs.dirs'
     state: link
     force: true
-  tags: [base, config]
+  tags:
+    - base
+    - config
 
 - name: Deploy fontconfig
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/base/files/fontconfig"
-    dest: "{{ home }}/.config/fontconfig"
+    src: '{{ dotfiles_dir }}/roles/base/files/fontconfig'
+    dest: '{{ home }}/.config/fontconfig'
     state: link
     force: true
-  tags: [base, config]
+  tags:
+    - base
+    - config
 
 - name: Deploy editorconfig
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/base/files/.editorconfig"
-    dest: "{{ home }}/.editorconfig"
+    src: '{{ dotfiles_dir }}/roles/base/files/.editorconfig'
+    dest: '{{ home }}/.editorconfig'
     state: link
     force: true
-  tags: [base, config]
+  tags:
+    - base
+    - config
 
 - name: Set vm.swappiness for SSD/NVMe performance
   ansible.posix.sysctl:
     name: vm.swappiness
-    value: "10"
+    value: '10'
     state: present
     sysctl_file: /etc/sysctl.d/99-vm.conf
   become: true
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Deploy paccache systemd units
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/base/files/systemd/system/{{ item }}"
-    dest: "/etc/systemd/system/{{ item }}"
+    src: '{{ dotfiles_dir }}/roles/base/files/systemd/system/{{ item }}'
+    dest: /etc/systemd/system/{{ item }}
     state: link
     force: true
   become: true
   loop:
     - paccache.service
     - paccache.timer
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Enable paccache timer
   ansible.builtin.systemd:
@@ -111,19 +137,23 @@
     enabled: true
     state: started
   become: true
-  tags: [base, services]
+  tags:
+    - base
+    - services
 
 - name: Deploy reflector systemd units
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/base/files/systemd/system/{{ item }}"
-    dest: "/etc/systemd/system/{{ item }}"
+    src: '{{ dotfiles_dir }}/roles/base/files/systemd/system/{{ item }}'
+    dest: /etc/systemd/system/{{ item }}
     state: link
     force: true
   become: true
   loop:
     - reflector.service
     - reflector.timer
-  tags: [base, system]
+  tags:
+    - base
+    - system
 
 - name: Enable reflector timer
   ansible.builtin.systemd:
@@ -132,4 +162,6 @@
     enabled: true
     state: started
   become: true
-  tags: [base, services]
+  tags:
+    - base
+    - services

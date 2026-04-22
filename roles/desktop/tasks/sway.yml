@@ -37,25 +37,33 @@
       - hyprpicker
     state: present
   become: true
-  tags: [desktop, packages]
+  tags:
+    - desktop
+    - packages
 
 - name: Install swayfx (AUR)
   kewlfft.aur.aur:
     name: swayfx
     state: present
   become: false
-  tags: [desktop, packages]
+  tags:
+    - desktop
+    - packages
 
 - name: Install gtklock (AUR)
   kewlfft.aur.aur:
     name: gtklock
     state: present
   become: false
-  tags: [desktop, packages]
+  tags:
+    - desktop
+    - packages
 
 - name: Install autotiling (AUR)
   kewlfft.aur.aur:
     name: autotiling
     state: present
   become: false
-  tags: [desktop, packages]
+  tags:
+    - desktop
+    - packages

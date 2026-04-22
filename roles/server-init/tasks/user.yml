@@ -1,7 +1,7 @@
 ---
 - name: Create dev user with sudo and docker groups
   ansible.builtin.user:
-    name: "{{ server_dev_username }}"
+    name: '{{ server_dev_username }}'
     groups:
       - sudo
       - docker
@@ -9,4 +9,6 @@
     shell: /bin/bash
     create_home: true
     state: present
-  tags: [server-init, user]
+  tags:
+    - server-init
+    - user

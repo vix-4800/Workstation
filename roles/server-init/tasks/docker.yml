@@ -3,7 +3,10 @@
   ansible.builtin.stat:
     path: /usr/bin/docker
   register: server_init_docker_cli_stat
-  tags: [server-init, docker, packages]
+  tags:
+    - server-init
+    - docker
+    - packages
 
 - name: Install docker.io
   ansible.builtin.apt:
@@ -11,11 +14,17 @@
     state: present
     update_cache: true
   when: not server_init_docker_cli_stat.stat.exists
-  tags: [server-init, docker, packages]
+  tags:
+    - server-init
+    - docker
+    - packages
 
 - name: Enable and start Docker service
   ansible.builtin.systemd:
     name: docker
     enabled: true
     state: started
-  tags: [server-init, docker, services]
+  tags:
+    - server-init
+    - docker
+    - services

@@ -3,71 +3,95 @@
   ansible.builtin.include_tasks:
     file: firewall.yml
     apply:
-      tags: [network]
-  tags: [network, firewall]
+      tags:
+        - network
+  tags:
+    - network
+    - firewall
 
 - name: Configure USBGuard
   ansible.builtin.include_tasks:
     file: usbguard.yml
     apply:
-      tags: [network]
-  tags: [network, usbguard]
+      tags:
+        - network
+  tags:
+    - network
+    - usbguard
 
 - name: Configure Bluetooth
   ansible.builtin.include_tasks:
     file: bluetooth.yml
     apply:
-      tags: [network]
-  tags: [network, bluetooth]
+      tags:
+        - network
+  tags:
+    - network
+    - bluetooth
 
 - name: Configure WireGuard
   ansible.builtin.include_tasks:
     file: wireguard.yml
     apply:
-      tags: [network]
-  tags: [network, wireguard]
+      tags:
+        - network
+  tags:
+    - network
+    - wireguard
 
 - name: Configure v2raya
   ansible.builtin.include_tasks:
     file: v2raya.yml
     apply:
-      tags: [network]
-  tags: [network, v2raya]
+      tags:
+        - network
+  tags:
+    - network
+    - v2raya
 
 - name: Configure DPI bypass tool
   ansible.builtin.include_tasks:
     file: dpi-bypass.yml
     apply:
-      tags: [network]
-  tags: [network, dpi-bypass]
+      tags:
+        - network
+  tags:
+    - network
+    - dpi-bypass
 
 - name: Ensure network config parent directories exist
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: '{{ item }}'
     state: directory
-    mode: "0755"
+    mode: '0755'
   loop:
-    - "{{ home }}/.config/geoclue"
-    - "{{ home }}/.local/bin"
-  tags: [network, config]
+    - '{{ home }}/.config/geoclue'
+    - '{{ home }}/.local/bin'
+  tags:
+    - network
+    - config
 
 - name: Deploy network helper scripts
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/network/scripts/{{ item.src }}"
-    dest: "{{ home }}/.local/bin/{{ item.dest }}"
+    src: '{{ dotfiles_dir }}/roles/network/scripts/{{ item.src }}'
+    dest: '{{ home }}/.local/bin/{{ item.dest }}'
     state: link
     force: true
   loop:
-    - { src: bluetooth-pair, dest: bluetooth-pair }
-    - { src: usbguard-generate-policy, dest: usbguard-generate-policy }
+    - {src: bluetooth-pair, dest: bluetooth-pair}
+    - {src: usbguard-generate-policy, dest: usbguard-generate-policy}
   loop_control:
-    label: "{{ item.dest }}"
-  tags: [network, config]
+    label: '{{ item.dest }}'
+  tags:
+    - network
+    - config
 
 - name: Deploy geoclue config
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/network/files/geoclue/curl.conf"
-    dest: "{{ home }}/.config/geoclue/curl.conf"
+    src: '{{ dotfiles_dir }}/roles/network/files/geoclue/curl.conf'
+    dest: '{{ home }}/.config/geoclue/curl.conf'
     state: link
     force: true
-  tags: [network, config]
+  tags:
+    - network
+    - config

@@ -3,77 +3,101 @@
   ansible.builtin.include_tasks:
     file: sway.yml
     apply:
-      tags: [desktop]
-  tags: [desktop, sway]
+      tags:
+        - desktop
+  tags:
+    - desktop
+    - sway
 
 - name: Setup Waybar
   ansible.builtin.include_tasks:
     file: waybar.yml
     apply:
-      tags: [desktop]
-  tags: [desktop, waybar]
+      tags:
+        - desktop
+  tags:
+    - desktop
+    - waybar
 
 - name: Build and install gtklock modules
   ansible.builtin.include_tasks:
     file: gtklock.yml
     apply:
-      tags: [desktop]
-  tags: [desktop, gtklock]
+      tags:
+        - desktop
+  tags:
+    - desktop
+    - gtklock
 
 - name: Setup notifications
   ansible.builtin.include_tasks:
     file: notifications.yml
     apply:
-      tags: [desktop]
-  tags: [desktop, notifications]
+      tags:
+        - desktop
+  tags:
+    - desktop
+    - notifications
 
 - name: Deploy desktop configs
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/desktop/files/{{ item.src }}"
-    dest: "{{ item.dest }}"
+    src: '{{ dotfiles_dir }}/roles/desktop/files/{{ item.src }}'
+    dest: '{{ item.dest }}'
     state: link
     force: true
-  loop: "{{ desktop_configs }}"
+  loop: '{{ desktop_configs }}'
   loop_control:
-    label: "{{ item.src }}"
-  tags: [desktop, config]
+    label: '{{ item.src }}'
+  tags:
+    - desktop
+    - config
 
 - name: Ensure xdg-desktop-portal config dir exists
   ansible.builtin.file:
-    path: "{{ home }}/.config/xdg-desktop-portal"
+    path: '{{ home }}/.config/xdg-desktop-portal'
     state: directory
-    mode: "0755"
-  tags: [desktop, config]
+    mode: '0755'
+  tags:
+    - desktop
+    - config
 
 - name: Deploy XDG Desktop Portal config
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/desktop/files/xdg-desktop-portal/portals.conf"
-    dest: "{{ home }}/.config/xdg-desktop-portal/portals.conf"
+    src: '{{ dotfiles_dir }}/roles/desktop/files/xdg-desktop-portal/portals.conf'
+    dest: '{{ home }}/.config/xdg-desktop-portal/portals.conf'
     state: link
     force: true
-  tags: [desktop, config]
+  tags:
+    - desktop
+    - config
 
 - name: Deploy mimeapps.list
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/desktop/files/mimeapps.list"
-    dest: "{{ home }}/.config/mimeapps.list"
+    src: '{{ dotfiles_dir }}/roles/desktop/files/mimeapps.list'
+    dest: '{{ home }}/.config/mimeapps.list'
     state: link
     force: true
-  tags: [desktop, config]
+  tags:
+    - desktop
+    - config
 
 - name: Deploy electron-flags.conf
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/desktop/files/electron-flags.conf"
-    dest: "{{ home }}/.config/electron-flags.conf"
+    src: '{{ dotfiles_dir }}/roles/desktop/files/electron-flags.conf'
+    dest: '{{ home }}/.config/electron-flags.conf'
     state: link
     force: true
-  tags: [desktop, config]
+  tags:
+    - desktop
+    - config
 
 - name: Deploy gtklock PAM config
   ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/roles/desktop/files/pam.d/gtklock"
+    src: '{{ dotfiles_dir }}/roles/desktop/files/pam.d/gtklock'
     dest: /etc/pam.d/gtklock
     state: link
     force: true
   become: true
-  tags: [desktop, system]
+  tags:
+    - desktop
+    - system
