@@ -13,10 +13,7 @@
 
 - name: Download zapret2 release archive
   ansible.builtin.get_url:
-    url: >-
-      'https://github.com/bol-van/zapret2/releases/download
-        /v{{ network_zapret2_version }}
-        /zapret2-v{{ network_zapret2_version }}.tar.gz'
+    url: https://github.com/bol-van/zapret2/releases/download/v{{ network_zapret2_version }}/zapret2-v{{ network_zapret2_version }}.tar.gz
     dest: /tmp/zapret2-v{{ network_zapret2_version }}.tar.gz
     mode: '0644'
   become: true
