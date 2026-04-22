@@ -285,6 +285,10 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.MethodSpacing">
         <type>warning</type>
+        <properties>
+            <property name="minLinesCount" value="1"/>
+            <property name="maxLinesCount" value="1"/>
+        </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.ClassLength">
         <properties>
