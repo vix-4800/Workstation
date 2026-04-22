@@ -13,7 +13,8 @@
 - name: Deploy locale.conf
   ansible.builtin.copy:
     dest: /etc/locale.conf
-    content: LANG={{ base_locale }}
+    content: |
+      LANG={{ base_locale }}
     mode: '0644'
   become: true
   tags:
