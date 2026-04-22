@@ -438,6 +438,9 @@
     "blade": "html",
     "twig": "html"
   },
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  },
   "errorLens.border": ["0.5px solid", "0.5px dotted", "0.5px dotted", "0.5px dotted"],
   "errorLens.codeLensEnabled": false,
   "errorLens.delay": 300,
@@ -1099,14 +1102,21 @@
     },
     {
       "name": "XML",
-      "filePatterns": ["*.xml"],
+      "filePatterns": ["*.xml", "*.xsd", "*.xsl", "*.xslt"],
+      "preCommands": [
+        {
+          "name": "XML Validate",
+          "command": "xmllint",
+          "args": ["--nonet", "--noout", "${file}"]
+        }
+      ],
       "linters": [
         {
-          "args": ["--noout", "${file}"],
+          "args": ["--nonet", "--noout", "${file}"],
           "command": "xmllint",
           "name": "XML Lint",
           "parser": "xmllint",
-          "run": "onOpen"
+          "run": "onSave"
         }
       ]
     },
@@ -1211,6 +1221,21 @@
         }
       ],
       "fixers": [
+        {
+          "name": "Rector",
+          "command": "~/.config/composer/vendor/bin/rector",
+          "args": [
+            "process",
+            "--config",
+            "~/.config/rector/rector.php",
+            "--ansi",
+            "--no-progress-bar",
+            "--clear-cache",
+            "--no-diffs",
+            "${file}"
+          ],
+          "run": "manual"
+        },
         // {
         //   "name": "PHP Code Beautifier and Fixer",
         //   "command": "~/.config/composer/vendor/bin/phpcbf",
