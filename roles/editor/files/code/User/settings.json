@@ -747,12 +747,13 @@
           "name": "Markdown Lint",
           "command": "markdownlint",
           "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"]
+        },
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "enabled": false
         }
-        // {
-        //   "name": "Prettier",
-        //   "command": "prettier",
-        //   "args": ["--write", "--config", "~/.prettierrc", "${file}"]
-        // }
       ]
     },
     {
@@ -952,12 +953,13 @@
           "name": "ESLint",
           "command": "eslint",
           "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"]
+        },
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "enabled": false
         }
-        // {
-        //   "name": "Prettier",
-        //   "command": "prettier",
-        //   "args": ["--write", "--config", "~/.prettierrc", "${file}"]
-        // }
       ]
     },
     {
@@ -977,12 +979,13 @@
           "name": "Style Lint",
           "command": "stylelint",
           "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"]
+        },
+        {
+          "name": "Prettier",
+          "command": "prettier",
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "enabled": false
         }
-        // {
-        //   "name": "Prettier",
-        //   "command": "prettier",
-        //   "args": ["--write", "--config", "~/.prettierrc", "${file}"]
-        // }
       ]
     },
     {
@@ -1236,11 +1239,12 @@
           ],
           "run": "manual"
         },
-        // {
-        //   "name": "PHP Code Beautifier and Fixer",
-        //   "command": "~/.config/composer/vendor/bin/phpcbf",
-        //   "args": ["${file}"]
-        // },
+        {
+          "name": "PHP Code Beautifier and Fixer",
+          "command": "~/.config/composer/vendor/bin/phpcbf",
+          "args": ["${file}"],
+          "enabled": false
+        },
         {
           "name": "PHP CS Fixer",
           "command": "~/.config/composer/vendor/bin/php-cs-fixer",
