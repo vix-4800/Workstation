@@ -85,27 +85,31 @@ parameters:
     # Reference parameter checks
     checkArgumentsPassedByReference: true
 
+    usePathConstantsAsConstantString: true
+
     exceptions:
         implicitThrows: false
 
         uncheckedExceptionClasses:
-            - LogicException
-            - BadFunctionCallException
-            - BadMethodCallException
-            - DomainException
-            - InvalidArgumentException
-            - LengthException
-            - OutOfRangeException
-            - RuntimeException
+            # - LogicException
+            # - BadFunctionCallException
+            # - BadMethodCallException
+            # - DomainException
+            # - InvalidArgumentException
+            # - LengthException
+            # - OutOfRangeException
+            # - RuntimeException
 
             # PHP Native Errors
             - Error
             - TypeError
             - ValueError
-            - ArithmeticError
-            - DivisionByZeroError
-            - UnhandledMatchError
+            # - ArithmeticError
+            # - DivisionByZeroError
+            # - UnhandledMatchError
         reportUncheckedExceptionDeadCatch: true
         check:
             missingCheckedExceptionInThrows: true
             tooWideThrowType: true
+            throwTypeCovariance: true
+            tooWideImplicitThrowType: true
