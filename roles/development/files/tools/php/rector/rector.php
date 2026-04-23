@@ -162,7 +162,7 @@ $config = RectorConfig::configure()
     ->withCodingStyleLevel(3)
     ->withTypeCoverageDocblockLevel(3)
     ->withPreparedSets(
-                privatization: true,
+        privatization: true,
         rectorPreset: true,
         earlyReturn: true,
     )
