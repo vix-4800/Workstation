@@ -1,6 +1,9 @@
+---
 name: Lint
 
-on: [push, pull_request]
+on:
+  - push
+  - pull_request
 
 jobs:
   lint:
@@ -9,7 +12,11 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v6
+
       - uses: actions/setup-python@v6
-        with: { python-version: "3.11" }
+        with:
+          python-version: '3.11'
+
       - run: pipx install pre-commit
+
       - run: pre-commit run -a
