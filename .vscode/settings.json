@@ -1,28 +1,39 @@
 {
+  "ansible.mcpServer.enabled": true,
   "cSpell.words": [
     "Adwaita",
     "analyse",
     "autocmd",
     "autocmds",
+    "bladeformatterrc",
     "checkmake",
     "codesnap",
     "devicons",
     "fontconfig",
     "gtkrc",
+    "inifmt",
+    "jsonlintrc",
+    "kewlfft",
     "keymap",
     "keymaps",
+    "linthtml",
+    "linthtmlrc",
     "lspconfig",
+    "luacheck",
+    "luacheckrc",
+    "luarocks",
     "pyproject",
     "regreet",
     "sqlfluff",
+    "stylua",
+    "taplo",
     "titlebar"
   ],
   "Lua.diagnostics.globals": ["vim"],
-  "Lua.workspace.library": ["${addons}/love2d/module/library"],
-  "Lua.runtime.version": "LuaJIT",
   "Lua.runtime.special": {
     "love.filesystem.load": "loadfile"
   },
+  "Lua.runtime.version": "LuaJIT",
   "Lua.workspace.checkThirdParty": false,
-  "ansible.mcpServer.enabled": true
+  "Lua.workspace.library": ["${addons}/love2d/module/library"]
 }
