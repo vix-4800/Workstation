@@ -12,17 +12,20 @@
         "claude-code",
         "--open-web-dashboard",
         "False"
-      ]
+      ],
+      "tools": ["*"]
     },
     "context7": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "tools": ["*"]
     },
     "playwright": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest", "--browser=firefox"]
+      "args": ["-y", "@playwright/mcp@latest", "--browser=firefox"],
+      "tools": ["*"]
     }
   }
 }
