@@ -1321,8 +1321,11 @@
   "terminal.integrated.automationProfile.linux": {
     "path": "/bin/bash"
   },
+  "terminal.integrated.copyOnSelection": true,
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.cursorStyleInactive": "line",
   "terminal.integrated.defaultProfile.linux": "fish",
-  "terminal.integrated.defaultProfile.windows": "Git Bash",
   "terminal.integrated.enableMultiLinePasteWarning": "never",
   "terminal.integrated.profiles.linux": {
     "bash": {
@@ -1344,6 +1347,8 @@
       "path": "zsh"
     }
   },
+  "terminal.integrated.smoothScrolling": true,
+  "terminal.integrated.tabs.defaultColor": "terminal.ansiMagenta",
   "versionlens.suggestions.showOnStartup": true,
   "window.commandCenter": false,
   "window.confirmBeforeClose": "never",
