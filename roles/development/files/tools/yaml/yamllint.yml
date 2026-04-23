@@ -13,7 +13,7 @@ rules:
     indent-sequences: true
     check-multi-line-strings: false
 
-  comments-indentation: true
+  comments-indentation: enable
   comments:
     require-starting-space: true
     min-spaces-from-content: 1
