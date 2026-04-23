@@ -50,6 +50,9 @@
   "[toml]": {
     "editor.tabSize": 2
   },
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  },
   "[yaml]": {
     "diffEditor.ignoreTrimWhitespace": false,
     "editor.autoIndent": "keep",
@@ -64,6 +67,9 @@
   },
   "breadcrumbs.enabled": true,
   "chat.agent.maxRequests": 50,
+  "chat.agentSkillsLocations": {
+    "~/.claude/skills": false
+  },
   "chat.checkpoints.enabled": false,
   "chat.customAgentInSubagent.enabled": true,
   "chat.editing.confirmEditRequestRemoval": false,
@@ -438,9 +444,6 @@
     "blade": "html",
     "twig": "html"
   },
-  "[xml]": {
-    "editor.defaultFormatter": "DotJoshJohnson.xml"
-  },
   "errorLens.border": ["0.5px solid", "0.5px dotted", "0.5px dotted", "0.5px dotted"],
   "errorLens.codeLensEnabled": false,
   "errorLens.delay": 300,
@@ -698,8 +701,14 @@
   "keyboard.dispatch": "code",
   "lintRunner.targets": [
     {
-      "name": "Shell",
       "filePatterns": ["*.sh"],
+      "fixers": [
+        {
+          "args": ["-w", "${file}"],
+          "command": "shfmt",
+          "name": "shfmt"
+        }
+      ],
       "linters": [
         {
           "args": ["-x", "--format", "json", "${file}"],
@@ -709,16 +718,9 @@
           "run": "onSave"
         }
       ],
-      "fixers": [
-        {
-          "name": "shfmt",
-          "command": "shfmt",
-          "args": ["-w", "${file}"]
-        }
-      ]
+      "name": "Shell"
     },
     {
-      "name": "Dockerfile",
       "filePatterns": ["Dockerfile", "Dockerfile.*"],
       "linters": [
         {
@@ -728,11 +730,24 @@
           "parser": "json",
           "run": "onOpen"
         }
-      ]
+      ],
+      "name": "Dockerfile"
     },
     {
-      "name": "Markdown",
       "filePatterns": ["*.md"],
+      "fixers": [
+        {
+          "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"],
+          "command": "markdownlint",
+          "name": "Markdown Lint"
+        },
+        {
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "command": "prettier",
+          "enabled": false,
+          "name": "Prettier"
+        }
+      ],
       "linters": [
         {
           "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--json", "${file}"],
@@ -742,23 +757,18 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
-        {
-          "name": "Markdown Lint",
-          "command": "markdownlint",
-          "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"]
-        },
-        {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "enabled": false
-        }
-      ]
+      "name": "Markdown"
     },
     {
-      "name": "YAML",
       "filePatterns": ["*.yml", "*.yaml"],
+      "fixers": [
+        {
+          "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"],
+          "command": "yamlfmt",
+          "name": "YAML Format",
+          "run": "onSave"
+        }
+      ],
       "linters": [
         {
           "args": ["--format", "parsable", "--config-file", "~/.config/yamllint/config", "${file}"],
@@ -768,17 +778,9 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
-        {
-          "name": "YAML Format",
-          "command": "yamlfmt",
-          "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"],
-          "run": "onSave"
-        }
-      ]
+      "name": "YAML"
     },
     {
-      "name": "Ansible",
       "filePatterns": [
         "ansible/**/*.yml",
         "roles/**/tasks/*.yml",
@@ -796,11 +798,23 @@
           "parser": "ansible-lint",
           "run": "onSave"
         }
-      ]
+      ],
+      "name": "Ansible"
     },
     {
-      "name": "Python",
       "filePatterns": ["*.py"],
+      "fixers": [
+        {
+          "args": ["check", "--fix", "--config=~/.config/ruff/pyproject.toml", "${file}"],
+          "command": "ruff",
+          "name": "Ruff Fix"
+        },
+        {
+          "args": ["format", "--config=~/.config/ruff/pyproject.toml", "${file}"],
+          "command": "ruff",
+          "name": "Ruff Format"
+        }
+      ],
       "linters": [
         {
           "args": [
@@ -816,22 +830,17 @@
           "run": "onSave"
         }
       ],
-      "fixers": [
-        {
-          "name": "Ruff Fix",
-          "command": "ruff",
-          "args": ["check", "--fix", "--config=~/.config/ruff/pyproject.toml", "${file}"]
-        },
-        {
-          "name": "Ruff Format",
-          "command": "ruff",
-          "args": ["format", "--config=~/.config/ruff/pyproject.toml", "${file}"]
-        }
-      ]
+      "name": "Python"
     },
     {
-      "name": "Dotenv",
       "filePatterns": [".env", ".env.*"],
+      "fixers": [
+        {
+          "args": ["--plain", "fix", "--no-backup", "${file}"],
+          "command": "dotenv-linter",
+          "name": "Dotenv Linter"
+        }
+      ],
       "linters": [
         {
           "args": ["--plain", "check", "--skip-updates", "${file}"],
@@ -841,28 +850,28 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
-        {
-          "name": "Dotenv Linter",
-          "command": "dotenv-linter",
-          "args": ["--plain", "fix", "--no-backup", "${file}"]
-        }
-      ]
+      "name": "Dotenv"
     },
     {
-      "name": "INI",
       "filePatterns": ["*.ini", "*.cfg", ".editorconfig", ".gitconfig"],
       "fixers": [
         {
-          "name": "inifmt",
+          "args": ["--write", "${file}"],
           "command": "inifmt",
-          "args": ["--write", "${file}"]
+          "name": "inifmt"
         }
-      ]
+      ],
+      "name": "INI"
     },
     {
-      "name": "Lua",
       "filePatterns": ["*.lua"],
+      "fixers": [
+        {
+          "args": ["--config-path", "~/.config/stylua/stylua.toml", "${file}"],
+          "command": "stylua",
+          "name": "StyLua"
+        }
+      ],
       "linters": [
         {
           "args": [
@@ -879,22 +888,15 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
-        {
-          "name": "StyLua",
-          "command": "stylua",
-          "args": ["--config-path", "~/.config/stylua/stylua.toml", "${file}"]
-        }
-      ]
+      "name": "Lua"
     },
     {
-      "name": "TOML",
       "filePatterns": ["*.toml"],
-      "preCommands": [
+      "fixers": [
         {
-          "name": "Taplo",
+          "args": ["fmt", "--config", "~/.config/taplo/taplo.toml", "${file}"],
           "command": "taplo",
-          "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"]
+          "name": "Taplo"
         }
       ],
       "linters": [
@@ -906,39 +908,52 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
+      "name": "TOML",
+      "preCommands": [
         {
-          "name": "Taplo",
+          "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
           "command": "taplo",
-          "args": ["fmt", "--config", "~/.config/taplo/taplo.toml", "${file}"]
+          "name": "Taplo"
         }
       ]
     },
     {
-      "name": "Go",
       "filePatterns": ["*.go"],
       "fixers": [
         {
-          "name": "gofmt",
+          "args": ["-w", "${file}"],
           "command": "gofmt",
-          "args": ["-w", "${file}"]
+          "name": "gofmt"
         }
-      ]
+      ],
+      "name": "Go"
     },
     {
-      "name": "Fish",
       "filePatterns": ["*.fish"],
       "fixers": [
         {
-          "name": "fish_indent",
+          "args": ["-w", "${file}"],
           "command": "fish_indent",
-          "args": ["-w", "${file}"]
+          "name": "fish_indent"
         }
-      ]
+      ],
+      "name": "Fish"
     },
     {
-      "name": "JavaScript/TypeScript/Vue",
       "filePatterns": ["*.js", "*.ts", "*.jsx", "*.tsx", "*.vue"],
+      "fixers": [
+        {
+          "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"],
+          "command": "eslint",
+          "name": "ESLint"
+        },
+        {
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "command": "prettier",
+          "enabled": false,
+          "name": "Prettier"
+        }
+      ],
       "linters": [
         {
           "args": ["--config", "~/.config/eslint/eslint.config.js", "--format", "json", "${file}"],
@@ -948,23 +963,23 @@
           "run": "onSave"
         }
       ],
-      "fixers": [
-        {
-          "name": "ESLint",
-          "command": "eslint",
-          "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"]
-        },
-        {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "enabled": false
-        }
-      ]
+      "name": "JavaScript/TypeScript/Vue"
     },
     {
-      "name": "Styles",
       "filePatterns": ["*.css", "*.scss", "*.less"],
+      "fixers": [
+        {
+          "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"],
+          "command": "stylelint",
+          "name": "Style Lint"
+        },
+        {
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "command": "prettier",
+          "enabled": false,
+          "name": "Prettier"
+        }
+      ],
       "linters": [
         {
           "args": ["--config", "~/.stylelintrc.json", "--formatter", "json", "${file}"],
@@ -974,23 +989,17 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
-        {
-          "name": "Style Lint",
-          "command": "stylelint",
-          "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"]
-        },
-        {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "enabled": false
-        }
-      ]
+      "name": "Styles"
     },
     {
-      "name": "HTML",
       "filePatterns": ["*.html"],
+      "fixers": [
+        {
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "command": "prettier",
+          "name": "Prettier"
+        }
+      ],
       "linters": [
         {
           "args": [
@@ -1013,17 +1022,17 @@
           "run": "onSave"
         }
       ],
-      "fixers": [
-        {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"]
-        }
-      ]
+      "name": "HTML"
     },
     {
-      "name": "SQL",
       "filePatterns": ["*.sql"],
+      "fixers": [
+        {
+          "args": ["fix", "--config", "~/.sqlfluff", "--dialect", "mysql", "${file}"],
+          "command": "sqlfluff",
+          "name": "Sql Fluff"
+        }
+      ],
       "linters": [
         {
           "args": [
@@ -1042,16 +1051,9 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
-        {
-          "name": "Sql Fluff",
-          "command": "sqlfluff",
-          "args": ["fix", "--config", "~/.sqlfluff", "--dialect", "mysql", "${file}"]
-        }
-      ]
+      "name": "SQL"
     },
     {
-      "name": "Make",
       "filePatterns": ["Makefile", "*.mk"],
       "linters": [
         {
@@ -1061,21 +1063,22 @@
           "parser": "json",
           "run": "onOpen"
         }
-      ]
+      ],
+      "name": "Make"
     },
     {
-      "name": "Nginx",
       "filePatterns": [
         "nginx.conf",
         "**/nginx/**/*.conf",
         "**/sites-available/*",
         "**/sites-enabled/*"
       ],
-      "preCommands": [
+      "fixers": [
         {
-          "name": "Nginx Test",
-          "command": "nginx",
-          "args": ["-t", "-c", "${file}"]
+          "args": ["-s", "4", "-i", "${file}"],
+          "command": "nginxbeautifier",
+          "name": "Nginx Beautifier",
+          "run": "onSave"
         }
       ],
       "linters": [
@@ -1094,25 +1097,17 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
+      "name": "Nginx",
+      "preCommands": [
         {
-          "name": "Nginx Beautifier",
-          "command": "nginxbeautifier",
-          "args": ["-s", "4", "-i", "${file}"],
-          "run": "onSave"
+          "args": ["-t", "-c", "${file}"],
+          "command": "nginx",
+          "name": "Nginx Test"
         }
       ]
     },
     {
-      "name": "XML",
       "filePatterns": ["*.xml", "*.xsd", "*.xsl", "*.xslt"],
-      "preCommands": [
-        {
-          "name": "XML Validate",
-          "command": "xmllint",
-          "args": ["--nonet", "--noout", "${file}"]
-        }
-      ],
       "linters": [
         {
           "args": ["--nonet", "--noout", "${file}"],
@@ -1121,11 +1116,26 @@
           "parser": "xmllint",
           "run": "onSave"
         }
+      ],
+      "name": "XML",
+      "preCommands": [
+        {
+          "args": ["--nonet", "--noout", "${file}"],
+          "command": "xmllint",
+          "name": "XML Validate"
+        }
       ]
     },
     {
-      "name": "JSON",
       "filePatterns": ["*.json", "*.jsonc"],
+      "fixers": [
+        {
+          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+          "command": "prettier",
+          "name": "Prettier",
+          "run": "onSave"
+        }
+      ],
       "linters": [
         {
           "args": ["-f", "~/.jsonlintrc", "${file}"],
@@ -1135,17 +1145,9 @@
           "run": "onOpen"
         }
       ],
-      "fixers": [
-        {
-          "name": "Prettier",
-          "command": "prettier",
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "run": "onSave"
-        }
-      ]
+      "name": "JSON"
     },
     {
-      "name": "GitHub Actions",
       "filePatterns": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
       "linters": [
         {
@@ -1155,32 +1157,53 @@
           "parser": "json",
           "run": "onSave"
         }
-      ]
+      ],
+      "name": "GitHub Actions"
     },
     {
-      "name": "Blade",
       "filePatterns": ["*.blade.php"],
       "fixers": [
         {
-          "name": "Blade Formatter",
-          "command": "blade-formatter",
           "args": [
             "--write",
             "--config",
             "~/.config/blade-formatter/.bladeformatterrc.json",
             "${file}"
-          ]
+          ],
+          "command": "blade-formatter",
+          "name": "Blade Formatter"
         }
-      ]
+      ],
+      "name": "Blade"
     },
     {
-      "name": "PHP",
       "filePatterns": ["*.php"],
-      "preCommands": [
+      "fixers": [
         {
-          "name": "PHP Lint",
-          "command": "php",
-          "args": ["-l", "${file}"]
+          "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"],
+          "command": "~/.config/composer/vendor/bin/php-cs-fixer",
+          "name": "PHP CS Fixer"
+        },
+        {
+          "args": [
+            "process",
+            "--config",
+            "~/.config/rector/rector.php",
+            "--ansi",
+            "--no-progress-bar",
+            "--clear-cache",
+            "--no-diffs",
+            "${file}"
+          ],
+          "command": "~/.config/composer/vendor/bin/rector",
+          "name": "Rector",
+          "run": "manual"
+        },
+        {
+          "args": ["${file}"],
+          "command": "~/.config/composer/vendor/bin/phpcbf",
+          "enabled": false,
+          "name": "PHP Code Beautifier and Fixer"
         }
       ],
       "linters": [
@@ -1224,32 +1247,12 @@
           "run": "manual"
         }
       ],
-      "fixers": [
+      "name": "PHP",
+      "preCommands": [
         {
-          "name": "PHP CS Fixer",
-          "command": "~/.config/composer/vendor/bin/php-cs-fixer",
-          "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"]
-        },
-        {
-          "name": "Rector",
-          "command": "~/.config/composer/vendor/bin/rector",
-          "args": [
-            "process",
-            "--config",
-            "~/.config/rector/rector.php",
-            "--ansi",
-            "--no-progress-bar",
-            "--clear-cache",
-            "--no-diffs",
-            "${file}"
-          ],
-          "run": "manual"
-        },
-        {
-          "name": "PHP Code Beautifier and Fixer",
-          "command": "~/.config/composer/vendor/bin/phpcbf",
-          "args": ["${file}"],
-          "enabled": false
+          "args": ["-l", "${file}"],
+          "command": "php",
+          "name": "PHP Lint"
         }
       ]
     }
@@ -1373,8 +1376,5 @@
   "workbench.tree.indent": 15,
   "yaml.format.enable": true,
   "yaml.schemaStore.enable": true,
-  "yaml.validate": true,
-  "chat.agentSkillsLocations": {
-    "~/.claude/skills": false
-  }
+  "yaml.validate": true
 }
