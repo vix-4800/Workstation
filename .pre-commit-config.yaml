@@ -9,6 +9,7 @@ repos:
         exclude: roles/desktop/files/waypaper/config.ini
       - id: check-yaml
       - id: check-json
+        exclude: 'roles/editor/files/code/User/(keybindings|tasks|settings)\.json'
       - id: check-toml
       - id: check-merge-conflict
       - id: check-case-conflict
@@ -37,8 +38,6 @@ repos:
     hooks:
       - id: yamllint
         args:
-          - -d
-          - relaxed
           - --config-file
           - roles/development/files/tools/yaml/yamllint.yml
 
