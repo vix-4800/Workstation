@@ -1380,6 +1380,9 @@
   "workbench.statusBar.visible": true,
   "workbench.tree.indent": 15,
   "yaml.format.enable": true,
+"yaml.schemas": {
+    "https://www.schemastore.org/yamllint.json": "**/yamllint.yml"
+  },
   "yaml.schemaStore.enable": true,
   "yaml.validate": true
 }
