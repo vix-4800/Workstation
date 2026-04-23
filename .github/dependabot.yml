@@ -1,8 +1,13 @@
+---
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
+      interval: weekly
     commit-message:
-      prefix: "ci"
+      prefix: 'ci(deps): update GitHub Actions workflows'
+      include: scope
+    labels:
+      - dependencies
+      - github-actions
