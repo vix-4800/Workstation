@@ -1186,20 +1186,6 @@
       "linters": [
         {
           "args": [
-            "analyse",
-            "--error-format=json",
-            "--no-progress",
-            "--memory-limit=2G",
-            "--configuration=${workspaceFolder}/phpstan.neon",
-            "${file}"
-          ],
-          "command": "~/.config/composer/vendor/bin/phpstan",
-          "name": "PHPStan",
-          "parser": "json",
-          "run": "manual"
-        },
-        {
-          "args": [
             "--standard=~/.config/phpcs/phpcs.xml",
             "--report=json",
             "--ignore=*/vendor/*",
@@ -1221,9 +1207,29 @@
           "parser": "json",
           "run": "onSave",
           "showDiagnosticCodes": false
+        },
+        {
+          "args": [
+            "analyse",
+            "--error-format=json",
+            "--no-progress",
+            "--memory-limit=2G",
+            "--configuration=${workspaceFolder}/phpstan.neon",
+            "--autoload-file=${workspaceFolder}/phpstan-bootstrap.php",
+            "${file}"
+          ],
+          "command": "~/.config/composer/vendor/bin/phpstan",
+          "name": "PHPStan",
+          "parser": "json",
+          "run": "manual"
         }
       ],
       "fixers": [
+        {
+          "name": "PHP CS Fixer",
+          "command": "~/.config/composer/vendor/bin/php-cs-fixer",
+          "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"]
+        },
         {
           "name": "Rector",
           "command": "~/.config/composer/vendor/bin/rector",
@@ -1244,11 +1250,6 @@
           "command": "~/.config/composer/vendor/bin/phpcbf",
           "args": ["${file}"],
           "enabled": false
-        },
-        {
-          "name": "PHP CS Fixer",
-          "command": "~/.config/composer/vendor/bin/php-cs-fixer",
-          "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"]
         }
       ]
     }
