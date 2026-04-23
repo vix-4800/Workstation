@@ -13,6 +13,7 @@ rules:
     indent-sequences: true
     check-multi-line-strings: false
 
+  comments-indentation: true
   comments:
     require-starting-space: true
     min-spaces-from-content: 1
@@ -70,3 +71,7 @@ rules:
     quote-type: single
     required: only-when-needed
     check-keys: false
+
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true
