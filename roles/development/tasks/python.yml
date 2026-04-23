@@ -1,14 +1,18 @@
 ---
 - name: Install Python and pipx
   community.general.pacman:
-    name: [python, python-pipx]
+    name:
+      - python
+      - python-pipx
     state: present
   become: true
-  tags: [development, packages]
+  tags:
+    - development
+    - packages
 
 - name: Install Python tools via pipx
   community.general.pipx:
-    name: "{{ item }}"
+    name: '{{ item }}'
     state: present
   loop:
     - pre-commit
@@ -17,4 +21,6 @@
     - ansible-lint
     - sqlfluff
   become: false
-  tags: [development, packages]
+  tags:
+    - development
+    - packages

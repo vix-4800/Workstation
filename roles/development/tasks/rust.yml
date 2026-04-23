@@ -1,28 +1,37 @@
 ---
 - name: Install Rust toolchain
   community.general.pacman:
-    name: [rust]
+    name:
+      - rust
     state: present
   become: true
-  tags: [development, packages]
+  tags:
+    - development
+    - packages
 
 - name: Install just-lsp via Cargo
   ansible.builtin.command:
     cmd: cargo install just-lsp
-    creates: "{{ home }}/.cargo/bin/just-lsp"
+    creates: '{{ home }}/.cargo/bin/just-lsp'
   become: false
-  tags: [development, packages]
+  tags:
+    - development
+    - packages
 
 - name: Install nginx-lint via Cargo
   ansible.builtin.command:
     cmd: cargo install --git https://github.com/walf443/nginx-lint --tag v0.10.5 nginx-lint
-    creates: "{{ home }}/.cargo/bin/nginx-lint"
+    creates: '{{ home }}/.cargo/bin/nginx-lint'
   become: false
-  tags: [development, packages]
+  tags:
+    - development
+    - packages
 
 - name: Install dotenv-linter via Cargo
   ansible.builtin.command:
     cmd: cargo install dotenv-linter --version 4.0.0
-    creates: "{{ home }}/.cargo/bin/dotenv-linter"
+    creates: '{{ home }}/.cargo/bin/dotenv-linter'
   become: false
-  tags: [development, packages]
+  tags:
+    - development
+    - packages
