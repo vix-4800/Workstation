@@ -9,7 +9,7 @@ repos:
         exclude: roles/desktop/files/waypaper/config.ini
       - id: check-yaml
       - id: check-json
-        exclude: 'roles/editor/files/code/User/(keybindings|tasks|settings)\.json'
+        exclude: roles/editor/files/code/User/(keybindings|tasks|settings)\.json
       - id: check-toml
       - id: check-merge-conflict
       - id: check-case-conflict
