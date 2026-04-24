@@ -1,7 +1,7 @@
 interface:
-  display_name: 'Backend Patterns'
-  short_description: 'Controller, service, repository, and transaction guidance'
+  display_name: Backend Patterns
+  short_description: Controller, service, repository, and transaction guidance
   brand_color: '#0ea5e9'
-  default_prompt: 'Review this backend change for controller boundaries, transactions, data access, and service design.'
+  default_prompt: Review this backend change for controller boundaries, transactions, data access, and service design.
 policy:
   allow_implicit_invocation: true

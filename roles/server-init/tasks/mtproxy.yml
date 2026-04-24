@@ -43,8 +43,8 @@
 
 - name: Print MTProxy connection link
   ansible.builtin.debug:
-    msg: 'https://t.me/proxy?server={{ ansible_default_ipv4.address }}&port={{ server_mtproxy_port }}&secret={{ mtg_secret.stdout
-      | trim }}'
+    msg: >-
+      https://t.me/proxy?server={{ ansible_default_ipv4.address }}&port={{ server_mtproxy_port }}&secret={{ mtg_secret.stdout | trim }}
   tags:
     - server-init
     - mtproxy

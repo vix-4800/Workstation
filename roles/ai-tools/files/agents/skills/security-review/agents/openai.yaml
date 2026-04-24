@@ -1,7 +1,7 @@
 interface:
-  display_name: 'Security Review'
-  short_description: 'PHP-first security checklist for web and API changes'
+  display_name: Security Review
+  short_description: PHP-first security checklist for web and API changes
   brand_color: '#ef4444'
-  default_prompt: 'Review this change for input validation, authorization, secrets handling, uploads, and outbound HTTP safety.'
+  default_prompt: Review this change for input validation, authorization, secrets handling, uploads, and outbound HTTP safety.
 policy:
   allow_implicit_invocation: true
