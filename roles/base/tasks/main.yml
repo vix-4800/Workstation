@@ -32,7 +32,7 @@
 - name: Set hostname
   ansible.builtin.hostname:
     name: '{{ hostname }}'
-    use: systemd
+    use: generic
   become: true
   tags:
     - base

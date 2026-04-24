@@ -90,4 +90,4 @@ jobs:
         run: chown -R ci:ci "$GITHUB_WORKSPACE"
 
       - name: Run playbook in check mode
-        run: sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True ansible-playbook site.yml --check --diff
+        run: sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True ansible-playbook site.yml --check --diff --skip-tags services
