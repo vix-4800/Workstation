@@ -144,7 +144,7 @@
   when: >
     ai_tools_github_mcp_installed_version.rc != 0 or ai_tools_github_mcp_server_version not in (ai_tools_github_mcp_installed_version.stdout
     | default(''))
-  notify: extract github-mcp-server
+  notify: Extract github-mcp-server
   tags:
     - ai-tools
     - packages

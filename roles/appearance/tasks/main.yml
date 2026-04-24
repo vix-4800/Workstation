@@ -143,7 +143,7 @@
     mode: '0644'
     remote_src: true
   become: true
-  notify: rebuild initramfs
+  notify: Rebuild initramfs
   tags:
     - appearance
     - system
@@ -165,7 +165,7 @@
   become: true
   when: appearance_plymouth_current_theme.stdout | trim != 'catppuccin-mocha'
   changed_when: true
-  notify: rebuild initramfs
+  notify: Rebuild initramfs
   tags:
     - appearance
     - system
@@ -176,7 +176,7 @@
     regexp: ^(HOOKS=\([^)]*\budev\b)(?! plymouth)
     replace: \1 plymouth
   become: true
-  notify: rebuild initramfs
+  notify: Rebuild initramfs
   tags:
     - appearance
     - system
@@ -187,7 +187,7 @@
     regexp: ^(GRUB_CMDLINE_LINUX_DEFAULT="(?!.*\bsplash\b)[^"]*)"$'
     replace: \1 splash"
   become: true
-  notify: regenerate grub config
+  notify: Regenerate grub config
   tags:
     - appearance
     - system
