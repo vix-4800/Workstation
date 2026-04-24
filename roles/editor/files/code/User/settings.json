@@ -1456,5 +1456,16 @@
     "https://www.schemastore.org/yamllint.json": "**/yamllint.yml"
   },
   "yaml.schemaStore.enable": true,
-  "yaml.validate": true
+  "yaml.validate": true,
+  "mago.binPath": "mago",
+  "mago.configFile": "mago.toml",
+  "mago.enableAnalyze": true,
+  "mago.enableFormat": true,
+  "mago.enableGuard": true,
+  "mago.enableLint": true,
+  "mago.phpVersion": "8.4",
+  "mago.formatOnSave": true,
+  "mago.runGuardOnSave": false,
+  "mago.scanOnOpen": false,
+  "mago.threads": 4
 }
