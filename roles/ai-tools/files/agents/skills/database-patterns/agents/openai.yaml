@@ -1,7 +1,8 @@
+---
 interface:
-  display_name: 'Database Patterns'
-  short_description: 'Schema, migration, index, query, and ORM guidance'
+  display_name: Database Patterns
+  short_description: Schema, migration, index, query, and ORM guidance
   brand_color: '#14b8a6'
-  default_prompt: 'Review this database change for schema design, migration safety, indexes, and query behaviour.'
+  default_prompt: Review this database change for schema design, migration safety, indexes, and query behaviour.
 policy:
   allow_implicit_invocation: true

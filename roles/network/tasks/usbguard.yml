@@ -12,7 +12,7 @@
   ansible.builtin.assert:
     that:
       - network_usbguard_mode in ['audit', 'enforce']
-    fail_msg: "network_usbguard_mode must be either 'audit' or 'enforce'"
+    fail_msg: network_usbguard_mode must be either 'audit' or 'enforce'
   tags:
     - network
     - config
@@ -21,7 +21,7 @@
   ansible.builtin.assert:
     that:
       - network_usbguard_rules | length > 0
-    fail_msg: "network_usbguard_rules must be set in host_vars when network_usbguard_mode is 'enforce'"
+    fail_msg: network_usbguard_rules must be set in host_vars when network_usbguard_mode is 'enforce'
   when: network_usbguard_mode == 'enforce'
   tags:
     - network

@@ -1,7 +1,8 @@
+---
 interface:
-  display_name: 'Coding Standards'
-  short_description: 'Naming, structure, and maintainability guidance'
+  display_name: Coding Standards
+  short_description: Naming, structure, and maintainability guidance
   brand_color: '#8b5cf6'
-  default_prompt: 'Review this code for naming, maintainability, and project coding standard violations.'
+  default_prompt: Review this code for naming, maintainability, and project coding standard violations.
 policy:
   allow_implicit_invocation: true

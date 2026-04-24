@@ -1,7 +1,8 @@
+---
 interface:
-  display_name: 'Code Review'
-  short_description: 'Diff-first review workflow with severity categories'
+  display_name: Code Review
+  short_description: Diff-first review workflow with severity categories
   brand_color: '#f59e0b'
-  default_prompt: 'Review this change for correctness, security, architecture, tests, and requirements compliance.'
+  default_prompt: Review this change for correctness, security, architecture, tests, and requirements compliance.
 policy:
   allow_implicit_invocation: true

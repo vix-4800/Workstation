@@ -1,7 +1,9 @@
+---
 interface:
-  display_name: 'Obsidian'
-  short_description: 'Vault structure, templates, frontmatter, wikilinks, and note-writing conventions'
+  display_name: Obsidian
+  short_description: Vault structure, templates, frontmatter, wikilinks, and note-writing conventions
   brand_color: '#7c3aed'
-  default_prompt: 'Create or update a note in the Obsidian vault following the correct folder, template, frontmatter, and writing style.'
+  default_prompt: Create or update a note in the Obsidian vault following the correct folder, template, frontmatter, and writing
+    style.
 policy:
   allow_implicit_invocation: true

@@ -18,15 +18,15 @@
     - name: Allow wheel group to sudo without password
       ansible.builtin.lineinfile:
         path: /etc/sudoers
-        regexp: '^%wheel'
+        regexp: ^%wheel
         line: '%wheel ALL=(ALL) NOPASSWD: ALL'
         validate: visudo -cf %s
 
     - name: Ensure config directories exist
       ansible.builtin.file:
-        path: "{{ item }}"
+        path: '{{ item }}'
         state: directory
-        mode: "0755"
+        mode: '0755'
         owner: molecule
       loop:
         - /home/molecule/.config

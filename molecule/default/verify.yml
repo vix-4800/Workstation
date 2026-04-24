@@ -20,30 +20,36 @@
         - fzf
         - bat
       changed_when: false
-      tags: [base, packages]
+      tags:
+        - base
+        - packages
 
     # ── base: config symlinks exist ──────────────────────────────────────────
     - name: Stat base config symlinks
       ansible.builtin.stat:
-        path: "{{ item }}"
+        path: '{{ item }}'
       register: base_links
       loop:
         - /etc/environment
-        - "{{ home }}/.config/user-dirs.dirs"
-        - "{{ home }}/.config/fontconfig"
-        - "{{ home }}/.editorconfig"
-      tags: [base, config]
+        - '{{ home }}/.config/user-dirs.dirs'
+        - '{{ home }}/.config/fontconfig'
+        - '{{ home }}/.editorconfig'
+      tags:
+        - base
+        - config
 
     - name: Assert base config symlinks are valid
       ansible.builtin.assert:
         that:
           - item.stat.exists
           - item.stat.islnk
-        fail_msg: "Expected symlink missing or invalid: {{ item.item }}"
-      loop: "{{ base_links.results }}"
+        fail_msg: 'Expected symlink missing or invalid: {{ item.item }}'
+      loop: '{{ base_links.results }}'
       loop_control:
-        label: "{{ item.item }}"
-      tags: [base, config]
+        label: '{{ item.item }}'
+      tags:
+        - base
+        - config
 
     # ── shell: packages installed ────────────────────────────────────────────
     - name: Check shell packages are installed
@@ -52,28 +58,34 @@
         - fish
         - tmux
       changed_when: false
-      tags: [shell, packages]
+      tags:
+        - shell
+        - packages
 
     # ── shell: config symlinks exist ─────────────────────────────────────────
     - name: Stat shell config symlinks
       ansible.builtin.stat:
-        path: "{{ item }}"
+        path: '{{ item }}'
       register: shell_links
       loop:
-        - "{{ home }}/.config/fish"
-        - "{{ home }}/.config/tmux"
-        - "{{ home }}/.aliases"
-        - "{{ home }}/.bash_profile"
-        - "{{ home }}/.bashrc"
-      tags: [shell, config]
+        - '{{ home }}/.config/fish'
+        - '{{ home }}/.config/tmux'
+        - '{{ home }}/.aliases'
+        - '{{ home }}/.bash_profile'
+        - '{{ home }}/.bashrc'
+      tags:
+        - shell
+        - config
 
     - name: Assert shell config symlinks are valid
       ansible.builtin.assert:
         that:
           - item.stat.exists
           - item.stat.islnk
-        fail_msg: "Expected symlink missing or invalid: {{ item.item }}"
-      loop: "{{ shell_links.results }}"
+        fail_msg: 'Expected symlink missing or invalid: {{ item.item }}'
+      loop: '{{ shell_links.results }}'
       loop_control:
-        label: "{{ item.item }}"
-      tags: [shell, config]
+        label: '{{ item.item }}'
+      tags:
+        - shell
+        - config

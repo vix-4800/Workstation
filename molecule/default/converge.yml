@@ -29,81 +29,102 @@
     # ── base: packages ──────────────────────────────────────────────────────
     - name: Install base essential packages
       community.general.pacman:
-        name: "{{ base_essential_packages }}"
+        name: '{{ base_essential_packages }}'
         state: present
       become: true
-      tags: [base, packages]
+      tags:
+        - base
+        - packages
 
     - name: Install base CLI packages
       community.general.pacman:
-        name: "{{ base_cli_packages }}"
+        name: '{{ base_cli_packages }}'
         state: present
       become: true
-      tags: [base, packages]
+      tags:
+        - base
+        - packages
 
     # ── base: config symlinks ────────────────────────────────────────────────
     - name: Deploy /etc/environment symlink
       ansible.builtin.file:
-        src: "{{ dotfiles_dir }}/roles/base/files/environment"
+        src: '{{ dotfiles_dir }}/roles/base/files/environment'
         dest: /etc/environment
         state: link
         force: true
       become: true
-      tags: [base, config]
+      tags:
+        - base
+        - config
 
     - name: Deploy user-dirs config symlink
       ansible.builtin.file:
-        src: "{{ dotfiles_dir }}/roles/base/files/user-dirs.dirs"
-        dest: "{{ home }}/.config/user-dirs.dirs"
+        src: '{{ dotfiles_dir }}/roles/base/files/user-dirs.dirs'
+        dest: '{{ home }}/.config/user-dirs.dirs'
         state: link
         force: true
       become: true
       become_user: molecule
-      tags: [base, config]
+      tags:
+        - base
+        - config
 
     - name: Deploy fontconfig symlink
       ansible.builtin.file:
-        src: "{{ dotfiles_dir }}/roles/base/files/fontconfig"
-        dest: "{{ home }}/.config/fontconfig"
+        src: '{{ dotfiles_dir }}/roles/base/files/fontconfig'
+        dest: '{{ home }}/.config/fontconfig'
         state: link
         force: true
       become: true
       become_user: molecule
-      tags: [base, config]
+      tags:
+        - base
+        - config
 
     - name: Deploy editorconfig symlink
       ansible.builtin.file:
-        src: "{{ dotfiles_dir }}/roles/base/files/.editorconfig"
-        dest: "{{ home }}/.editorconfig"
+        src: '{{ dotfiles_dir }}/roles/base/files/.editorconfig'
+        dest: '{{ home }}/.editorconfig'
         state: link
         force: true
       become: true
       become_user: molecule
-      tags: [base, config]
+      tags:
+        - base
+        - config
 
     # ── shell: packages ──────────────────────────────────────────────────────
     - name: Install shell packages
       community.general.pacman:
-        name: "{{ shell_packages }}"
+        name: '{{ shell_packages }}'
         state: present
       become: true
-      tags: [shell, packages]
+      tags:
+        - shell
+        - packages
 
     # ── shell: config symlinks ───────────────────────────────────────────────
     - name: Deploy shell config symlinks
       ansible.builtin.file:
-        src: "{{ dotfiles_dir }}/roles/shell/files/{{ item.src }}"
-        dest: "{{ item.dest }}"
+        src: '{{ dotfiles_dir }}/roles/shell/files/{{ item.src }}'
+        dest: '{{ item.dest }}'
         state: link
         force: true
       become: true
       become_user: molecule
       loop:
-        - { src: fish, dest: "{{ home }}/.config/fish" }
-        - { src: tmux, dest: "{{ home }}/.config/tmux" }
-        - { src: shell/aliases, dest: "{{ home }}/.aliases" }
-        - { src: bash/.bash_profile, dest: "{{ home }}/.bash_profile" }
-        - { src: bash/bashrc, dest: "{{ home }}/.bashrc" }
+        - src: fish
+          dest: '{{ home }}/.config/fish'
+        - src: tmux
+          dest: '{{ home }}/.config/tmux'
+        - src: shell/aliases
+          dest: '{{ home }}/.aliases'
+        - src: bash/.bash_profile
+          dest: '{{ home }}/.bash_profile'
+        - src: bash/bashrc
+          dest: '{{ home }}/.bashrc'
       loop_control:
-        label: "{{ item.src }}"
-      tags: [shell, config]
+        label: '{{ item.src }}'
+      tags:
+        - shell
+        - config
