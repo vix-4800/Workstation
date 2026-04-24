@@ -38,7 +38,7 @@ jobs:
         run: ansible-playbook site.yml --syntax-check
 
       - name: ansible-lint
-        run: ansible-lint site.yml
+        run: ansible-lint -c roles/development/files/tools/ansible/ansible-lint/.ansible-lint site.yml
 
   dry-run:
     name: Dry Run (Arch Linux)
