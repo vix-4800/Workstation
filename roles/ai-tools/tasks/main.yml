@@ -138,7 +138,7 @@
 
 - name: Download github-mcp-server binary
   ansible.builtin.get_url:
-    url: 'https://github.com/github/github-mcp-server/releases/download/v{{ ai_tools_github_mcp_server_version }}/github-mcp-server_Linux_x86_64.tar.gz'
+    url: https://github.com/github/github-mcp-server/releases/download/v{{ ai_tools_github_mcp_server_version }}/github-mcp-server_Linux_x86_64.tar.gz
     dest: /tmp/github-mcp-server_{{ ai_tools_github_mcp_server_version }}.tar.gz
     mode: '0644'
   when: >
