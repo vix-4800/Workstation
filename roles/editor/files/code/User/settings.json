@@ -447,7 +447,7 @@
   "errorLens.border": ["0.5px solid", "0.5px dotted", "0.5px dotted", "0.5px dotted"],
   "errorLens.codeLensEnabled": false,
   "errorLens.delay": 300,
-  "errorLens.enabledDiagnosticLevels": ["error", "warning", "hint"], // "error", "warning", "hint" or "info"
+  "errorLens.enabledDiagnosticLevels": ["error", "warning", "hint"],
   "errorLens.enabledInMergeConflict": false,
   "errorLens.enableOnDiffView": false,
   "errorLens.followCursor": "allLines",
