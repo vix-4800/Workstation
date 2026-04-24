@@ -7,32 +7,34 @@ profile: production
 strict: true
 
 warn_list:
-    - experimental
+  - experimental
 
 skip_list: []
 
 exclude_paths:
-    - .git/
-    - node_modules/
-    - .cache/
-    - molecule/
+  - .git/
+  - .cache/
+  - .serena/
+  - node_modules/
+  - molecule/
+  - vendor/
 
 enable_list:
-    - args
-    - empty-string-compare
-    - no-log-password
-    - no-same-owner
+  - args
+  - empty-string-compare
+  - no-log-password
+  - no-same-owner
 
 use_default_rules: true
 
 offline: false
 
 kinds:
-    - playbook: '**/playbook*.yml'
-    - playbook: '**/site.yml'
-    - tasks: '**/tasks/**/*.yml'
-    - handlers: '**/handlers/**/*.yml'
-    - vars: '**/vars/**/*.yml'
-    - vars: '**/defaults/**/*.yml'
-    - meta: '**/meta/main.yml'
-    - role: '**/roles/*/'
+  - playbook: '**/playbook*.yml'
+  - playbook: '**/site.yml'
+  - tasks: '**/tasks/**/*.yml'
+  - handlers: '**/handlers/**/*.yml'
+  - vars: '**/vars/**/*.yml'
+  - vars: '**/defaults/**/*.yml'
+  - meta: '**/meta/main.yml'
+  - role: '**/roles/*/'
