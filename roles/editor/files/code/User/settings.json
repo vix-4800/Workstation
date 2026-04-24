@@ -700,6 +700,17 @@
   "json.validate.enable": true,
   "keyboard.dispatch": "code",
   "lintRunner.debounceMs": 300,
+  "lintRunner.ignorePatterns": [
+    "vendor/**",
+    "*.min.js",
+    "dist/**",
+    "node_modules/**",
+    "storage/framework/views/**",
+    "logs/**",
+    "cache/**",
+    "runtime/**",
+    "venv/**"
+  ],
   "lintRunner.respectGitignore": true,
   "lintRunner.targets": [
     {
@@ -1439,8 +1450,8 @@
   "workbench.tree.indent": 15,
   "yaml.format.enable": true,
   "yaml.schemas": {
-    "https://www.schemastore.org/yamllint.json": "**/yamllint.yml",
-    "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible-lint-config.json": "**/.ansible-lint"
+    "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible-lint-config.json": "**/.ansible-lint",
+    "https://www.schemastore.org/yamllint.json": "**/yamllint.yml"
   },
   "yaml.schemaStore.enable": true,
   "yaml.validate": true
