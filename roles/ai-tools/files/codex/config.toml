@@ -1,4 +1,4 @@
-model = "gpt-5.4"
+model = "gpt-5.5"
 web_search = "cached"
 personality = "pragmatic"
 model_reasoning_effort = "high"
