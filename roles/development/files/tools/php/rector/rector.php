@@ -21,9 +21,7 @@ use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
-use Rector\CodeQuality\Rector\NullCoalesce\CoalesceToTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
-use Rector\CodeQuality\Rector\Ternary\RemoveUselessTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
 use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
@@ -88,6 +86,7 @@ use RectorLaravel\Rector\MethodCall\ValidationRuleArrayStringValueToArrayRector;
 use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
 use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use RectorLaravel\Set\LaravelSetProvider;
+use Rector\ValueObject\PhpVersion;
 
 $laravelRulesEnabled = false;
 $yii2RulesEnabled = false;
@@ -156,6 +155,7 @@ $config = RectorConfig::configure()
         'bootstrap/cache',
     ])
     ->withPhpSets(php84: true)
+    ->withPhpVersion(PhpVersion::PHP_84)
     ->withTypeCoverageLevel(5)
     ->withDeadCodeLevel(5)
     ->withCodeQualityLevel(5)
@@ -218,7 +218,6 @@ $rules = [
     SimplifyTautologyTernaryRector::class, // Simplifies tautological ternary expressions
     AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
     AddOverrideAttributeToOverriddenPropertiesRector::class, // Adds #[Override] attribute to overridden properties
-    DeprecatedAnnotationToDeprecatedAttributeRector::class, // Converts @deprecated annotations to #[Deprecated] attributes
     ConstAndTraitDeprecatedAttributeRector::class, // Adds #[Deprecated] attribute to deprecated constants and traits
 
     // Arrays
@@ -234,12 +233,7 @@ $rules = [
     InlineIfToExplicitIfRector::class,
     LogicalToBooleanRector::class,
 
-    ExplicitNullableParamTypeRector::class,
-
     // Ternary & coalescing
-    RemoveUselessTernaryRector::class, // Removes ternary expressions that are redundant or do not impact logic
-    CoalesceToTernaryRector::class, // Converts ?? to ternary ?: where appropriate for code clarity
-
     // Strict types
     SafeDeclareStrictTypesRector::class, // Adds declare(strict_types=1) only when the file is already type-safe
 

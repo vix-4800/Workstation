@@ -739,12 +739,20 @@
       "filePatterns": ["Dockerfile", "Dockerfile.*"],
       "linters": [
         {
-          "args": ["--format", "tty", "${file}", "--config", "~/.config/hadolint.yaml"],
+          "args": [
+            "--no-color",
+            "--format",
+            "tty",
+            "--config",
+            "~/.config/hadolint.yaml",
+            "${file}"
+          ],
           "command": "hadolint",
           "name": "HadoLint",
           "parser": {
             "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+) (?<code>\\S+) (?<severity>\\w+): (?<message>.+)$"
+            "output": "stdout",
+            "pattern": "^(?:hadolint:)?(?:.+?):(?<line>\\d+):? (?<code>\\S+) (?<severity>\\w+): (?<message>.+)$"
           }
         }
       ],
@@ -1150,14 +1158,7 @@
           }
         }
       ],
-      "name": "Nginx",
-      "preCommands": [
-        {
-          "args": ["-t", "-c", "${file}"],
-          "command": "nginx",
-          "name": "Nginx Test"
-        }
-      ]
+      "name": "Nginx"
     },
     {
       "filePatterns": ["*.xml", "*.xsd", "*.xsl", "*.xslt"],
@@ -1313,7 +1314,8 @@
             "defaultSeverity": "error",
             "flags": "gm",
             "pattern": "^.+?:(?<line>\\d+):(?<message>.+?)(?: \\[identifier=(?<code>[^\\]]+)\\])?$"
-          }
+          },
+          "run": "manual"
         }
       ],
       "name": "PHP",
