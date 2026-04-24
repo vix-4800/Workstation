@@ -47,6 +47,7 @@
     creates: /opt/zapret2/init.d/sysv/zapret2
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - network
     - packages
@@ -60,6 +61,7 @@
     mode: '0755'
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - network
     - config
@@ -73,6 +75,7 @@
     mode: '0644'
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - network
     - config
@@ -86,6 +89,7 @@
     mode: '0755'
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - network
     - config
@@ -100,6 +104,7 @@
     remote_src: true
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - network
     - config
@@ -112,6 +117,7 @@
     daemon_reload: true
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - network
     - services
