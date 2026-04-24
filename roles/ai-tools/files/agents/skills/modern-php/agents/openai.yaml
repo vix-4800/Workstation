@@ -1,7 +1,7 @@
 interface:
-  display_name: 'Modern PHP'
-  short_description: 'Strict modern PHP guidance for implementation and review'
+  display_name: Modern PHP
+  short_description: Strict modern PHP guidance for implementation and review
   brand_color: '#4f46e5'
-  default_prompt: 'Implement or review this PHP code using strict types, modern language features, and the project toolchain.'
+  default_prompt: Implement or review this PHP code using strict types, modern language features, and the project toolchain.
 policy:
   allow_implicit_invocation: true
