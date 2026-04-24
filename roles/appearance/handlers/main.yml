@@ -1,11 +1,11 @@
 ---
-- name: rebuild initramfs
+- name: Rebuild initramfs
   ansible.builtin.command:
     cmd: mkinitcpio -P
   become: true
   changed_when: true
 
-- name: regenerate grub config
+- name: Regenerate grub config
   ansible.builtin.command:
     cmd: grub-mkconfig -o /boot/grub/grub.cfg
   become: true

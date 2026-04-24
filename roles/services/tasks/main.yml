@@ -45,7 +45,7 @@
   loop: '{{ services_unit_files.files }}'
   loop_control:
     label: '{{ item.path | basename }}'
-  notify: reload systemd user
+  notify: Reload systemd user
   tags:
     - services
     - config

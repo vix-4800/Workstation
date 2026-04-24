@@ -5,7 +5,7 @@
     regexp: ^#?{{ base_locale }}
     line: '{{ base_locale }} UTF-8'
   become: true
-  notify: generate locale
+  notify: Generate locale
   tags:
     - base
     - system
