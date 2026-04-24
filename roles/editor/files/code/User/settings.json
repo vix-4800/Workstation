@@ -1313,7 +1313,8 @@
             "defaultSeverity": "error",
             "flags": "gm",
             "pattern": "^.+?:(?<line>\\d+):(?<message>.+?)(?: \\[identifier=(?<code>[^\\]]+)\\])?$"
-          }
+          },
+          "run": "manual"
         }
       ],
       "name": "PHP",
