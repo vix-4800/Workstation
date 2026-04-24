@@ -699,6 +699,8 @@
   ],
   "json.validate.enable": true,
   "keyboard.dispatch": "code",
+  "lintRunner.debounceMs": 300,
+  "lintRunner.respectGitignore": true,
   "lintRunner.targets": [
     {
       "filePatterns": ["*.sh"],
@@ -711,11 +713,13 @@
       ],
       "linters": [
         {
-          "args": ["-x", "--format", "json", "${file}"],
+          "args": ["-x", "--format", "gcc", "${file}"],
           "command": "shellcheck",
           "name": "Shell Check",
-          "parser": "json",
-          "run": "onSave"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>\\w+): (?<message>.+?) \\[(?<code>SC\\d+)\\]$"
+          }
         }
       ],
       "name": "Shell"
@@ -724,11 +728,13 @@
       "filePatterns": ["Dockerfile", "Dockerfile.*"],
       "linters": [
         {
-          "args": ["--format", "json", "${file}", "--config", "~/.config/hadolint.yaml"],
+          "args": ["--format", "tty", "${file}", "--config", "~/.config/hadolint.yaml"],
           "command": "hadolint",
           "name": "HadoLint",
-          "parser": "json",
-          "run": "onOpen"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+) (?<code>\\S+) (?<severity>\\w+): (?<message>.+)$"
+          }
         }
       ],
       "name": "Dockerfile"
@@ -750,11 +756,13 @@
       ],
       "linters": [
         {
-          "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--json", "${file}"],
+          "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "${file}"],
           "command": "markdownlint",
           "name": "Markdown Lint",
-          "parser": "json",
-          "run": "onOpen"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+) (?<severity>\\w+) (?<code>[A-Z0-9]+)(?:/\\S+)? (?<message>.+)$"
+          }
         }
       ],
       "name": "Markdown"
@@ -774,8 +782,10 @@
           "args": ["--format", "parsable", "--config-file", "~/.config/yamllint/config", "${file}"],
           "command": "yamllint",
           "name": "YAML Lint",
-          "parser": "parsable",
-          "run": "onOpen"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): \\[(?<severity>\\w+)\\] (?<message>.+?) \\((?<code>[^)]+)\\)$"
+          }
         }
       ],
       "name": "YAML"
@@ -792,11 +802,14 @@
       ],
       "linters": [
         {
-          "args": ["-c", "~/.ansible-lint", "--format", "json", "--nocolor", "${file}"],
+          "args": ["-c", "~/.ansible-lint", "--nocolor", "${file}"],
           "command": "ansible-lint",
           "name": "Ansible Lint",
-          "parser": "ansible-lint",
-          "run": "onSave"
+          "parser": {
+            "defaultSeverity": "warning",
+            "flags": "gm",
+            "pattern": "^(?<code>[a-z][\\w.\\[\\]-]+): (?<message>.+)\\n.+?:(?<line>\\d+)(?::(?<col>\\d+))?"
+          }
         }
       ],
       "name": "Ansible"
@@ -821,13 +834,15 @@
             "check",
             "--config=~/.config/ruff/pyproject.toml",
             "--output-format",
-            "json",
+            "github",
             "${file}"
           ],
           "command": "ruff",
           "name": "Ruff",
-          "parser": "json",
-          "run": "onSave"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^::(?<severity>error|warning) title=ruff \\((?<code>[^)]+)\\),file=[^,]+,line=(?<line>\\d+),col=(?<col>\\d+),endLine=\\d+,endColumn=\\d+::(?:[^:]+:\\d+:\\d+: [A-Z]\\d+ )?(?<message>[^\\n%]+)"
+          }
         }
       ],
       "name": "Python"
@@ -846,8 +861,10 @@
           "args": ["--plain", "check", "--skip-updates", "${file}"],
           "command": "dotenv-linter",
           "name": "Dotenv Linter",
-          "parser": "parsable",
-          "run": "onOpen"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+) (?<code>[A-Za-z][\\w-]*): (?<message>.+)$"
+          }
         }
       ],
       "name": "Dotenv"
@@ -884,8 +901,10 @@
           ],
           "command": "luacheck",
           "name": "LuaCheck",
-          "parser": "parsable",
-          "run": "onOpen"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): \\((?<code>[A-Z]\\d+)\\) (?<message>.+)$"
+          }
         }
       ],
       "name": "Lua"
@@ -901,11 +920,13 @@
       ],
       "linters": [
         {
-          "args": ["fmt", "--check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
+          "args": ["lint", "--config", "~/.config/taplo/taplo.toml", "${file}"],
           "command": "taplo",
           "name": "Taplo",
-          "parser": "taplo",
-          "run": "onOpen"
+          "parser": {
+            "flags": "g",
+            "pattern": "(?<severity>error|warning|info):\\s*(?<message>[^\\n]+)[\\s\\S]*?\\u250c\\u2500\\s+[^:\\n]+:(?<line>\\d+):(?<col>\\d+)"
+          }
         }
       ],
       "name": "TOML",
@@ -956,11 +977,19 @@
       ],
       "linters": [
         {
-          "args": ["--config", "~/.config/eslint/eslint.config.js", "--format", "json", "${file}"],
+          "args": [
+            "--config",
+            "~/.config/eslint/eslint.config.js",
+            "--format",
+            "stylish",
+            "${file}"
+          ],
           "command": "eslint",
           "name": "ESLint",
-          "parser": "json",
-          "run": "onSave"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^\\s*(?<line>\\d+):(?<col>\\d+)\\s+(?<severity>error|warning)\\s+(?<message>.+?)\\s{2,}(?<code>\\S+)\\s*$"
+          }
         }
       ],
       "name": "JavaScript/TypeScript/Vue"
@@ -982,11 +1011,13 @@
       ],
       "linters": [
         {
-          "args": ["--config", "~/.stylelintrc.json", "--formatter", "json", "${file}"],
+          "args": ["--config", "~/.stylelintrc.json", "--formatter", "compact", "${file}"],
           "command": "stylelint",
           "name": "Style Lint",
-          "parser": "json",
-          "run": "onOpen"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?: line (?<line>\\d+), col (?<col>\\d+), (?<severity>\\w+) - (?<message>.+?) \\((?<code>[^)]+)\\)$"
+          }
         }
       ],
       "name": "Styles"
@@ -1011,15 +1042,19 @@
           ],
           "command": "bash",
           "name": "Lint HTML",
-          "parser": "linthtml",
-          "run": "onSave"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^\\s*(?<line>\\d+):(?<col>\\d+)\\s+(?<severity>error|warning)\\s+(?<message>.+?)\\s{2,}(?<code>\\S+)\\s*$"
+          }
         },
         {
-          "args": ["--config", "~/.htmlhintrc", "--format", "json", "${file}"],
+          "args": ["--config", "~/.htmlhintrc", "--format", "unix", "${file}"],
           "command": "htmlhint",
           "name": "HTML Hint",
-          "parser": "json",
-          "run": "onSave"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<message>.+) \\[(?<severity>[^/\\]]+)/(?<code>[^\\]]+)\\]$"
+          }
         }
       ],
       "name": "HTML"
@@ -1040,15 +1075,17 @@
             "--config",
             "~/.sqlfluff",
             "--format",
-            "json",
+            "github-annotation-native",
             "--dialect",
             "mysql",
             "${file}"
           ],
           "command": "sqlfluff",
           "name": "Sql Fluff",
-          "parser": "json",
-          "run": "onOpen"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^::(?<severity>error|warning|notice) title=SQLFluff,file=[^,]+,line=(?<line>\\d+),col=(?<col>\\d+),endLine=\\d+,endColumn=\\d+::(?<code>[A-Z]+\\d+): (?<message>.+?)(?: \\[[^\\]]+\\])?$"
+          }
         }
       ],
       "name": "SQL"
@@ -1060,8 +1097,11 @@
           "args": ["--config=~/.config/checkmake/checkmake.ini", "-o", "json", "${file}"],
           "command": "checkmake",
           "name": "Check Make",
-          "parser": "json",
-          "run": "onOpen"
+          "parser": {
+            "flags": "g",
+            "messageFormat": "json",
+            "pattern": "\\{\\s*\"rule\":\\s*\"(?<code>[^\"]+)\",\\s*\"violation\":\\s*\"(?<message>(?:\\\\.|[^\"])*)\",\\s*\"file_name\":\\s*\"[^\"]+\",\\s*\"line_number\":\\s*(?<line>\\d+)\\s*\\}"
+          }
         }
       ],
       "name": "Make"
@@ -1093,8 +1133,10 @@
           ],
           "command": "nginx-lint",
           "name": "Nginx Lint",
-          "parser": "parsable",
-          "run": "onOpen"
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>\\w+)\\[(?<code>[^\\]]+)\\]: (?<message>.+)$"
+          }
         }
       ],
       "name": "Nginx",
@@ -1113,8 +1155,11 @@
           "args": ["--nonet", "--noout", "${file}"],
           "command": "xmllint",
           "name": "XML Lint",
-          "parser": "xmllint",
-          "run": "onSave"
+          "parser": {
+            "flags": "gm",
+            "output": "stderr",
+            "pattern": "^.+?:(?<line>\\d+): (?:(?:parser )?(?<severity>error|warning)) : (?<message>.+)$"
+          }
         }
       ],
       "name": "XML",
@@ -1141,8 +1186,11 @@
           "args": ["-f", "~/.jsonlintrc", "${file}"],
           "command": "jsonlint",
           "name": "JSON Lint",
-          "parser": "jsonlint",
-          "run": "onOpen"
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^(?:.+?:\\s*)?line\\s+(?<line>\\d+),\\s*col\\s+(?<col>\\d+),\\s*(?<message>.+?)(?:\\.)?$"
+          }
         }
       ],
       "name": "JSON"
@@ -1151,11 +1199,14 @@
       "filePatterns": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
       "linters": [
         {
-          "args": ["-format", "{{json .}}", "${file}"],
+          "args": ["${file}"],
           "command": "actionlint",
           "name": "Action Lint",
-          "parser": "json",
-          "run": "onSave"
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<message>.+?) \\[(?<code>[^\\]]+)\\]$"
+          }
         }
       ],
       "name": "GitHub Actions"
@@ -1210,7 +1261,7 @@
         {
           "args": [
             "--standard=~/.config/phpcs/phpcs.xml",
-            "--report=json",
+            "--report=emacs",
             "--ignore=*/vendor/*",
             "-q",
             "--ignore-annotations",
@@ -1219,22 +1270,26 @@
           ],
           "command": "~/.config/composer/vendor/bin/phpcs",
           "name": "PHP CodeSniffer",
-          "parser": "json",
-          "run": "onSave",
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>warning|error) - (?<message>.+)$"
+          },
           "showDiagnosticCodes": false
         },
         {
-          "args": ["${file}", "json", "~/.config/phpmd/phpmd.xml"],
+          "args": ["${file}", "text", "~/.config/phpmd/phpmd.xml"],
           "command": "~/.config/composer/vendor/bin/phpmd",
           "name": "PHP Mess Detector",
-          "parser": "json",
-          "run": "onSave",
+          "parser": {
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+)\\s+(?<code>\\S+)\\s+(?<message>.+)$"
+          },
           "showDiagnosticCodes": false
         },
         {
           "args": [
             "analyse",
-            "--error-format=json",
+            "--error-format=raw",
             "--no-progress",
             "--memory-limit=2G",
             "--configuration=${workspaceFolder}/phpstan.neon",
@@ -1243,8 +1298,11 @@
           ],
           "command": "~/.config/composer/vendor/bin/phpstan",
           "name": "PHPStan",
-          "parser": "json",
-          "run": "manual"
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<message>.+?)(?: \\[identifier=(?<code>[^\\]]+)\\])?$"
+          }
         }
       ],
       "name": "PHP",
@@ -1380,7 +1438,7 @@
   "workbench.statusBar.visible": true,
   "workbench.tree.indent": 15,
   "yaml.format.enable": true,
-"yaml.schemas": {
+  "yaml.schemas": {
     "https://www.schemastore.org/yamllint.json": "**/yamllint.yml"
   },
   "yaml.schemaStore.enable": true,
