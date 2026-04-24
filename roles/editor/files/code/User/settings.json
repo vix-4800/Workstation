@@ -1158,14 +1158,7 @@
           }
         }
       ],
-      "name": "Nginx",
-      "preCommands": [
-        {
-          "args": ["-t", "-c", "${file}"],
-          "command": "nginx",
-          "name": "Nginx Test"
-        }
-      ]
+      "name": "Nginx"
     },
     {
       "filePatterns": ["*.xml", "*.xsd", "*.xsl", "*.xslt"],
