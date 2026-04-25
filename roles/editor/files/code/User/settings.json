@@ -787,7 +787,7 @@
       "name": "Markdown"
     },
     {
-      "languages": ["yaml"],
+      "languages": ["yaml", "dockercompose"],
       "fixers": [
         {
           "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"],
