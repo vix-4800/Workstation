@@ -25,7 +25,7 @@ final class Yii2UserFindOneToIdentityRector extends AbstractRector
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

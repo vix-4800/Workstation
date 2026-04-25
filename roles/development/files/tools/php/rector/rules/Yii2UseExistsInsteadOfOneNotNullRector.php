@@ -48,7 +48,7 @@ final class Yii2UseExistsInsteadOfOneNotNullRector extends AbstractRector
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

@@ -57,7 +57,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -142,7 +142,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
 
         $args = [
             new Arg($firstVariable),
-            new Arg($valuesArray)
+            new Arg($valuesArray),
         ];
 
         if ($isStrict) {
@@ -158,7 +158,9 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
     /**
      * Recursively collects all Identical and Equal comparisons from BooleanOr chain
      *
-     * @return array<Equal|Identical>
+     * @param Node $node
+     *
+     * @return list<Equal|Identical>
      */
     private function collectComparisons(Node $node): array
     {
@@ -178,6 +180,9 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
 
     /**
      * Simple node comparison - should work for simple variables
+     *
+     * @param ?Node $node1
+     * @param ?Node $node2
      */
     private function areNodesEqual(?Node $node1, ?Node $node2): bool
     {
@@ -209,7 +214,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
      * - $var === null || $var === 0
      * - $var === false || $var === null
      *
-     * @param array<Equal|Identical> $comparisons
+     * @param list<Equal|Identical> $comparisons
      */
     private function isSimpleNullOrEmptyCheck(array $comparisons): bool
     {
@@ -236,7 +241,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
      * Checks if the array contains only "simple" values for comparison
      * Simple values: null, empty string, false, true, 0
      *
-     * @param array<Node> $values
+     * @param list<Node> $values
      */
     private function containsOnlySimpleValues(array $values): bool
     {
@@ -244,7 +249,7 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
 
         foreach ($values as $value) {
             if ($this->isSimpleValue($value)) {
-                $simpleValueCount++;
+                ++$simpleValueCount;
             }
         }
 
@@ -253,6 +258,8 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
 
     /**
      * Checks if the value is "simple" (null, '', false, true, 0)
+     *
+     * @param Node $value
      */
     private function isSimpleValue(Node $value): bool
     {
@@ -268,6 +275,6 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
             return true;
         }
 
-        return (bool) ($value instanceof LNumber && $value->value === 0);
+        return $value instanceof LNumber && $value->value === 0;
     }
 }

@@ -41,7 +41,7 @@ final class Yii2FindOneIdShortcutRector extends AbstractRector
     /**
      * Specifies the node types this Rector rule should process.
      *
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

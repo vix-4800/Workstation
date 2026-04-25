@@ -36,28 +36,28 @@ final class AddTypedClassConstantRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'PHP'
-class Foo
-{
-    public const MAX_VALUE = 42;
-    public const NAME = 'John Doe';
-    public const ENABLED = true;
-}
-PHP,
+                        class Foo
+                        {
+                            public const MAX_VALUE = 42;
+                            public const NAME = 'John Doe';
+                            public const ENABLED = true;
+                        }
+                        PHP,
                     <<<'PHP'
-class Foo
-{
-    public const int MAX_VALUE = 42;
-    public const string NAME = 'John Doe';
-    public const bool ENABLED = true;
-}
-PHP
+                        class Foo
+                        {
+                            public const int MAX_VALUE = 42;
+                            public const string NAME = 'John Doe';
+                            public const bool ENABLED = true;
+                        }
+                        PHP
                 ),
             ]
         );
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -122,9 +122,9 @@ PHP
 
         // bool literals (true / false)
         if ($value instanceof ConstFetch) {
-            $name = strtolower($value->name->toString());
+            $name = mb_strtolower($value->name->toString());
 
-            if ($name === 'true' || $name === 'false') {
+            if (in_array($name, ['true', 'false'], true)) {
                 return 'bool';
             }
 

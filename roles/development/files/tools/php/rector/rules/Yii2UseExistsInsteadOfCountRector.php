@@ -35,7 +35,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class Yii2UseExistsInsteadOfCountRector extends AbstractRector
 {
-    /** Returns rule definition for documentation */
+    /**
+     * Returns rule definition for documentation
+     */
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -64,7 +66,7 @@ final class Yii2UseExistsInsteadOfCountRector extends AbstractRector
     /**
      * Get node types this rector processes
      *
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

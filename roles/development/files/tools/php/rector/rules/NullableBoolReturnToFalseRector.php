@@ -7,13 +7,11 @@ namespace Rector\Custom\Rules;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,32 +28,32 @@ final class NullableBoolReturnToFalseRector extends AbstractRector
             [
                 new CodeSample(
                     <<<'PHP'
-function foo(): ?bool
-{
-    if ($this->var === null) {
-        return null;
-    }
+                        function foo(): ?bool
+                        {
+                            if ($this->var === null) {
+                                return null;
+                            }
 
-    return true;
-}
-PHP,
+                            return true;
+                        }
+                        PHP,
                     <<<'PHP'
-function foo(): bool
-{
-    if ($this->var === null) {
-        return false;
-    }
+                        function foo(): bool
+                        {
+                            if ($this->var === null) {
+                                return false;
+                            }
 
-    return true;
-}
-PHP
+                            return true;
+                        }
+                        PHP
                 ),
             ]
         );
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -105,7 +103,8 @@ PHP
      * not to any nested closure or anonymous function inside it.
      *
      * @param ClassMethod|Function_ $node
-     * @return Return_[]
+     *
+     * @return list<Return_>
      */
     private function findDirectNullReturns(Node $node): array
     {
@@ -117,15 +116,19 @@ PHP
     }
 
     /**
-     * @param Node\Stmt[] $stmts
-     * @param Return_[]   $nullReturns
+     * @param list<Stmt>    $stmts
+     * @param list<Return_> $nullReturns
      */
     private function traverseStmts(array $stmts, array &$nullReturns): void
     {
         foreach ($stmts as $stmt) {
             // Don't descend into nested functions/closures/arrow functions — they are
             // separate scopes with their own return types.
-            if ($stmt instanceof Function_ || $stmt instanceof ClassMethod) {
+            if ($stmt instanceof Function_) {
+                continue;
+            }
+
+            if ($stmt instanceof ClassMethod) {
                 continue;
             }
 
@@ -139,11 +142,11 @@ PHP
 
             // Recurse into any compound statement that may contain returns.
             foreach ($stmt->getSubNodeNames() as $subNodeName) {
-                $sub = $stmt->$subNodeName;
+                $sub = $stmt->{$subNodeName};
 
                 if (is_array($sub)) {
                     $this->traverseStmts($sub, $nullReturns);
-                } elseif ($sub instanceof Node\Stmt) {
+                } elseif ($sub instanceof Stmt) {
                     $this->traverseStmts([$sub], $nullReturns);
                 }
             }
@@ -153,6 +156,6 @@ PHP
     private function isNullConstFetch(?Node $node): bool
     {
         return $node instanceof ConstFetch
-            && strtolower($node->name->toString()) === 'null';
+            && mb_strtolower($node->name->toString()) === 'null';
     }
 }

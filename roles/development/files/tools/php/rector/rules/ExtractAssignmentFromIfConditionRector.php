@@ -72,7 +72,7 @@ if (is_array($items)) {
     }
 
     /**
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -134,7 +134,7 @@ if (is_array($items)) {
 
         return [
             new Expression($assignment),
-            $newIf
+            $newIf,
         ];
     }
 
@@ -160,7 +160,7 @@ if (is_array($items)) {
 
         return [
             new Expression($assignment),
-            $newIf
+            $newIf,
         ];
     }
 
@@ -179,7 +179,7 @@ if (is_array($items)) {
 
         return [
             new Expression($assignment),
-            $newIf
+            $newIf,
         ];
     }
 

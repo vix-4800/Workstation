@@ -38,7 +38,7 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
     /**
      * Specifies which node types this Rector rule should process.
      *
-     * @return array<class-string<Node>>
+     * @return list<class-string<Node>>
      */
     public function getNodeTypes(): array
     {
@@ -54,7 +54,7 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
      */
     public function refactor(Node $node): ?Node
     {
-        if (!($node->name instanceof Identifier)) {
+        if (!$node->name instanceof Identifier) {
             return null;
         }
 
