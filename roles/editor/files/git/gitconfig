@@ -1,64 +1,64 @@
 [include]
-	path = ~/.gitconfig.user
-	path = ~/.gitconfig.delta
+path = ~/.gitconfig.user
+path = ~/.gitconfig.delta
 
 [credential "https://github.com"]
-	helper =
-	helper = !/usr/bin/gh auth git-credential
+helper =
+helper = !/usr/bin/gh auth git-credential
 
 [credential "https://gist.github.com"]
-	helper =
-	helper = !/usr/bin/gh auth git-credential
+helper =
+helper = !/usr/bin/gh auth git-credential
 
 [core]
-	autocrlf = input
-	untrackedCache = true
-	preloadIndex = true
-	fscache = true
+autocrlf = input
+untrackedCache = true
+preloadIndex = true
+fscache = true
 
 [init]
-	defaultBranch = main
+defaultBranch = main
 
 [pull]
-	rebase = true
+rebase = true
 
 [push]
-	autoSetupRemote = true
-	default = current
+autoSetupRemote = true
+default = current
 
 [fetch]
-	prune = true
-	pruneTags = true
-	writeCommitGraph = true
+prune = true
+pruneTags = true
+writeCommitGraph = true
 
 [rebase]
-	autoStash = true
-	autoSquash = true
+autoStash = true
+autoSquash = true
 
 [diff]
-	algorithm = histogram
-	colorMoved = default
+algorithm = histogram
+colorMoved = default
 
 [log]
-	date = relative
+date = relative
 
 [branch]
-	sort = -committerdate
+sort = -committerdate
 
 [http]
-	postBuffer = 524288000
-	lowSpeedLimit = 1000
-	lowSpeedTime = 60
+postBuffer = 524288000
+lowSpeedLimit = 1000
+lowSpeedTime = 60
 
 [pack]
-	threads = 0
-	windowMemory = 256m
+threads = 0
+windowMemory = 256m
 
 [feature]
-	manyFiles = true
+manyFiles = true
 
 [gc]
-	auto = 256
+auto = 256
 
 [maintenance]
-	strategy = incremental
+strategy = incremental
