@@ -966,7 +966,7 @@
         {
           "args": ["-w", "${file}"],
           "command": "gofmt",
-          "name": "gofmt"
+          "name": "Go Format"
         }
       ],
       "name": "Go"
@@ -977,7 +977,7 @@
         {
           "args": ["-w", "${file}"],
           "command": "fish_indent",
-          "name": "fish_indent"
+          "name": "Fish Format"
         }
       ],
       "name": "Fish"
