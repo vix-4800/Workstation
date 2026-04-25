@@ -891,13 +891,13 @@
       "name": "Dotenv"
     },
     {
-      "languages": ["ini", "properties"],
-      "filePatterns": ["*.ini", "*.cfg", ".editorconfig", ".gitconfig"],
+      "languages": ["ini", "properties", "editorconfig"],
       "fixers": [
         {
           "args": ["--write", "${file}"],
           "command": "inifmt",
-          "name": "inifmt"
+          "name": "INI Format",
+          "run": "onSave"
         }
       ],
       "name": "INI"
