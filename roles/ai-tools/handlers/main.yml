@@ -7,3 +7,4 @@
       - github-mcp-server
     remote_src: true
     mode: '0755'
+  ignore_errors: '{{ ansible_check_mode }}'

@@ -14,7 +14,6 @@
       - xorg-xwayland
       - libnotify
       - wofi
-      - wlogout
       - brightnessctl
       - geoclue
       - tumbler
@@ -44,6 +43,15 @@
 - name: Install swayfx (AUR)
   kewlfft.aur.aur:
     name: swayfx
+    state: present
+  become: false
+  tags:
+    - desktop
+    - packages
+
+- name: Install wlogout (AUR)
+  kewlfft.aur.aur:
+    name: wlogout
     state: present
   become: false
   tags:
