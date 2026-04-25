@@ -17,6 +17,7 @@
     groups: docker
     append: true
   become: true
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - development
     - system
