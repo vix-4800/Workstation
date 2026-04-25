@@ -144,6 +144,7 @@
     state: present
     flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
     method: user
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - apps
     - packages
