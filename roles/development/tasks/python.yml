@@ -21,6 +21,7 @@
     - ansible-lint
     - sqlfluff
   become: false
+  ignore_errors: '{{ ansible_check_mode }}'
   tags:
     - development
     - packages
