@@ -894,7 +894,7 @@
       "languages": ["ini", "properties", "editorconfig"],
       "fixers": [
         {
-          "args": ["--write", "${file}"],
+          "args": ["--write", "${file}", "--single-space"],
           "command": "inifmt",
           "name": "INI Format",
           "run": "onSave"
