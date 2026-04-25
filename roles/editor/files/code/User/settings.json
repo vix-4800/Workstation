@@ -714,7 +714,7 @@
   "lintRunner.respectGitignore": true,
   "lintRunner.targets": [
     {
-      "filePatterns": ["*.sh"],
+      "languages": ["shellscript"],
       "fixers": [
         {
           "args": ["-w", "${file}"],
@@ -736,7 +736,7 @@
       "name": "Shell"
     },
     {
-      "filePatterns": ["Dockerfile", "Dockerfile.*"],
+      "languages": ["dockerfile"],
       "linters": [
         {
           "args": [
@@ -759,7 +759,7 @@
       "name": "Dockerfile"
     },
     {
-      "filePatterns": ["*.md"],
+      "languages": ["markdown"],
       "fixers": [
         {
           "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"],
@@ -787,7 +787,7 @@
       "name": "Markdown"
     },
     {
-      "filePatterns": ["*.yml", "*.yaml"],
+      "languages": ["yaml"],
       "fixers": [
         {
           "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"],
@@ -810,6 +810,7 @@
       "name": "YAML"
     },
     {
+      "languages": ["ansible", "yaml"],
       "filePatterns": [
         "ansible/**/*.yml",
         "roles/**/tasks/*.yml",
@@ -834,7 +835,7 @@
       "name": "Ansible"
     },
     {
-      "filePatterns": ["*.py"],
+      "languages": ["python"],
       "fixers": [
         {
           "args": ["check", "--fix", "--config=~/.config/ruff/pyproject.toml", "${file}"],
@@ -867,6 +868,7 @@
       "name": "Python"
     },
     {
+      "languages": ["dotenv", "shellscript"],
       "filePatterns": [".env", ".env.*"],
       "fixers": [
         {
@@ -889,6 +891,7 @@
       "name": "Dotenv"
     },
     {
+      "languages": ["ini", "properties"],
       "filePatterns": ["*.ini", "*.cfg", ".editorconfig", ".gitconfig"],
       "fixers": [
         {
@@ -900,7 +903,7 @@
       "name": "INI"
     },
     {
-      "filePatterns": ["*.lua"],
+      "languages": ["lua"],
       "fixers": [
         {
           "args": ["--config-path", "~/.config/stylua/stylua.toml", "${file}"],
@@ -929,7 +932,7 @@
       "name": "Lua"
     },
     {
-      "filePatterns": ["*.toml"],
+      "languages": ["toml"],
       "fixers": [
         {
           "args": ["fmt", "--config", "~/.config/taplo/taplo.toml", "${file}"],
@@ -958,7 +961,7 @@
       ]
     },
     {
-      "filePatterns": ["*.go"],
+      "languages": ["go"],
       "fixers": [
         {
           "args": ["-w", "${file}"],
@@ -969,7 +972,7 @@
       "name": "Go"
     },
     {
-      "filePatterns": ["*.fish"],
+      "languages": ["fish"],
       "fixers": [
         {
           "args": ["-w", "${file}"],
@@ -980,7 +983,7 @@
       "name": "Fish"
     },
     {
-      "filePatterns": ["*.js", "*.ts", "*.jsx", "*.tsx", "*.vue"],
+      "languages": ["javascript", "typescript", "javascriptreact", "typescriptreact", "vue"],
       "fixers": [
         {
           "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"],
@@ -1014,7 +1017,7 @@
       "name": "JavaScript/TypeScript/Vue"
     },
     {
-      "filePatterns": ["*.css", "*.scss", "*.less"],
+      "languages": ["css", "scss", "less"],
       "fixers": [
         {
           "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"],
@@ -1042,7 +1045,7 @@
       "name": "Styles"
     },
     {
-      "filePatterns": ["*.html"],
+      "languages": ["html"],
       "fixers": [
         {
           "args": ["--write", "--config", "~/.prettierrc", "${file}"],
@@ -1079,7 +1082,7 @@
       "name": "HTML"
     },
     {
-      "filePatterns": ["*.sql"],
+      "languages": ["sql"],
       "fixers": [
         {
           "args": ["fix", "--config", "~/.sqlfluff", "--dialect", "mysql", "${file}"],
@@ -1110,7 +1113,7 @@
       "name": "SQL"
     },
     {
-      "filePatterns": ["Makefile", "*.mk"],
+      "languages": ["makefile"],
       "linters": [
         {
           "args": ["--config=~/.config/checkmake/checkmake.ini", "-o", "json", "${file}"],
@@ -1126,6 +1129,7 @@
       "name": "Make"
     },
     {
+      "languages": ["nginx", "plaintext"],
       "filePatterns": [
         "nginx.conf",
         "**/nginx/**/*.conf",
@@ -1161,6 +1165,7 @@
       "name": "Nginx"
     },
     {
+      "languages": ["xml", "xsl"],
       "filePatterns": ["*.xml", "*.xsd", "*.xsl", "*.xslt"],
       "linters": [
         {
@@ -1184,7 +1189,7 @@
       ]
     },
     {
-      "filePatterns": ["*.json", "*.jsonc"],
+      "languages": ["json"],
       "fixers": [
         {
           "args": ["--write", "--config", "~/.prettierrc", "${file}"],
@@ -1208,6 +1213,7 @@
       "name": "JSON"
     },
     {
+      "languages": ["github-actions-workflow", "yaml"],
       "filePatterns": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
       "linters": [
         {
@@ -1224,6 +1230,7 @@
       "name": "GitHub Actions"
     },
     {
+      "languages": ["blade", "php"],
       "filePatterns": ["*.blade.php"],
       "fixers": [
         {
@@ -1240,7 +1247,7 @@
       "name": "Blade"
     },
     {
-      "filePatterns": ["*.php"],
+      "languages": ["php"],
       "fixers": [
         {
           "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"],
