@@ -935,20 +935,10 @@
       "languages": ["toml"],
       "fixers": [
         {
-          "args": ["fmt", "--config", "~/.config/taplo/taplo.toml", "${file}"],
-          "command": "taplo",
-          "name": "Taplo"
-        }
-      ],
-      "linters": [
-        {
-          "args": ["lint", "--config", "~/.config/taplo/taplo.toml", "${file}"],
+          "args": ["format", "--config", "~/.config/taplo/taplo.toml", "${file}"],
           "command": "taplo",
           "name": "Taplo",
-          "parser": {
-            "flags": "g",
-            "pattern": "(?<severity>error|warning|info):\\s*(?<message>[^\\n]+)[\\s\\S]*?\\u250c\\u2500\\s+[^:\\n]+:(?<line>\\d+):(?<col>\\d+)"
-          }
+          "run": "onSave"
         }
       ],
       "name": "TOML",
