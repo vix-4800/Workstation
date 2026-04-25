@@ -40,6 +40,7 @@
     - devstrict/phpcs:dev-main
     - phpcompatibility/php-compatibility:"^10.0.0@dev"
     - phpmd/phpmd
+    - carthage-software/mago
   become: false
   ignore_errors: '{{ ansible_check_mode }}'
   tags:

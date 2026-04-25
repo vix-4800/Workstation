@@ -1,0 +1,269 @@
+stack-size = 8388608
+threads = 8
+php-version = "8.4"
+editor-url = "vscode://file/%file%:%line%:%column%"
+
+[source]
+includes = ["vendor"]
+excludes = [
+  ".git/**",
+  ".idea/**",
+  ".vscode/**",
+  ".phpunit.cache/**",
+  ".php-cs-fixer.cache",
+  ".phpstan.cache/**",
+  ".rector/**",
+  "bootstrap/cache/**",
+  "build/**",
+  "cache/**",
+  "coverage/**",
+  "node_modules/**",
+  "public/build/**",
+  "storage/**",
+  "var/**",
+]
+extensions = ["php"]
+
+[source.glob]
+literal-separator = true
+case-insensitive = false
+backslash-escape = true
+empty-alternates = false
+
+[parser]
+enable-short-tags = false
+
+[formatter]
+preset = "default"
+print-width = 120
+tab-width = 4
+use-tabs = false
+end-of-line = "lf"
+single-quote = true
+excludes = ["**/Generated/**", "**/generated/**", "**/*Generated.php", "**/*_generated.php"]
+
+[linter]
+integrations = ["laravel", "phpunit", "yii"]
+baseline-variant = "strict"
+minimum-fail-level = "warning"
+excludes = ["database/migrations/**"]
+
+[linter.rules]
+ambiguous-constant-access = { enabled = true, level = "warning" }
+ambiguous-function-call = { enabled = true, level = "warning" }
+array-style = { enabled = true, level = "warning", style = "short" }
+assert-description = { enabled = true, level = "warning" }
+assertion-style = { enabled = true, level = "warning", style = "static" }
+block-statement = { enabled = true, level = "error" }
+braced-string-interpolation = { enabled = true, level = "warning" }
+class-name = { enabled = true, level = "error" }
+combine-consecutive-issets = { enabled = true, level = "warning" }
+constant-condition = { enabled = true, level = "warning" }
+constant-name = { enabled = true, level = "error" }
+cyclomatic-complexity = { enabled = true, level = "error", threshold = 10, method-threshold = 8 }
+deprecated-cast = { enabled = true, level = "error" }
+deprecated-shell-execute-string = { enabled = true, level = "error" }
+deprecated-switch-semicolon = { enabled = true, level = "error" }
+disallowed-functions = { enabled = true, level = "error", functions = [
+  "assert",
+  "create_function",
+  "eval",
+  "exec",
+  "extract",
+  "parse_str",
+  "passthru",
+  "popen",
+  "proc_open",
+  "shell_exec",
+  "system",
+  "unserialize",
+] }
+disallowed-type-instantiation = { enabled = true, level = "warning", types = ["DateTime"] }
+enum-name = { enabled = true, level = "error" }
+excessive-nesting = { enabled = true, level = "error", threshold = 4, function-like-threshold = 3 }
+excessive-parameter-list = { enabled = true, level = "error", threshold = 5, constructor-threshold = 8 }
+explicit-nullable-param = { enabled = true, level = "error" }
+explicit-octal = { enabled = true, level = "error" }
+file-name = { enabled = true, level = "warning" }
+final-controller = { enabled = true, level = "error" }
+function-name = { enabled = true, level = "error" }
+halstead = { enabled = true, level = "warning", volume-threshold = 800, difficulty-threshold = 10, effort-threshold = 4000 }
+identity-comparison = { enabled = true, level = "error" }
+ineffective-format-ignore-next = { enabled = true, level = "error" }
+ineffective-format-ignore-region = { enabled = true, level = "error" }
+inline-variable-return = { enabled = true, level = "warning" }
+instanceof-stringable = { enabled = true, level = "warning" }
+interface-name = { enabled = true, level = "error" }
+invalid-open-tag = { enabled = true, level = "error" }
+kan-defect = { enabled = true, level = "error", threshold = 1.4 }
+literal-named-argument = { enabled = true, level = "warning" }
+loop-does-not-iterate = { enabled = true, level = "error" }
+lowercase-keyword = { enabled = true, level = "error" }
+lowercase-type-hint = { enabled = true, level = "error" }
+middleware-in-routes = { enabled = true, level = "warning" }
+missing-docs = { enabled = true, level = "warning" }
+no-alias-function = { enabled = true, level = "error" }
+no-alternative-syntax = { enabled = true, level = "error" }
+no-array-accumulation-in-loop = { enabled = true, level = "warning" }
+no-assign-in-argument = { enabled = true, level = "error" }
+no-assign-in-condition = { enabled = true, level = "error" }
+no-boolean-flag-parameter = { enabled = true, level = "warning", exclude-setters = false, exclude-constructors = true }
+no-closing-tag = { enabled = true, level = "error" }
+no-db-schema-change = { enabled = true, level = "error" }
+no-debug-symbols = { enabled = true, level = "error" }
+no-direct-db-query = { enabled = true, level = "error" }
+no-else-clause = { enabled = true, level = "warning" }
+no-empty = { enabled = true, level = "warning" }
+no-empty-catch-clause = { enabled = true, level = "error" }
+no-empty-comment = { enabled = true, level = "warning" }
+no-empty-loop = { enabled = true, level = "error" }
+no-error-control-operator = { enabled = true, level = "error" }
+no-eval = { enabled = true, level = "error" }
+no-ffi = { enabled = true, level = "error" }
+no-fully-qualified-global-class-like = { enabled = true, level = "warning" }
+no-fully-qualified-global-constant = { enabled = true, level = "warning" }
+no-fully-qualified-global-function = { enabled = true, level = "warning" }
+no-global = { enabled = true, level = "error" }
+no-goto = { enabled = true, level = "error" }
+no-hash-comment = { enabled = true, level = "warning" }
+no-hash-emoji = { enabled = true, level = "warning" }
+no-inline = { enabled = true, level = "error" }
+no-ini-set = { enabled = true, level = "error" }
+no-insecure-comparison = { enabled = true, level = "error" }
+no-isset = { enabled = true, level = "warning" }
+no-literal-namespace-string = { enabled = true, level = "warning" }
+no-literal-password = { enabled = true, level = "error" }
+no-multi-assignments = { enabled = true, level = "warning" }
+no-nested-ternary = { enabled = true, level = "error" }
+no-noop = { enabled = true, level = "error" }
+no-only = { enabled = true, level = "error" }
+no-parameter-shadowing = { enabled = true, level = "error" }
+no-php-tag-terminator = { enabled = true, level = "error" }
+no-protected-in-final = { enabled = true, level = "warning" }
+no-redundant-block = { enabled = true, level = "warning" }
+no-redundant-continue = { enabled = true, level = "warning" }
+no-redundant-file = { enabled = true, level = "warning" }
+no-redundant-final = { enabled = true, level = "warning" }
+no-redundant-label = { enabled = true, level = "warning" }
+no-redundant-literal-return = { enabled = true, level = "warning" }
+no-redundant-math = { enabled = true, level = "warning" }
+no-redundant-method-override = { enabled = true, level = "warning" }
+no-redundant-nullsafe = { enabled = true, level = "warning" }
+no-redundant-parentheses = { enabled = true, level = "warning" }
+no-redundant-readonly = { enabled = true, level = "warning" }
+no-redundant-string-concat = { enabled = true, level = "warning" }
+no-redundant-use = { enabled = true, level = "warning" }
+no-redundant-write-visibility = { enabled = true, level = "warning" }
+no-redundant-yield-from = { enabled = true, level = "warning" }
+no-request-all = { enabled = true, level = "error" }
+no-request-variable = { enabled = true, level = "error" }
+no-roles-as-capabilities = { enabled = true, level = "error" }
+no-self-assignment = { enabled = true, level = "error" }
+no-shell-execute-string = { enabled = true, level = "error" }
+no-short-bool-cast = { enabled = true, level = "error" }
+no-short-opening-tag = { enabled = true, level = "error" }
+no-shorthand-ternary = { enabled = true, level = "error" }
+no-side-effects-with-declarations = { enabled = true, level = "warning", allow-conditional-declarations = true, allow-class-alias = true, allow-class-exists = true }
+no-sprintf-concat = { enabled = true, level = "warning" }
+no-trailing-space = { enabled = true, level = "warning" }
+no-underscore-class = { enabled = true, level = "error" }
+no-unescaped-output = { enabled = true, level = "error" }
+no-unsafe-finally = { enabled = true, level = "error" }
+no-variable-variable = { enabled = true, level = "error" }
+no-void-reference-return = { enabled = true, level = "error" }
+optional-param-order = { enabled = true, level = "error" }
+prefer-anonymous-migration = { enabled = true, level = "warning" }
+prefer-arrow-function = { enabled = true, level = "warning" }
+prefer-early-continue = { enabled = true, level = "warning" }
+prefer-explode-over-preg-split = { enabled = true, level = "warning" }
+prefer-first-class-callable = { enabled = true, level = "warning" }
+prefer-interface = { enabled = true, level = "warning" }
+prefer-pre-increment = { enabled = true, level = "warning" }
+prefer-self-return-type = { enabled = true, level = "warning" }
+prefer-static-closure = { enabled = true, level = "warning" }
+prefer-test-attribute = { enabled = true, level = "warning" }
+prefer-view-array = { enabled = true, level = "warning" }
+prefer-while-loop = { enabled = true, level = "warning" }
+property-name = { enabled = true, level = "error" }
+psl-array-functions = { enabled = true, level = "warning" }
+psl-data-structures = { enabled = true, level = "warning" }
+psl-datetime = { enabled = true, level = "warning" }
+psl-math-functions = { enabled = true, level = "warning" }
+psl-output = { enabled = true, level = "warning" }
+psl-randomness-functions = { enabled = true, level = "warning" }
+psl-regex-functions = { enabled = true, level = "warning" }
+psl-sleep-functions = { enabled = true, level = "warning" }
+psl-string-functions = { enabled = true, level = "warning" }
+readable-literal = { enabled = true, level = "warning" }
+require-namespace = { enabled = true, level = "error" }
+require-preg-quote-delimiter = { enabled = true, level = "error" }
+sensitive-parameter = { enabled = true, level = "error" }
+single-class-per-file = { enabled = true, level = "error" }
+sorted-integer-keys = { enabled = true, level = "warning" }
+str-contains = { enabled = true, level = "warning" }
+str-starts-with = { enabled = true, level = "warning" }
+strict-assertions = { enabled = true, level = "error" }
+strict-behavior = { enabled = true, level = "error" }
+strict-types = { enabled = true, level = "error" }
+switch-continue-to-break = { enabled = true, level = "error" }
+tagged-fixme = { enabled = true, level = "warning" }
+tagged-todo = { enabled = true, level = "warning" }
+tainted-data-to-sink = { enabled = true, level = "error", known-sink-functions = [
+  "printf",
+  "fprintf",
+  "vfprintf",
+  "error_log",
+  "syslog",
+] }
+too-many-enum-cases = { enabled = true, level = "error", threshold = 12 }
+too-many-methods = { enabled = true, level = "error", threshold = 12, count-hooks = true, count-setters-and-getters = true }
+too-many-properties = { enabled = true, level = "error", threshold = 10 }
+trait-name = { enabled = true, level = "error" }
+use-compound-assignment = { enabled = true, level = "warning" }
+use-dedicated-expectation = { enabled = true, level = "warning" }
+use-simpler-expectation = { enabled = true, level = "warning" }
+use-specific-assertions = { enabled = true, level = "warning" }
+use-specific-expectations = { enabled = true, level = "warning" }
+use-wp-functions = { enabled = true, level = "warning" }
+valid-docblock = { enabled = true, level = "error" }
+variable-name = { enabled = true, level = "warning" }
+yoda-conditions = { enabled = true, level = "error" }
+
+[analyzer]
+find-unused-expressions = true
+find-unused-definitions = true
+find-overly-wide-return-types = true
+analyze-dead-code = true
+memoize-properties = true
+allow-possibly-undefined-array-keys = false
+check-throws = true
+check-missing-override = true
+find-unused-parameters = true
+strict-list-index-checks = true
+no-boolean-literal-comparison = true
+check-missing-type-hints = true
+check-closure-missing-type-hints = true
+check-arrow-function-missing-type-hints = true
+register-super-globals = true
+trust-existence-checks = true
+check-property-initialization = true
+check-use-statements = true
+check-name-casing = true
+enforce-class-finality = true
+require-api-or-internal = true
+check-experimental = true
+allow-side-effects-in-conditions = false
+class-initializers = ["setUp", "initialize", "boot", "mount"]
+unchecked-exceptions = []
+unchecked-exception-classes = []
+
+[analyzer.performance]
+saturation-complexity-threshold = 16384
+disjunction-complexity-threshold = 8192
+negation-complexity-threshold = 8192
+consensus-limit-threshold = 512
+formula-size-threshold = 1024
+string-combination-threshold = 256
+integer-combination-threshold = 256
+array-combination-threshold = 256
+loop-assignment-depth-threshold = 4

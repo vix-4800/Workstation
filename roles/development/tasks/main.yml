@@ -102,6 +102,8 @@
         dest: '{{ home }}/.config/phpcs'
       - src: php/phpmd
         dest: '{{ home }}/.config/phpmd'
+      - src: php/mago/mago.toml
+        dest: '{{ home }}/.config/mago.toml'
       - src: blade/.bladeformatterrc.json
         dest: '{{ home }}/.config/blade-formatter/.bladeformatterrc.json'
       - src: python/ruff
