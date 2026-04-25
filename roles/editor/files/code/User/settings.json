@@ -1240,6 +1240,11 @@
       "languages": ["php"],
       "fixers": [
         {
+          "args": ["--colors=never", "format", "${file}"],
+          "command": "mago",
+          "name": "Mago Formatter"
+        },
+        {
           "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"],
           "command": "~/.config/composer/vendor/bin/php-cs-fixer",
           "name": "PHP CS Fixer"
@@ -1267,6 +1272,59 @@
         }
       ],
       "linters": [
+        {
+          "args": [
+            "--colors=never",
+            "lint",
+            "--reporting-format=emacs",
+            "--minimum-report-level=warning",
+            "--minimum-fail-level=warning",
+            "${file}"
+          ],
+          "command": "mago",
+          "name": "Mago Linter",
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+          }
+        },
+        {
+          "args": [
+            "--colors=never",
+            "analyze",
+            "--reporting-format=emacs",
+            "--minimum-report-level=warning",
+            "--minimum-fail-level=warning",
+            "${file}"
+          ],
+          "command": "mago",
+          "name": "Mago Analyzer",
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+          },
+          "run": "manual"
+        },
+        {
+          "args": [
+            "--colors=never",
+            "guard",
+            "--reporting-format=emacs",
+            "--minimum-report-level=warning",
+            "--minimum-fail-level=warning",
+            "${file}"
+          ],
+          "command": "mago",
+          "name": "Mago Guard",
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+          },
+          "run": "manual"
+        },
         {
           "args": [
             "--standard=~/.config/phpcs/phpcs.xml",
@@ -1453,16 +1511,5 @@
     "https://www.schemastore.org/yamllint.json": "**/yamllint.yml"
   },
   "yaml.schemaStore.enable": true,
-  "yaml.validate": true,
-  "mago.binPath": "mago",
-  "mago.configFile": "mago.toml",
-  "mago.enableAnalyze": true,
-  "mago.enableFormat": true,
-  "mago.enableGuard": true,
-  "mago.enableLint": true,
-  "mago.phpVersion": "8.4",
-  "mago.formatOnSave": true,
-  "mago.runGuardOnSave": false,
-  "mago.scanOnOpen": false,
-  "mago.threads": 4
+  "yaml.validate": true
 }
