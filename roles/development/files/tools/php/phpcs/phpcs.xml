@@ -341,7 +341,7 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction" />
     <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty" />
-<rule ref="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator" />
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator" />
     <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall">
         <exclude-pattern>*/config/*</exclude-pattern>
         <exclude-pattern>*/views/*</exclude-pattern>
@@ -368,7 +368,7 @@
                 <element key="eval" value="null" />
                 <element key="extract" value="null" />
                 <element key="is_null" value="null" />
-<element key="isset" value="null" />
+                <element key="isset" value="null" />
                 <element key="call_user_func" value="null" />
             </property>
         </properties>
