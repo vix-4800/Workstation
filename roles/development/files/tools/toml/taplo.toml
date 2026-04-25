@@ -1,18 +1,14 @@
 include = ["**/*.toml"]
-exclude = [
-  "**/.git/**",
-  "**/node_modules/**",
-  "**/vendor/**",
-]
+exclude = ["**/.git/**", "**/node_modules/**", "**/vendor/**"]
 
 [formatting]
 align_comments = true
 align_entries = false
-allowed_blank_lines = 2
+allowed_blank_lines = 1
 array_auto_collapse = true
 array_auto_expand = true
 array_trailing_comma = true
-column_width = 120
+column_width = 100
 compact_arrays = true
 compact_entries = false
 compact_inline_tables = false
@@ -27,12 +23,7 @@ reorder_keys = false
 trailing_newline = true
 
 [[rule]]
-include = [
-  ".taplo.toml",
-  "taplo.toml",
-  "**/.taplo.toml",
-  "**/taplo.toml",
-]
+include = [".taplo.toml", "taplo.toml", "**/.taplo.toml", "**/taplo.toml"]
 
 [rule.schema]
 path = "taplo://taplo.toml"
