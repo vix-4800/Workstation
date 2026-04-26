@@ -1,26 +1,4 @@
 {
   "version": "2.0.0",
-  "tasks": [
-    // {
-    //     "label": "Rector: fix current file",
-    //     "type": "shell",
-    //     "command": "php",
-    //     "args": [
-    //         "${env:HOME}/.config/composer/vendor/bin/rector",
-    //         "process",
-    //         "${file}",
-    //         "--ansi",
-    //         "--no-progress-bar",
-    //         "--config=${env:HOME}/.config/rector/rector.php",
-    //         "--clear-cache",
-    //         "--no-diffs"
-    //     ],
-    //     "group": "none",
-    //     "presentation": {
-    //         "reveal": "always",
-    //         "panel": "dedicated",
-    //         "clear": true
-    //     }
-    // }
-  ]
+  "tasks": []
 }
