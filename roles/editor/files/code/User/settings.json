@@ -1179,7 +1179,7 @@
       ]
     },
     {
-      "languages": ["json"],
+      "languages": ["json", "jsonc"],
       "fixers": [
         {
           "args": ["--write", "--config", "~/.prettierrc", "${file}"],
