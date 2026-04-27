@@ -49,8 +49,8 @@ minimum-fail-level = "warning"
 excludes = ["database/migrations/**"]
 
 [linter.rules]
-ambiguous-constant-access = { enabled = true, level = "warning" }
-ambiguous-function-call = { enabled = true, level = "warning" }
+ambiguous-constant-access = { enabled = false, level = "warning" }
+ambiguous-function-call = { enabled = false, level = "warning" }
 array-style = { enabled = true, level = "warning", style = "short" }
 assert-description = { enabled = true, level = "warning" }
 assertion-style = { enabled = true, level = "warning", style = "static" }
@@ -60,7 +60,7 @@ class-name = { enabled = true, level = "error" }
 combine-consecutive-issets = { enabled = true, level = "warning" }
 constant-condition = { enabled = true, level = "warning" }
 constant-name = { enabled = true, level = "error" }
-cyclomatic-complexity = { enabled = true, level = "error", threshold = 10, method-threshold = 8 }
+cyclomatic-complexity = { enabled = false, level = "error", threshold = 10, method-threshold = 8 }
 deprecated-cast = { enabled = true, level = "error" }
 deprecated-shell-execute-string = { enabled = true, level = "error" }
 deprecated-switch-semicolon = { enabled = true, level = "error" }
@@ -87,7 +87,7 @@ explicit-octal = { enabled = true, level = "error" }
 file-name = { enabled = true, level = "warning" }
 final-controller = { enabled = true, level = "error" }
 function-name = { enabled = true, level = "error" }
-halstead = { enabled = true, level = "warning", volume-threshold = 800, difficulty-threshold = 10, effort-threshold = 4000 }
+halstead = { enabled = false, level = "warning", volume-threshold = 800, difficulty-threshold = 10, effort-threshold = 4000 }
 identity-comparison = { enabled = true, level = "error" }
 ineffective-format-ignore-next = { enabled = true, level = "error" }
 ineffective-format-ignore-region = { enabled = true, level = "error" }
@@ -95,8 +95,8 @@ inline-variable-return = { enabled = true, level = "warning" }
 instanceof-stringable = { enabled = true, level = "warning" }
 interface-name = { enabled = true, level = "error" }
 invalid-open-tag = { enabled = true, level = "error" }
-kan-defect = { enabled = true, level = "error", threshold = 1.4 }
-literal-named-argument = { enabled = true, level = "warning" }
+kan-defect = { enabled = false, level = "error", threshold = 1.4 }
+literal-named-argument = { enabled = true, level = "help" }
 loop-does-not-iterate = { enabled = true, level = "error" }
 lowercase-keyword = { enabled = true, level = "error" }
 lowercase-type-hint = { enabled = true, level = "error" }
@@ -112,7 +112,7 @@ no-closing-tag = { enabled = true, level = "error" }
 no-db-schema-change = { enabled = true, level = "error" }
 no-debug-symbols = { enabled = true, level = "error" }
 no-direct-db-query = { enabled = true, level = "error" }
-no-else-clause = { enabled = true, level = "warning" }
+no-else-clause = { enabled = true, level = "help" }
 no-empty = { enabled = true, level = "warning" }
 no-empty-catch-clause = { enabled = true, level = "error" }
 no-empty-comment = { enabled = true, level = "warning" }
@@ -227,7 +227,7 @@ use-specific-expectations = { enabled = true, level = "warning" }
 use-wp-functions = { enabled = true, level = "warning" }
 valid-docblock = { enabled = true, level = "error" }
 variable-name = { enabled = true, level = "warning" }
-yoda-conditions = { enabled = true, level = "error" }
+yoda-conditions = { enabled = false, level = "warning" }
 
 [analyzer]
 find-unused-expressions = true
