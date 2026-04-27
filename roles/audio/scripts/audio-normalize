@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly USER_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+export XDG_RUNTIME_DIR="${USER_RUNTIME_DIR}"
+export PULSE_SERVER="${PULSE_SERVER:-unix:${USER_RUNTIME_DIR}/pulse/native}"
+
+readonly OUTPUT_CONTROLS_REGEX='^(Master|PCM|Speaker|Headphone|Front|Surround|Center|LFE|Line Out|Digital|S/PDIF|IEC958|HDMI|AUX|Wave|Output)$'
+
+normalize_alsa_card() {
+    local card="$1"
+    local control
+    local controls
+    local line
+
+    controls="$(amixer -c "${card}" scontrols 2>/dev/null || true)"
+
+    while IFS= read -r line; do
+        [[ "${line}" =~ ^Simple\ mixer\ control\ \'([^\']*)\' ]] || continue
+        control="${BASH_REMATCH[1]}"
+        [[ "${control}" =~ ${OUTPUT_CONTROLS_REGEX} ]] || continue
+
+        amixer -q -c "${card}" sset "${control}" 100% 2>/dev/null || true
+        amixer -q -c "${card}" sset "${control}" unmute 2>/dev/null || true
+    done <<< "${controls}"
+}
+
+normalize_alsa() {
+    local card_path
+    local card
+
+    shopt -s nullglob
+    for card_path in /proc/asound/card[0-9]*; do
+        card="${card_path##*/card}"
+        normalize_alsa_card "${card}"
+    done
+}
+
+normalize_pipewire_sinks() {
+    local sink
+
+    pactl list short sinks 2>/dev/null | while read -r sink _; do
+        pactl set-sink-mute "${sink}" 0 2>/dev/null || true
+        pactl set-sink-volume "${sink}" 100% 2>/dev/null || true
+    done
+}
+
+normalize_pipewire_streams() {
+    local input
+
+    pactl list short sink-inputs 2>/dev/null | while read -r input _; do
+        pactl set-sink-input-mute "${input}" 0 2>/dev/null || true
+        pactl set-sink-input-volume "${input}" 100% 2>/dev/null || true
+    done
+}
+
+main() {
+    normalize_alsa
+    normalize_pipewire_sinks
+    normalize_pipewire_streams
+}
+
+main "$@"

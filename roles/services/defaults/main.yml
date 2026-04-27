@@ -1,7 +1,6 @@
 ---
 # Services enabled on all hosts
 services_common:
-  - alsa-restore.service
   - xdg-user-dirs.service
   - break-reminder.timer
   - water-reminder.timer

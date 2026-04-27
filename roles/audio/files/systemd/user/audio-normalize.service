@@ -1,0 +1,11 @@
+[Unit]
+Description=Normalize audio output volumes
+After=pipewire.service pipewire-pulse.service wireplumber.service
+Wants=pipewire.service pipewire-pulse.service wireplumber.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/audio-normalize
+
+[Install]
+WantedBy=default.target

@@ -40,3 +40,12 @@ audio_configs:
     dest: '{{ home }}/.config/pipewire'
   - src: wireplumber
     dest: '{{ home }}/.config/wireplumber'
+
+audio_scripts:
+  - audio-normalize
+
+audio_user_services:
+  - audio-normalize.service
+
+audio_legacy_user_services:
+  - alsa-restore.service

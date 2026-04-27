@@ -30,6 +30,46 @@
     - audio
     - config
 
+- name: Ensure ~/.local/bin exists
+  ansible.builtin.file:
+    path: '{{ home }}/.local/bin'
+    state: directory
+    mode: '0755'
+  tags:
+    - audio
+    - config
+
+- name: Deploy audio scripts
+  ansible.builtin.file:
+    src: '{{ dotfiles_dir }}/roles/audio/scripts/{{ item }}'
+    dest: '{{ home }}/.local/bin/{{ item }}'
+    state: link
+    force: true
+  loop: '{{ audio_scripts }}'
+  tags:
+    - audio
+    - config
+
+- name: Ensure systemd user directory exists
+  ansible.builtin.file:
+    path: '{{ home }}/.config/systemd/user'
+    state: directory
+    mode: '0755'
+  tags:
+    - audio
+    - config
+
+- name: Deploy audio user services
+  ansible.builtin.file:
+    src: '{{ dotfiles_dir }}/roles/audio/files/systemd/user/{{ item }}'
+    dest: '{{ home }}/.config/systemd/user/{{ item }}'
+    state: link
+    force: true
+  loop: '{{ audio_user_services }}'
+  tags:
+    - audio
+    - config
+
 - name: Enable PipeWire user services
   ansible.builtin.systemd:
     name: '{{ item }}'
@@ -39,6 +79,29 @@
     - pipewire.service
     - pipewire-pulse.service
     - wireplumber.service
+  tags:
+    - audio
+    - services
+
+- name: Enable audio normalization user services
+  ansible.builtin.systemd:
+    name: '{{ item }}'
+    scope: user
+    enabled: true
+    state: started
+    daemon_reload: true
+  loop: '{{ audio_user_services }}'
+  tags:
+    - audio
+    - services
+
+- name: Disable legacy ALSA restore user services
+  ansible.builtin.systemd:
+    name: '{{ item }}'
+    scope: user
+    enabled: false
+    state: stopped
+  loop: '{{ audio_legacy_user_services }}'
   tags:
     - audio
     - services
