@@ -1401,7 +1401,7 @@
   "php-docblocker.returnGap": true,
   "php-docblocker.returnVoid": true,
   "php-docblocker.useShortNames": true,
-  "phpmnd.enable": true,
+  "phpmnd.enable": false,
   "phpmnd.ignoreNumbers": ["0", "1", "-1"],
   "phpmnd.ignoreStrings": [],
   "phpTypeHints.enabled": true,
