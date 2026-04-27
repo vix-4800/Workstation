@@ -426,6 +426,7 @@
   "editor.linkedEditing": true,
   "editor.minimap.enabled": false,
   "editor.minimap.renderCharacters": false,
+  "editor.pasteAs.preferences": ["chat.attach.text"],
   "editor.quickSuggestionsDelay": 0,
   "editor.renderWhitespace": "trailing",
   "editor.rulers": [120, 150],
