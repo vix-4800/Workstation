@@ -566,7 +566,7 @@
   "intelephense.diagnostics.enable": true,
   "intelephense.diagnostics.implementationErrors": true,
   "intelephense.diagnostics.languageConstraints": true,
-  "intelephense.diagnostics.noMixedTypeCheck": true,
+  "intelephense.diagnostics.noMixedTypeCheck": false,
   "intelephense.diagnostics.relaxedTypeCheck": false,
   "intelephense.diagnostics.run": "onSave",
   "intelephense.diagnostics.typeErrors": true,
