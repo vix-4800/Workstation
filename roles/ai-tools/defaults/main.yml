@@ -77,8 +77,8 @@ ai_tools_repo_symlinks:
     dest: '{{ home }}/.codex/agents'
   - src: agents/commands
     dest: '{{ home }}/.codex/commands'
-  - src: copilot/config.json
-    dest: '{{ home }}/.copilot/config.json'
+  - src: copilot/settings.json
+    dest: '{{ home }}/.copilot/settings.json'
   - src: copilot/mcp-config.json
     dest: '{{ home }}/.copilot/mcp-config.json'
   - src: '{{ ai_tools_global_instruction_repo_src }}'
