@@ -65,7 +65,6 @@ deprecated-cast = { enabled = true, level = "error" }
 deprecated-shell-execute-string = { enabled = true, level = "error" }
 deprecated-switch-semicolon = { enabled = true, level = "error" }
 disallowed-functions = { enabled = true, level = "error", functions = [
-  "assert",
   "create_function",
   "eval",
   "exec",
