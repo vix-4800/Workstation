@@ -73,14 +73,6 @@
     - ai-tools
     - config
 
-- name: Remove deprecated Copilot config symlink
-  ansible.builtin.file:
-    path: '{{ home }}/.copilot/config.json'
-    state: absent
-  tags:
-    - ai-tools
-    - config
-
 - name: Deploy AI tool repo symlinks
   ansible.builtin.file:
     src: '{{ dotfiles_dir }}/roles/ai-tools/files/{{ item.src }}'
