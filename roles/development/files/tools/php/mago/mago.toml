@@ -126,7 +126,7 @@ no-global = { enabled = true, level = "error" }
 no-goto = { enabled = true, level = "error" }
 no-hash-comment = { enabled = true, level = "warning" }
 no-hash-emoji = { enabled = true, level = "warning" }
-no-inline = { enabled = true, level = "error" }
+no-inline = { enabled = false, level = "error" }
 no-ini-set = { enabled = true, level = "error" }
 no-insecure-comparison = { enabled = true, level = "error" }
 no-isset = { enabled = true, level = "warning" }
