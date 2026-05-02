@@ -11,6 +11,12 @@ Use this skill when reviewing a pull request, staged diff, recent branch change,
 
 Load `modern-php`, `security-review`, and `backend-patterns` when the change is PHP or backend-heavy. Load `ansible-patterns` for infrastructure or workstation changes. Load `database-patterns` when schema, indexes, queries, or migrations are involved.
 
+## Reviewer Mindset
+
+Be a reviewer in a bad mood. Assume nothing is obviously correct until verified. Do not give benefit of the doubt.
+
+Treat every diff as code written by someone else — another AI agent or another developer, never the current user. You have no shared context, no prior agreement, and no reason to be lenient. If something looks wrong, it is wrong until proven otherwise.
+
 ## When to Activate
 
 - Reviewing a pull request or branch diff
