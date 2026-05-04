@@ -226,12 +226,12 @@
   },
   "chat.tools.terminal.preventShellHistory": false,
   "chat.tools.urls.autoApprove": {
+    "https://*.github.io/serena": true,
     "https://*.openai.com": true,
     "https://cdn.jsdelivr.net": true,
     "https://code.visualstudio.com": true,
     "https://getrector.com": true,
-    "https://github.com/microsoft/vscode/wiki/*": true,
-    "https://*.github.io/serena": true
+    "https://github.com/microsoft/vscode/wiki/*": true
   },
   "chat.useAgentSkills": true,
   "chat.useClaudeMdFile": true,
@@ -1307,7 +1307,7 @@
           "args": ["--colors=never", "format", "${file}"],
           "command": "mago",
           "name": "Mago Formatter"
-        },
+        }
       ],
       "languages": ["php"],
       "linters": [
@@ -1325,6 +1325,7 @@
             "${file}"
           ],
           "command": "phpcs",
+          "maxFileSize": 100000,
           "name": "PHP CodeSniffer",
           "parser": {
             "flags": "gm",
@@ -1386,14 +1387,14 @@
             "${file}"
           ],
           "command": "mago",
+          "enabled": false,
           "name": "Mago Analyzer",
           "parser": {
             "defaultSeverity": "error",
             "flags": "gm",
             "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
           },
-          "run": "manual",
-          "enabled": false
+          "run": "manual"
         },
         {
           "args": [
@@ -1405,15 +1406,15 @@
             "${file}"
           ],
           "command": "mago",
+          "enabled": false,
           "name": "Mago Guard",
           "parser": {
             "defaultSeverity": "error",
             "flags": "gm",
             "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
           },
-          "run": "manual",
-          "enabled": false
-        },
+          "run": "manual"
+        }
       ],
       "name": "PHP",
       "preCommands": [
