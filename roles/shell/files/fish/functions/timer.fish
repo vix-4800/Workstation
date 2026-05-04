@@ -16,18 +16,22 @@ function timer --description 'Run a background timer and notify when it finishes
         set message (string join ' ' -- $argv[2..-1])
     end
 
-    begin
-        command sleep "$duration"
+    set -l escaped_duration (string escape -- $duration)
+    set -l escaped_message (string escape -- $message)
+    set -l escaped_body (string escape -- "Finished after $duration")
+
+    command fish -c "
+        command sleep $escaped_duration
 
         if command -v notify-send >/dev/null 2>&1
-            notify-send --app-name timer "$message" "Finished after $duration" >/dev/null 2>&1
+            notify-send --app-name timer $escaped_message $escaped_body >/dev/null 2>&1
         else
-            echo "$message"
+            echo $escaped_message >/dev/null
         end
 
-        printf '\a'
-    end &
+        printf '\\a'
+    " >/dev/null 2>&1 &
 
-    disown
+    disown $last_pid
     echo "Timer started: $duration -> $message"
 end
