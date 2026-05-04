@@ -1270,14 +1270,23 @@
     {
       "fixers": [
         {
-          "args": ["--colors=never", "format", "${file}"],
-          "command": "mago",
-          "name": "Mago Formatter"
-        },
-        {
           "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"],
           "command": "php-cs-fixer",
           "name": "PHP CS Fixer"
+        },
+        {
+          "args": [
+            "--standard=~/.config/phpcs/phpcs.xml",
+            "-q",
+            "--ignore-annotations",
+            "--parallel=8",
+            "--no-colors",
+            "-d",
+            "memory_limit=512M",
+            "${file}"
+          ],
+          "command": "phpcbf",
+          "name": "PHP Code Beautifier"
         },
         {
           "args": [
@@ -1295,75 +1304,13 @@
           "run": "manual"
         },
         {
-          "args": [
-            "--standard=~/.config/phpcs/phpcs.xml",
-            "-q",
-            "--ignore-annotations",
-            "--parallel=8",
-            "--no-colors",
-            "-d",
-            "memory_limit=512M",
-            "${file}"
-          ],
-          "command": "phpcbf",
-          "name": "PHP Code Beautifier and Fixer"
-        }
+          "args": ["--colors=never", "format", "${file}"],
+          "command": "mago",
+          "name": "Mago Formatter"
+        },
       ],
       "languages": ["php"],
       "linters": [
-        {
-          "args": [
-            "--colors=never",
-            "lint",
-            "--reporting-format=emacs",
-            "--minimum-report-level=warning",
-            "--minimum-fail-level=warning",
-            "${file}"
-          ],
-          "command": "mago",
-          "name": "Mago Linter",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
-          }
-        },
-        {
-          "args": [
-            "--colors=never",
-            "analyze",
-            "--reporting-format=emacs",
-            "--minimum-report-level=warning",
-            "--minimum-fail-level=warning",
-            "${file}"
-          ],
-          "command": "mago",
-          "name": "Mago Analyzer",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
-          },
-          "run": "manual"
-        },
-        {
-          "args": [
-            "--colors=never",
-            "guard",
-            "--reporting-format=emacs",
-            "--minimum-report-level=warning",
-            "--minimum-fail-level=warning",
-            "${file}"
-          ],
-          "command": "mago",
-          "name": "Mago Guard",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
-          },
-          "run": "manual"
-        },
         {
           "args": [
             "--standard=~/.config/phpcs/phpcs.xml",
@@ -1411,7 +1358,62 @@
             "pattern": "^.+?:(?<line>\\d+):(?<message>.+?)(?: \\[identifier=(?<code>[^\\]]+)\\])?$"
           },
           "run": "manual"
-        }
+        },
+        {
+          "args": [
+            "--colors=never",
+            "lint",
+            "--reporting-format=emacs",
+            "--minimum-report-level=warning",
+            "--minimum-fail-level=warning",
+            "${file}"
+          ],
+          "command": "mago",
+          "name": "Mago Linter",
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+          }
+        },
+        {
+          "args": [
+            "--colors=never",
+            "analyze",
+            "--reporting-format=emacs",
+            "--minimum-report-level=warning",
+            "--minimum-fail-level=warning",
+            "${file}"
+          ],
+          "command": "mago",
+          "name": "Mago Analyzer",
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+          },
+          "run": "manual",
+          "enabled": false
+        },
+        {
+          "args": [
+            "--colors=never",
+            "guard",
+            "--reporting-format=emacs",
+            "--minimum-report-level=warning",
+            "--minimum-fail-level=warning",
+            "${file}"
+          ],
+          "command": "mago",
+          "name": "Mago Guard",
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+          },
+          "run": "manual",
+          "enabled": false
+        },
       ],
       "name": "PHP",
       "preCommands": [
