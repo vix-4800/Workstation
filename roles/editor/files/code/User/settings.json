@@ -1301,6 +1301,8 @@
             "--ignore-annotations",
             "--parallel=8",
             "--no-colors",
+            "-d",
+            "memory_limit=512M",
             "${file}"
           ],
           "command": "phpcbf",
@@ -1371,6 +1373,8 @@
             "--ignore-annotations",
             "--parallel=8",
             "--no-colors",
+            "-d",
+            "memory_limit=512M",
             "${file}"
           ],
           "command": "phpcs",
