@@ -397,7 +397,7 @@
   "database-client.autoSync": true,
   "database-client.telemetry.usesOnlineServices": false,
   "diffEditor.codeLens": true,
-  "diffEditor.experimental.showMoves": true,
+  "diffEditor.experimental.showMoves": false,
   "diffEditor.ignoreTrimWhitespace": true,
   "diffEditor.maxComputationTime": 0,
   "docker.extension.enableComposeLanguageServer": true,
