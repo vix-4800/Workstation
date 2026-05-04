@@ -5,15 +5,20 @@ declare(strict_types=1);
 namespace Rector\Custom\Rules;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\List_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -67,6 +72,26 @@ if (is_array($items)) {
     return $items;
 }'
                 ),
+                new CodeSample(
+                    'if ($obj = $this->user) {
+    return $obj;
+}',
+                    '$obj = $this->user;
+if ($obj) {
+    return $obj;
+}'
+                ),
+                new CodeSample(
+                    'if ($userId && ($user = User::findIdentity($userId)) !== null) {
+    return $user;
+}',
+                    'if ($userId) {
+    $user = User::findIdentity($userId);
+    if ($user !== null) {
+        return $user;
+    }
+}'
+                ),
             ]
         );
     }
@@ -90,6 +115,14 @@ if (is_array($items)) {
 
         $condition = $node->cond;
 
+        if ($condition instanceof BooleanAnd) {
+            return $this->handleBooleanAndCondition($node, $condition);
+        }
+
+        if ($condition instanceof Assign) {
+            return $this->handleAssignmentCondition($node, $condition);
+        }
+
         if ($condition instanceof BinaryOp && $this->isSupportedComparison($condition)) {
             return $this->handleBinaryOpCondition($node, $condition);
         }
@@ -103,6 +136,46 @@ if (is_array($items)) {
         }
 
         return null;
+    }
+
+    private function handleAssignmentCondition(If_ $node, Assign $assignment): ?array
+    {
+        $replacement = $this->createConditionReplacement($assignment);
+
+        if ($replacement === null) {
+            return null;
+        }
+
+        $newIf = clone $node;
+        $newIf->cond = $replacement;
+
+        return [
+            new Expression($assignment),
+            $newIf,
+        ];
+    }
+
+    private function handleBooleanAndCondition(If_ $node, BooleanAnd $booleanAnd): ?array
+    {
+        if ($node->elseifs !== [] || $node->else !== null) {
+            return null;
+        }
+
+        $rightIf = clone $node;
+        $rightExtraction = $this->extractAssignmentFromCondition($booleanAnd->right, $rightIf);
+
+        if ($rightExtraction === null) {
+            return null;
+        }
+
+        $leftIf = clone $node;
+        $leftIf->cond = $booleanAnd->left;
+        $leftIf->stmts = [
+            ...$rightExtraction['statements'],
+            $rightExtraction['if'],
+        ];
+
+        return [$leftIf];
     }
 
     private function handleBinaryOpCondition(If_ $node, BinaryOp $binaryOp): ?array
@@ -125,9 +198,15 @@ if (is_array($items)) {
             return null;
         }
 
+        $replacement = $this->createConditionReplacement($assignment);
+
+        if ($replacement === null) {
+            return null;
+        }
+
         $newCondition = $isLeftAssignment
-            ? $this->createBinaryOp($binaryOp, $assignment->var, $comparisonValue)
-            : $this->createBinaryOp($binaryOp, $comparisonValue, $assignment->var);
+            ? $this->createBinaryOp($binaryOp, $replacement, $comparisonValue)
+            : $this->createBinaryOp($binaryOp, $comparisonValue, $replacement);
 
         $newIf = clone $node;
         $newIf->cond = $newCondition;
@@ -140,6 +219,22 @@ if (is_array($items)) {
 
     private function handleBooleanNotCondition(If_ $node, BooleanNot $booleanNot): ?array
     {
+        if ($booleanNot->expr instanceof Assign) {
+            $replacement = $this->createConditionReplacement($booleanNot->expr);
+
+            if ($replacement === null) {
+                return null;
+            }
+
+            $newIf = clone $node;
+            $newIf->cond = new BooleanNot($replacement);
+
+            return [
+                new Expression($booleanNot->expr),
+                $newIf,
+            ];
+        }
+
         if (!$booleanNot->expr instanceof FuncCall) {
             return null;
         }
@@ -152,7 +247,13 @@ if (is_array($items)) {
             return null;
         }
 
-        $newFuncCall = $this->createFuncCallWithoutAssignment($funcCall, $assignment->var);
+        $replacement = $this->createConditionReplacement($assignment);
+
+        if ($replacement === null) {
+            return null;
+        }
+
+        $newFuncCall = $this->createFuncCallWithoutAssignment($funcCall, $replacement);
         $newCondition = new BooleanNot($newFuncCall);
 
         $newIf = clone $node;
@@ -172,7 +273,13 @@ if (is_array($items)) {
             return null;
         }
 
-        $newCondition = $this->createFuncCallWithoutAssignment($funcCall, $assignment->var);
+        $replacement = $this->createConditionReplacement($assignment);
+
+        if ($replacement === null) {
+            return null;
+        }
+
+        $newCondition = $this->createFuncCallWithoutAssignment($funcCall, $replacement);
 
         $newIf = clone $node;
         $newIf->cond = $newCondition;
@@ -196,6 +303,73 @@ if (is_array($items)) {
         }
 
         return null;
+    }
+
+    /**
+     * @return array{statements: list<Expression>, if: If_}|null
+     */
+    private function extractAssignmentFromCondition(Node $condition, If_ $node): ?array
+    {
+        if ($condition instanceof Assign) {
+            $replacement = $this->createConditionReplacement($condition);
+
+            if ($replacement === null) {
+                return null;
+            }
+
+            $node->cond = $replacement;
+
+            return [
+                'statements' => [new Expression($condition)],
+                'if' => $node,
+            ];
+        }
+
+        if ($condition instanceof BinaryOp && $this->isSupportedComparison($condition)) {
+            $result = $this->handleBinaryOpCondition($node, $condition);
+        } elseif ($condition instanceof BooleanNot) {
+            $result = $this->handleBooleanNotCondition($node, $condition);
+        } elseif ($condition instanceof FuncCall) {
+            $result = $this->handleFuncCallCondition($node, $condition);
+        } else {
+            return null;
+        }
+
+        if ($result === null || count($result) !== 2) {
+            return null;
+        }
+
+        [$statement, $if] = $result;
+
+        if (!$statement instanceof Expression || !$if instanceof If_) {
+            return null;
+        }
+
+        return [
+            'statements' => [$statement],
+            'if' => $if,
+        ];
+    }
+
+    private function createConditionReplacement(Assign $assignment): ?Node
+    {
+        if ($assignment->var instanceof List_) {
+            if (!$this->isSafeListConditionReplacement($assignment->expr)) {
+                return null;
+            }
+
+            return $assignment->expr;
+        }
+
+        return $assignment->var;
+    }
+
+    private function isSafeListConditionReplacement(Node $node): bool
+    {
+        return $node instanceof Variable
+            || $node instanceof PropertyFetch
+            || $node instanceof StaticPropertyFetch
+            || $node instanceof ArrayDimFetch;
     }
 
     private function isSupportedFunction(FuncCall $funcCall): bool
@@ -225,13 +399,22 @@ if (is_array($items)) {
 
     private function createFuncCallWithoutAssignment(FuncCall $originalFuncCall, Node $replacementVar): FuncCall
     {
-        $newArgs = [];
+        $newFuncCall = clone $originalFuncCall;
+        $newFuncCall->args = [];
 
         foreach ($originalFuncCall->args as $arg) {
-            $newArgs[] = $arg->value instanceof Assign ? new Arg($replacementVar) : $arg;
+            if (!$arg->value instanceof Assign) {
+                $newFuncCall->args[] = $arg;
+
+                continue;
+            }
+
+            $newArg = clone $arg;
+            $newArg->value = $replacementVar;
+            $newFuncCall->args[] = $newArg;
         }
 
-        return new FuncCall($originalFuncCall->name, $newArgs);
+        return $newFuncCall;
     }
 
     private function isSupportedComparison(BinaryOp $binaryOp): bool
