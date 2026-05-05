@@ -743,6 +743,8 @@
     "venv/**"
   ],
   "lintRunner.respectGitignore": true,
+  "lintRunner.enableCodeActions": true,
+  "lintRunner.enableCodeLens": true,
   "lintRunner.targets": [
     {
       "fixers": [
