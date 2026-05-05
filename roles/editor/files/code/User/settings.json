@@ -731,6 +731,8 @@
   "json.validate.enable": true,
   "keyboard.dispatch": "code",
   "lintRunner.debounceMs": 300,
+  "lintRunner.enableCodeActions": true,
+  "lintRunner.enableCodeLens": true,
   "lintRunner.ignorePatterns": [
     "vendor/**",
     "*.min.js",
@@ -743,8 +745,6 @@
     "venv/**"
   ],
   "lintRunner.respectGitignore": true,
-  "lintRunner.enableCodeActions": true,
-  "lintRunner.enableCodeLens": true,
   "lintRunner.targets": [
     {
       "fixers": [
