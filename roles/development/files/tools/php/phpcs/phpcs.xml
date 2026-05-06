@@ -83,7 +83,9 @@
         <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification" />
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue" />
-    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint" />
+    <rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint">
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint" />
 
     <!-- ===== CONTROL STRUCTURES ===== -->
