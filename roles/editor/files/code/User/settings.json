@@ -1328,7 +1328,7 @@
             "${file}"
           ],
           "command": "phpcs",
-          "maxFileSize": 100000,
+          "maxFileSize": 75000,
           "name": "PHP CodeSniffer",
           "parser": {
             "flags": "gm",
