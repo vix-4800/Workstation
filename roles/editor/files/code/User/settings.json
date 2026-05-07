@@ -520,6 +520,7 @@
   "git.repositoryScanIgnoredFolders": ["node_modules", "vendor"],
   "git.repositoryScanMaxDepth": 3,
   "git.timeline.showUncommitted": true,
+  "github.copilot.chat.agent.backgroundTodoAgent.enabled": true,
   "github.copilot.chat.anthropic.tools.websearch.enabled": true,
   "github.copilot.chat.cli.forkSessions.enabled": true,
   "github.copilot.chat.cli.remote.enabled": true,
