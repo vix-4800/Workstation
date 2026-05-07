@@ -1333,7 +1333,8 @@
           "parser": {
             "flags": "gm",
             "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>warning|error) - (?<message>.+)$"
-          }
+          },
+          "timeout": 60000
         },
         {
           "args": ["${file}", "text", "~/.config/phpmd/phpmd.xml"],
