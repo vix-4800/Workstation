@@ -1,3 +1,4 @@
+"$schema" = "https://mago.carthage.software/1.26.0/schema.json"
 stack-size = 8388608
 threads = 8
 php-version = "8.4"
@@ -109,6 +110,7 @@ no-assign-in-condition = { enabled = true, level = "error" }
 no-boolean-flag-parameter = { enabled = true, level = "warning", exclude-setters = false, exclude-constructors = true }
 no-closing-tag = { enabled = true, level = "error" }
 no-db-schema-change = { enabled = true, level = "error" }
+no-dead-store = { enabled = true, level = "error" }
 no-debug-symbols = { enabled = true, level = "error" }
 no-direct-db-query = { enabled = true, level = "error" }
 no-else-clause = { enabled = true, level = "help" }
@@ -133,6 +135,7 @@ no-isset = { enabled = true, level = "warning" }
 no-literal-namespace-string = { enabled = true, level = "warning" }
 no-literal-password = { enabled = true, level = "error" }
 no-multi-assignments = { enabled = true, level = "warning" }
+no-negated-ternary = { enabled = true, level = "error" }
 no-nested-ternary = { enabled = true, level = "error" }
 no-noop = { enabled = true, level = "error" }
 no-only = { enabled = true, level = "error" }
@@ -141,6 +144,7 @@ no-php-tag-terminator = { enabled = true, level = "error" }
 no-protected-in-final = { enabled = true, level = "warning" }
 no-redundant-block = { enabled = true, level = "warning" }
 no-redundant-continue = { enabled = true, level = "warning" }
+no-redundant-else = { enabled = true, level = "warning" }
 no-redundant-file = { enabled = true, level = "warning" }
 no-redundant-final = { enabled = true, level = "warning" }
 no-redundant-label = { enabled = true, level = "warning" }
@@ -152,6 +156,7 @@ no-redundant-parentheses = { enabled = true, level = "warning" }
 no-redundant-readonly = { enabled = true, level = "warning" }
 no-redundant-string-concat = { enabled = true, level = "warning" }
 no-redundant-use = { enabled = true, level = "warning" }
+no-redundant-variable = { enabled = true, level = "warning" }
 no-redundant-write-visibility = { enabled = true, level = "warning" }
 no-redundant-yield-from = { enabled = true, level = "warning" }
 no-request-all = { enabled = true, level = "error" }
@@ -168,10 +173,14 @@ no-trailing-space = { enabled = true, level = "warning" }
 no-underscore-class = { enabled = true, level = "error" }
 no-unescaped-output = { enabled = true, level = "error" }
 no-unsafe-finally = { enabled = true, level = "error" }
+no-unused-closure-capture = { enabled = true, level = "warning" }
+no-unused-global = { enabled = true, level = "error" }
+no-unused-static = { enabled = true, level = "error" }
 no-variable-variable = { enabled = true, level = "error" }
 no-void-reference-return = { enabled = true, level = "error" }
 optional-param-order = { enabled = true, level = "error" }
 prefer-anonymous-migration = { enabled = true, level = "warning" }
+prefer-array-spread = { enabled = true, level = "warning" }
 prefer-arrow-function = { enabled = true, level = "warning" }
 prefer-early-continue = { enabled = true, level = "warning" }
 prefer-explode-over-preg-split = { enabled = true, level = "warning" }
@@ -234,9 +243,9 @@ find-unused-definitions = true
 find-overly-wide-return-types = true
 analyze-dead-code = true
 memoize-properties = true
-allow-possibly-undefined-array-keys = false
+strict-array-index-existence = true
+allow-array-truthy-operand = false
 check-throws = true
-check-missing-override = true
 find-unused-parameters = true
 strict-list-index-checks = true
 no-boolean-literal-comparison = true
@@ -252,6 +261,7 @@ enforce-class-finality = true
 require-api-or-internal = true
 check-experimental = true
 allow-side-effects-in-conditions = false
+allow-implicit-pipe-callable-types = false
 class-initializers = ["setUp", "initialize", "boot", "mount"]
 unchecked-exceptions = []
 unchecked-exception-classes = []
