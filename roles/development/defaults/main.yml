@@ -1,0 +1,13 @@
+---
+development_docker_packages:
+  - docker
+  - docker-compose
+  - docker-buildx
+
+development_docker_nvidia_packages:
+  - nvidia-container-toolkit
+
+development_docker_daemon_config_path: /etc/docker/daemon.json
+development_docker_nvidia_runtime_path: /usr/bin/nvidia-container-runtime
+development_docker_nvidia_cdi_dir: /etc/cdi
+development_docker_nvidia_cdi_spec_path: /etc/cdi/nvidia.yaml

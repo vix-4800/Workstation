@@ -1,15 +1,75 @@
 ---
 - name: Install Docker
   community.general.pacman:
-    name:
-      - docker
-      - docker-compose
-      - docker-buildx
+    name: '{{ development_docker_packages }}'
     state: present
   become: true
   tags:
     - development
     - packages
+
+- name: Install NVIDIA Container Toolkit for Docker
+  community.general.pacman:
+    name: '{{ development_docker_nvidia_packages }}'
+    state: present
+  become: true
+  when: gpu_vendor == 'nvidia'
+  notify: Restart Docker
+  tags:
+    - development
+    - packages
+
+- name: Ensure Docker config directory exists
+  ansible.builtin.file:
+    path: '{{ development_docker_daemon_config_path | dirname }}'
+    state: directory
+    mode: '0755'
+  become: true
+  when: gpu_vendor == 'nvidia'
+  tags:
+    - development
+    - config
+
+- name: Configure Docker NVIDIA runtime
+  ansible.builtin.copy:
+    dest: '{{ development_docker_daemon_config_path }}'
+    content: |
+      {
+        "runtimes": {
+          "nvidia": {
+            "path": "{{ development_docker_nvidia_runtime_path }}",
+            "runtimeArgs": []
+          }
+        }
+      }
+    mode: '0644'
+  become: true
+  when: gpu_vendor == 'nvidia'
+  notify: Restart Docker
+  tags:
+    - development
+    - config
+
+- name: Ensure NVIDIA CDI directory exists
+  ansible.builtin.file:
+    path: '{{ development_docker_nvidia_cdi_dir }}'
+    state: directory
+    mode: '0755'
+  become: true
+  when: gpu_vendor == 'nvidia'
+  tags:
+    - development
+    - config
+
+- name: Generate NVIDIA CDI specification for Docker
+  ansible.builtin.command:
+    cmd: nvidia-ctk cdi generate --output={{ development_docker_nvidia_cdi_spec_path }}
+    creates: '{{ development_docker_nvidia_cdi_spec_path }}'
+  become: true
+  when: gpu_vendor == 'nvidia'
+  tags:
+    - development
+    - config
 
 - name: Add user to docker group
   ansible.builtin.user:
