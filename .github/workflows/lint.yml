@@ -1,7 +1,7 @@
 ---
 name: Lint
 
-on:
+'on':
   - push
   - pull_request
 
@@ -19,4 +19,8 @@ jobs:
 
       - run: pipx install pre-commit
 
-      - run: pre-commit run -a
+      - name: Run fast local hooks
+        run: pre-commit run -a
+
+      - name: Run heavy CI-only hooks
+        run: pre-commit run -a --hook-stage manual

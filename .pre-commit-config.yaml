@@ -25,11 +25,15 @@ repos:
     rev: v8.30.1
     hooks:
       - id: gitleaks
+        stages:
+          - manual
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
+        stages:
+          - manual
         args:
           - --severity=warning
 
@@ -37,6 +41,8 @@ repos:
     rev: v1.38.0
     hooks:
       - id: yamllint
+        stages:
+          - manual
         args:
           - --config-file
           - roles/development/files/tools/yaml/yamllint.yml
@@ -45,6 +51,8 @@ repos:
     rev: v0.48.0
     hooks:
       - id: markdownlint
+        stages:
+          - manual
         args:
           - --fix
           - --config
