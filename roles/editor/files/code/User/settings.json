@@ -507,7 +507,6 @@
   },
   "git.allowNoVerifyCommit": true,
   "git.autofetch": true,
-  "git.branchProtection": ["main", "master"],
   "git.confirmNoVerifyCommit": false,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
