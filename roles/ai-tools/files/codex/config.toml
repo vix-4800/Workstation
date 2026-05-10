@@ -29,7 +29,7 @@ enabled = false
 [features]
 multi_agent = true
 apps = true
-codex_hooks = true
+hooks = true
 fast_mode = false
 shell_snapshot = true
 prevent_idle_sleep = true
