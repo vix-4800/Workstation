@@ -43,6 +43,9 @@ theme = "catppuccin-mocha"
 notifications = true
 status_line = ["current-dir", "git-branch", "model-with-reasoning", "context-remaining"]
 
+[tui.model_availability_nux]
+"gpt-5.5" = 1
+
 [profiles.default]
 model = "gpt-5.4"
 web_search = "cached"
