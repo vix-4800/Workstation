@@ -1,5 +1,4 @@
 {
-  "ansible.mcpServer.enabled": true,
   "cSpell.words": [
     "Adwaita",
     "analyse",
@@ -28,12 +27,5 @@
     "stylua",
     "taplo",
     "titlebar"
-  ],
-  "Lua.diagnostics.globals": ["vim"],
-  "Lua.runtime.special": {
-    "love.filesystem.load": "loadfile"
-  },
-  "Lua.runtime.version": "LuaJIT",
-  "Lua.workspace.checkThirdParty": false,
-  "Lua.workspace.library": ["${addons}/love2d/module/library"]
+  ]
 }
