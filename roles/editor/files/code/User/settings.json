@@ -800,7 +800,8 @@
         {
           "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"],
           "command": "markdownlint",
-          "name": "Markdown Lint"
+          "name": "Markdown Lint",
+          "run": "onSave"
         },
         {
           "args": ["--write", "--config", "~/.prettierrc", "${file}"],
