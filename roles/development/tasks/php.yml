@@ -32,6 +32,7 @@
     - phpstan/extension-installer
     - phpstan/phpstan-strict-rules
     - phpstan/phpstan-deprecation-rules
+    - phpat/phpat
     - rector/rector
     - driftingly/rector-laravel
     - friendsofphp/php-cs-fixer
