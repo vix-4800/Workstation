@@ -8,10 +8,6 @@ parameters:
     level: max
     reportIgnoresWithoutComments: true
 
-    dynamicConstantNames:
-        - YII_ENV
-        - YII_DEBUG
-
     excludePaths:
         - vendor/*
         - node_modules/*
@@ -113,3 +109,6 @@ parameters:
             tooWideThrowType: true
             throwTypeCovariance: true
             tooWideImplicitThrowType: true
+
+    phpat:
+        ignore_built_in_classes: true
