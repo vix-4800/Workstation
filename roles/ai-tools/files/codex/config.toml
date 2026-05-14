@@ -45,7 +45,7 @@ status_line = ["run-state", "project-name", "git-branch", "model-with-reasoning"
 status_line_use_colors = true
 
 [tui.model_availability_nux]
-"gpt-5.5" = 2
+"gpt-5.5" = 4
 
 [profiles.default]
 model = "gpt-5.4"
