@@ -276,6 +276,23 @@ final class NoYodaComparisonFixer extends AbstractFixer
                 continue;
             }
 
+            if ($nextToken->isGivenKind(T_OBJECT_OPERATOR) || $nextToken->isGivenKind(T_NULLSAFE_OBJECT_OPERATOR)) {
+                $propertyOrMethod = $tokens->getNextMeaningfulToken($next);
+
+                if ($propertyOrMethod === null) {
+                    break;
+                }
+
+                $current = $propertyOrMethod;
+                $afterProperty = $tokens->getNextMeaningfulToken($current);
+
+                if ($afterProperty !== null && $tokens[$afterProperty]->equals('(')) {
+                    $current = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $afterProperty);
+                }
+
+                continue;
+            }
+
             if ($nextToken->equals('(')) {
                 $current = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $next);
 
@@ -290,6 +307,21 @@ final class NoYodaComparisonFixer extends AbstractFixer
                 }
 
                 $current = $methodOrConst;
+
+                $afterMethodOrConst = $tokens->getNextMeaningfulToken($current);
+
+                if ($afterMethodOrConst !== null && $tokens[$afterMethodOrConst]->equals('(')) {
+                    $current = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $afterMethodOrConst);
+                }
+
+                continue;
+            }
+
+            if ($nextToken->equals('[') || $nextToken->isGivenKind(CT::T_ARRAY_INDEX_CURLY_BRACE_OPEN)) {
+                $blockType = $nextToken->equals('[')
+                    ? Tokens::BLOCK_TYPE_INDEX_SQUARE_BRACE
+                    : Tokens::BLOCK_TYPE_ARRAY_INDEX_CURLY_BRACE;
+                $current = $tokens->findBlockEnd($blockType, $next);
 
                 continue;
             }
