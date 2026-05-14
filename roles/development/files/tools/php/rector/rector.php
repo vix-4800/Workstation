@@ -28,6 +28,7 @@ use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\CodingStyle\Rector\FuncCall\StrictInArrayRector;
 use Rector\Config\RectorConfig;
 use Rector\Custom\Rules\AddTypedClassConstantRector;
+use Rector\Custom\Rules\CollapseSequentialStrReplaceRector;
 use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
 use Rector\Custom\Rules\NullableBoolReturnToFalseRector;
 use Rector\Custom\Rules\ReplaceMultipleEqualWithInArrayRector;
@@ -49,8 +50,6 @@ use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
-use Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector;
-use Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector;
 use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
@@ -239,6 +238,7 @@ $rules = [
 
     // Custom code quality rules
     AddTypedClassConstantRector::class, // Add explicit type to class constants inferred from scalar literals (PHP 8.3+)
+    CollapseSequentialStrReplaceRector::class, // Collapse sequential str_replace() calls with the same replacement into one call
     ExtractAssignmentFromIfConditionRector::class, // Extract assignment from if condition to improve readability
     NullableBoolReturnToFalseRector::class, // Replace ?bool return type with bool and return null → return false
     ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
