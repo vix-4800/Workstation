@@ -361,6 +361,8 @@
     <rule ref="Generic.PHP.ForbiddenFunctions">
         <properties>
             <property name="forbiddenFunctions" type="array" extend="true">
+                <element key="rand" value="random_int" />
+                <element key="mt_rand" value="random_int" />
                 <element key="var_dump" value="null" />
                 <element key="dd" value="null" />
                 <element key="dump" value="null" />
