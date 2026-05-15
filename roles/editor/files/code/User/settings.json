@@ -1506,11 +1506,10 @@
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.cursorStyleInactive": "line",
-  "terminal.integrated.defaultProfile.linux": "fish",
+  "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.enableMultiLinePasteWarning": "never",
   "terminal.integrated.profiles.linux": {
     "bash": {
-      "icon": "terminal-bash",
       "path": "/usr/bin/bash"
     },
     "fish": {
