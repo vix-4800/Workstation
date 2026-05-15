@@ -5,10 +5,15 @@ declare(strict_types=1);
 namespace Rector\Custom\Rules;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -31,7 +36,12 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
     {
         return new RuleDefinition(
             'Converts Model::find()->where([...])->one()/all() into Model::findOne([...]) or findAll([...]). Skips chains with limit() to preserve behavior.',
-            []
+            [
+                new CodeSample(
+                    "Model::find()->where(['id' => \$id])->one();",
+                    'Model::findOne($id);'
+                ),
+            ]
         );
     }
 
@@ -89,11 +99,58 @@ final class Yii2FindOneFindAllShortcutRector extends AbstractRector
         }
 
         $newMethod = $methodName === 'one' ? 'findOne' : 'findAll';
+        $newArgs = $this->resolveShortcutArgs($whereCall);
 
         return new StaticCall(
             $findCall->class,
             new Identifier($newMethod),
-            $whereCall->args
+            $newArgs
         );
+    }
+
+    /**
+     * @return list<Arg>
+     */
+    private function resolveShortcutArgs(MethodCall $whereCall): array
+    {
+        if (count($whereCall->args) !== 1) {
+            return $whereCall->args;
+        }
+
+        $firstArg = $whereCall->args[0]->value;
+
+        if (!$firstArg instanceof Array_) {
+            return $whereCall->args;
+        }
+
+        $shortcutArg = $this->resolveSingleIdArg($firstArg);
+
+        if (!$shortcutArg instanceof Arg) {
+            return $whereCall->args;
+        }
+
+        return [$shortcutArg];
+    }
+
+    /**
+     * @return Arg|null
+     */
+    private function resolveSingleIdArg(Array_ $array): ?Arg
+    {
+        if (count($array->items) !== 1) {
+            return null;
+        }
+
+        $item = $array->items[0];
+
+        if (!$item instanceof ArrayItem) {
+            return null;
+        }
+
+        if (!$item->key instanceof String_ || $item->key->value !== 'id') {
+            return null;
+        }
+
+        return new Arg($item->value);
     }
 }
