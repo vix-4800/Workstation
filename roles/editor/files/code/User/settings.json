@@ -751,6 +751,34 @@
   "lintRunner.respectGitignore": true,
   "lintRunner.targets": [
     {
+      "languages": ["php"],
+      "linters": [
+        {
+          "args": [
+            "dir",
+            "--config",
+            "${workspaceFolder}/.gitleaks.toml",
+            "--report-format",
+            "json",
+            "--report-path",
+            "-",
+            "${file}"
+          ],
+          "command": "gitleaks",
+          "name": "GitLeaks",
+          "parser": {
+            "defaultSeverity": "error",
+            "flags": "gm",
+            "messageFormat": "json",
+            "output": "stdout",
+            "pattern": "\\{\\s*\"RuleID\":\\s*\"(?<code>(?:\\\\.|[^\\\"])*)\",\\s*\"Description\":\\s*\"(?<message>(?:\\\\.|[^\\\"])*)\",\\s*\"StartLine\":\\s*(?<line>\\d+),\\s*\"EndLine\":\\s*\\d+,\\s*\"StartColumn\":\\s*(?<col>\\d+),[\\s\\S]*?\"File\":\\s*\"(?<file>(?:\\\\.|[^\\\"])*)\""
+          },
+          "run": "onSave"
+        }
+      ],
+      "name": "GitLeaks"
+    },
+    {
       "fixers": [
         {
           "args": ["-w", "${file}"],
