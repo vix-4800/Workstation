@@ -43,6 +43,7 @@
   community.general.pacman:
     name:
       - go
+      - gitleaks
       - lua
       - lua54
       - luarocks
@@ -150,6 +151,8 @@
         dest: '{{ home }}/.jsonlintrc'
       - src: make/checkmake
         dest: '{{ home }}/.config/checkmake'
+      - src: gitleaks/.gitleaks.toml
+        dest: '{{ home }}/.gitleaks.toml'
   tags:
     - development
     - config
