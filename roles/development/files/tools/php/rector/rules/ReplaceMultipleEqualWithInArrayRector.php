@@ -93,6 +93,10 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
 
         $comparisons = $this->collectComparisons($node);
 
+        if (!is_array($comparisons)) {
+            return null;
+        }
+
         if (count($comparisons) < 2) {
             return null;
         }
@@ -184,9 +188,9 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
      *
      * @param Node $node
      *
-     * @return list<Equal|Identical|NotEqual|NotIdentical>
+     * @return list<Equal|Identical|NotEqual|NotIdentical>|null
      */
-    private function collectComparisons(Node $node): array
+    private function collectComparisons(Node $node): ?array
     {
         if ($node instanceof BooleanOr) {
             return $this->collectOrComparisons($node);
@@ -196,45 +200,53 @@ final class ReplaceMultipleEqualWithInArrayRector extends AbstractRector
             return $this->collectAndComparisons($node);
         }
 
-        return [];
+        return null;
     }
 
     /**
-     * @return list<Equal|Identical>
+     * @return list<Equal|Identical>|null
      */
-    private function collectOrComparisons(Node $node): array
+    private function collectOrComparisons(Node $node): ?array
     {
         if ($node instanceof Identical || $node instanceof Equal) {
             return [$node];
         }
 
         if ($node instanceof BooleanOr) {
-            return array_merge(
-                $this->collectOrComparisons($node->left),
-                $this->collectOrComparisons($node->right)
-            );
+            $leftComparisons = $this->collectOrComparisons($node->left);
+            $rightComparisons = $this->collectOrComparisons($node->right);
+
+            if (!is_array($leftComparisons) || !is_array($rightComparisons)) {
+                return null;
+            }
+
+            return [...$leftComparisons, ...$rightComparisons];
         }
 
-        return [];
+        return null;
     }
 
     /**
-     * @return list<NotEqual|NotIdentical>
+     * @return list<NotEqual|NotIdentical>|null
      */
-    private function collectAndComparisons(Node $node): array
+    private function collectAndComparisons(Node $node): ?array
     {
         if ($node instanceof NotIdentical || $node instanceof NotEqual) {
             return [$node];
         }
 
         if ($node instanceof BooleanAnd) {
-            return array_merge(
-                $this->collectAndComparisons($node->left),
-                $this->collectAndComparisons($node->right)
-            );
+            $leftComparisons = $this->collectAndComparisons($node->left);
+            $rightComparisons = $this->collectAndComparisons($node->right);
+
+            if (!is_array($leftComparisons) || !is_array($rightComparisons)) {
+                return null;
+            }
+
+                return [...$leftComparisons, ...$rightComparisons];
         }
 
-        return [];
+        return null;
     }
 
     /**
