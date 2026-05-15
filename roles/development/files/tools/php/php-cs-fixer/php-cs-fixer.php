@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 use CustomFixer\BlankLineAfterStatementFixer;
 use CustomFixer\CatchExceptionToThrowableFixer;
+use CustomFixer\FluentChainLineBreaksFixer;
 use CustomFixer\IssetCoalesceFixer;
 use CustomFixer\NoYodaComparisonFixer;
 use CustomFixer\NumericLiteralSeparatorFixer;
@@ -24,6 +25,9 @@ use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 require_once __DIR__ . '/Fixer/NumericLiteralSeparatorFixer.php';
 require_once __DIR__ . '/Fixer/BlankLineAfterStatementFixer.php';
 require_once __DIR__ . '/Fixer/NoYodaComparisonFixer.php';
+require_once __DIR__ . '/Fixer/FluentChainCollector.php';
+require_once __DIR__ . '/Fixer/FluentChainWhitespaceFormatter.php';
+require_once __DIR__ . '/Fixer/FluentChainLineBreaksFixer.php';
 require_once __DIR__ . '/Fixer/IssetCoalesceFixer.php';
 require_once __DIR__ . '/Fixer/CatchExceptionToThrowableFixer.php';
 require_once __DIR__ . '/Fixer/RemoveUnusedCatchVariableFixer.php';
@@ -43,6 +47,7 @@ return new Config()
         new NumericLiteralSeparatorFixer(),
         new BlankLineAfterStatementFixer(),
         new NoYodaComparisonFixer(),
+        new FluentChainLineBreaksFixer(),
         new IssetCoalesceFixer(),
         new CatchExceptionToThrowableFixer(),
         new RemoveUnusedCatchVariableFixer(),
@@ -58,7 +63,7 @@ return new Config()
         // Base preset
         // ─────────────────────────────────────────────────────────────
         '@PER-CS' => true, // PHP-FIG PER Coding Style (successor to PSR-12)
-        '@PHP84Migration' => true, // Applies PHP 8.4 language modernisation fixes
+        '@PHP84Migration' => true, // Applies PHP 8.4 language modernization fixes
 
         // ─────────────────────────────────────────────────────────────
         // Modern PHP & Performance optimizations
@@ -327,7 +332,7 @@ return new Config()
         'random_api_migration' => true, // Replaces deprecated random number generation functions with modern ones
         'self_accessor' => true, // Enforces the use of self:: for accessing static properties and methods
         'self_static_accessor' => true, // In final/anonymous classes, replaces static:: with self::
-        'phpdoc_return_self_reference' => true, // Normalises @return $self, @return @this etc. to self/$this
+        'phpdoc_return_self_reference' => true, // Normalizes @return $self, @return @this etc. to self/$this
         'mb_str_functions' => true, // Enforces the use of mb_str_* functions for multibyte string operations
 
         // ─────────────────────────────────────────────────────────────────────────
@@ -346,6 +351,7 @@ return new Config()
             ],
         ],
         'CustomFixer/no_yoda_comparison' => true, // Converts Yoda-style comparisons to standard style
+        'CustomFixer/fluent_chain_line_breaks' => true, // Splits multiline fluent chains so each call starts on its own line
         'CustomFixer/isset_coalesce' => true, // Simplifies (... ?? null) !== null to isset(...)
         'CustomFixer/catch_exception_to_throwable' => true, // Replaces Exception catches with Throwable
         'CustomFixer/remove_unused_catch_variable' => true, // Removes unused variables in catch blocks (PHP 8.0+ non-capturing catch)
