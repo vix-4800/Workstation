@@ -74,14 +74,14 @@
   // Line Length & Special Cases
   // ─────────────────────────────────────────────────────────────
   "MD013": {
-    "line_length": 120,
+    "line_length": 150,
     "heading_line_length": 120,
     "code_block_line_length": 120,
     "tables": false,
-    "code_blocks": false,
-    "headings": false,
+    "code_blocks": true,
+    "headings": true,
     "strict": false,
-    "stern": false
+    "stern": true
   },
 
   // ─────────────────────────────────────────────────────────────
