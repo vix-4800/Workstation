@@ -1340,7 +1340,8 @@
         {
           "args": ["--colors=never", "format", "${file}"],
           "command": "mago",
-          "name": "Mago Formatter"
+          "name": "Mago Formatter",
+          "enabled": false
         }
       ],
       "languages": ["php"],
