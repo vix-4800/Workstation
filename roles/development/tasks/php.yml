@@ -40,6 +40,7 @@
     - slevomat/coding-standard
     - vix/phpcs-sniffs:dev-main
     - vix/phpstan-rules:dev-main
+    - vix/php-cs-fixer-fixers:dev-main
     - phpcompatibility/php-compatibility:"^10.0.0@dev"
     - phpmd/phpmd
     - carthage-software/mago
