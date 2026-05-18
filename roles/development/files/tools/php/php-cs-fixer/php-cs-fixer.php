@@ -6,58 +6,22 @@
 
 declare(strict_types=1);
 
-use CustomFixer\BlankLineAfterStatementFixer;
-use CustomFixer\CatchExceptionToThrowableFixer;
-use CustomFixer\FluentChainLineBreaksFixer;
-use CustomFixer\IssetCoalesceFixer;
-use CustomFixer\NoYodaComparisonFixer;
-use CustomFixer\NumericLiteralSeparatorFixer;
-use CustomFixer\PhpDocOpeningLineFixer;
-use CustomFixer\PhpDocSelfReferenceFixer;
-use CustomFixer\PhpDocSeparateThrowsFixer;
-use CustomFixer\RemoveDocBlockTagsFixer;
-use CustomFixer\RemoveUnusedCatchVariableFixer;
-use CustomFixer\RemoveUnusedForeachKeyFixer;
-use CustomFixer\RequireNullSafeOperatorFixer;
 use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+use Vix\PhpCsFixerFixers\Fixers;
 
-require_once __DIR__ . '/Fixer/NumericLiteralSeparatorFixer.php';
-require_once __DIR__ . '/Fixer/BlankLineAfterStatementFixer.php';
-require_once __DIR__ . '/Fixer/NoYodaComparisonFixer.php';
-require_once __DIR__ . '/Fixer/FluentChainCollector.php';
-require_once __DIR__ . '/Fixer/FluentChainWhitespaceFormatter.php';
-require_once __DIR__ . '/Fixer/FluentChainLineBreaksFixer.php';
-require_once __DIR__ . '/Fixer/IssetCoalesceFixer.php';
-require_once __DIR__ . '/Fixer/CatchExceptionToThrowableFixer.php';
-require_once __DIR__ . '/Fixer/RemoveUnusedCatchVariableFixer.php';
-require_once __DIR__ . '/Fixer/RemoveUnusedForeachKeyFixer.php';
-require_once __DIR__ . '/Fixer/PhpDocOpeningLineFixer.php';
-require_once __DIR__ . '/Fixer/PhpDocSeparateThrowsFixer.php';
-require_once __DIR__ . '/Fixer/PhpDocSelfReferenceFixer.php';
-require_once __DIR__ . '/Fixer/RequireNullSafeOperatorFixer.php';
-require_once __DIR__ . '/Fixer/RemoveDocBlockTagsFixer.php';
+$home = getenv('HOME');
+$customPackageVendorPath = $home . '/.config/composer/vendor/vix/php-cs-fixer-fixers/src/';
+$fixerPath = $customPackageVendorPath . 'Fixers.php';
+
+require_once $fixerPath;
 
 return new Config()
     ->setRiskyAllowed(true)
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setUsingCache(false)
     ->setUnsupportedPhpVersionAllowed(true)
-    ->registerCustomFixers([
-        new NumericLiteralSeparatorFixer(),
-        new BlankLineAfterStatementFixer(),
-        new NoYodaComparisonFixer(),
-        new FluentChainLineBreaksFixer(),
-        new IssetCoalesceFixer(),
-        new CatchExceptionToThrowableFixer(),
-        new RemoveUnusedCatchVariableFixer(),
-        new RemoveUnusedForeachKeyFixer(),
-        new PhpDocOpeningLineFixer(),
-        new PhpDocSeparateThrowsFixer(),
-        new PhpDocSelfReferenceFixer(),
-        new RequireNullSafeOperatorFixer(),
-        new RemoveDocBlockTagsFixer(),
-    ])
+    ->registerCustomFixers(Fixers::all())
     ->setRules([
         // ─────────────────────────────────────────────────────────────
         // Base preset
@@ -121,7 +85,7 @@ return new Config()
                 'link' => 'see',
             ],
         ], // Removes PHPDoc alias tags
-        'CustomFixer/remove_doc_block_tags' => [
+        'VixFixer/remove_doc_block_tags' => [
             'tags' => [
                 'category',
                 'package',
@@ -338,8 +302,8 @@ return new Config()
         // ─────────────────────────────────────────────────────────────────────────
         // Custom fixers
         // ─────────────────────────────────────────────────────────────────────────
-        'CustomFixer/numeric_literal_separator' => ['min_digits' => 5],
-        'CustomFixer/blank_line_after_statement' => [
+        'VixFixer/numeric_literal_separator' => ['min_digits' => 5],
+        'VixFixer/blank_line_after_statement' => [
             'statements' => [
                 'if',
                 'do',
@@ -350,16 +314,16 @@ return new Config()
                 'try',
             ],
         ],
-        'CustomFixer/no_yoda_comparison' => true, // Converts Yoda-style comparisons to standard style
-        'CustomFixer/fluent_chain_line_breaks' => true, // Splits multiline fluent chains so each call starts on its own line
-        'CustomFixer/isset_coalesce' => true, // Simplifies (... ?? null) !== null to isset(...)
-        'CustomFixer/catch_exception_to_throwable' => true, // Replaces Exception catches with Throwable
-        'CustomFixer/remove_unused_catch_variable' => true, // Removes unused variables in catch blocks (PHP 8.0+ non-capturing catch)
-        'CustomFixer/remove_unused_foreach_key' => true, // Removes unused key variables from foreach loops
-        'CustomFixer/phpdoc_opening_line' => true, // Ensures multi-line PHPDoc /** is on its own line
-        'CustomFixer/phpdoc_separate_throws' => true, // Splits @throws A|B into separate @throws tags
-        'CustomFixer/phpdoc_self_reference' => true, // Replaces class name with self in PHPDoc @var/@param/@return inside the class
-        'CustomFixer/require_null_safe_operator' => true, // Converts $x !== null ? $x->method() : null to $x?->method()
+        'VixFixer/no_yoda_comparison' => true, // Converts Yoda-style comparisons to standard style
+        'VixFixer/fluent_chain_line_breaks' => true, // Splits multiline fluent chains so each call starts on its own line
+        'VixFixer/isset_coalesce' => true, // Simplifies (... ?? null) !== null to isset(...)
+        'VixFixer/catch_exception_to_throwable' => true, // Replaces Exception catches with Throwable
+        'VixFixer/remove_unused_catch_variable' => true, // Removes unused variables in catch blocks (PHP 8.0+ non-capturing catch)
+        'VixFixer/remove_unused_foreach_key' => true, // Removes unused key variables from foreach loops
+        'VixFixer/phpdoc_opening_line' => true, // Ensures multi-line PHPDoc /** is on its own line
+        'VixFixer/phpdoc_separate_throws' => true, // Splits @throws A|B into separate @throws tags
+        'VixFixer/phpdoc_self_reference' => true, // Replaces class name with self in PHPDoc @var/@param/@return inside the class
+        'VixFixer/require_null_safe_operator' => true, // Converts $x !== null ? $x->method() : null to $x?->method()
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
