@@ -112,3 +112,8 @@ parameters:
 
     phpat:
         ignore_built_in_classes: true
+
+    phpstanRules:
+        yii2:
+            rules:
+                all: false
