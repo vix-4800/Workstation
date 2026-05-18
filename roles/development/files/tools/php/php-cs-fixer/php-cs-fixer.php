@@ -11,10 +11,9 @@ use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 use Vix\PhpCsFixerFixers\Fixers;
 
 $home = getenv('HOME');
-$customPackageVendorPath = $home . '/.config/composer/vendor/vix/php-cs-fixer-fixers/src/';
-$fixerPath = $customPackageVendorPath . 'Fixers.php';
+$globalComposerAutoloadPath = $home . '/.config/composer/vendor/autoload.php';
 
-require_once $fixerPath;
+require_once $globalComposerAutoloadPath;
 
 return new Config()
     ->setRiskyAllowed(true)
