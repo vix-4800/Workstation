@@ -1466,6 +1466,7 @@
   "markdown.extension.bold.indicator": "**",
   "markdown.extension.italic.indicator": "*",
   "markdown.extension.orderedList.marker": "ordered",
+  "markdown.extension.toc.updateOnSave": true,
   "markdown.validate.enabled": true,
   "network.meteredConnection": "off",
   "php-docblocker.alignParams": true,
