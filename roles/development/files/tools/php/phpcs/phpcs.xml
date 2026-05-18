@@ -31,9 +31,9 @@
     <!-- ===== CORE STANDARDS ===== -->
     <rule ref="PSR12" />
     <rule ref="PHPCompatibility" />
-    <rule ref="DevStrict">
-        <exclude name="DevStrict.Yii2" />
-        <!-- <exclude name="DevStrict.Laravel" /> -->
+    <rule ref="VixPHPCS">
+        <exclude name="VixPHPCS.Yii2" />
+        <exclude name="VixPHPCS.Laravel" />
     </rule>
 
     <!-- ===== TYPE HINTS ===== -->
@@ -306,7 +306,7 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment" />
     <rule ref="SlevomatCodingStandard.Attributes.DisallowMultipleAttributesPerLine" />
-    <rule ref="DevStrict.Attributes.ForbiddenAttributes">
+    <rule ref="VixPHPCS.Attributes.ForbiddenAttributes">
         <properties>
             <property name="forbiddenAttributes" type="array">
                 <element value="ArrayShape" />
