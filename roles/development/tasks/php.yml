@@ -38,7 +38,8 @@
     - friendsofphp/php-cs-fixer
     - squizlabs/php_codesniffer
     - slevomat/coding-standard
-    - devstrict/phpcs:dev-main
+    - vix/phpcs-sniffs:dev-main
+    - vix/phpstan-rules:dev-main
     - phpcompatibility/php-compatibility:"^10.0.0@dev"
     - phpmd/phpmd
     - carthage-software/mago
