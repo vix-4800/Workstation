@@ -27,18 +27,6 @@ use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRe
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\CodingStyle\Rector\FuncCall\StrictInArrayRector;
 use Rector\Config\RectorConfig;
-use Rector\Custom\Rules\AddTypedClassConstantRector;
-use Rector\Custom\Rules\CollapseSequentialStrReplaceRector;
-use Rector\Custom\Rules\ExtractAssignmentFromIfConditionRector;
-use Rector\Custom\Rules\NullableBoolReturnToFalseRector;
-use Rector\Custom\Rules\ReplaceMultipleEqualWithInArrayRector;
-use Rector\Custom\Rules\Yii2FindAllIdShortcutRector;
-use Rector\Custom\Rules\Yii2FindOneFindAllShortcutRector;
-use Rector\Custom\Rules\Yii2FindOneIdShortcutRector;
-use Rector\Custom\Rules\Yii2PropertyAccessRector;
-use Rector\Custom\Rules\Yii2UseExistsInsteadOfCountRector;
-use Rector\Custom\Rules\Yii2UseExistsInsteadOfOneNotNullRector;
-use Rector\Custom\Rules\Yii2UserFindOneToIdentityRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
@@ -61,6 +49,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRect
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector;
+use Rector\ValueObject\PhpVersion;
 use RectorLaravel\Rector\ArrayDimFetch\EnvVariableToEnvHelperRector;
 use RectorLaravel\Rector\ArrayDimFetch\RequestVariablesToRequestFacadeRector;
 use RectorLaravel\Rector\ArrayDimFetch\ServerVariableToRequestFacadeRector;
@@ -85,23 +74,26 @@ use RectorLaravel\Rector\MethodCall\ValidationRuleArrayStringValueToArrayRector;
 use RectorLaravel\Rector\StaticCall\EloquentMagicMethodToQueryBuilderRector;
 use RectorLaravel\Rector\StaticCall\RequestStaticValidateToInjectRector;
 use RectorLaravel\Set\LaravelSetProvider;
-use Rector\ValueObject\PhpVersion;
+use Vix\RectorRules\AddTypedClassConstantRector;
+use Vix\RectorRules\CollapseSequentialStrReplaceRector;
+use Vix\RectorRules\ExtractAssignmentFromIfConditionRector;
+use Vix\RectorRules\NullableBoolReturnToFalseRector;
+use Vix\RectorRules\ReplaceMultipleEqualWithInArrayRector;
+use Vix\RectorRules\Yii2FindAllIdShortcutRector;
+use Vix\RectorRules\Yii2FindOneFindAllShortcutRector;
+use Vix\RectorRules\Yii2FindOneIdShortcutRector;
+use Vix\RectorRules\Yii2PropertyAccessRector;
+use Vix\RectorRules\Yii2UseExistsInsteadOfCountRector;
+use Vix\RectorRules\Yii2UseExistsInsteadOfOneNotNullRector;
+use Vix\RectorRules\Yii2UserFindOneToIdentityRector;
 
 $laravelRulesEnabled = false;
 $yii2RulesEnabled = false;
 
-$rulesDir = __DIR__ . '/rules';
-$ruleFiles = glob("{$rulesDir}/*.php");
+$home = getenv('HOME');
+$globalComposerAutoloadPath = $home . '/.config/composer/vendor/autoload.php';
 
-if ($ruleFiles !== false) {
-    foreach ($ruleFiles as $ruleFile) {
-        if (!file_exists($ruleFile) || !is_readable($ruleFile)) {
-            continue;
-        }
-
-        require_once $ruleFile;
-    }
-}
+require_once $globalComposerAutoloadPath;
 
 $laravelRules = [
     AbortIfRector::class,
@@ -249,7 +241,8 @@ if ($laravelRulesEnabled) {
         $rules[] = $laravelRule;
     }
 
-    $config->withSetProviders(LaravelSetProvider::class)
+    $config
+        ->withSetProviders(LaravelSetProvider::class)
         ->withComposerBased(laravel: true);
 }
 
