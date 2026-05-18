@@ -756,7 +756,7 @@
           "args": [
             "dir",
             "--config",
-            "${workspaceFolder}/.gitleaks.toml",
+            "~/.gitleaks.toml",
             "--report-format",
             "json",
             "--report-path",
