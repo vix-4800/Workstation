@@ -8,7 +8,6 @@ use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
 use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
-use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
@@ -217,7 +216,6 @@ $rules = [
     // Strings
     StrlenZeroToIdenticalEmptyStringRector::class, // Replaces strlen($x) === 0 / > 0 with $x === '' / !== ''
     SimplifyStrposLowerRector::class,
-    SimplifyRegexPatternRector::class,
     MbStrContainsRector::class,
 
     // Code style
