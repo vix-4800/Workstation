@@ -120,3 +120,81 @@ parameters:
         yii2:
             rules:
                 all: false
+
+    shipmonkRules:
+        enableAllRules: false
+
+        allowComparingOnlyComparableTypes:
+            enabled: true
+
+        enforceClosureParamNativeTypehint:
+            enabled: true
+
+        enforceEnumMatch:
+            enabled: true
+
+        forbidArithmeticOperationOnNonNumber:
+            enabled: true
+            allowNumericString: false
+
+        forbidUnsafeArrayKey:
+            enabled: true
+            reportMixed: true
+            reportInsideIsset: false
+
+        forbidMethodCallOnMixed:
+            enabled: true
+
+        forbidNotNormalizedType:
+            enabled: true
+
+        forbidFetchOnMixed:
+            enabled: true
+
+        forbidNullInBinaryOperations:
+            enabled: true
+
+        forbidNullInAssignOperations:
+            enabled: true
+
+        forbidNullInInterpolatedString:
+            enabled: true
+
+        forbidPhpDocNullabilityMismatchWithNativeTypehint:
+            enabled: true
+
+        forbidMatchDefaultArmForEnums:
+            enabled: true
+
+        enforceListReturn:
+            enabled: true
+
+        requirePreviousExceptionPass:
+            enabled: true
+
+        enforceReadonlyPublicProperty:
+            enabled: true
+
+        forbidCast:
+            enabled: true
+
+        forbidIdenticalClassComparison:
+            enabled: true
+
+        forbidIncrementDecrementOnNonInteger:
+            enabled: true
+
+        forbidProtectedEnumMethod:
+            enabled: true
+
+        forbidVariableTypeOverwriting:
+            enabled: true
+
+        forbidUnsetClassField:
+            enabled: true
+
+        forbidUnusedMatchResult:
+            enabled: true
+
+        uselessPrivatePropertyDefaultValue:
+            enabled: true

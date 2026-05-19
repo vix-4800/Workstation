@@ -28,21 +28,27 @@
     global_command: true
     arguments: '{{ item }}'
   loop:
+    # PHPStan and extensions
     - phpstan/phpstan
     - phpstan/extension-installer
     - phpstan/phpstan-strict-rules
     - phpstan/phpstan-deprecation-rules
     - vix/phpstan-rules:dev-main
     - phpat/phpat
+    - shipmonk/phpstan-rules
+    # Rector and extensions
     - rector/rector
     - driftingly/rector-laravel
     - vix/rector-rules:dev-main
+    # PHP-CS-Fixer and extensions
     - friendsofphp/php-cs-fixer
     - vix/php-cs-fixer-fixers:dev-main
+    # PHP_CodeSniffer and extensions
     - squizlabs/php_codesniffer
     - slevomat/coding-standard
     - vix/phpcs-sniffs:dev-main
     - phpcompatibility/php-compatibility:"^10.0.0@dev"
+    # Other tools
     - phpmd/phpmd
     - carthage-software/mago
   become: false
