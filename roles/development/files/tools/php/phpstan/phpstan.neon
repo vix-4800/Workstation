@@ -113,7 +113,7 @@ parameters:
     phpat:
         ignore_built_in_classes: true
 
-    phpstanRules:
+    vixPhpstan:
         php:
             rules:
                 all: true
