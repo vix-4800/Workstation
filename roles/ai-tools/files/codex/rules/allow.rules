@@ -28,7 +28,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["composer", ["info", "show", "validate"]],
+    pattern = ["composer", ["info", "show", "validate", "prohibits"]],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
 )
@@ -249,4 +249,10 @@ prefix_rule(
     pattern = ["yamllint"],
     decision = "allow",
     justification = "Read-only YAML linter; no side effects.",
+)
+
+prefix_rule(
+    pattern=["npm", "test"],
+    decision="allow",
+    justification="Running tests is allowed without user approval",
 )
