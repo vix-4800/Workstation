@@ -1,4 +1,5 @@
-"$schema" = "https://mago.carthage.software/1.27.1/schema.json"
+"$schema" = "https://mago.carthage.software/1.28.0/schema.json"
+version = "1.28"
 stack-size = 8388608
 threads = 8
 php-version = "8.4"
