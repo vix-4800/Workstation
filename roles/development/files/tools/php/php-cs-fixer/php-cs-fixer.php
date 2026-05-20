@@ -128,9 +128,6 @@ return new Config()
         'phpdoc_param_order' => true, // Orders @param tags according to method signature
         'phpdoc_tag_casing' => true, // Fixes casing of PHPDoc tags.
         'phpdoc_tag_type' => ['tags' => ['inheritdoc' => 'inline']], // Normalizes @inheritdoc tags to inline form
-        'phpdoc_tag_no_named_arguments' => [
-            'description' => 'Parameter names are not covered by the backward compatibility promise.',
-        ],
         'general_phpdoc_annotation_remove' => [
             'annotations' => [
                 'category',
