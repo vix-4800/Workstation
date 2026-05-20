@@ -56,6 +56,7 @@ use Vix\RectorRules\Yii2FindAllIdShortcutRector;
 use Vix\RectorRules\Yii2FindOneFindAllShortcutRector;
 use Vix\RectorRules\Yii2FindOneIdShortcutRector;
 use Vix\RectorRules\Yii2PropertyAccessRector;
+use Vix\RectorRules\Yii2RedundantActiveRecordSelfLookupRector;
 use Vix\RectorRules\Yii2UseExistsInsteadOfCountRector;
 use Vix\RectorRules\Yii2UseExistsInsteadOfOneNotNullRector;
 use Vix\RectorRules\Yii2UserFindOneToIdentityRector;
@@ -102,6 +103,7 @@ $yii2Rules = [
     Yii2UserFindOneToIdentityRector::class, // Replace User::findOne() with identity access patterns
     Yii2UseExistsInsteadOfOneNotNullRector::class, // Replace ->one() !== null with ->exists()
     Yii2UseExistsInsteadOfCountRector::class, // Replace ->count() > 0 with ->exists()
+    Yii2RedundantActiveRecordSelfLookupRector::class, // Remove redundant self lookups in ActiveRecord queries
 ];
 
 $config = RectorConfig::configure()
