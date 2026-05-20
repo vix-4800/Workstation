@@ -186,7 +186,12 @@ return new Config()
         // ─────────────────────────────────────────────────────────────────────────
         // Spacing, operators, and general style
         // ─────────────────────────────────────────────────────────────────────────
-        'yoda_style' => false, // Disables Yoda conditions
+        'yoda_style' => [
+            'equal' => false,
+            'identical' => false,
+            'less_and_greater' => null,
+            'always_move_variable' => true,
+        ], // Disables Yoda conditions
         'binary_operator_spaces' => ['default' => 'single_space'],
         'no_extra_blank_lines' => [
             'tokens' => [
@@ -368,7 +373,6 @@ return new Config()
                 'try',
             ],
         ],
-        'VixFixer/no_yoda_comparison' => true, // Converts Yoda-style comparisons to standard style
         'VixFixer/fluent_chain_line_breaks' => true, // Splits multiline fluent chains so each call starts on its own line
         'VixFixer/isset_coalesce' => true, // Simplifies (... ?? null) !== null to isset(...)
         'VixFixer/catch_exception_to_throwable' => true, // Replaces Exception catches with Throwable
