@@ -374,14 +374,12 @@ return new Config()
             ],
         ],
         'VixFixer/fluent_chain_line_breaks' => true, // Splits multiline fluent chains so each call starts on its own line
-        'VixFixer/isset_coalesce' => true, // Simplifies (... ?? null) !== null to isset(...)
         'VixFixer/catch_exception_to_throwable' => true, // Replaces Exception catches with Throwable
         'VixFixer/remove_unused_catch_variable' => true, // Removes unused variables in catch blocks (PHP 8.0+ non-capturing catch)
         'VixFixer/remove_unused_foreach_key' => true, // Removes unused key variables from foreach loops
         'VixFixer/phpdoc_opening_line' => true, // Ensures multi-line PHPDoc /** is on its own line
         'VixFixer/phpdoc_separate_throws' => true, // Splits @throws A|B into separate @throws tags
         'VixFixer/phpdoc_self_reference' => true, // Replaces class name with self in PHPDoc @var/@param/@return inside the class
-        'VixFixer/require_null_safe_operator' => true, // Converts $x !== null ? $x->method() : null to $x?->method()
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
