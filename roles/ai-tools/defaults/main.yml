@@ -67,12 +67,8 @@ ai_tools_repo_symlinks:
     dest: '{{ home }}/.config/opencode'
   - src: codex/config.toml
     dest: '{{ home }}/.codex/config.toml'
-  - src: codex/rules/allow.rules
-    dest: '{{ home }}/.codex/rules/allow.rules'
-  - src: codex/rules/prompt.rules
-    dest: '{{ home }}/.codex/rules/prompt.rules'
-  - src: codex/rules/deny.rules
-    dest: '{{ home }}/.codex/rules/deny.rules'
+  - src: codex/rules/default.rules
+    dest: '{{ home }}/.codex/rules/default.rules'
   - src: codex/agents
     dest: '{{ home }}/.codex/agents'
   - src: agents/commands
