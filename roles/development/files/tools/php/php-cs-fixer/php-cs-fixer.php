@@ -61,11 +61,37 @@ return new Config()
         // ─────────────────────────────────────────────────────────────
         // PHPDOC and comments
         // ─────────────────────────────────────────────────────────────
-        'phpdoc_align' => ['align' => 'vertical'], // Aligns tags like @param, @return, etc.
+        'phpdoc_align' => [
+            'align' => 'vertical',
+            'tags' => [
+                'method',
+                'param',
+                'property',
+                'property-read',
+                'property-write',
+                'return',
+                'throws',
+                'type',
+                'var',
+            ],
+        ], // Aligns tags like @param, @return, etc.
+        'phpdoc_annotation_without_dot' => true, // Ensures annotations do not end with a dot
         'phpdoc_order' => ['order' => ['param', 'return', 'throws']], // Orders tags: @param → @return → @throws
         'phpdoc_summary' => false, // Doesn't require a period at the end of the first sentence
         'phpdoc_to_comment' => false, // Doesn't convert /** */ into regular // comments
-        'phpdoc_scalar' => true, // Normalizes scalar types (e.g., integer → int)
+        'phpdoc_scalar' => [
+            'types' => [
+                'boolean',
+                'callback',
+                'double',
+                'integer',
+                'never-return',
+                'never-returns',
+                'no-return',
+                'real',
+                'str',
+            ],
+        ], // Normalizes scalar types (e.g., integer → int)
         'phpdoc_separation' => true, // Ensures separation between different types of tags
         'phpdoc_trim' => true, // Trims PHPDoc comments
         'phpdoc_trim_consecutive_blank_line_separation' => true, // Trims blank line separation in PHPDoc comments
@@ -84,18 +110,7 @@ return new Config()
                 'link' => 'see',
             ],
         ], // Removes PHPDoc alias tags
-        'VixFixer/remove_doc_block_tags' => [
-            'tags' => [
-                'category',
-                'package',
-                'subpackage',
-                'author',
-                'copyright',
-                'license',
-                'link',
-                'version',
-            ],
-        ],
+        'phpdoc_no_duplicate_types' => true, // Removes duplicate types in PHPDoc annotations
         'phpdoc_no_useless_inheritdoc' => true, // Removes useless PHPDoc inheritdoc tags
         'phpdoc_no_empty_return' => true, // Removes empty @return tags
         'phpdoc_single_line_var_spacing' => true, // Ensures single line spacing for var tags
@@ -112,6 +127,35 @@ return new Config()
         'phpdoc_array_type' => true, // PHPDoc array<T> type must be used instead of T[].
         'phpdoc_param_order' => true, // Orders @param tags according to method signature
         'phpdoc_tag_casing' => true, // Fixes casing of PHPDoc tags.
+        'phpdoc_tag_type' => ['tags' => ['inheritdoc' => 'inline']], // Normalizes @inheritdoc tags to inline form
+        'phpdoc_tag_no_named_arguments' => [
+            'description' => 'Parameter names are not covered by the backward compatibility promise.',
+        ],
+        'general_phpdoc_annotation_remove' => [
+            'annotations' => [
+                'category',
+                'package',
+                'subpackage',
+                'author',
+                'copyright',
+                'license',
+                'link',
+                'version',
+            ],
+            'case_sensitive' => false,
+        ], // Removes specified PHPDoc annotations
+        'align_multiline_comment' => ['comment_type' => 'all_multiline'], // Aligns multiline comments
+        'phpdoc_order_by_value' => [
+            'annotations' => [
+                'property',
+                'property-read',
+                'property-write',
+                'requires',
+                'throws',
+                'uses',
+            ],
+        ], // Order PHPDoc tags by value
+        'phpdoc_types_no_duplicates' => true, // Removes duplicate types in PHPDoc annotations
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
@@ -144,20 +188,22 @@ return new Config()
         // ─────────────────────────────────────────────────────────────────────────
         'yoda_style' => false, // Disables Yoda conditions
         'binary_operator_spaces' => ['default' => 'single_space'],
-        'no_extra_blank_lines' => ['tokens' => [
-            'extra',
-            'break',
-            'continue',
-            'return',
-            'throw',
-            'use',
-            'curly_brace_block',
-            'parenthesis_brace_block',
-            'square_brace_block',
-            'switch',
-            'case',
-            'default',
-        ]], // Removes extra blank lines
+        'no_extra_blank_lines' => [
+            'tokens' => [
+                'extra',
+                'break',
+                'continue',
+                'return',
+                'throw',
+                'use',
+                'curly_brace_block',
+                'parenthesis_brace_block',
+                'square_brace_block',
+                'switch',
+                'case',
+                'default',
+            ]
+        ], // Removes extra blank lines
         'single_quote' => true, // Converts double quotes to single quotes
         'combine_consecutive_issets' => true, // Combines isset($a) && isset($b)
         'combine_consecutive_unsets' => true, // Combines unset($a); unset($b);
@@ -295,7 +341,16 @@ return new Config()
         'random_api_migration' => true, // Replaces deprecated random number generation functions with modern ones
         'self_accessor' => true, // Enforces the use of self:: for accessing static properties and methods
         'self_static_accessor' => true, // In final/anonymous classes, replaces static:: with self::
-        'phpdoc_return_self_reference' => true, // Normalizes @return $self, @return @this etc. to self/$this
+        'phpdoc_return_self_reference' => [
+            'replacements' => [
+                'this' => 'self',
+                '@this' => 'self',
+                '$self' => 'self',
+                '@self' => 'self',
+                '$static' => 'static',
+                '@static' => 'static',
+            ],
+        ], // Normalizes @return references to self/static
         'mb_str_functions' => true, // Enforces the use of mb_str_* functions for multibyte string operations
 
         // ─────────────────────────────────────────────────────────────────────────
