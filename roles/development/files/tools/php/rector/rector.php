@@ -12,7 +12,6 @@ use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
-use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector;
@@ -187,7 +186,6 @@ $rules = [
     PropertyHookRector::class, // Replace getter/setter with property hook
     // SequentialAssignmentsToPipeOperatorRector::class, // Convert sequential assignments to use the pipe operator
     // NestedFuncCallsToPipeOperatorRector::class, // Convert nested function calls to use the pipe operator
-    ContinueToBreakInSwitchRector::class, // Use break instead of continue in switch statements
 
     // Custom code quality rules
     AddTypedClassConstantRector::class, // Add explicit type to class constants inferred from scalar literals (PHP 8.3+)
