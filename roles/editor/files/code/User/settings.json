@@ -520,6 +520,7 @@
   "git.timeline.showUncommitted": true,
   "github.copilot.chat.agent.backgroundTodoAgent.enabled": true,
   "github.copilot.chat.anthropic.tools.websearch.enabled": true,
+  "github.copilot.chat.claudeAgent.allowAutoPermissions": true,
   "github.copilot.chat.cli.forkSessions.enabled": true,
   "github.copilot.chat.cli.remote.enabled": true,
   "github.copilot.chat.cli.terminalLinks.enabled": true,
@@ -1340,8 +1341,8 @@
         {
           "args": ["--colors=never", "format", "${file}"],
           "command": "mago",
-          "name": "Mago Formatter",
-          "enabled": false
+          "enabled": false,
+          "name": "Mago Formatter"
         }
       ],
       "languages": ["php"],
