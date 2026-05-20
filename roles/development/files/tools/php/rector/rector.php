@@ -58,6 +58,7 @@ use Vix\RectorRules\CollapseSequentialStrReplaceRector;
 use Vix\RectorRules\ExtractAssignmentFromIfConditionRector;
 use Vix\RectorRules\NullableBoolReturnToFalseRector;
 use Vix\RectorRules\ReplaceMultipleEqualWithInArrayRector;
+use Vix\RectorRules\TernaryNullCheckToNullsafeOperatorRector;
 use Vix\RectorRules\Yii2FindAllIdShortcutRector;
 use Vix\RectorRules\Yii2FindOneFindAllShortcutRector;
 use Vix\RectorRules\Yii2FindOneIdShortcutRector;
@@ -195,6 +196,7 @@ $rules = [
     NullableBoolReturnToFalseRector::class, // Replace ?bool return type with bool and return null → return false
     ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
     AddNameToBooleanArgumentRector::class, // Add argument name to boolean arguments for better readability
+    TernaryNullCheckToNullsafeOperatorRector::class, // Convert ternary null checks to nullsafe operator where possible
 ];
 
 if ($laravelRulesEnabled) {
