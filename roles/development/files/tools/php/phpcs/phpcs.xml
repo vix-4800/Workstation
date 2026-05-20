@@ -449,6 +449,7 @@
         <type>error</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Variables.DisallowVariableVariable" />
+    <rule ref="Squiz.Operators.ValidLogicalOperators" />
 
     <!-- ===== EXCEPTIONS ===== -->
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch" />
@@ -456,6 +457,7 @@
     <rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.Arrays.DisallowPartiallyKeyed" />
 
     <!-- ===== COMMENTS AND DOCUMENTATION ===== -->
     <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment">
