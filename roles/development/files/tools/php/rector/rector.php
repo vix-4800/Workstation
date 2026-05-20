@@ -67,8 +67,8 @@ use Vix\RectorRules\Yii2UseExistsInsteadOfCountRector;
 use Vix\RectorRules\Yii2UseExistsInsteadOfOneNotNullRector;
 use Vix\RectorRules\Yii2UserFindOneToIdentityRector;
 
-$laravelRulesEnabled = false;
-$yii2RulesEnabled = false;
+define('LARAVEL_RULES_ENABLED', value: false);
+define('YII2_RULES_ENABLED', value: false);
 
 $home = getenv('HOME');
 $globalComposerAutoloadPath = $home . '/.config/composer/vendor/autoload.php';
@@ -197,7 +197,7 @@ $rules = [
     TernaryNullCheckToNullsafeOperatorRector::class, // Convert ternary null checks to nullsafe operator where possible
 ];
 
-if ($laravelRulesEnabled) {
+if (LARAVEL_RULES_ENABLED) {
     foreach ($laravelRules as $laravelRule) {
         $rules[] = $laravelRule;
     }
@@ -207,7 +207,7 @@ if ($laravelRulesEnabled) {
         ->withComposerBased(laravel: true);
 }
 
-if ($yii2RulesEnabled) {
+if (YII2_RULES_ENABLED) {
     foreach ($yii2Rules as $yii2Rule) {
         $rules[] = $yii2Rule;
     }
