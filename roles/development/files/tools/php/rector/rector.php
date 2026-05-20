@@ -2,53 +2,26 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector;
-use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
-use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
-use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
-use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
-use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
-use Rector\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector;
-use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
-use Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector;
-use Rector\CodeQuality\Rector\Identical\SimplifyConditionsRector;
-use Rector\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector;
-use Rector\CodeQuality\Rector\If_\CombineIfRector;
-use Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector;
-use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
-use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
-use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
-use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
-use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
-use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
-use Rector\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector;
-use Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector;
-use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
-use Rector\CodingStyle\Rector\FuncCall\StrictInArrayRector;
+use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
+use Rector\CodingStyle\Rector\Assign\NestedTernaryToMatchRector;
+use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
+use Rector\CodingStyle\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector;
 use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
-use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
-use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
-use Rector\DeadCode\Rector\If_\RemoveDeadIfBlockRector;
-use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
-use Rector\DeadCode\Rector\Stmt\RemoveNextSameValueConditionRector;
-use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
+use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
+use Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
+use Rector\Php84\Rector\Class_\PropertyHookRector;
 use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
+use Rector\Php85\Rector\Expression\NestedFuncCallsToPipeOperatorRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
-use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
-use Rector\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
+use Rector\Php85\Rector\StmtsAwareInterface\SequentialAssignmentsToPipeOperatorRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
-use Rector\TypeDeclaration\Rector\StmtsAwareInterface\SafeDeclareStrictTypesRector;
-use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector;
+use Rector\Unambiguous\Rector\Class_\RemoveReturnThisFromSetterClassMethodRector;
 use Rector\ValueObject\PhpVersion;
 use RectorLaravel\Rector\ArrayDimFetch\EnvVariableToEnvHelperRector;
 use RectorLaravel\Rector\ArrayDimFetch\RequestVariablesToRequestFacadeRector;
@@ -147,85 +120,58 @@ $config = RectorConfig::configure()
     ])
     ->withPhpSets(php84: true)
     ->withPhpVersion(PhpVersion::PHP_84)
-    ->withTypeCoverageLevel(5)
-    ->withDeadCodeLevel(5)
-    ->withCodeQualityLevel(5)
-    ->withCodingStyleLevel(3)
-    ->withTypeCoverageDocblockLevel(3)
     ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        codingStyle: true,
+        typeDeclarations: true,
+        typeDeclarationDocblocks: true,
         privatization: true,
-        rectorPreset: true,
+        naming: true,
+        instanceOf: true,
         earlyReturn: true,
+        rectorPreset: true,
     )
     ->withImportNames(removeUnusedImports: true)
+    ->withConfiguredRule(
+        AddSensitiveParameterAttributeRector::class,
+        [
+            'sensitive_parameters' => [
+                'password',
+                'newPassword',
+                'oldPassword',
+                'secret',
+                'apiKey',
+                'token',
+                'accessToken',
+                'refreshToken',
+                'authToken',
+            ],
+        ],
+    )
     ->withAttributesSets()
     ->withMemoryLimit('2G');
 
 $rules = [
-    // Simplifying conditions
-    SimplifyBoolIdenticalTrueRector::class, // Replaces $a === true with just $a
-    SimplifyIfReturnBoolRector::class, // Simplifies if-statements that return true/false
-    SimplifyConditionsRector::class,
-    CombineIfRector::class,
-    ShortenElseIfRector::class,
-    SimplifyDeMorganBinaryRector::class,
-
-    // Code optimization
-    SimplifyUselessVariableRector::class,
-    UnusedForeachValueToArrayKeysRector::class,
-    SimplifyIfElseToTernaryRector::class, // Replaces if/else with a ternary operator
-    UnnecessaryTernaryExpressionRector::class, // Removes redundant ternary expressions
-    RemoveNextSameValueConditionRector::class,
-
-    // Safety and strong typing
     AddReturnTypeDeclarationRector::class,
-    UseIdenticalOverEqualWithSameTypeRector::class,
-    CompleteDynamicPropertiesRector::class,
     // IssetOnPropertyObjectToPropertyExistsRector::class,
-    AddVoidReturnTypeWhereNoReturnRector::class, // Adds void return type where no return is present
     AddParamTypeDeclarationRector::class, // Adds parameter type declaration where missing
     AddPropertyTypeDeclarationRector::class, // Adds property type declaration where missing
-    AddMethodCallBasedStrictParamTypeRector::class, // Adds strict parameter type based on method calls
-    DisallowedEmptyRuleFixerRector::class, // Disallow usage of empty()
-    JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
-    AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
-    TypedStaticPropertyInBehatContextRector::class,
-    StrictInArrayRector::class,
-
-    // Remove dead code
-    RemoveUnusedPrivateMethodRector::class, // Removes unused private methods
-    RemoveUnusedPrivatePropertyRector::class, // Removes unused private properties
-    RemoveConcatAutocastRector::class,
-    RemoveDeadIfBlockRector::class,
-    RemoveParentDelegatingConstructorRector::class,
-
-    // Modern PHP constructs and functions
-    StringClassNameToClassConstantRector::class, // Replaces string class names with ClassName::class
+    // JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
     ClassPropertyAssignToConstructorPromotionRector::class, // Promotes class property assignments to constructor parameters
-    SingularSwitchToIfRector::class, // Replaces singular switch statements with if-statements
-    ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class, // Replaces consecutive null compares with null coalesce
-    TernaryEmptyArrayArrayDimFetchToCoalesceRector::class, // Replaces empty array checks in ternary conditions with null coalescing
-    ArrayKeyExistsTernaryThenValueToCoalescingRector::class, // Replaces array_key_exists checks in ternary conditions with null coalescing
-    SimplifyTautologyTernaryRector::class, // Simplifies tautological ternary expressions
     AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
     AddOverrideAttributeToOverriddenPropertiesRector::class, // Adds #[Override] attribute to overridden properties
     ConstAndTraitDeprecatedAttributeRector::class, // Adds #[Deprecated] attribute to deprecated constants and traits
-
-    // Arrays
-    ChangeArrayPushToArrayAssignRector::class,
-
-    // Strings
-    StrlenZeroToIdenticalEmptyStringRector::class, // Replaces strlen($x) === 0 / > 0 with $x === '' / !== ''
-    SimplifyStrposLowerRector::class,
-    MbStrContainsRector::class,
-
-    // Code style
-    InlineIfToExplicitIfRector::class,
-    LogicalToBooleanRector::class,
-
-    // Ternary & coalescing
-    // Strict types
-    SafeDeclareStrictTypesRector::class, // Adds declare(strict_types=1) only when the file is already type-safe
+    StaticClosureRector::class,
+    ArraySpreadInsteadOfArrayMergeRector::class, // Replace array_merge() with array spread operator where possible
+    NestedTernaryToMatchRector::class, // Convert nested ternary operators to match expressions
+    StaticArrowFunctionRector::class, // Convert arrow functions to static where possible
+    RemoveReturnThisFromSetterClassMethodRector::class, // Remove return $this; from setter methods
+    MbStrContainsRector::class, // Replace mb_strpos() !== false and mb_strstr() with str_contains()
+    PropertyHookRector::class, // Replace getter/setter with property hook
+    // SequentialAssignmentsToPipeOperatorRector::class, // Convert sequential assignments to use the pipe operator
+    // NestedFuncCallsToPipeOperatorRector::class, // Convert nested function calls to use the pipe operator
+    ContinueToBreakInSwitchRector::class, // Use break instead of continue in switch statements
 
     // Custom code quality rules
     AddTypedClassConstantRector::class, // Add explicit type to class constants inferred from scalar literals (PHP 8.3+)
