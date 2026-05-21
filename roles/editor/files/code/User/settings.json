@@ -1488,7 +1488,7 @@
   "phpmnd.ignoreStrings": [],
   "phpNamespaceResolver.autoImportOnSave": true,
   "phpNamespaceResolver.highlightNotImported": true,
-  "phpNamespaceResolver.removeOnSave": false,
+  "phpNamespaceResolver.removeOnSave": true,
   "phpNamespaceResolver.sortOnSave": true,
   "phpTypeHints.enabled": true,
   "phpTypeHints.hideWhenArgumentMatchesName": false,
