@@ -56,7 +56,7 @@ status_line_use_colors = true
 # ---------------------------
 
 [permissions.workspace-safe.filesystem]
-":minimal" = "read"
+"/" = "read"
 glob_scan_max_depth = 4
 
 [permissions.workspace-safe.filesystem.":workspace_roots"]
@@ -75,7 +75,7 @@ glob_scan_max_depth = 4
 enabled = false
 
 [permissions.workspace-net.filesystem]
-":minimal" = "read"
+"/" = "read"
 glob_scan_max_depth = 4
 
 [permissions.workspace-net.filesystem.":workspace_roots"]
