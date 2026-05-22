@@ -466,6 +466,7 @@
   "explorer.confirmDragAndDrop": false,
   "explorer.confirmPasteNative": false,
   "extensions.allowOpenInModalEditor": false,
+  "extensions.autoUpdate": false,
   "files.associations": {
     ".gitleaks.toml": "toml",
     "*.neon": "neon",
