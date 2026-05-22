@@ -48,6 +48,7 @@ text/calendar=userapp-Thunderbird-E3WAO3.desktop
 application/x-extension-ics=userapp-Thunderbird-E3WAO3.desktop
 x-scheme-handler/webcals=userapp-Thunderbird-E3WAO3.desktop
 x-scheme-handler/postman=Postman.desktop
+x-scheme-handler/jetbrains=jetbrainsd.desktop
 
 [Added Associations]
 text/plain=code.desktop;
