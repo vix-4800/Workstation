@@ -187,7 +187,7 @@ return new Config()
             'equal' => false,
             'identical' => false,
             'less_and_greater' => null,
-            'always_move_variable' => true,
+            'always_move_variable' => false,
         ], // Disables Yoda conditions
         'binary_operator_spaces' => ['default' => 'single_space'],
         'no_extra_blank_lines' => [
