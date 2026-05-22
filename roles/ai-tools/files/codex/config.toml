@@ -5,6 +5,9 @@ model_reasoning_effort = "medium"
 plan_mode_reasoning_effort = "high"
 model_verbosity = "low"
 file_opener = "vscode"
+default_permissions = "workspace-safe"
+approval_policy = "on-request"
+
 notify = [
   "notify-send",
   "Codex",
@@ -14,6 +17,7 @@ notify = [
   "-i",
   "dialog-warning",
 ]
+
 commit_attribution = "Codex <codex@openai.com>"
 disable_paste_burst = true
 
@@ -47,35 +51,51 @@ status_line_use_colors = true
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 
-[profiles.default]
-model = "gpt-5.5"
-web_search = "cached"
-personality = "pragmatic"
-model_reasoning_effort = "high"
+# ---------------------------
+# Permission profiles
+# ---------------------------
 
-[profiles.review]
-model = "gpt-5.5"
-web_search = "cached"
-personality = "pragmatic"
-model_reasoning_effort = "high"
-approval_policy = "never"
-sandbox_mode = "read-only"
+[permissions.workspace-safe.filesystem]
+":minimal" = "read"
+glob_scan_max_depth = 4
 
-[profiles.php]
-model = "gpt-5.5"
-web_search = "cached"
-personality = "pragmatic"
-model_reasoning_effort = "high"
-approval_policy = "on-request"
-sandbox_mode = "workspace-write"
+[permissions.workspace-safe.filesystem.":workspace_roots"]
+"." = "write"
+"**/.env" = "deny"
+"**/.env.*" = "deny"
+"**/*.env" = "deny"
+"**/*.pem" = "deny"
+"**/*.key" = "deny"
+"**/.ssh/**" = "deny"
+"**/.gnupg/**" = "deny"
+"**/.aws/**" = "deny"
+"**/.kube/**" = "deny"
 
-[profiles.devops]
-model = "gpt-5.5"
-web_search = "cached"
-personality = "pragmatic"
-model_reasoning_effort = "high"
-approval_policy = "on-request"
-sandbox_mode = "workspace-write"
+[permissions.workspace-safe.network]
+enabled = false
+
+[permissions.workspace-net.filesystem]
+":minimal" = "read"
+glob_scan_max_depth = 4
+
+[permissions.workspace-net.filesystem.":workspace_roots"]
+"." = "write"
+"**/.env" = "deny"
+"**/.env.*" = "deny"
+"**/*.env" = "deny"
+"**/*.pem" = "deny"
+"**/*.key" = "deny"
+"**/.ssh/**" = "deny"
+"**/.gnupg/**" = "deny"
+"**/.aws/**" = "deny"
+"**/.kube/**" = "deny"
+
+[permissions.workspace-net.network]
+enabled = true
+
+# ---------------------------
+# MCP servers
+# ---------------------------
 
 [mcp_servers.github]
 command = "npx"
@@ -110,6 +130,10 @@ args = ["-y", "@upstash/context7-mcp@latest"]
 [mcp_servers.playwright]
 command = "npx"
 args = ["-y", "@playwright/mcp@latest", "--browser=firefox"]
+
+# ---------------------------
+# Plugins
+# ---------------------------
 
 [plugins."github@openai-curated"]
 enabled = true
