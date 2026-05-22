@@ -48,13 +48,13 @@ status_line_use_colors = true
 "gpt-5.5" = 4
 
 [profiles.default]
-model = "gpt-5.4"
+model = "gpt-5.5"
 web_search = "cached"
 personality = "pragmatic"
 model_reasoning_effort = "high"
 
 [profiles.review]
-model = "gpt-5.4"
+model = "gpt-5.5"
 web_search = "cached"
 personality = "pragmatic"
 model_reasoning_effort = "high"
@@ -62,7 +62,7 @@ approval_policy = "never"
 sandbox_mode = "read-only"
 
 [profiles.php]
-model = "gpt-5.4"
+model = "gpt-5.5"
 web_search = "cached"
 personality = "pragmatic"
 model_reasoning_effort = "high"
@@ -70,7 +70,7 @@ approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 
 [profiles.devops]
-model = "gpt-5.4"
+model = "gpt-5.5"
 web_search = "cached"
 personality = "pragmatic"
 model_reasoning_effort = "high"
