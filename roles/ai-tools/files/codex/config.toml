@@ -137,3 +137,9 @@ args = ["-y", "@playwright/mcp@latest", "--browser=firefox"]
 
 [plugins."github@openai-curated"]
 enabled = true
+
+[plugins."codex-security@openai-curated"]
+enabled = true
+
+[plugins."superpowers@openai-curated"]
+enabled = true
