@@ -753,7 +753,7 @@
   "lintRunner.respectGitignore": true,
   "lintRunner.targets": [
     {
-      "languages": ["php"],
+      "languages": ["*"],
       "linters": [
         {
           "args": [
