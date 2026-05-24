@@ -1113,14 +1113,8 @@
       "languages": ["html"],
       "linters": [
         {
-          "args": [
-            "-lc",
-            "cd \"$1\" && linthtml --config ~/.linthtmlrc --no-color \"$2\"",
-            "linthtml",
-            "${fileDirname}",
-            "${fileBasename}"
-          ],
-          "command": "bash",
+          "args": ["--config", "~/.linthtmlrc", "--no-color", "${relativeFile}"],
+          "command": "linthtml",
           "name": "Lint HTML",
           "parser": {
             "flags": "gm",
