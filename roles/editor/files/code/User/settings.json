@@ -384,6 +384,7 @@
   "css.validate": true,
   "database-client.autoSync": true,
   "database-client.telemetry.usesOnlineServices": false,
+  "depHealth.autoScanOnOpen": false,
   "diffEditor.codeLens": true,
   "diffEditor.experimental.showMoves": false,
   "diffEditor.ignoreTrimWhitespace": true,
