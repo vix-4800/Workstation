@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector;
+use Rector\CodeQuality\Rector\CallLike\AddNameToNullArgumentRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
 use Rector\CodingStyle\Rector\Assign\NestedTernaryToMatchRector;
@@ -194,6 +195,7 @@ $rules = [
     NullableBoolReturnToFalseRector::class, // Replace ?bool return type with bool and return null → return false
     ReplaceMultipleEqualWithInArrayRector::class, // Replace multiple === comparisons with in_array()
     AddNameToBooleanArgumentRector::class, // Add argument name to boolean arguments for better readability
+    AddNameToNullArgumentRector::class, // Add argument name to null arguments for better readability
     TernaryNullCheckToNullsafeOperatorRector::class, // Convert ternary null checks to nullsafe operator where possible
 ];
 
