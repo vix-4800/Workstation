@@ -50,6 +50,7 @@ parameters:
     reportMaybesInPropertyPhpDocTypes: true
     reportStaticMethodSignatures: true
     reportNonIntStringArrayKey: true
+    reportUnsafeArrayStringKeyCasting: detect
     reportWrongPhpDocTypeInVarTag: true
     reportAnyTypeWideningInVarTag: true
 
