@@ -1474,6 +1474,7 @@
   "phpImportHelper.autoSort": false,
   "phpImportHelper.highlightNotImported": true,
   "phpImportHelper.highlightNotUsed": true,
+  "phpImportHelper.performance.trace": true,
   "phpImportHelper.removeOnSave": true,
   "phpImportHelper.sortOnSave": true,
   "phpmnd.enable": false,
