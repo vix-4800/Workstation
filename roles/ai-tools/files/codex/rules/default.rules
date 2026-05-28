@@ -93,6 +93,7 @@ prefix_rule(
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
 )
 
+prefix_rule(pattern=["gh", "pr", "view"], decision="allow")
 prefix_rule(
     pattern = ["gh", "pr", "view"],
     decision = "allow",
