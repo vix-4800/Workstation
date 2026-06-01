@@ -87,6 +87,8 @@ prefix_rule(
     justification = "Read-only filesystem search; no side effects.",
 )
 
+prefix_rule(pattern=["gh", "auth", "status"], decision="allow")
+
 prefix_rule(
     pattern = [["gh", "/usr/bin/gh"], "pr", "diff"],
     decision = "allow",
