@@ -744,712 +744,888 @@
   "lintRunner.respectGitignore": true,
   "lintRunner.targets": [
     {
-      "languages": ["*"],
-      "linters": [
-        {
-          "args": [
-            "dir",
-            "--config",
-            "~/.gitleaks.toml",
-            "--report-format",
-            "json",
-            "--report-path",
-            "-",
-            "${file}"
-          ],
-          "command": "gitleaks",
-          "name": "GitLeaks",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "messageFormat": "json",
-            "output": "stdout",
-            "pattern": "\\{\\s*\"RuleID\":\\s*\"(?<code>(?:\\\\.|[^\\\"])*)\",\\s*\"Description\":\\s*\"(?<message>(?:\\\\.|[^\\\"])*)\",\\s*\"StartLine\":\\s*(?<line>\\d+),\\s*\"EndLine\":\\s*\\d+,\\s*\"StartColumn\":\\s*(?<col>\\d+),[\\s\\S]*?\"File\":\\s*\"(?<file>(?:\\\\.|[^\\\"])*)\""
-          },
-          "run": "onSave"
-        }
-      ],
-      "name": "GitLeaks"
+      "match": {
+        "languages": ["*"]
+      },
+      "name": "GitLeaks",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["GitLeaks"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["-w", "${file}"],
-          "command": "shfmt",
-          "name": "shfmt"
-        }
-      ],
-      "languages": ["shellscript"],
-      "linters": [
-        {
-          "args": ["-x", "--format", "gcc", "${file}"],
-          "command": "shellcheck",
-          "name": "Shell Check",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>\\w+): (?<message>.+?) \\[(?<code>SC\\d+)\\]$"
-          }
-        }
-      ],
-      "name": "Shell"
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["shfmt"]
+      },
+      "match": {
+        "languages": ["shellscript"]
+      },
+      "name": "Shell Fix"
     },
     {
-      "languages": ["dockerfile"],
-      "linters": [
-        {
-          "args": [
-            "--no-color",
-            "--format",
-            "tty",
-            "--config",
-            "~/.config/hadolint.yaml",
-            "${file}"
-          ],
-          "command": "hadolint",
-          "name": "HadoLint",
-          "parser": {
-            "flags": "gm",
-            "output": "stdout",
-            "pattern": "^(?:hadolint:)?(?:.+?):(?<line>\\d+):? (?<code>\\S+) (?<severity>\\w+): (?<message>.+)$"
-          }
-        }
-      ],
-      "name": "Dockerfile"
+      "match": {
+        "languages": ["shellscript"]
+      },
+      "name": "Shell",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Shell Check"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"],
-          "command": "markdownlint",
-          "name": "Markdown Lint",
-          "run": "onSave"
-        },
-        {
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "command": "prettier",
-          "enabled": false,
-          "name": "Prettier"
-        }
-      ],
-      "languages": ["markdown"],
-      "linters": [
-        {
-          "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "${file}"],
-          "command": "markdownlint",
-          "name": "Markdown Lint",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+) (?<severity>\\w+) (?<code>[A-Z0-9]+)(?:/\\S+)? (?<message>.+)$"
-          }
-        }
-      ],
-      "name": "Markdown"
+      "match": {
+        "languages": ["dockerfile"]
+      },
+      "name": "Dockerfile",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["HadoLint"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"],
-          "command": "yamlfmt",
-          "name": "YAML Format",
-          "run": "onSave"
-        }
-      ],
-      "languages": ["yaml", "dockercompose"],
-      "linters": [
-        {
-          "args": ["--format", "parsable", "--config-file", "~/.config/yamllint/config", "${file}"],
-          "command": "yamllint",
-          "name": "YAML Lint",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): \\[(?<severity>\\w+)\\] (?<message>.+?) \\((?<code>[^)]+)\\)$"
-          }
-        }
-      ],
-      "name": "YAML"
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Prettier Markdown"]
+      },
+      "match": {
+        "languages": ["markdown"]
+      },
+      "name": "Markdown Fix",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Markdown Lint Fix"]
+      }
     },
     {
-      "filePatterns": [
-        "ansible/**/*.yml",
-        "roles/**/tasks/*.yml",
-        "roles/**/handlers/*.yml",
-        "roles/**/meta/*.yml",
-        "roles/**/defaults/*.yml",
-        "roles/**/vars/*.yml",
-        "playbooks/**/*.yml"
-      ],
-      "languages": ["ansible", "yaml"],
-      "linters": [
-        {
-          "args": ["-c", "~/.ansible-lint", "--nocolor", "${file}"],
-          "command": "ansible-lint",
-          "name": "Ansible Lint",
-          "parser": {
-            "defaultSeverity": "warning",
-            "flags": "gm",
-            "pattern": "^(?<code>[a-z][\\w.\\[\\]-]+): (?<message>.+)\\n.+?:(?<line>\\d+)(?::(?<col>\\d+))?"
-          }
-        }
-      ],
-      "name": "Ansible"
+      "match": {
+        "languages": ["markdown"]
+      },
+      "name": "Markdown",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Markdown Lint"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["check", "--fix", "--config=~/.config/ruff/pyproject.toml", "${file}"],
-          "command": "ruff",
-          "name": "Ruff Fix"
-        },
-        {
-          "args": ["format", "--config=~/.config/ruff/pyproject.toml", "${file}"],
-          "command": "ruff",
-          "name": "Ruff Format"
-        }
-      ],
-      "languages": ["python"],
-      "linters": [
-        {
-          "args": [
-            "check",
-            "--config=~/.config/ruff/pyproject.toml",
-            "--output-format",
-            "github",
-            "${file}"
-          ],
-          "command": "ruff",
-          "name": "Ruff",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^::(?<severity>error|warning) title=ruff \\((?<code>[^)]+)\\),file=[^,]+,line=(?<line>\\d+),col=(?<col>\\d+),endLine=\\d+,endColumn=\\d+::(?:[^:]+:\\d+:\\d+: [A-Z]\\d+ )?(?<message>[^\\n%]+)"
-          }
-        }
-      ],
-      "name": "Python"
+      "match": {
+        "languages": ["yaml", "dockercompose"]
+      },
+      "name": "YAML Fix",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["YAML Format"]
+      }
     },
     {
-      "filePatterns": [".env", ".env.*"],
-      "fixers": [
-        {
-          "args": ["--plain", "fix", "--no-backup", "${file}"],
-          "command": "dotenv-linter",
-          "name": "Dotenv Linter"
-        }
-      ],
-      "languages": ["dotenv", "shellscript"],
-      "linters": [
-        {
-          "args": ["--plain", "check", "--skip-updates", "${file}"],
-          "command": "dotenv-linter",
-          "name": "Dotenv Linter",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+) (?<code>[A-Za-z][\\w-]*): (?<message>.+)$"
-          }
-        }
-      ],
-      "name": "Dotenv"
+      "match": {
+        "languages": ["yaml", "dockercompose"]
+      },
+      "name": "YAML",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["YAML Lint"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["--write", "${file}", "--single-space"],
-          "command": "inifmt",
-          "name": "INI Format",
-          "run": "onSave"
-        }
-      ],
-      "languages": ["ini", "properties", "editorconfig"],
-      "name": "INI"
+      "match": {
+        "files": [
+          "ansible/**/*.yml",
+          "roles/**/tasks/*.yml",
+          "roles/**/handlers/*.yml",
+          "roles/**/meta/*.yml",
+          "roles/**/defaults/*.yml",
+          "roles/**/vars/*.yml",
+          "playbooks/**/*.yml"
+        ],
+        "languages": ["ansible", "yaml"]
+      },
+      "name": "Ansible",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Ansible Lint"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["--config-path", "~/.config/stylua/stylua.toml", "${file}"],
-          "command": "stylua",
-          "name": "StyLua"
-        }
-      ],
-      "languages": ["lua"],
-      "linters": [
-        {
-          "args": [
-            "--config",
-            "~/.config/luacheck/.luacheckrc",
-            "--formatter",
-            "plain",
-            "--codes",
-            "${file}"
-          ],
-          "command": "luacheck",
-          "name": "LuaCheck",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): \\((?<code>[A-Z]\\d+)\\) (?<message>.+)$"
-          }
-        }
-      ],
-      "name": "Lua"
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Ruff Fix", "Ruff Format"]
+      },
+      "match": {
+        "languages": ["python"]
+      },
+      "name": "Python Fix"
     },
     {
-      "fixers": [
-        {
-          "args": ["format", "--config", "~/.config/taplo/taplo.toml", "${file}"],
-          "command": "taplo",
-          "name": "Taplo",
-          "run": "onSave"
-        }
-      ],
-      "languages": ["toml"],
+      "match": {
+        "languages": ["python"]
+      },
+      "name": "Python",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Ruff"]
+      }
+    },
+    {
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Dotenv Linter Fix"]
+      },
+      "match": {
+        "files": [".env", ".env.*"],
+        "languages": ["dotenv", "shellscript"]
+      },
+      "name": "Dotenv Fix"
+    },
+    {
+      "match": {
+        "files": [".env", ".env.*"],
+        "languages": ["dotenv", "shellscript"]
+      },
+      "name": "Dotenv",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Dotenv Linter"]
+      }
+    },
+    {
+      "match": {
+        "languages": ["ini", "properties", "editorconfig"]
+      },
+      "name": "INI",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["INI Format"]
+      }
+    },
+    {
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["StyLua"]
+      },
+      "match": {
+        "languages": ["lua"]
+      },
+      "name": "Lua Fix"
+    },
+    {
+      "match": {
+        "languages": ["lua"]
+      },
+      "name": "Lua",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["LuaCheck"]
+      }
+    },
+    {
+      "match": {
+        "languages": ["toml"]
+      },
       "name": "TOML",
-      "preCommands": [
-        {
-          "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
-          "command": "taplo",
-          "name": "Taplo"
-        }
-      ]
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Taplo Check", "Taplo"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["-w", "${file}"],
-          "command": "gofmt",
-          "name": "Go Format"
-        }
-      ],
-      "languages": ["go"],
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Go Format"]
+      },
+      "match": {
+        "languages": ["go"]
+      },
       "name": "Go"
     },
     {
-      "fixers": [
-        {
-          "args": ["-w", "${file}"],
-          "command": "fish_indent",
-          "name": "Fish Format"
-        }
-      ],
-      "languages": ["fish"],
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Fish Format"]
+      },
+      "match": {
+        "languages": ["fish"]
+      },
       "name": "Fish"
     },
     {
-      "fixers": [
-        {
-          "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"],
-          "command": "eslint",
-          "name": "ESLint"
-        },
-        {
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "command": "prettier",
-          "enabled": false,
-          "name": "Prettier"
-        }
-      ],
-      "languages": ["javascript", "typescript", "javascriptreact", "typescriptreact", "vue"],
-      "linters": [
-        {
-          "args": [
-            "--config",
-            "~/.config/eslint/eslint.config.js",
-            "--format",
-            "stylish",
-            "${file}"
-          ],
-          "command": "eslint",
-          "name": "ESLint",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^\\s*(?<line>\\d+):(?<col>\\d+)\\s+(?<severity>error|warning)\\s+(?<message>.+?)\\s{2,}(?<code>\\S+)\\s*$"
-          }
-        }
-      ],
-      "name": "JavaScript/TypeScript/Vue"
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["ESLint Fix", "Prettier JS"]
+      },
+      "match": {
+        "languages": ["javascript", "typescript", "javascriptreact", "typescriptreact", "vue"]
+      },
+      "name": "JavaScript/TypeScript/Vue Fix"
     },
     {
-      "fixers": [
-        {
-          "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"],
-          "command": "stylelint",
-          "name": "Style Lint"
-        },
-        {
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "command": "prettier",
-          "enabled": false,
-          "name": "Prettier"
-        }
-      ],
-      "languages": ["css", "scss", "less"],
-      "linters": [
-        {
-          "args": ["--config", "~/.stylelintrc.json", "--formatter", "compact", "${file}"],
-          "command": "stylelint",
-          "name": "Style Lint",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?: line (?<line>\\d+), col (?<col>\\d+), (?<severity>\\w+) - (?<message>.+?) \\((?<code>[^)]+)\\)$"
-          }
-        }
-      ],
-      "name": "Styles"
+      "match": {
+        "languages": ["javascript", "typescript", "javascriptreact", "typescriptreact", "vue"]
+      },
+      "name": "JavaScript/TypeScript/Vue",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["ESLint"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "command": "prettier",
-          "name": "Prettier"
-        }
-      ],
-      "languages": ["html"],
-      "linters": [
-        {
-          "args": ["--config", "~/.linthtmlrc", "--no-color", "${relativeFile}"],
-          "command": "linthtml",
-          "name": "Lint HTML",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^\\s*(?<line>\\d+):(?<col>\\d+)\\s+(?<severity>error|warning)\\s+(?<message>.+?)\\s{2,}(?<code>\\S+)\\s*$"
-          }
-        },
-        {
-          "args": ["--config", "~/.htmlhintrc", "--format", "unix", "${file}"],
-          "command": "htmlhint",
-          "name": "HTML Hint",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<message>.+) \\[(?<severity>[^/\\]]+)/(?<code>[^\\]]+)\\]$"
-          }
-        }
-      ],
-      "name": "HTML"
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Style Lint Fix", "Prettier Styles"]
+      },
+      "match": {
+        "languages": ["css", "scss", "less"]
+      },
+      "name": "Styles Fix"
     },
     {
-      "fixers": [
-        {
-          "args": ["fix", "--config", "~/.sqlfluff", "--dialect", "mysql", "${file}"],
-          "command": "sqlfluff",
-          "name": "Sql Fluff"
-        }
-      ],
-      "languages": ["sql"],
-      "linters": [
-        {
-          "args": [
-            "lint",
-            "--config",
-            "~/.sqlfluff",
-            "--format",
-            "github-annotation-native",
-            "--dialect",
-            "mysql",
-            "${file}"
-          ],
-          "command": "sqlfluff",
-          "name": "Sql Fluff",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^::(?<severity>error|warning|notice) title=SQLFluff,file=[^,]+,line=(?<line>\\d+),col=(?<col>\\d+),endLine=\\d+,endColumn=\\d+::(?<code>[A-Z]+\\d+): (?<message>.+?)(?: \\[[^\\]]+\\])?$"
-          }
-        }
-      ],
-      "name": "SQL"
+      "match": {
+        "languages": ["css", "scss", "less"]
+      },
+      "name": "Styles",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Style Lint"]
+      }
     },
     {
-      "languages": ["makefile"],
-      "linters": [
-        {
-          "args": ["--config=~/.config/checkmake/checkmake.ini", "-o", "json", "${file}"],
-          "command": "checkmake",
-          "name": "Check Make",
-          "parser": {
-            "flags": "g",
-            "messageFormat": "json",
-            "pattern": "\\{\\s*\"rule\":\\s*\"(?<code>[^\"]+)\",\\s*\"violation\":\\s*\"(?<message>(?:\\\\.|[^\"])*)\",\\s*\"file_name\":\\s*\"[^\"]+\",\\s*\"line_number\":\\s*(?<line>\\d+)\\s*\\}"
-          }
-        }
-      ],
-      "name": "Make"
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Prettier HTML"]
+      },
+      "match": {
+        "languages": ["html"]
+      },
+      "name": "HTML Fix"
     },
     {
-      "filePatterns": [
-        "nginx.conf",
-        "**/nginx/**/*.conf",
-        "**/sites-available/*",
-        "**/sites-enabled/*"
-      ],
-      "fixers": [
-        {
-          "args": ["-s", "4", "-i", "${file}"],
-          "command": "nginxbeautifier",
-          "name": "Nginx Beautifier",
-          "run": "onSave"
-        }
-      ],
-      "languages": ["nginx", "plaintext"],
-      "linters": [
-        {
-          "args": [
-            "--format",
-            "errorformat",
-            "--no-color",
-            "--config",
-            "~/.config/nginx-lint/.nginx-lint.toml",
-            "${file}"
-          ],
-          "command": "nginx-lint",
-          "name": "Nginx Lint",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>\\w+)\\[(?<code>[^\\]]+)\\]: (?<message>.+)$"
-          }
-        }
-      ],
-      "name": "Nginx"
+      "match": {
+        "languages": ["html"]
+      },
+      "name": "HTML",
+      "onSave": {
+        "strategy": "parallel",
+        "tools": ["Lint HTML", "HTML Hint"]
+      }
     },
     {
-      "filePatterns": ["*.xml", "*.xsd", "*.xsl", "*.xslt"],
-      "languages": ["xml", "xsl"],
-      "linters": [
-        {
-          "args": ["--nonet", "--noout", "${file}"],
-          "command": "xmllint",
-          "name": "XML Lint",
-          "parser": {
-            "flags": "gm",
-            "output": "stderr",
-            "pattern": "^.+?:(?<line>\\d+): (?:(?:parser )?(?<severity>error|warning)) : (?<message>.+)$"
-          }
-        }
-      ],
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Sql Fluff Fix"]
+      },
+      "match": {
+        "languages": ["sql"]
+      },
+      "name": "SQL Fix"
+    },
+    {
+      "match": {
+        "languages": ["sql"]
+      },
+      "name": "SQL",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Sql Fluff"]
+      }
+    },
+    {
+      "match": {
+        "languages": ["makefile"]
+      },
+      "name": "Make",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Check Make"]
+      }
+    },
+    {
+      "match": {
+        "files": ["nginx.conf", "**/nginx/**/*.conf", "**/sites-available/*", "**/sites-enabled/*"],
+        "languages": ["nginx", "plaintext"]
+      },
+      "name": "Nginx Fix",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Nginx Beautifier"]
+      }
+    },
+    {
+      "match": {
+        "files": ["nginx.conf", "**/nginx/**/*.conf", "**/sites-available/*", "**/sites-enabled/*"],
+        "languages": ["nginx", "plaintext"]
+      },
+      "name": "Nginx",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Nginx Lint"]
+      }
+    },
+    {
+      "match": {
+        "files": ["*.xml", "*.xsd", "*.xsl", "*.xslt"],
+        "languages": ["xml", "xsl"]
+      },
       "name": "XML",
-      "preCommands": [
-        {
-          "args": ["--nonet", "--noout", "${file}"],
-          "command": "xmllint",
-          "name": "XML Validate"
-        }
-      ]
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["XML Validate", "XML Lint"]
+      }
     },
     {
-      "fixers": [
-        {
-          "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-          "command": "prettier",
-          "name": "Prettier",
-          "run": "onSave"
-        }
-      ],
-      "languages": ["json", "jsonc"],
-      "linters": [
-        {
-          "args": ["-f", "~/.jsonlintrc", "${file}"],
-          "command": "jsonlint",
-          "name": "JSON Lint",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^(?:.+?:\\s*)?line\\s+(?<line>\\d+),\\s*col\\s+(?<col>\\d+),\\s*(?<message>.+?)(?:\\.)?$"
-          }
-        }
-      ],
-      "name": "JSON"
+      "match": {
+        "languages": ["json", "jsonc"]
+      },
+      "name": "JSON Fix",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Prettier JSON"]
+      }
     },
     {
-      "filePatterns": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
-      "languages": ["github-actions-workflow", "yaml"],
-      "linters": [
-        {
-          "args": ["${file}"],
-          "command": "actionlint",
-          "name": "Action Lint",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<message>.+?) \\[(?<code>[^\\]]+)\\]$"
-          }
-        }
-      ],
-      "name": "GitHub Actions"
+      "match": {
+        "languages": ["json", "jsonc"]
+      },
+      "name": "JSON",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["JSON Lint"]
+      }
     },
     {
-      "filePatterns": ["*.blade.php"],
-      "fixers": [
-        {
-          "args": [
-            "--write",
-            "--config",
-            "~/.config/blade-formatter/.bladeformatterrc.json",
-            "${file}"
-          ],
-          "command": "blade-formatter",
-          "name": "Blade Formatter"
-        }
-      ],
-      "languages": ["blade", "php"],
+      "match": {
+        "files": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
+        "languages": ["github-actions-workflow", "yaml"]
+      },
+      "name": "GitHub Actions",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Action Lint"]
+      }
+    },
+    {
+      "manual": {
+        "strategy": "sequence",
+        "tools": ["Blade Formatter"]
+      },
+      "match": {
+        "files": ["*.blade.php"],
+        "languages": ["blade", "php"]
+      },
       "name": "Blade"
     },
     {
-      "fixers": [
-        {
-          "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"],
-          "command": "php-cs-fixer",
-          "name": "PHP CS Fixer"
-        },
-        {
-          "args": [
-            "--standard=~/.config/phpcs/phpcs.xml",
-            "-q",
-            "--ignore-annotations",
-            "--parallel=8",
-            "--no-colors",
-            "-d",
-            "memory_limit=512M",
-            "${file}"
-          ],
-          "command": "phpcbf",
-          "name": "PHP Code Beautifier"
-        },
-        {
-          "args": [
-            "process",
-            "--config",
-            "~/.config/rector/rector.php",
-            "--ansi",
-            "--no-progress-bar",
-            "--clear-cache",
-            "--no-diffs",
-            "${file}"
-          ],
-          "command": "rector",
-          "name": "Rector",
-          "run": "manual"
-        },
-        {
-          "args": ["--colors=never", "format", "${file}"],
-          "command": "mago",
-          "enabled": false,
-          "name": "Mago Formatter"
-        }
-      ],
-      "languages": ["php"],
-      "linters": [
-        {
-          "args": [
-            "--standard=~/.config/phpcs/phpcs.xml",
-            "--report=emacs",
-            "--ignore=*/vendor/*",
-            "-q",
-            "--ignore-annotations",
-            "--parallel=8",
-            "--no-colors",
-            "-d",
-            "memory_limit=512M",
-            "${file}"
-          ],
-          "command": "phpcs",
-          "maxFileSize": 75000,
-          "name": "PHP CodeSniffer",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>warning|error) - (?<message>.+)$"
-          },
-          "timeout": 60000
-        },
-        {
-          "args": ["${file}", "text", "~/.config/phpmd/phpmd.xml"],
-          "command": "phpmd",
-          "name": "PHP Mess Detector",
-          "parser": {
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+)\\s+(?<code>\\S+)\\s+(?<message>.+)$"
-          }
-        },
-        {
-          "args": [
-            "analyse",
-            "--error-format=raw",
-            "--no-progress",
-            "--memory-limit=2G",
-            "--configuration=${workspaceFolder}/phpstan.neon",
-            "--autoload-file=${workspaceFolder}/phpstan-bootstrap.php",
-            "${file}"
-          ],
-          "command": "phpstan",
-          "name": "PHPStan",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<message>.+?)(?: \\[identifier=(?<code>[^\\]]+)\\])?$"
-          },
-          "run": "manual"
-        },
-        {
-          "args": [
-            "--colors=never",
-            "lint",
-            "--reporting-format=emacs",
-            "--minimum-report-level=warning",
-            "--minimum-fail-level=warning",
-            "${file}"
-          ],
-          "command": "mago",
-          "name": "Mago Linter",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
-          }
-        },
-        {
-          "args": [
-            "--colors=never",
-            "analyze",
-            "--reporting-format=emacs",
-            "--minimum-report-level=warning",
-            "--minimum-fail-level=warning",
-            "${file}"
-          ],
-          "command": "mago",
-          "enabled": false,
-          "name": "Mago Analyzer",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
-          },
-          "run": "manual"
-        },
-        {
-          "args": [
-            "--colors=never",
-            "guard",
-            "--reporting-format=emacs",
-            "--minimum-report-level=warning",
-            "--minimum-fail-level=warning",
-            "${file}"
-          ],
-          "command": "mago",
-          "enabled": false,
-          "name": "Mago Guard",
-          "parser": {
-            "defaultSeverity": "error",
-            "flags": "gm",
-            "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
-          },
-          "run": "manual"
-        }
-      ],
+      "manual": {
+        "strategy": "sequence",
+        "tools": [
+          "PHP CS Fixer",
+          "PHP Code Beautifier",
+          "Rector",
+          "PHPStan",
+          "Mago Analyzer",
+          "Mago Guard",
+          "Mago Formatter"
+        ]
+      },
+      "match": {
+        "languages": ["php"]
+      },
       "name": "PHP",
-      "preCommands": [
-        {
-          "args": ["-l", "${file}"],
-          "command": "php",
-          "name": "PHP Lint"
-        }
-      ]
+      "onSave": {
+        "strategy": "parallel",
+        "tools": ["PHP CodeSniffer", "PHP Mess Detector", "Mago Linter"]
+      }
     }
   ],
+  "lintRunner.tools": {
+    "Action Lint": {
+      "args": ["${file}"],
+      "command": "actionlint",
+      "kind": "diagnostic",
+      "parser": {
+        "defaultSeverity": "error",
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<message>.+?) \\[(?<code>[^\\]]+)\\]$"
+      }
+    },
+    "Ansible Lint": {
+      "args": ["-c", "~/.ansible-lint", "--nocolor", "${file}"],
+      "command": "ansible-lint",
+      "kind": "diagnostic",
+      "parser": {
+        "defaultSeverity": "warning",
+        "flags": "gm",
+        "pattern": "^(?<code>[a-z][\\w.\\[\\]-]+): (?<message>.+)\\n.+?:(?<line>\\d+)(?::(?<col>\\d+))?"
+      }
+    },
+    "Blade Formatter": {
+      "args": [
+        "--write",
+        "--config",
+        "~/.config/blade-formatter/.bladeformatterrc.json",
+        "${file}"
+      ],
+      "command": "blade-formatter",
+      "kind": "write"
+    },
+    "Check Make": {
+      "args": ["--config=~/.config/checkmake/checkmake.ini", "-o", "json", "${file}"],
+      "command": "checkmake",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "g",
+        "messageFormat": "json",
+        "pattern": "\\{\\s*\"rule\":\\s*\"(?<code>[^\"]+)\",\\s*\"violation\":\\s*\"(?<message>(?:\\\\.|[^\"])*)\",\\s*\"file_name\":\\s*\"[^\"]+\",\\s*\"line_number\":\\s*(?<line>\\d+)\\s*\\}"
+      }
+    },
+    "Dotenv Linter": {
+      "args": ["--plain", "check", "--skip-updates", "${file}"],
+      "command": "dotenv-linter",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+) (?<code>[A-Za-z][\\w-]*): (?<message>.+)$"
+      }
+    },
+    "Dotenv Linter Fix": {
+      "args": ["--plain", "fix", "--no-backup", "${file}"],
+      "command": "dotenv-linter",
+      "kind": "write"
+    },
+    "ESLint": {
+      "args": ["--config", "~/.config/eslint/eslint.config.js", "--format", "stylish", "${file}"],
+      "command": "eslint",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^\\s*(?<line>\\d+):(?<col>\\d+)\\s+(?<severity>error|warning)\\s+(?<message>.+?)\\s{2,}(?<code>\\S+)\\s*$"
+      }
+    },
+    "ESLint Fix": {
+      "args": ["--config", "~/.config/eslint/eslint.config.js", "--fix", "${file}"],
+      "command": "eslint",
+      "kind": "write"
+    },
+    "Fish Format": {
+      "args": ["-w", "${file}"],
+      "command": "fish_indent",
+      "kind": "write"
+    },
+    "GitLeaks": {
+      "args": [
+        "dir",
+        "--config",
+        "~/.gitleaks.toml",
+        "--report-format",
+        "json",
+        "--report-path",
+        "-",
+        "${file}"
+      ],
+      "command": "gitleaks",
+      "kind": "diagnostic",
+      "parser": {
+        "defaultSeverity": "error",
+        "flags": "gm",
+        "messageFormat": "json",
+        "output": "stdout",
+        "pattern": "\\{\\s*\"RuleID\":\\s*\"(?<code>(?:\\\\.|[^\\\"])*)\",\\s*\"Description\":\\s*\"(?<message>(?:\\\\.|[^\\\"])*)\",\\s*\"StartLine\":\\s*(?<line>\\d+),\\s*\"EndLine\":\\s*\\d+,\\s*\"StartColumn\":\\s*(?<col>\\d+),[\\s\\S]*?\"File\":\\s*\"(?<file>(?:\\\\.|[^\\\"])*)\""
+      }
+    },
+    "Go Format": {
+      "args": ["-w", "${file}"],
+      "command": "gofmt",
+      "kind": "write"
+    },
+    "HadoLint": {
+      "args": ["--no-color", "--format", "tty", "--config", "~/.config/hadolint.yaml", "${file}"],
+      "command": "hadolint",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "output": "stdout",
+        "pattern": "^(?:hadolint:)?(?:.+?):(?<line>\\d+):? (?<code>\\S+) (?<severity>\\w+): (?<message>.+)$"
+      }
+    },
+    "HTML Hint": {
+      "args": ["--config", "~/.htmlhintrc", "--format", "unix", "${file}"],
+      "command": "htmlhint",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<message>.+) \\[(?<severity>[^/\\]]+)/(?<code>[^\\]]+)\\]$"
+      }
+    },
+    "INI Format": {
+      "args": ["--write", "${file}", "--single-space"],
+      "command": "inifmt",
+      "kind": "write"
+    },
+    "JSON Lint": {
+      "args": ["-f", "~/.jsonlintrc", "${file}"],
+      "command": "jsonlint",
+      "kind": "diagnostic",
+      "parser": {
+        "defaultSeverity": "error",
+        "flags": "gm",
+        "pattern": "^(?:.+?:\\s*)?line\\s+(?<line>\\d+),\\s*col\\s+(?<col>\\d+),\\s*(?<message>.+?)(?:\\.)?$"
+      }
+    },
+    "Lint HTML": {
+      "args": ["--config", "~/.linthtmlrc", "--no-color", "${relativeFile}"],
+      "command": "linthtml",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^\\s*(?<line>\\d+):(?<col>\\d+)\\s+(?<severity>error|warning)\\s+(?<message>.+?)\\s{2,}(?<code>\\S+)\\s*$"
+      }
+    },
+    "LuaCheck": {
+      "args": [
+        "--config",
+        "~/.config/luacheck/.luacheckrc",
+        "--formatter",
+        "plain",
+        "--codes",
+        "${file}"
+      ],
+      "command": "luacheck",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): \\((?<code>[A-Z]\\d+)\\) (?<message>.+)$"
+      }
+    },
+    "Mago Analyzer": {
+      "args": [
+        "--colors=never",
+        "analyze",
+        "--reporting-format=emacs",
+        "--minimum-report-level=warning",
+        "--minimum-fail-level=warning",
+        "${file}"
+      ],
+      "command": "mago",
+      "enabled": false,
+      "kind": "diagnostic",
+      "parser": {
+        "defaultSeverity": "error",
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+      }
+    },
+    "Mago Formatter": {
+      "args": ["--colors=never", "format", "${file}"],
+      "command": "mago",
+      "enabled": false,
+      "kind": "write"
+    },
+    "Mago Guard": {
+      "args": [
+        "--colors=never",
+        "guard",
+        "--reporting-format=emacs",
+        "--minimum-report-level=warning",
+        "--minimum-fail-level=warning",
+        "${file}"
+      ],
+      "command": "mago",
+      "enabled": false,
+      "kind": "diagnostic",
+      "parser": {
+        "defaultSeverity": "error",
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+      }
+    },
+    "Mago Linter": {
+      "args": [
+        "--colors=never",
+        "lint",
+        "--reporting-format=emacs",
+        "--minimum-report-level=warning",
+        "--minimum-fail-level=warning",
+        "${file}"
+      ],
+      "command": "mago",
+      "kind": "diagnostic",
+      "parser": {
+        "defaultSeverity": "error",
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+):\\s*(?:(?<severity>error|warning)|note|help)?:?\\s*(?:\\[(?<code>[^\\]]+)\\]\\s*)?(?<message>.+)$"
+      }
+    },
+    "Markdown Lint": {
+      "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "${file}"],
+      "command": "markdownlint",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+) (?<severity>\\w+) (?<code>[A-Z0-9]+)(?:/\\S+)? (?<message>.+)$"
+      }
+    },
+    "Markdown Lint Fix": {
+      "args": ["--config", "~/.config/markdownlint/.markdownlint.jsonc", "--fix", "${file}"],
+      "command": "markdownlint",
+      "kind": "write"
+    },
+    "Nginx Beautifier": {
+      "args": ["-s", "4", "-i", "${file}"],
+      "command": "nginxbeautifier",
+      "kind": "write"
+    },
+    "Nginx Lint": {
+      "args": [
+        "--format",
+        "errorformat",
+        "--no-color",
+        "--config",
+        "~/.config/nginx-lint/.nginx-lint.toml",
+        "${file}"
+      ],
+      "command": "nginx-lint",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>\\w+)\\[(?<code>[^\\]]+)\\]: (?<message>.+)$"
+      }
+    },
+    "PHP Code Beautifier": {
+      "args": [
+        "--standard=~/.config/phpcs/phpcs.xml",
+        "-q",
+        "--ignore-annotations",
+        "--parallel=8",
+        "--no-colors",
+        "-d",
+        "memory_limit=512M",
+        "${file}"
+      ],
+      "command": "phpcbf",
+      "kind": "write"
+    },
+    "PHP CodeSniffer": {
+      "args": [
+        "--standard=~/.config/phpcs/phpcs.xml",
+        "--report=emacs",
+        "--ignore=*/vendor/*",
+        "-q",
+        "--ignore-annotations",
+        "--parallel=8",
+        "--no-colors",
+        "-d",
+        "memory_limit=512M",
+        "${file}"
+      ],
+      "command": "phpcs",
+      "kind": "diagnostic",
+      "maxFileSize": 75000,
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>warning|error) - (?<message>.+)$"
+      },
+      "timeout": 60000
+    },
+    "PHP CS Fixer": {
+      "args": ["fix", "--config", "~/.config/php-cs-fixer/php-cs-fixer.php", "${file}"],
+      "command": "php-cs-fixer",
+      "kind": "write"
+    },
+    "PHP Lint": {
+      "args": ["-l", "${file}"],
+      "command": "php",
+      "kind": "write"
+    },
+    "PHP Mess Detector": {
+      "args": ["${file}", "text", "~/.config/phpmd/phpmd.xml"],
+      "command": "phpmd",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+)\\s+(?<code>\\S+)\\s+(?<message>.+)$"
+      }
+    },
+    "PHPStan": {
+      "args": [
+        "analyse",
+        "--error-format=raw",
+        "--no-progress",
+        "--memory-limit=2G",
+        "--configuration=${workspaceFolder}/phpstan.neon",
+        "--autoload-file=${workspaceFolder}/phpstan-bootstrap.php",
+        "${file}"
+      ],
+      "command": "phpstan",
+      "kind": "diagnostic",
+      "parser": {
+        "defaultSeverity": "error",
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<message>.+?)(?: \\[identifier=(?<code>[^\\]]+)\\])?$"
+      }
+    },
+    "Prettier HTML": {
+      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+      "command": "prettier",
+      "kind": "write"
+    },
+    "Prettier JS": {
+      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+      "command": "prettier",
+      "enabled": false,
+      "kind": "write"
+    },
+    "Prettier JSON": {
+      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+      "command": "prettier",
+      "kind": "write"
+    },
+    "Prettier Markdown": {
+      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+      "command": "prettier",
+      "enabled": false,
+      "kind": "write"
+    },
+    "Prettier Styles": {
+      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
+      "command": "prettier",
+      "enabled": false,
+      "kind": "write"
+    },
+    "Rector": {
+      "args": [
+        "process",
+        "--config",
+        "~/.config/rector/rector.php",
+        "--ansi",
+        "--no-progress-bar",
+        "--clear-cache",
+        "--no-diffs",
+        "${file}"
+      ],
+      "command": "rector",
+      "kind": "write",
+      "successExitCodes": [0]
+    },
+    "Ruff": {
+      "args": [
+        "check",
+        "--config=~/.config/ruff/pyproject.toml",
+        "--output-format",
+        "github",
+        "${file}"
+      ],
+      "command": "ruff",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^::(?<severity>error|warning) title=ruff \\((?<code>[^)]+)\\),file=[^,]+,line=(?<line>\\d+),col=(?<col>\\d+),endLine=\\d+,endColumn=\\d+::(?:[^:]+:\\d+:\\d+: [A-Z]\\d+ )?(?<message>[^\\n%]+)"
+      }
+    },
+    "Ruff Fix": {
+      "args": ["check", "--fix", "--config=~/.config/ruff/pyproject.toml", "${file}"],
+      "command": "ruff",
+      "kind": "write"
+    },
+    "Ruff Format": {
+      "args": ["format", "--config=~/.config/ruff/pyproject.toml", "${file}"],
+      "command": "ruff",
+      "kind": "write"
+    },
+    "Shell Check": {
+      "args": ["-x", "--format", "gcc", "${file}"],
+      "command": "shellcheck",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): (?<severity>\\w+): (?<message>.+?) \\[(?<code>SC\\d+)\\]$"
+      }
+    },
+    "shfmt": {
+      "args": ["-w", "${file}"],
+      "command": "shfmt",
+      "kind": "write"
+    },
+    "Sql Fluff": {
+      "args": [
+        "lint",
+        "--config",
+        "~/.sqlfluff",
+        "--format",
+        "github-annotation-native",
+        "--dialect",
+        "mysql",
+        "${file}"
+      ],
+      "command": "sqlfluff",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^::(?<severity>error|warning|notice) title=SQLFluff,file=[^,]+,line=(?<line>\\d+),col=(?<col>\\d+),endLine=\\d+,endColumn=\\d+::(?<code>[A-Z]+\\d+): (?<message>.+?)(?: \\[[^\\]]+\\])?$"
+      }
+    },
+    "Sql Fluff Fix": {
+      "args": ["fix", "--config", "~/.sqlfluff", "--dialect", "mysql", "${file}"],
+      "command": "sqlfluff",
+      "kind": "write"
+    },
+    "Style Lint": {
+      "args": ["--config", "~/.stylelintrc.json", "--formatter", "compact", "${file}"],
+      "command": "stylelint",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?: line (?<line>\\d+), col (?<col>\\d+), (?<severity>\\w+) - (?<message>.+?) \\((?<code>[^)]+)\\)$"
+      }
+    },
+    "Style Lint Fix": {
+      "args": ["--config", "~/.stylelintrc.json", "--fix", "${file}"],
+      "command": "stylelint",
+      "kind": "write"
+    },
+    "StyLua": {
+      "args": ["--config-path", "~/.config/stylua/stylua.toml", "${file}"],
+      "command": "stylua",
+      "kind": "write"
+    },
+    "Taplo": {
+      "args": ["format", "--config", "~/.config/taplo/taplo.toml", "${file}"],
+      "command": "taplo",
+      "kind": "write"
+    },
+    "Taplo Check": {
+      "args": ["check", "--config", "~/.config/taplo/taplo.toml", "${file}"],
+      "command": "taplo",
+      "kind": "write"
+    },
+    "XML Lint": {
+      "args": ["--nonet", "--noout", "${file}"],
+      "command": "xmllint",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "output": "stderr",
+        "pattern": "^.+?:(?<line>\\d+): (?:(?:parser )?(?<severity>error|warning)) : (?<message>.+)$"
+      }
+    },
+    "XML Validate": {
+      "args": ["--nonet", "--noout", "${file}"],
+      "command": "xmllint",
+      "kind": "write"
+    },
+    "YAML Format": {
+      "args": ["-conf", "~/.config/yamlfmt/.yamlfmt", "${file}"],
+      "command": "yamlfmt",
+      "kind": "write"
+    },
+    "YAML Lint": {
+      "args": ["--format", "parsable", "--config-file", "~/.config/yamllint/config", "${file}"],
+      "command": "yamllint",
+      "kind": "diagnostic",
+      "parser": {
+        "flags": "gm",
+        "pattern": "^.+?:(?<line>\\d+):(?<col>\\d+): \\[(?<severity>\\w+)\\] (?<message>.+?) \\((?<code>[^)]+)\\)$"
+      }
+    }
+  },
   "liveServer.settings.donotShowInfoMsg": true,
   "liveServer.settings.donotVerifyTags": true,
   "markdown.extension.bold.indicator": "**",
