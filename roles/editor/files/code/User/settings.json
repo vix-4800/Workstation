@@ -413,6 +413,7 @@
   "editor.inlayHints.fontFamily": "JetBrains Mono, monospace",
   "editor.inlayHints.fontSize": 12,
   "editor.inlayHints.padding": true,
+  "editor.inlineSuggest.enabled": false,
   "editor.inlineSuggest.suppressSuggestions": false,
   "editor.insertSpaces": true,
   "editor.linkedEditing": true,
@@ -1697,6 +1698,7 @@
   "terminal.integrated.cursorStyleInactive": "line",
   "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "terminal.integrated.initialHint": false,
   "terminal.integrated.profiles.linux": {
     "bash": {
       "path": "/usr/bin/bash"
