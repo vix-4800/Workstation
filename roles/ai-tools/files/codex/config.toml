@@ -5,9 +5,6 @@ model_reasoning_effort = "medium"
 plan_mode_reasoning_effort = "high"
 model_verbosity = "low"
 file_opener = "vscode"
-default_permissions = "workspace-safe"
-approval_policy = "on-request"
-
 notify = [
   "notify-send",
   "Codex",
@@ -17,7 +14,6 @@ notify = [
   "-i",
   "dialog-warning",
 ]
-
 commit_attribution = "Codex <codex@openai.com>"
 disable_paste_burst = true
 
@@ -50,29 +46,6 @@ status_line_use_colors = true
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
-
-# ---------------------------
-# Permission profiles
-# ---------------------------
-
-[permissions.workspace-safe.filesystem]
-"/" = "read"
-glob_scan_max_depth = 4
-
-[permissions.workspace-safe.filesystem.":workspace_roots"]
-"." = "write"
-"**/.env" = "deny"
-"**/.env.*" = "deny"
-"**/*.env" = "deny"
-"**/*.pem" = "deny"
-"**/*.key" = "deny"
-"**/.ssh/**" = "deny"
-"**/.gnupg/**" = "deny"
-"**/.aws/**" = "deny"
-"**/.kube/**" = "deny"
-
-[permissions.workspace-safe.network]
-enabled = true
 
 [mcp_servers.github]
 command = "npx"
@@ -107,10 +80,6 @@ args = ["-y", "@playwright/mcp@latest", "--browser=firefox"]
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
-
-# ---------------------------
-# Plugins
-# ---------------------------
 
 [plugins."github@openai-curated"]
 enabled = true
