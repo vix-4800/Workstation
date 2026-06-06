@@ -387,7 +387,7 @@
   "depHealth.autoScanOnOpen": false,
   "diffEditor.codeLens": true,
   "diffEditor.experimental.showMoves": false,
-  "diffEditor.ignoreTrimWhitespace": true,
+  "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.maxComputationTime": 0,
   "docker.extension.enableComposeLanguageServer": true,
   "docker.lsp.telemetry": "off",
