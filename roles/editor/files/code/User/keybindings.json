@@ -13,9 +13,5 @@
     "key": "ctrl+shift+i",
     "command": "-notebook.formatCell",
     "when": "editorHasDocumentFormattingProvider && editorTextFocus && inCompositeEditor && notebookEditable && !editorReadonly && activeEditor == 'workbench.editor.notebook'"
-  },
-  {
-    "key": "ctrl+shift+i",
-    "command": "lintRunner.fix"
-  }
+}
 ]
