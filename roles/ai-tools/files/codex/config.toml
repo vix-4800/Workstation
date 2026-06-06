@@ -5,6 +5,9 @@ model_reasoning_effort = "medium"
 plan_mode_reasoning_effort = "high"
 model_verbosity = "low"
 file_opener = "vscode"
+default_permissions = "approval-first"
+approval_policy = "on-request"
+approvals_reviewer = "user"
 notify = [
   "notify-send",
   "Codex",
@@ -46,6 +49,10 @@ status_line_use_colors = true
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
+
+[permissions.approval-first]
+extends = ":read-only"
+# extends = ":workspace"
 
 [mcp_servers.github]
 command = "npx"
