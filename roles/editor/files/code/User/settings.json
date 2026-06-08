@@ -1145,6 +1145,16 @@
         "strategy": "parallel",
         "tools": ["PHP CodeSniffer", "PHP Mess Detector", "Mago Linter"]
       }
+    },
+    {
+      "match": {
+        "languages": ["Justfile"]
+      },
+      "name": "Just",
+      "onSave": {
+        "strategy": "sequence",
+        "tools": ["Just format"]
+      }
     }
   ],
   "lintRunner.tools": {
@@ -1280,6 +1290,11 @@
         "flags": "gm",
         "pattern": "^(?:.+?:\\s*)?line\\s+(?<line>\\d+),\\s*col\\s+(?<col>\\d+),\\s*(?<message>.+?)(?:\\.)?$"
       }
+    },
+    "Just format": {
+      "args": ["--fmt", "${file}"],
+      "command": "just",
+      "kind": "write"
     },
     "Lint HTML": {
       "args": ["--config", "~/.linthtmlrc", "--no-color", "${relativeFile}"],
