@@ -1,15 +1,19 @@
 [Interface]
-PrivateKey = {{ vault_wg_private_key }}
-Address = {{ vault_wg_address }}
-DNS = {{ vault_wg_dns }}
+{% set wg_addresses = network_wireguard_profile.address if network_wireguard_profile.address is string else (network_wireguard_profile.address | join(', ')) %}
+{% set wg_allowed_ips = network_wireguard_profile.allowed_ips | default(['0.0.0.0/0', '::/0']) %}
+PrivateKey = {{ network_wireguard_profile.private_key }}
+Address = {{ wg_addresses }}
+{% if network_wireguard_profile.dns is defined %}
+DNS = {{ network_wireguard_profile.dns if network_wireguard_profile.dns is string else (network_wireguard_profile.dns | join(', ')) }}
+{% endif %}
 
 [Peer]
-PublicKey = {{ vault_wg_peer_public_key }}
-{% if vault_wg_preshared_key | default('') != '' %}
-PresharedKey = {{ vault_wg_preshared_key }}
+PublicKey = {{ network_wireguard_profile.peer_public_key }}
+{% if network_wireguard_profile.preshared_key | default('') != '' %}
+PresharedKey = {{ network_wireguard_profile.preshared_key }}
 {% endif %}
-{% if vault_wg_persistent_keepalive is defined %}
-PersistentKeepalive = {{ vault_wg_persistent_keepalive }}
+{% if network_wireguard_profile.persistent_keepalive is defined %}
+PersistentKeepalive = {{ network_wireguard_profile.persistent_keepalive }}
 {% endif %}
-Endpoint = {{ vault_wg_endpoint }}
-AllowedIPs = 0.0.0.0/0, ::/0
+Endpoint = {{ network_wireguard_profile.endpoint }}
+AllowedIPs = {{ wg_allowed_ips if wg_allowed_ips is string else (wg_allowed_ips | join(', ')) }}
