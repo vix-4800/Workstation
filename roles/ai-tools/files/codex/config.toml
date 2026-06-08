@@ -19,6 +19,8 @@ notify = [
 ]
 commit_attribution = "Codex <codex@openai.com>"
 disable_paste_burst = true
+model_reasoning_summary = "none"
+hide_agent_reasoning = true
 
 [shell_environment_policy]
 inherit = "core"
@@ -36,6 +38,7 @@ hooks = true
 fast_mode = false
 shell_snapshot = true
 prevent_idle_sleep = true
+codex_git_commit = true
 
 [agents]
 max_threads = 6
@@ -46,9 +49,6 @@ theme = "catppuccin-mocha"
 notifications = true
 status_line = ["run-state", "project-name", "git-branch", "model-with-reasoning", "context-remaining", "five-hour-limit", "weekly-limit"]
 status_line_use_colors = true
-
-[tui.model_availability_nux]
-"gpt-5.5" = 4
 
 [permissions.approval-first]
 extends = ":read-only"
