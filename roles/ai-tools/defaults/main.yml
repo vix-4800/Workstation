@@ -4,6 +4,7 @@ ai_tools_global_instruction_home_path: '{{ home }}/.agents/instructions/AGENTS.m
 ai_tools_health_timeout_seconds: 30
 ai_tools_run_health_checks: false
 ai_tools_github_mcp_server_version: 0.32.0
+ai_tools_playwright_browser: firefox
 
 ai_tools_claude_mcp_servers_present:
   - name: github

@@ -44,6 +44,32 @@
     - ai-tools
     - packages
 
+- name: Check installed Playwright browsers
+  ansible.builtin.find:
+    paths: '{{ home }}/.cache/ms-playwright'
+    patterns: '{{ ai_tools_playwright_browser }}-*'
+    file_type: directory
+  register: ai_tools_playwright_browser_installation
+  failed_when: false
+  changed_when: false
+  tags:
+    - ai-tools
+    - packages
+
+- name: Install Playwright browser for MCP
+  ansible.builtin.command:
+    argv:
+      - npx
+      - -y
+      - '@playwright/mcp@latest'
+      - install-browser
+      - '{{ ai_tools_playwright_browser }}'
+  when: ai_tools_playwright_browser_installation.matched | default(0) == 0
+  changed_when: true
+  tags:
+    - ai-tools
+    - packages
+
 - name: Ensure AI config parent directories exist
   ansible.builtin.file:
     path: '{{ item }}'
