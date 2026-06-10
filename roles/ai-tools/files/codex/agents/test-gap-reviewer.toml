@@ -1,6 +1,6 @@
 name = "test-gap-reviewer"
 description = "Read-only reviewer focused on missing or weak tests and the smallest effective verification strategy."
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "read-only"

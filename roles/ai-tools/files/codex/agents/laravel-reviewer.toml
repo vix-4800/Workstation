@@ -1,6 +1,6 @@
 name = "laravel-reviewer"
 description = "Read-only reviewer for Laravel conventions, validation, authorization, Eloquent usage, and maintainability."
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "read-only"

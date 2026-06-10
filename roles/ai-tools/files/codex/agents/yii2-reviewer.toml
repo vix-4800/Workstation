@@ -1,6 +1,6 @@
 name = "yii2-reviewer"
 description = "Read-only reviewer for Yii2 conventions, validation boundaries, RBAC usage, Active Record patterns, and maintainability."
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "read-only"
