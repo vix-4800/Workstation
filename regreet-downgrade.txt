@@ -1,0 +1,2 @@
+sudo pacman -U /var/cache/pacman/pkg/greetd-regreet-0.3.0-2-x86_64.pkg.tar.zst
+sudo systemctl restart greetd
