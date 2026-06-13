@@ -21,6 +21,7 @@ commit_attribution = "Codex <codex@openai.com>"
 disable_paste_burst = true
 model_reasoning_summary = "none"
 hide_agent_reasoning = true
+service_tier = "default"
 
 [shell_environment_policy]
 inherit = "core"
@@ -49,6 +50,9 @@ theme = "catppuccin-mocha"
 notifications = true
 status_line = ["run-state", "project-name", "git-branch", "model-with-reasoning", "context-remaining", "five-hour-limit", "weekly-limit"]
 status_line_use_colors = true
+
+[tui.model_availability_nux]
+"gpt-5.5" = 1
 
 [permissions.approval-first]
 extends = ":read-only"
