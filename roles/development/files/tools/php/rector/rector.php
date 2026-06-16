@@ -19,9 +19,8 @@ use Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php84\Rector\Class_\PropertyHookRector;
 use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
-use Rector\Php85\Rector\Expression\NestedFuncCallsToPipeOperatorRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
-use Rector\Php85\Rector\StmtsAwareInterface\SequentialAssignmentsToPipeOperatorRector;
+use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestFunctionPrefixWithAttributeRector;
 use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -121,7 +120,6 @@ $config = RectorConfig::configure()
         'vendor',
         'storage',
         'runtime',
-        'tests',
         '*.blade.php',
         '_ide_helper.php',
         '_ide_helper_models.php',
@@ -139,6 +137,7 @@ $config = RectorConfig::configure()
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
+        phpunitCodeQuality: true,
         codingStyle: true,
         typeDeclarations: true,
         typeDeclarationDocblocks: true,
@@ -148,6 +147,7 @@ $config = RectorConfig::configure()
         earlyReturn: true,
         rectorPreset: true,
     )
+    ->withComposerBased(phpunit: true)
     ->withImportNames(removeUnusedImports: true)
     ->withConfiguredRule(
         AddSensitiveParameterAttributeRector::class,
@@ -197,6 +197,9 @@ $rules = [
     AddNameToBooleanArgumentRector::class, // Add argument name to boolean arguments for better readability
     AddNameToNullArgumentRector::class, // Add argument name to null arguments for better readability
     TernaryNullCheckToNullsafeOperatorRector::class, // Convert ternary null checks to nullsafe operator where possible
+
+    // PHPUnit rules
+    ReplaceTestFunctionPrefixWithAttributeRector::class, // Replace test function prefix with #[Test] attribute for PHPUnit 10
 ];
 
 if (LARAVEL_RULES_ENABLED) {
