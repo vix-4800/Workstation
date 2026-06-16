@@ -396,4 +396,30 @@ return new Config()
         'standardize_increment' => true, // Standardizes increment and decrement operators
         'long_to_shorthand_operator' => true, // Converts long-form assignment operators to their shorthand versions (e.g., $a = $a + 1 → $a += 1)
         'single_line_comment_style' => true, // Converts single-line comments to use // instead of #
+
+        // ─────────────────────────────────────────────────────────────────────────
+        // PHPUnit
+        // ─────────────────────────────────────────────────────────────────────────
+        'php_unit_assert_new_names' => true, // Rename deprecated PHPUnit assertions like assertFileNotExists to new methods like assertFileDoesNotExist.
+        'php_unit_attributes' => true, // PHPUnit attributes must be used over their respective PHPDoc-based annotations.
+        'php_unit_construct' => true, // PHPUnit assertion method calls like ->assertSame(true, $foo) should be written with dedicated method like ->assertTrue($foo).
+        'php_unit_data_provider_method_order' => true, // Data provider method must be placed after the last test where used.
+        'php_unit_data_provider_name' => true, // Data provider names must match the name of the test.
+        'php_unit_data_provider_return_type' => true, // The return type of PHPUnit data provider must be iterable.
+        'php_unit_data_provider_static' => true, // Data providers must be static.
+        'php_unit_dedicate_assert' => true, // PHPUnit assertions like assertInternalType, assertFileExists, should be used over assertTrue.
+        'php_unit_dedicate_assert_internal_type' => true, // PHPUnit assertions like assertIsArray should be used over assertInternalType.
+        'php_unit_expectation' => true, // Usages of ->setExpectedException* methods MUST be replaced by ->expectException* methods.
+        'php_unit_internal_class' => true, // All PHPUnit test classes should be marked as internal.
+        'php_unit_method_casing' => [
+            'case' => 'camel_case',
+        ], // Enforce camel case for PHPUnit test methods, following configuration.
+        'php_unit_mock' => true, // Usages of ->getMock and ->getMockWithoutInvokingTheOriginalConstructor methods MUST be replaced by ->createMock or ->createPartialMock methods.
+        'php_unit_mock_short_will_return' => true, // Usage of PHPUnit’s mock e.g. ->will($this->returnValue(..)) must be replaced by its shorter equivalent such as ->willReturn(...).
+        'php_unit_namespaced' => true, // PHPUnit classes MUST be used in namespaced version, e.g. \PHPUnit\Framework\TestCase instead of \PHPUnit_Framework_TestCase.
+        'php_unit_no_expectation_annotation' => true, // Usages of @expectedException* annotations MUST be replaced by ->setExpectedException* methods.
+        'php_unit_set_up_tear_down_visibility' => true, // Changes the visibility of the setUp() and tearDown() functions of PHPUnit to protected, to match the PHPUnit TestCase.
+        'php_unit_strict' => true, // PHPUnit methods like assertSame should be used instead of assertEquals.
+        'php_unit_test_annotation' => true, // Removes @test annotations from tests, following configuration.
+        'php_unit_test_class_requires_covers' => true, // All PHPUnit test classes should have @covers annotation.
     ]);
