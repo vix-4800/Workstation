@@ -72,6 +72,12 @@
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation" />
         <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification" />
+        <properties>
+            <property name="enableUnionTypeHint" value="true"/>
+            <property name="enableIntersectionTypeHint" value="true"/>
+            <property name="enableMixedTypeHint" value="true"/>
+            <property name="enableStaticTypeHint" value="true"/>
+        </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing" />
     <rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition">
