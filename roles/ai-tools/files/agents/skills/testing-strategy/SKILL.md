@@ -24,6 +24,7 @@ Load `code-review` when evaluating a diff for missing coverage. Load `modern-php
 2. Match the test level to the risk.
 3. Prefer one clear regression test over many redundant shallow assertions.
 4. Cover the changed behaviour and the critical edge cases introduced by the change.
+5. Test root causes, not individual observed examples. Do not test only the reported narrow case; identify the underlying failure class and cover representative similar cases.
 
 ## Test-Level Guidance
 
