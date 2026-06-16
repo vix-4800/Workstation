@@ -5,9 +5,13 @@ model_reasoning_effort = "medium"
 plan_mode_reasoning_effort = "high"
 model_verbosity = "low"
 file_opener = "vscode"
-default_permissions = "approval-first"
+
+# dev-workspace - filesystem sandbox + network access, no approval required
+# approval-first - minimal permissions, requires approval for most actions
+default_permissions = "dev-workspace"
 approval_policy = "on-request"
 approvals_reviewer = "user"
+allow_login_shell = false
 notify = [
   "notify-send",
   "Codex",
@@ -52,11 +56,33 @@ status_line = ["run-state", "project-name", "git-branch", "model-with-reasoning"
 status_line_use_colors = true
 
 [tui.model_availability_nux]
-"gpt-5.5" = 1
+"gpt-5.5" = 0
 
 [permissions.approval-first]
-# extends = ":read-only"
+extends = ":read-only"
+
+[permissions.dev-workspace]
 extends = ":workspace"
+description = "Allow workspace edits, restricted network, and explicit command exceptions."
+
+[permissions.dev-workspace.network]
+enabled = true
+allow_local_binding = false
+
+[permissions.dev-workspace.network.domains]
+"github.com" = "allow"
+"*.github.com" = "allow"
+"api.github.com" = "allow"
+"raw.githubusercontent.com" = "allow"
+"objects.githubusercontent.com" = "allow"
+"registry.npmjs.org" = "allow"
+"packagist.org" = "allow"
+"repo.packagist.org" = "allow"
+"getcomposer.org" = "allow"
+"api.openai.com" = "allow"
+"pastebin.com" = "deny"
+"webhook.site" = "deny"
+"requestbin.com" = "deny"
 
 [mcp_servers.github]
 command = "npx"
