@@ -800,22 +800,12 @@
         "tools": ["Prettier Markdown"]
       },
       "match": {
-        "languages": ["markdown"]
-      },
-      "name": "Markdown Fix",
-      "onSave": {
-        "strategy": "sequence",
-        "tools": ["Markdown Lint Fix"]
-      }
-    },
-    {
-      "match": {
-        "languages": ["markdown"]
+        "languages": ["markdown", "skill"]
       },
       "name": "Markdown",
       "onSave": {
         "strategy": "sequence",
-        "tools": ["Markdown Lint"]
+        "tools": ["Markdown Lint Fix", "Markdown Lint"]
       }
     },
     {
