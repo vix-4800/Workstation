@@ -88,6 +88,8 @@ prefix_rule(
 )
 
 prefix_rule(pattern=["gh", "auth", "status"], decision="allow")
+prefix_rule(pattern=["gh", "pr", "diff"], decision="allow")
+prefix_rule(pattern=["gh", "pr", "view"], decision="allow")
 
 prefix_rule(
     pattern = [["gh", "/usr/bin/gh"], "pr", "diff"],
