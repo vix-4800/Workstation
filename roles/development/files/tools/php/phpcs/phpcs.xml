@@ -17,7 +17,6 @@
     <exclude-pattern>*/bootstrap/cache/*</exclude-pattern>
     <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/runtime/*</exclude-pattern>
-    <exclude-pattern>*/tests/*</exclude-pattern>
     <exclude-pattern>*/photos/*</exclude-pattern>
     <exclude-pattern>*/storage/*</exclude-pattern>
     <exclude-pattern>*/logs/*</exclude-pattern>
@@ -379,6 +378,7 @@
                 <element key="is_null" value="null" />
                 <element key="isset" value="null" />
                 <element key="call_user_func" value="null" />
+                <element key="debug_zval_dump" value="null" />
             </property>
         </properties>
         <exclude-pattern>*/console/*</exclude-pattern>
