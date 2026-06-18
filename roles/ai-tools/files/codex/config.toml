@@ -56,7 +56,7 @@ status_line = ["run-state", "project-name", "git-branch", "model-with-reasoning"
 status_line_use_colors = true
 
 [tui.model_availability_nux]
-"gpt-5.5" = 0
+"gpt-5.5" = 4
 
 [permissions.approval-first]
 extends = ":read-only"
@@ -107,6 +107,9 @@ approval_mode = "approve"
 approval_mode = "approve"
 
 [mcp_servers.github.tools.get_pull_request_status]
+approval_mode = "approve"
+
+[mcp_servers.github.tools.get_pull_request_files]
 approval_mode = "approve"
 
 [mcp_servers.serena]
