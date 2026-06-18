@@ -21,6 +21,7 @@ use Rector\Php84\Rector\Class_\PropertyHookRector;
 use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestFunctionPrefixWithAttributeRector;
+use Rector\Renaming\Rector\MethodCall\RenameDeprecatedMethodCallRector;
 use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -146,6 +147,7 @@ $config = RectorConfig::configure()
         instanceOf: true,
         earlyReturn: true,
         rectorPreset: true,
+        // namedArgs: true,
     )
     ->withComposerBased(phpunit: true)
     ->withImportNames(removeUnusedImports: true)
@@ -187,6 +189,7 @@ $rules = [
     PropertyHookRector::class, // Replace getter/setter with property hook
     // SequentialAssignmentsToPipeOperatorRector::class, // Convert sequential assignments to use the pipe operator
     // NestedFuncCallsToPipeOperatorRector::class, // Convert nested function calls to use the pipe operator
+    RenameDeprecatedMethodCallRector::class, // Rename deprecated method calls to their new names
 
     // Custom code quality rules
     AddTypedClassConstantRector::class, // Add explicit type to class constants inferred from scalar literals (PHP 8.3+)
