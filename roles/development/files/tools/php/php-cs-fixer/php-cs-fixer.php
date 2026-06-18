@@ -26,7 +26,7 @@ return new Config()
         // Base preset
         // ─────────────────────────────────────────────────────────────
         '@PER-CS' => true, // PHP-FIG PER Coding Style (successor to PSR-12)
-        '@PHP84Migration' => true, // Applies PHP 8.4 language modernization fixes
+        '@PHP8x4Migration' => true, // Applies PHP 8.4 language modernization fixes
 
         // ─────────────────────────────────────────────────────────────
         // Modern PHP & Performance optimizations
@@ -152,7 +152,6 @@ return new Config()
                 'uses',
             ],
         ], // Order PHPDoc tags by value
-        'phpdoc_types_no_duplicates' => true, // Removes duplicate types in PHPDoc annotations
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
