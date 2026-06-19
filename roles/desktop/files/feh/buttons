@@ -1,0 +1,5 @@
+# Use the mouse wheel to zoom instead of changing images.
+prev_img
+next_img
+zoom_in 4
+zoom_out 5

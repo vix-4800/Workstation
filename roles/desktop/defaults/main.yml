@@ -2,6 +2,8 @@
 desktop_configs:
   - src: sway
     dest: '{{ home }}/.config/sway'
+  - src: feh
+    dest: '{{ home }}/.config/feh'
   - src: wofi
     dest: '{{ home }}/.config/wofi'
   - src: swaync
