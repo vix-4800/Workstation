@@ -395,6 +395,7 @@ return new Config()
         'standardize_increment' => true, // Standardizes increment and decrement operators
         'long_to_shorthand_operator' => true, // Converts long-form assignment operators to their shorthand versions (e.g., $a = $a + 1 → $a += 1)
         'single_line_comment_style' => true, // Converts single-line comments to use // instead of #
+        'class_keyword' => true, // Converts FQCN strings to *::class keywords.
 
         // ─────────────────────────────────────────────────────────────────────────
         // PHPUnit
