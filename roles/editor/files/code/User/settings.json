@@ -1662,7 +1662,7 @@
   "php-docblocker.returnVoid": true,
   "php-docblocker.useShortNames": true,
   "phpImportHelper.autoAliasConflicts": true,
-  "phpImportHelper.autoAliasPrefixes": ["Base", "Core"],
+  "phpImportHelper.autoAliasPrefixes": ["Core", "Base"],
   "phpImportHelper.autoFoldUses": false,
   "phpImportHelper.autoImportOnSave": true,
   "phpImportHelper.autoSort": false,
