@@ -1661,6 +1661,8 @@
   "php-docblocker.returnGap": true,
   "php-docblocker.returnVoid": true,
   "php-docblocker.useShortNames": true,
+  "phpImportHelper.autoAliasConflicts": true,
+  "phpImportHelper.autoAliasPrefixes": ["Base", "Core"],
   "phpImportHelper.autoFoldUses": false,
   "phpImportHelper.autoImportOnSave": true,
   "phpImportHelper.autoSort": false,
