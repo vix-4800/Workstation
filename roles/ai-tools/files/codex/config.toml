@@ -51,9 +51,16 @@ max_depth = 2
 
 [tui]
 theme = "catppuccin-mocha"
-notifications = true
+notifications = ["agent-turn-complete", "approval-requested"]
+notification_condition = "unfocused"
 status_line = ["run-state", "project-name", "git-branch", "model-with-reasoning", "context-remaining", "five-hour-limit", "weekly-limit"]
 status_line_use_colors = true
+session_picker_view = "dense"
+vim_mode_default = false
+animations = false
+show_tooltips = false
+alternate_screen = "auto"
+terminal_title = ["activity", "project", "git-branch", "model"]
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
