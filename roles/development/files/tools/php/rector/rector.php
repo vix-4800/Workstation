@@ -2,12 +2,9 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\AssignOp\NewArrayItemConcatAssignToAssignRector;
 use Rector\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector;
 use Rector\CodeQuality\Rector\CallLike\AddNameToNullArgumentRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
-use Rector\CodeQuality\Rector\Property\FixClassCaseSensitivityVarDocblockRector;
-use Rector\CodeQuality\Rector\StmtsAwareInterface\MoveInnerFunctionToTopLevelRector;
 use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
 use Rector\CodingStyle\Rector\Assign\NestedTernaryToMatchRector;
 use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
@@ -17,7 +14,6 @@ use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php80\Rector\NotIdentical\MbStrContainsRector;
 use Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php84\Rector\Class_\PropertyHookRector;
@@ -28,11 +24,8 @@ use Rector\Renaming\Rector\MethodCall\RenameDeprecatedMethodCallRector;
 use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
-use Rector\TypeDeclaration\Rector\FuncCall\AddArrayAnyAllClosureParamTypeRector;
-use Rector\TypeDeclaration\Rector\FuncCall\NarrowArrayAnyAllNullableParamTypeRector;
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\While_\WhileNullableToInstanceofRector;
-use Rector\TypeDeclarationDocblocks\Rector\Class_\AddParamTypeToRefactorMethodRector;
 use Rector\Unambiguous\Rector\Class_\RemoveReturnThisFromSetterClassMethodRector;
 use Rector\ValueObject\PhpVersion;
 use RectorLaravel\Rector\ArrayDimFetch\EnvVariableToEnvHelperRector;
@@ -192,16 +185,10 @@ $rules = [
     NestedTernaryToMatchRector::class, // Convert nested ternary operators to match expressions
     StaticArrowFunctionRector::class, // Convert arrow functions to static where possible
     RemoveReturnThisFromSetterClassMethodRector::class, // Remove return $this; from setter methods
-    MbStrContainsRector::class, // Replace mb_strpos() !== false and mb_strstr() with str_contains()
     PropertyHookRector::class, // Replace getter/setter with property hook
     // SequentialAssignmentsToPipeOperatorRector::class, // Convert sequential assignments to use the pipe operator
     // NestedFuncCallsToPipeOperatorRector::class, // Convert nested function calls to use the pipe operator
     RenameDeprecatedMethodCallRector::class, // Rename deprecated method calls to their new names
-    AddArrayAnyAllClosureParamTypeRector::class, // Add a type to an untyped array_any()/array_all() closure param, based on the array item type
-    NarrowArrayAnyAllNullableParamTypeRector::class, // Narrow an already nullable array_any()/array_all()/array_find()/array_find_key() closure param to the non-nullable array item type
-    MoveInnerFunctionToTopLevelRector::class, // Move an inner named function to the top level
-    NewArrayItemConcatAssignToAssignRector::class, // Change concat assign on a new array item to plain assign, as the new item is always null
-    FixClassCaseSensitivityVarDocblockRector::class, // Fix a misspelled class name casing in a @var docblock to match the real class name
 
     // Custom code quality rules
     AddTypedClassConstantRector::class, // Add explicit type to class constants inferred from scalar literals (PHP 8.3+)
@@ -215,9 +202,6 @@ $rules = [
 
     // PHPUnit rules
     ReplaceTestFunctionPrefixWithAttributeRector::class, // Replace test function prefix with #[Test] attribute for PHPUnit 10
-
-    // Rector inner rules
-    AddParamTypeToRefactorMethodRector::class, // Add @param node type to refactor() method based on getNodeTypes() of a Rector rule
 ];
 
 if (LARAVEL_RULES_ENABLED) {
