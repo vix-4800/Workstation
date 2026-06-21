@@ -148,7 +148,12 @@ $config = RectorConfig::configure()
         rectorPreset: true,
         // namedArgs: true,
     )
-    ->withComposerBased(phpunit: true)
+    ->withComposerBased(
+        phpunit: true,
+        laravel: false,
+        doctrine: false,
+        symfony: false,
+    )
     ->withImportNames()
     ->withConfiguredRule(
         AddSensitiveParameterAttributeRector::class,
