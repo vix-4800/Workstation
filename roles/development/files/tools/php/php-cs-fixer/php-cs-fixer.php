@@ -376,6 +376,7 @@ return new Config()
         'VixFixer/phpdoc_opening_line' => true, // Ensures multi-line PHPDoc /** is on its own line
         'VixFixer/phpdoc_separate_throws' => true, // Splits @throws A|B into separate @throws tags
         'VixFixer/phpdoc_self_reference' => true, // Replaces class name with self in PHPDoc @var/@param/@return inside the class
+        'VixFixer/this_nullsafe_operator' => true, // Removes unnecessary nullsafe operator when $this is used
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
