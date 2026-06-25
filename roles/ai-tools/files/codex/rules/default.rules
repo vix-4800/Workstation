@@ -88,70 +88,57 @@ prefix_rule(
 )
 
 prefix_rule(pattern=["gh", "auth", "status"], decision="allow")
-prefix_rule(pattern=["gh", "pr", "diff"], decision="allow")
-prefix_rule(pattern=["gh", "pr", "view"], decision="allow")
+prefix_rule(pattern=["gh", "run", "view"], decision="allow")
 
 prefix_rule(
-    pattern = [["gh", "/usr/bin/gh"], "pr", "diff"],
+    pattern = ["gh", "pr", "diff"],
     decision = "allow",
     justification = "Viewing PR diffs is allowed without user approval",
     match = [
         "gh pr diff 1234",
-        "/usr/bin/gh pr diff 1234",
     ],
     not_match = [
         "gh pr checkout 1234",
-        "/usr/bin/gh pr checkout 1234",
         "gh issue view 1",
-        "/usr/bin/gh issue view 1",
     ],
 )
 
 prefix_rule(
-    pattern = [["gh", "/usr/bin/gh"], "pr", "view"],
+    pattern = ["gh", "pr", "view"],
     decision = "allow",
     justification = "Viewing PR metadata is allowed without user approval",
     match = [
         "gh pr view 1234 --json number,title,url,body,headRefName,baseRefName,author,state,mergeStateStatus",
-        "/usr/bin/gh pr view 1234 --json number,title,url,body,headRefName,baseRefName,author,state,mergeStateStatus",
     ],
     not_match = [
         "gh pr checkout 1234",
-        "/usr/bin/gh pr checkout 1234",
         "gh issue view 1",
-        "/usr/bin/gh issue view 1",
     ],
 )
 
 prefix_rule(
-    pattern = [["gh", "/usr/bin/gh"], "repo", "view"],
+    pattern = ["gh", "repo", "view"],
     decision = "allow",
     justification = "Viewing repo metadata is allowed without user approval",
     match = [
         "gh repo view owner/repo --json name,description,url,createdAt,updatedAt,owner",
-        "/usr/bin/gh repo view owner/repo --json name,description,url,createdAt,updatedAt,owner",
     ],
     not_match = [
         "gh pr view 1",
-        "/usr/bin/gh pr view 1",
         "gh issue view 1",
-        "/usr/bin/gh issue view 1",
     ],
 )
 
 prefix_rule(
-    pattern = [["gh", "/usr/bin/gh"], "issue", "view"],
+    pattern = ["gh", "issue", "view"],
     decision = "allow",
     justification = "Viewing issue metadata is allowed without user approval",
     match = [
         "gh issue view 1234 --json number,title,url,body,author,state",
-        "/usr/bin/gh issue view 1234 --json number,title,url,body,author,state",
     ],
     not_match = [
         "gh pr checkout 1234",
-        "/usr/bin/gh pr checkout 1234",
         "gh pr view 1",
-        "/usr/bin/gh pr view 1",
     ],
 )
 
