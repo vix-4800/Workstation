@@ -497,6 +497,15 @@
                 <element value="@name" />
                 <element value="@tutorial" />
                 <element value="@filesource" />
+
+                <!-- PHPUnit -->
+                <element value="@test" />
+                <element value="@dataProvider" />
+                <element value="@covers" />
+                <element value="@depends" />
+                <element value="@group" />
+                <element value="@requires" />
+                <element value="@testWith" />
             </property>
         </properties>
     </rule>
