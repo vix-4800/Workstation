@@ -55,7 +55,7 @@ notifications = ["agent-turn-complete", "approval-requested"]
 notification_condition = "unfocused"
 status_line = ["run-state", "project-name", "git-branch", "model-with-reasoning", "context-remaining", "five-hour-limit", "weekly-limit"]
 status_line_use_colors = true
-session_picker_view = "dense"
+session_picker_view = "comfortable"
 vim_mode_default = false
 animations = false
 show_tooltips = false
@@ -139,6 +139,7 @@ args = ["-y", "@playwright/mcp@latest", "--browser=firefox"]
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
+enabled = false
 
 [plugins."github@openai-curated"]
 enabled = true
