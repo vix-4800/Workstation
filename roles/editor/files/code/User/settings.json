@@ -802,7 +802,7 @@
     {
       "manual": {
         "strategy": "sequence",
-        "tools": ["Prettier Markdown"]
+        "tools": ["Prettier"]
       },
       "match": {
         "languages": ["markdown", "skill"]
@@ -957,7 +957,7 @@
     {
       "manual": {
         "strategy": "sequence",
-        "tools": ["ESLint Fix", "Prettier JS"]
+        "tools": ["ESLint Fix", "Prettier"]
       },
       "match": {
         "languages": ["javascript", "typescript", "javascriptreact", "typescriptreact", "vue"]
@@ -977,7 +977,7 @@
     {
       "manual": {
         "strategy": "sequence",
-        "tools": ["Style Lint Fix", "Prettier Styles"]
+        "tools": ["Style Lint Fix", "Prettier"]
       },
       "match": {
         "languages": ["css", "scss", "less"]
@@ -997,7 +997,7 @@
     {
       "manual": {
         "strategy": "sequence",
-        "tools": ["Prettier HTML"]
+        "tools": ["Prettier"]
       },
       "match": {
         "languages": ["html"]
@@ -1084,7 +1084,7 @@
       "name": "JSON Fix",
       "onSave": {
         "strategy": "sequence",
-        "tools": ["Prettier JSON"]
+        "tools": ["Prettier"]
       }
     },
     {
@@ -1483,32 +1483,9 @@
         "pattern": "^.+?:(?<line>\\d+):(?<message>.+?)(?: \\[identifier=(?<code>[^\\]]+)\\])?$"
       }
     },
-    "Prettier HTML": {
+    "Prettier": {
       "args": ["--write", "--config", "~/.prettierrc", "${file}"],
       "command": "prettier",
-      "kind": "write"
-    },
-    "Prettier JS": {
-      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-      "command": "prettier",
-      "enabled": false,
-      "kind": "write"
-    },
-    "Prettier JSON": {
-      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-      "command": "prettier",
-      "kind": "write"
-    },
-    "Prettier Markdown": {
-      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-      "command": "prettier",
-      "enabled": false,
-      "kind": "write"
-    },
-    "Prettier Styles": {
-      "args": ["--write", "--config", "~/.prettierrc", "${file}"],
-      "command": "prettier",
-      "enabled": false,
       "kind": "write"
     },
     "Rector": {
