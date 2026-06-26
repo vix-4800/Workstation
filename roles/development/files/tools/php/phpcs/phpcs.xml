@@ -114,6 +114,12 @@
         </properties>
         <type>warning</type>
     </rule>
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator">
+        <properties>
+            <property name="lineLengthLimit" value="121" />
+        </properties>
+        <type>warning</type>
+    </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
         <type>warning</type>
     </rule>
