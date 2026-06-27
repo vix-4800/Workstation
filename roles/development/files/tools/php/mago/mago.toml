@@ -47,7 +47,7 @@ excludes = ["**/Generated/**", "**/generated/**", "**/*Generated.php", "**/*_gen
 [linter]
 integrations = ["laravel", "phpunit", "yii"]
 baseline-variant = "strict"
-minimum-fail-level = "Warning"
+minimum-fail-level = "Note"
 excludes = ["database/migrations/**"]
 
 [linter.rules]
@@ -110,6 +110,7 @@ no-assign-in-argument = { enabled = true, level = "Error" }
 no-assign-in-condition = { enabled = true, level = "Error" }
 no-boolean-flag-parameter = { enabled = true, level = "Warning", exclude-setters = false, exclude-constructors = true }
 no-closing-tag = { enabled = true, level = "Error" }
+no-duplicate-match-arm = { enabled = true, level = "Note" }
 no-db-schema-change = { enabled = true, level = "Error" }
 no-dead-store = { enabled = true, level = "Error" }
 no-debug-symbols = { enabled = true, level = "Error" }
@@ -215,6 +216,7 @@ strict-assertions = { enabled = true, level = "Error" }
 strict-behavior = { enabled = true, level = "Error" }
 strict-types = { enabled = true, level = "Error" }
 switch-continue-to-break = { enabled = true, level = "Error" }
+suspicious-explode-arguments = { enabled = true, level = "Warning" }
 tagged-fixme = { enabled = true, level = "Warning" }
 tagged-todo = { enabled = true, level = "Warning" }
 tainted-data-to-sink = { enabled = true, level = "Error", known-sink-functions = [
