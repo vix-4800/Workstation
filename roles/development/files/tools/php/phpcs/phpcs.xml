@@ -299,6 +299,23 @@
         <type>warning</type>
     </rule>
     <rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants" />
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
+        <properties>
+            <property name="groups" type="array">
+                <element value="uses" />
+                <element value="enum cases" />
+                <element value="public constants" />
+                <element value="constants" />
+                <element value="public properties, protected properties, private properties" />
+                <element value="public static properties, protected static properties, private static properties" />
+                <element value="constructor" />
+                <element value="all public methods" />
+                <element value="methods" />
+                <element value="magic methods" />
+            </property>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ReadonlyClass" />
 
     <!-- ===== ENUMS ===== -->
     <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing">
@@ -643,25 +660,6 @@
             <property name="linesCountAfterLast" value="0" />
         </properties>
         <type>warning</type>
-    </rule>
-
-    <!-- ===== CLASS STRUCTURE ===== -->
-    <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
-        <properties>
-            <property name="groups" type="array">
-                <element value="uses" />
-                <element value="enum cases" />
-                <element value="public constants" />
-                <element value="constants" />
-                <element value="public properties, protected properties, private properties" />
-                <element value="public static properties, protected static properties, private static properties" />
-                <element value="constructor" />
-                <element value="all public methods" />
-                <element value="methods" />
-                <element value="magic methods" />
-            </property>
-        </properties>
-        <severity>0</severity>
     </rule>
 
     <!-- ===== ADDITIONAL CONTROL STRUCTURES ===== -->
