@@ -23,7 +23,7 @@ notify = [
   "-i",
   "dialog-warning",
 ]
-commit_attribution = "Codex <codex@openai.com>"
+# commit_attribution = "Codex <codex@openai.com>"
 disable_paste_burst = true
 model_reasoning_summary = "none"
 hide_agent_reasoning = true
