@@ -5,9 +5,7 @@ declare(strict_types=1);
 use Rector\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector;
 use Rector\CodeQuality\Rector\CallLike\AddNameToNullArgumentRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
-use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
 use Rector\CodingStyle\Rector\Assign\NestedTernaryToMatchRector;
-use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\CodingStyle\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector;
 use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
@@ -19,11 +17,14 @@ use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRecto
 use Rector\Php84\Rector\Class_\PropertyHookRector;
 use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\AddIntersectionVarToMockObjectPropertyRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferTestsWithCamelCaseRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestFunctionPrefixWithAttributeRector;
 use Rector\Renaming\Rector\MethodCall\RenameDeprecatedMethodCallRector;
 use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\NarrowBoolDocblockReturnTypeRector;
 use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\While_\WhileNullableToInstanceofRector;
 use Rector\Unambiguous\Rector\Class_\RemoveReturnThisFromSetterClassMethodRector;
@@ -185,15 +186,14 @@ $rules = [
     AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
     AddOverrideAttributeToOverriddenPropertiesRector::class, // Adds #[Override] attribute to overridden properties
     ConstAndTraitDeprecatedAttributeRector::class, // Adds #[Deprecated] attribute to deprecated constants and traits
-    StaticClosureRector::class,
     ArraySpreadInsteadOfArrayMergeRector::class, // Replace array_merge() with array spread operator where possible
     NestedTernaryToMatchRector::class, // Convert nested ternary operators to match expressions
-    StaticArrowFunctionRector::class, // Convert arrow functions to static where possible
     RemoveReturnThisFromSetterClassMethodRector::class, // Remove return $this; from setter methods
     PropertyHookRector::class, // Replace getter/setter with property hook
     // SequentialAssignmentsToPipeOperatorRector::class, // Convert sequential assignments to use the pipe operator
     // NestedFuncCallsToPipeOperatorRector::class, // Convert nested function calls to use the pipe operator
     RenameDeprecatedMethodCallRector::class, // Rename deprecated method calls to their new names
+    NarrowBoolDocblockReturnTypeRector::class,
 
     // Custom code quality rules
     AddTypedClassConstantRector::class, // Add explicit type to class constants inferred from scalar literals (PHP 8.3+)
@@ -207,6 +207,8 @@ $rules = [
 
     // PHPUnit rules
     ReplaceTestFunctionPrefixWithAttributeRector::class, // Replace test function prefix with #[Test] attribute for PHPUnit 10
+    AddIntersectionVarToMockObjectPropertyRector::class,
+    PreferTestsWithCamelCaseRector::class,
 ];
 
 if (LARAVEL_RULES_ENABLED) {
