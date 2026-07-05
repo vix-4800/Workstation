@@ -75,7 +75,6 @@ return new Config()
                 'var',
             ],
         ], // Aligns tags like @param, @return, etc.
-        'phpdoc_annotation_without_dot' => true, // Ensures annotations do not end with a dot
         'phpdoc_order' => ['order' => ['param', 'return', 'throws']], // Orders tags: @param → @return → @throws
         'phpdoc_summary' => false, // Doesn't require a period at the end of the first sentence
         'phpdoc_to_comment' => false, // Doesn't convert /** */ into regular // comments
@@ -142,16 +141,6 @@ return new Config()
             'case_sensitive' => false,
         ], // Removes specified PHPDoc annotations
         'align_multiline_comment' => ['comment_type' => 'all_multiline'], // Aligns multiline comments
-        'phpdoc_order_by_value' => [
-            'annotations' => [
-                'property',
-                'property-read',
-                'property-write',
-                'requires',
-                'throws',
-                'uses',
-            ],
-        ], // Order PHPDoc tags by value
 
         // ─────────────────────────────────────────────────────────────────────────
         // Imports
