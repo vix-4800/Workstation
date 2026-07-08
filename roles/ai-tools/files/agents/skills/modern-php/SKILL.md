@@ -1,12 +1,12 @@
 ---
 name: modern-php
 description: >
-  Use for PHP implementation, bug fixes, refactors, debugging, and code review in Yii2, Laravel, or Symfony projects using Composer, PHPStan, phpcs, rector, phpmd, php-cs-fixer, PHPUnit, or Pest.
+  Use for PHP implementation, bug fixes, refactors, debugging, and code review in Yii2, Laravel, or Symfony projects using Composer, PHPStan, phpcs, rector, phpmd, php-cs-fixer, PHPUnit, Pest, PHPDoc, DocBlocks, or advanced PHPStan types.
 license: MIT
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   domain: language
-  triggers: PHP, Yii2, Laravel, Symfony, Composer, PHPStan, phpcs, rector, phpmd, php-cs-fixer, PHPUnit, Pest, PSR
+  triggers: PHP, Yii2, Laravel, Symfony, Composer, PHPStan, PHPDoc, DocBlock, array-shape, generics, phpcs, rector, phpmd, php-cs-fixer, PHPUnit, Pest, PSR
   role: specialist
   scope: implementation
   output-format: code
@@ -22,14 +22,16 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 |---|---|---|
 | PHP 8.3-8.5 features | `references/php-8.3-8.5.md` | Selecting language features or checking version support |
 | Framework conventions | `references/framework-conventions.md` | Working inside Yii2, Laravel, or Symfony |
+| PHPStan DocBlocks and precise PHPDoc types | `references/phpstan-docblocks.md` | Writing or reviewing PHPDoc, DocBlocks, array shapes, generics, assertions, magic API annotations, callable signatures, or precise scalar/array types |
 | Quality gates | `references/tooling-and-verification.md` | Running or interpreting phpcs/phpstan/rector/phpmd/php-cs-fixer/tests |
 
 ## Core Workflow
 
-1. Detect the real target first: PHP version floor, framework, coding style, and local quality gates.
+1. Detect the real target first: PHP version floor, framework, coding style, PHPStan version/config, and local quality gates.
 2. Implement the smallest change that fits the current architecture instead of importing patterns from another framework.
 3. Prefer strict typing, constructor injection, value objects, enums, and framework-native validation/authorization patterns.
-4. Verify with the repo's own local tools before finishing. If a tool is missing or misconfigured, say so explicitly.
+4. Treat PHPDoc as a static-analysis type contract. Native PHP types come first; PHPDoc is added only when native types cannot express the real contract or when PHPStan needs more precision.
+5. Verify with the repo's own local tools before finishing. If a tool is missing or misconfigured, say so explicitly.
 
 ## Core Constraints
 
@@ -50,11 +52,13 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 13. Use `password_hash($plainTextPassword, PASSWORD_ARGON2ID)` for password storage unless the framework already wraps this safely.
 14. Prefer repository-local binaries and config files for verification over global defaults.
 15. Use `json_validate($input)` as an early guard before `json_decode()` whenever the input crosses a trust boundary (HTTP, file, external API). Reject and return immediately if validation fails; do not attempt to decode invalid JSON.
-16. After `json_decode()`, annotate the result variable with an inline `@var array{...}|null` doc block that fully describes the expected shape. This gives phpstan structural type information and documents the contract.
-17. Add PHPDoc with `@param` (including full array shape) and `@return` on ALL methods — including private — when a parameter or return type is `array` with a non-trivial structure. When native types fully express the contract and no shape detail is needed, PHPDoc may be omitted.
-18. Use `sprintf()` for strings that embed variable values inside HTML attribute quotes. Never use double-quoted interpolation with backslash-escaped inner quotes such as `"<tag attr=\"{$val}\""`.
-19. Use single-quoted strings for all literals that contain no variable interpolation or PHP escape sequences. Use double-quoted strings only when interpolation or sequences such as `\n` are needed.
-20. No column-alignment of variable assignments or match/array arms. Use exactly one space on each side of `=` and `=>`. Never pad with extra spaces to achieve visual alignment.
+16. After `json_decode()`, annotate the result variable with an inline `@var array{...}|null` doc block that fully describes the expected shape. This gives PHPStan structural type information and documents the contract.
+17. When PHPDoc is needed, use the most precise PHPStan type that is true for the value: `positive-int`, `non-negative-int`, `int<1, 100>`, `non-empty-string`, `numeric-string`, `list<T>`, `non-empty-list<T>`, `array<TKey, TValue>`, `array{...}`, `class-string<T>`, `key-of<...>`, `value-of<...>`, `callable(Arg): Return`, templates, aliases, and assertions. Load `references/phpstan-docblocks.md` before writing non-trivial PHPDoc.
+18. Add PHPDoc with `@param` and `@return` on all methods — including private — when a parameter or return type is `array`, `iterable`, `callable`, generic, shape-like, magic, or otherwise more precise than native PHP can express. When native types fully express the contract and no extra precision is needed, PHPDoc may be omitted.
+19. Use type aliases (`@phpstan-type` and `@phpstan-import-type`) when the same array shape or complex type is repeated or grows beyond 3-5 lines.
+20. Use `sprintf()` for strings that embed variable values inside HTML attribute quotes. Never use double-quoted interpolation with backslash-escaped inner quotes such as `"<tag attr=\"{$val}\""`.
+21. Use single-quoted strings for all literals that contain no variable interpolation or PHP escape sequences. Use double-quoted strings only when interpolation or sequences such as `\n` are needed.
+22. No column-alignment of variable assignments or match/array arms. Use exactly one space on each side of `=` and `=>`. Never pad with extra spaces to achieve visual alignment.
 
 ### MUST NOT DO
 
@@ -68,7 +72,10 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 8. Do not leave empty catch blocks.
 9. Do not place business logic in controllers, console commands, or Active Record models when a service or domain class is the proper boundary.
 10. Do not instantiate service dependencies with `new` inside business logic when constructor injection is available.
-11. Do not use double-quoted strings for literals that contain no interpolation or escape sequences. Do not pad `=` or `=>` with extra spaces to column-align assignments or match/array arms.
+11. Do not write PHPDoc that merely duplicates obvious native types, such as `@param int $id` for `int $id` or `@return User|null` for `?User`, unless local project rules explicitly require it.
+12. Do not write broad PHPDoc such as `@param array $payload`, `@return array`, or `@param callable $callback` when a true PHPStan type can describe keys, values, shapes, listness, generic relation, callable signature, or scalar constraints.
+13. Do not use inline `@var` to silence PHPStan or hide uncertainty. Fix the source type, add validation/assertion helpers, use generics, improve stubs, or narrow the value before use.
+14. Do not use double-quoted strings for literals that contain no interpolation or escape sequences. Do not pad `=` or `=>` with extra spaces to column-align assignments or match/array arms.
 
 ## PHP Version Features Quick Reference
 
@@ -100,6 +107,52 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 | URI extension | 8.5 | `new Uri\Rfc3986\Uri($url)` |
 
 Use only features supported by the target runtime. PHP 8.5 was released on November 20, 2025; verify project runtime support before introducing 8.5-only syntax.
+
+## PHPDoc / PHPStan Type Contract
+
+Native PHP types are the first layer. PHPDoc is the second layer and must add information that native PHP cannot express.
+
+Good PHPDoc adds precision:
+
+```php
+/**
+ * @param positive-int $userId
+ * @param non-empty-list<non-empty-string> $roles
+ * @param array{email: non-empty-string, active?: bool} $payload
+ *
+ * @return list<User>
+ */
+public function assignRoles(int $userId, array $roles, array $payload): array
+{
+    // ...
+}
+```
+
+Bad PHPDoc only repeats native types or hides uncertainty:
+
+```php
+/**
+ * @param int $userId
+ * @param array $roles
+ * @param array $payload
+ *
+ * @return array
+ */
+public function assignRoles(int $userId, array $roles, array $payload): array
+{
+    // ...
+}
+```
+
+Decision order:
+
+1. Express everything possible with native parameter, return, property, class constant, enum, and union/intersection types.
+2. Add PHPDoc only for missing precision: shaped arrays, lists, generic collections, callable signatures, type aliases, class strings, integer ranges, non-empty strings, key/value constraints, assertions, magic API, or conditional return types.
+3. Use the narrowest type that is guaranteed by validation or object invariants. Do not claim `positive-int` or `non-empty-string` unless the value is actually guarded or produced by trusted code.
+4. Prefer reusable `@phpstan-type` aliases for large repeated shapes.
+5. Prefer assertion functions with `@phpstan-assert*` over local inline `@var` casts.
+
+Load `references/phpstan-docblocks.md` for the complete PHPStan PHPDoc rules and examples.
 
 ## Code Patterns
 
@@ -212,10 +265,10 @@ if (!json_validate($json)) {
 
 /**
  * @var array{
- *   blocks: array<int, array{
- *     type: string,
- *     data: array{text?: string, level?: int}
- *   }>
+ *     blocks: list<array{
+ *         type: non-empty-string,
+ *         data: array{text?: non-empty-string, level?: int<1, 6>}
+ *     }>
  * }|null $data
  */
 $data = json_decode($json, true);
