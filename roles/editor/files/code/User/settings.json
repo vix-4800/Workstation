@@ -1819,6 +1819,16 @@
   "workbench.startupEditor": "welcomePageInEmptyWorkbench",
   "workbench.statusBar.visible": true,
   "workbench.tree.indent": 15,
+  "yaml.disableSchemaDetection": [
+    "**/docker-compose.yml",
+    "**/docker-compose.yaml",
+    "**/docker-compose.*.yml",
+    "**/docker-compose.*.yaml",
+    "**/compose.yml",
+    "**/compose.yaml",
+    "**/compose.*.yml",
+    "**/compose.*.yaml"
+  ],
   "yaml.format.enable": true,
   "yaml.schemas": {
     "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/ansible-lint-config.json": "**/.ansible-lint",
