@@ -644,7 +644,7 @@
     "**/console/migrations/**",
     "**/frontend/**"
   ],
-  "intelephense.files.maxSize": 1000000,
+  "intelephense.files.maxSize": 5000000,
   "intelephense.format.braces": "per",
   "intelephense.format.enable": false,
   "intelephense.inlayHint.parameterNames": true,
