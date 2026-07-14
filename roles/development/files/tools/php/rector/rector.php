@@ -17,7 +17,6 @@ use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRecto
 use Rector\Php84\Rector\Class_\PropertyHookRector;
 use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
-use Rector\PHPUnit\CodeQuality\Rector\Class_\AddIntersectionVarToMockObjectPropertyRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferTestsWithCamelCaseRector;
 use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestFunctionPrefixWithAttributeRector;
 use Rector\Renaming\Rector\MethodCall\RenameDeprecatedMethodCallRector;
@@ -138,16 +137,20 @@ $config = RectorConfig::configure()
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
-        phpunitCodeQuality: true,
         codingStyle: true,
-        typeDeclarations: true,
-        typeDeclarationDocblocks: true,
         privatization: true,
         // naming: true,
         instanceOf: true,
         earlyReturn: true,
         rectorPreset: true,
         // namedArgs: true,
+
+        typeDeclarations: true,
+        typeDeclarationDocblocks: true,
+
+        phpunitCodeQuality: true,
+        phpunitNarrowAsserts: true,
+        phpunitMockToStub: true,
     )
     ->withComposerBased(
         phpunit: true,
@@ -207,7 +210,6 @@ $rules = [
 
     // PHPUnit rules
     ReplaceTestFunctionPrefixWithAttributeRector::class, // Replace test function prefix with #[Test] attribute for PHPUnit 10
-    AddIntersectionVarToMockObjectPropertyRector::class,
     PreferTestsWithCamelCaseRector::class,
 ];
 
