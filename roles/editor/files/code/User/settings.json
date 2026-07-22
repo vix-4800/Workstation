@@ -88,6 +88,7 @@
       "allowedModels": ["copilot/auto"]
     }
   },
+  "chat.sessionSync.enabled": true,
   "chat.tips.enabled": true,
   "chat.titleBar.openInAgentsWindow.enabled": false,
   "chat.tools.confirmationCarousel.enabled": true,
