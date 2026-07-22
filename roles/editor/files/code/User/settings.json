@@ -641,7 +641,7 @@
     "**/logs/**",
     "**/tools/**",
     "**/src/www/**",
-    "**/console/migrations/**",
+    "**/console/migrations/m??????_??????_*.php",
     "**/frontend/**"
   ],
   "intelephense.files.maxSize": 5000000,
@@ -1701,7 +1701,7 @@
     "**/.phpunit.cache/**",
     "**/logs/**",
     "**/tools/**",
-    "**/console/migrations/**",
+    "**/console/migrations/m??????_??????_*.php",
     "**/frontend/**"
   ],
   "phpImportHelper.performance.trace": true,
@@ -1731,7 +1731,6 @@
     "**/bootstrap/cache/**": true,
     "**/build/**": true,
     "**/cache/**": true,
-    "**/console/migrations/**": true,
     "**/dist": true,
     "**/dist/**": true,
     "**/logs": true,
