@@ -124,6 +124,9 @@ approval_mode = "approve"
 [mcp_servers.github.tools.get_pull_request]
 approval_mode = "approve"
 
+[mcp_servers.github.tools.get_pull_request_reviews]
+approval_mode = "approve"
+
 [mcp_servers.serena]
 command = "uvx"
 args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex", "--open-web-dashboard", "False"]
