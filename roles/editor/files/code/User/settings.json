@@ -389,6 +389,7 @@
   "database-client.capitalizeKeywordsWhenFormatting": true,
   "database-client.telemetry.usesOnlineServices": false,
   "depHealth.autoScanOnOpen": false,
+  "dictation.enabled": false,
   "diffEditor.codeLens": true,
   "diffEditor.experimental.showMoves": false,
   "diffEditor.ignoreTrimWhitespace": false,
