@@ -542,11 +542,11 @@
   "github.copilot.chat.cli.forkSessions.enabled": true,
   "github.copilot.chat.cli.remote.enabled": true,
   "github.copilot.chat.cli.terminalLinks.enabled": true,
-  "github.copilot.chat.commitMessageGeneration.instructions": [
-    {
-      "text": "Generate a concise one-line commit message using Conventional Commits: <type>(<scope>): <subject>. Use English, imperative mood, present tense. Allowed types: feat, fix, refactor, perf, docs, test, build, ci, chore, style, revert. Add scope only when obvious. Keep the subject under 72 characters, describe the intent of the change, avoid file-by-file summaries, and do not end with a period. Use ! for breaking changes."
-    }
-  ],
+  // "github.copilot.chat.commitMessageGeneration.instructions": [
+  //   {
+  //     "text": "Generate a concise one-line commit message using Conventional Commits: <type>(<scope>): <subject>. Use English, imperative mood, present tense. Allowed types: feat, fix, refactor, perf, docs, test, build, ci, chore, style, revert. Add scope only when obvious. Keep the subject under 72 characters, describe the intent of the change, avoid file-by-file summaries, and do not end with a period. Use ! for breaking changes."
+  //   }
+  // ],
   "github.copilot.chat.copilotMemory.enabled": true,
   "github.copilot.chat.customInstructionsInSystemMessage": true,
   "github.copilot.chat.githubMcpServer.enabled": true,
