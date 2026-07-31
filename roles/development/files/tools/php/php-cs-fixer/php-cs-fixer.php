@@ -366,6 +366,9 @@ return new Config()
         'VixFixer/phpdoc_separate_throws' => true, // Splits @throws A|B into separate @throws tags
         'VixFixer/phpdoc_self_reference' => true, // Replaces class name with self in PHPDoc @var/@param/@return inside the class
         'VixFixer/this_nullsafe_operator' => true, // Removes unnecessary nullsafe operator when $this is used
+        'VixFixer/nullsafe_property_chain_in_null_coalesce' => true,
+        'VixFixer/array_elements_new_line' => true, // Ensures each array element is on its own line
+        'VixFixer/multiline_condition_parentheses' => true, // Ensures each condition in a multiline if statement is on its own line
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
