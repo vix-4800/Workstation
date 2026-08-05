@@ -58,6 +58,7 @@ use Vix\RectorRules\LegacyRector\ReplaceTestFunctionPrefixWithAttributeRector;
 use Vix\RectorRules\NullableBoolReturnToFalseRector;
 use Vix\RectorRules\ReplaceMultipleEqualWithInArrayRector;
 use Vix\RectorRules\TernaryNullCheckToNullsafeOperatorRector;
+use Vix\RectorRules\Yii2\Yii2AddRelationQueryGenericRector;
 use Vix\RectorRules\Yii2\Yii2FindAllIdShortcutRector;
 use Vix\RectorRules\Yii2\Yii2FindOneFindAllShortcutRector;
 use Vix\RectorRules\Yii2\Yii2FindOneIdShortcutRector;
