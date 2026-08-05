@@ -58,14 +58,14 @@ use Vix\RectorRules\ExtractAssignmentFromIfConditionRector;
 use Vix\RectorRules\NullableBoolReturnToFalseRector;
 use Vix\RectorRules\ReplaceMultipleEqualWithInArrayRector;
 use Vix\RectorRules\TernaryNullCheckToNullsafeOperatorRector;
-use Vix\RectorRules\Yii2FindAllIdShortcutRector;
-use Vix\RectorRules\Yii2FindOneFindAllShortcutRector;
-use Vix\RectorRules\Yii2FindOneIdShortcutRector;
-use Vix\RectorRules\Yii2PropertyAccessRector;
-use Vix\RectorRules\Yii2RedundantActiveRecordSelfLookupRector;
-use Vix\RectorRules\Yii2UseExistsInsteadOfCountRector;
-use Vix\RectorRules\Yii2UseExistsInsteadOfOneNotNullRector;
-use Vix\RectorRules\Yii2UserFindOneToIdentityRector;
+use Vix\RectorRules\Yii2\Yii2FindAllIdShortcutRector;
+use Vix\RectorRules\Yii2\Yii2FindOneFindAllShortcutRector;
+use Vix\RectorRules\Yii2\Yii2FindOneIdShortcutRector;
+use Vix\RectorRules\Yii2\Yii2PropertyAccessRector;
+use Vix\RectorRules\Yii2\Yii2RedundantActiveRecordSelfLookupRector;
+use Vix\RectorRules\Yii2\Yii2UseExistsInsteadOfCountRector;
+use Vix\RectorRules\Yii2\Yii2UseExistsInsteadOfOneNotNullRector;
+use Vix\RectorRules\Yii2\Yii2UserFindOneToIdentityRector;
 
 define('LARAVEL_RULES_ENABLED', value: false);
 define('YII2_RULES_ENABLED', value: false);
@@ -102,6 +102,7 @@ $laravelRules = [
 ];
 
 $yii2Rules = [
+    Yii2AddRelationQueryGenericRector::class, // Add generic type to relation query methods
     Yii2PropertyAccessRector::class, // Convert Yii::$app->user->getId() to Yii::$app->user->id
     Yii2FindAllIdShortcutRector::class, // Optimize findAll queries by ID
     Yii2FindOneFindAllShortcutRector::class, // Convert findOne/findAll patterns to more efficient forms
