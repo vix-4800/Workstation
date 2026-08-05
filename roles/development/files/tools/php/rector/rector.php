@@ -5,8 +5,6 @@ declare(strict_types=1);
 use Rector\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector;
 use Rector\CodeQuality\Rector\CallLike\AddNameToNullArgumentRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
-use Rector\CodingStyle\Rector\Assign\NestedTernaryToMatchRector;
-use Rector\CodingStyle\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector;
 use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
@@ -18,7 +16,6 @@ use Rector\Php84\Rector\Class_\PropertyHookRector;
 use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferTestsWithCamelCaseRector;
-use Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestFunctionPrefixWithAttributeRector;
 use Rector\Renaming\Rector\MethodCall\RenameDeprecatedMethodCallRector;
 use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
@@ -55,6 +52,9 @@ use RectorLaravel\Set\LaravelSetProvider;
 use Vix\RectorRules\AddTypedClassConstantRector;
 use Vix\RectorRules\CollapseSequentialStrReplaceRector;
 use Vix\RectorRules\ExtractAssignmentFromIfConditionRector;
+use Vix\RectorRules\LegacyRector\CountArrayToEmptyArrayComparisonRector;
+use Vix\RectorRules\LegacyRector\NestedTernaryToMatchRector;
+use Vix\RectorRules\LegacyRector\ReplaceTestFunctionPrefixWithAttributeRector;
 use Vix\RectorRules\NullableBoolReturnToFalseRector;
 use Vix\RectorRules\ReplaceMultipleEqualWithInArrayRector;
 use Vix\RectorRules\TernaryNullCheckToNullsafeOperatorRector;
@@ -190,8 +190,6 @@ $rules = [
     AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
     AddOverrideAttributeToOverriddenPropertiesRector::class, // Adds #[Override] attribute to overridden properties
     ConstAndTraitDeprecatedAttributeRector::class, // Adds #[Deprecated] attribute to deprecated constants and traits
-    ArraySpreadInsteadOfArrayMergeRector::class, // Replace array_merge() with array spread operator where possible
-    NestedTernaryToMatchRector::class, // Convert nested ternary operators to match expressions
     RemoveReturnThisFromSetterClassMethodRector::class, // Remove return $this; from setter methods
     PropertyHookRector::class, // Replace getter/setter with property hook
     // SequentialAssignmentsToPipeOperatorRector::class, // Convert sequential assignments to use the pipe operator
@@ -208,9 +206,11 @@ $rules = [
     AddNameToBooleanArgumentRector::class, // Add argument name to boolean arguments for better readability
     AddNameToNullArgumentRector::class, // Add argument name to null arguments for better readability
     TernaryNullCheckToNullsafeOperatorRector::class, // Convert ternary null checks to nullsafe operator where possible
+    CountArrayToEmptyArrayComparisonRector::class,
+    NestedTernaryToMatchRector::class,
+    ReplaceTestFunctionPrefixWithAttributeRector::class,
 
     // PHPUnit rules
-    ReplaceTestFunctionPrefixWithAttributeRector::class, // Replace test function prefix with #[Test] attribute for PHPUnit 10
     PreferTestsWithCamelCaseRector::class,
 ];
 
