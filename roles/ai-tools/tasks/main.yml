@@ -44,11 +44,12 @@
     - ai-tools
     - packages
 
-- name: Check installed Playwright browsers
+- name: Check installed Playwright browser binary
   ansible.builtin.find:
     paths: '{{ home }}/.cache/ms-playwright'
-    patterns: '{{ ai_tools_playwright_browser }}-*'
-    file_type: directory
+    patterns: '{{ ai_tools_playwright_browser }}'
+    file_type: file
+    recurse: true
   register: ai_tools_playwright_browser_installation
   failed_when: false
   changed_when: false
