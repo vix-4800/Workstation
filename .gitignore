@@ -19,3 +19,6 @@ roles/services/files/*.wants/
 
 # Logs
 *.log
+
+# Playwright
+.playwright-mcp
