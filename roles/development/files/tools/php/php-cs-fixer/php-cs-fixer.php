@@ -369,6 +369,8 @@ return new Config()
         'VixFixer/nullsafe_property_chain_in_null_coalesce' => true,
         'VixFixer/array_elements_new_line' => true, // Ensures each array element is on its own line
         'VixFixer/multiline_condition_parentheses' => true, // Ensures each condition in a multiline if statement is on its own line
+        'VixFixer/multiline_condition_line_breaks' => true, // Ensures each condition in a multiline if statement is on its own line
+        'VixFixer/multiline_ternary_expression' => true, // Ensures each part of a multiline ternary expression is on its own line
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc
