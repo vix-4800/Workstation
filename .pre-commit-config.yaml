@@ -29,7 +29,7 @@ repos:
           - manual
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
+    rev: v0.11.0.1-1
     hooks:
       - id: shellcheck
         stages:
@@ -48,7 +48,7 @@ repos:
           - roles/development/files/tools/yaml/yamllint.yml
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.48.0
+    rev: v0.49.1
     hooks:
       - id: markdownlint
         stages:
@@ -61,7 +61,7 @@ repos:
           - roles/development/files/tools/markdown/markdownlint/.markdownlintignore
 
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-    rev: v9.25.0
+    rev: v9.26.0
     hooks:
       - id: commitlint
         stages:
