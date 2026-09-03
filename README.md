@@ -316,12 +316,12 @@ tags (`packages`, `config`, `services`, `system`), and narrower subgroup tags su
 
 ### Secrets
 
-WireGuard keys are stored in `vault/secrets.yml`, encrypted with `ansible-vault`. Per-host variables in
-`host_vars/localhost.yml` and vault variables render the final configs.
+WireGuard profiles are stored in `vault_wg_profiles` inside `vault/secrets.yml`, encrypted with `ansible-vault`.
+Per-host variables in `host_vars/localhost.yml` and vault variables render the final configs.
 
 ```text
-vault/secrets.yml ──> host_vars/localhost.yml ──> templates/wg0.conf.j2 ──> /etc/wireguard/wg0.conf
-     (encrypted)           (local vars)             (Jinja2 template)        (deployed config)
+vault/secrets.yml ──> host_vars/localhost.yml ──> templates/wg0.conf.j2 ──> /etc/wireguard/<profile>.conf
+  (encrypted)           (local vars)             (Jinja2 template)        (deployed configs)
 ```
 
 Create the vault file like this:

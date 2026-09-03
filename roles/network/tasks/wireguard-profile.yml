@@ -1,0 +1,55 @@
+---
+- name: Deploy WireGuard config from vault
+  ansible.builtin.template:
+    src: wg0.conf.j2
+    dest: >-
+      /etc/wireguard/{{ network_wireguard_profile.name }}.conf
+    owner: root
+    group: root
+    mode: '0600'
+  become: true
+  register: network_wg_config
+  tags:
+    - network
+    - config
+
+- name: Collect existing WireGuard profile UUIDs
+  ansible.builtin.set_fact:
+    network_wg_profile_uuids: >-
+      {{
+        network_wg_connections.stdout_lines
+        | select('match', '^' ~ (network_wireguard_profile.name | regex_escape) ~ ':[^:]+:wireguard$')
+        | map(
+          'regex_replace',
+          '^' ~ (network_wireguard_profile.name | regex_escape) ~ ':([^:]+):wireguard$',
+          '\1'
+        )
+        | list
+      }}
+  changed_when: false
+  tags:
+    - network
+    - config
+
+- name: Remove existing WireGuard connections before import
+  ansible.builtin.command:
+    cmd: nmcli connection delete uuid {{ item }}
+  become: true
+  changed_when: true
+  loop: '{{ network_wg_profile_uuids }}'
+  when:
+    - network_wg_config.changed or network_wg_profile_uuids | length > 1
+  tags:
+    - network
+    - config
+
+- name: Import WireGuard connection to NetworkManager
+  ansible.builtin.command:
+    cmd: nmcli connection import type wireguard file /etc/wireguard/{{ network_wireguard_profile.name }}.conf
+  become: true
+  changed_when: true
+  when:
+    - network_wg_config.changed or network_wg_profile_uuids | length == 0 or network_wg_profile_uuids | length > 1
+  tags:
+    - network
+    - config
