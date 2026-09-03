@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\CallLike\AddNameToBooleanArgumentRector;
-use Rector\CodeQuality\Rector\CallLike\AddNameToNullArgumentRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
@@ -61,6 +59,7 @@ use Vix\RectorRules\LegacyRector\ReplaceTestFunctionPrefixWithAttributeRector;
 use Vix\RectorRules\NullableBoolReturnToFalseRector;
 use Vix\RectorRules\ReplaceMultipleEqualWithInArrayRector;
 use Vix\RectorRules\TernaryNullCheckToNullsafeOperatorRector;
+use Vix\RectorRules\Yii2\Yii2AddPropertyTagsRector;
 use Vix\RectorRules\Yii2\Yii2AddRelationQueryGenericRector;
 use Vix\RectorRules\Yii2\Yii2FindAllIdShortcutRector;
 use Vix\RectorRules\Yii2\Yii2FindOneFindAllShortcutRector;
@@ -182,6 +181,13 @@ $config = RectorConfig::configure()
                 'authToken',
             ],
         ],
+    )
+    ->withConfiguredRule(
+        Yii2AddPropertyTagsRector::class,
+        [
+            Yii2AddPropertyTagsRector::REFINE_PROPERTY_TAG_KINDS => true,
+            Yii2AddPropertyTagsRector::REMOVE_UNRESOLVED_PROPERTY_TAGS => false,
+        ]
     )
     ->reportUnusedSkips()
     ->withAttributesSets()
