@@ -63,6 +63,7 @@
   "chat.checkpoints.enabled": false,
   "chat.customAgentInSubagent.enabled": true,
   "chat.editing.confirmEditRequestRemoval": false,
+  "chat.experimental.richLinks.enabled": true,
   "chat.instructionsFilesLocations": {
     ".cursor/rules": false,
     ".github/instructions": true,
@@ -256,6 +257,7 @@
     "blueman",
     "bluez",
     "brightnessctl",
+    "captainhook",
     "catppuccin",
     "certbot",
     "certonly",
