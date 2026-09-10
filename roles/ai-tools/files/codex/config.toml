@@ -142,6 +142,9 @@ args = ["-y", "@upstash/context7-mcp@latest"]
 command = "npx"
 args = ["-y", "@playwright/mcp@latest", "--browser=firefox"]
 
+[mcp_servers.playwright.tools.browser_close]
+approval_mode = "approve"
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 enabled = false
