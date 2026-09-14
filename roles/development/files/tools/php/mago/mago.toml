@@ -1,5 +1,5 @@
-"$schema" = "https://mago.carthage.software/1.42.0/schema.json"
-version = "1.42.0"
+"$schema" = "https://mago.carthage.software/1.48.1/schema.json"
+version = "1.48.1"
 stack-size = 8388608
 threads = 8
 php-version = "8.4"
@@ -136,6 +136,7 @@ no-insecure-comparison = { enabled = true, level = "Error" }
 no-isset = { enabled = true, level = "Warning" }
 no-literal-namespace-string = { enabled = true, level = "Warning" }
 no-literal-password = { enabled = true, level = "Error" }
+no-missing-format-argument = { enabled = true, level = "Error" }
 no-multi-assignments = { enabled = true, level = "Warning" }
 no-negated-ternary = { enabled = true, level = "Error" }
 no-nested-ternary = { enabled = true, level = "Error" }
@@ -184,6 +185,7 @@ optional-param-order = { enabled = true, level = "Error" }
 prefer-anonymous-migration = { enabled = true, level = "Warning" }
 prefer-array-spread = { enabled = true, level = "Warning" }
 prefer-arrow-function = { enabled = true, level = "Warning" }
+prefer-datetimeimmutable-create-from-timestamp = { enabled = false, level = "Help" }
 prefer-early-continue = { enabled = true, level = "Warning" }
 prefer-early-return = { enabled = true, level = "Warning" }
 prefer-explode-over-preg-split = { enabled = true, level = "Warning" }
@@ -206,6 +208,7 @@ psl-regex-functions = { enabled = true, level = "Warning" }
 psl-sleep-functions = { enabled = true, level = "Warning" }
 psl-string-functions = { enabled = true, level = "Warning" }
 readable-literal = { enabled = true, level = "Warning" }
+redundant-static = { enabled = false, level = "Help" }
 require-namespace = { enabled = true, level = "Error" }
 require-preg-quote-delimiter = { enabled = true, level = "Error" }
 sensitive-parameter = { enabled = true, level = "Error" }
