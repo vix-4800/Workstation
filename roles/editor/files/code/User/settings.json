@@ -397,6 +397,8 @@
   "diffEditor.experimental.showMoves": false,
   "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.maxComputationTime": 0,
+  "diffEditor.renderSideBySide": true,
+  "diffEditor.useInlineViewWhenSpaceIsLimited": false,
   "docker.extension.enableComposeLanguageServer": true,
   "docker.lsp.telemetry": "off",
   "editor.accessibilitySupport": "off",
