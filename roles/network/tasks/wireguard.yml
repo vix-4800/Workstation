@@ -10,15 +10,53 @@
     - network
     - packages
 
-- name: Deploy WireGuard config from vault
-  ansible.builtin.template:
-    src: wg0.conf.j2
-    dest: /etc/wireguard/wg0.conf
-    owner: root
-    group: root
-    mode: '0600'
-  become: true
-  register: network_wg_config
+- name: Normalize WireGuard profiles from vault
+  ansible.builtin.set_fact:
+    network_wireguard_profiles: >-
+      {{
+        vault_wg_profiles
+        if (vault_wg_profiles is defined)
+        else (
+          [
+            {
+              'name': 'wg0',
+              'private_key': vault_wg_private_key,
+              'address': vault_wg_address,
+              'dns': vault_wg_dns,
+              'peer_public_key': vault_wg_peer_public_key,
+              'preshared_key': vault_wg_preshared_key | default(''),
+              'persistent_keepalive': vault_wg_persistent_keepalive,
+              'endpoint': vault_wg_endpoint
+            }
+          ]
+          if (vault_wg_private_key is defined)
+          else []
+        )
+      }}
+  changed_when: false
+  tags:
+    - network
+    - config
+
+- name: Validate WireGuard profile names
+  ansible.builtin.set_fact:
+    network_wireguard_profile_count: '{{ network_wireguard_profiles | length }}'
+    network_wireguard_named_profile_count: >-
+      {{ network_wireguard_profiles | selectattr('name', 'defined') | list | length }}
+    network_wireguard_unique_profile_count: >-
+      {{ network_wireguard_profiles | map(attribute='name') | unique | list | length }}
+  changed_when: false
+  tags:
+    - network
+    - config
+
+- name: Assert WireGuard profile names are unique
+  ansible.builtin.assert:
+    that:
+      - network_wireguard_named_profile_count == network_wireguard_profile_count
+      - network_wireguard_unique_profile_count == network_wireguard_profile_count
+    fail_msg: Each WireGuard profile must define a unique name.
+  changed_when: false
   tags:
     - network
     - config
@@ -43,39 +81,20 @@
     - network
     - config
 
-- name: Collect existing WireGuard profile names for wg0
-  ansible.builtin.set_fact:
-    network_wg_profile_uuids: >-
-      {{
-        network_wg_connections.stdout_lines
-        | select('match', '^wg0:[^:]+:wireguard$')
-        | map('regex_replace', '^wg0:([^:]+):wireguard$', '\1')
-        | list
-      }}
-  changed_when: false
+- name: Configure WireGuard profiles
+  ansible.builtin.include_tasks:
+    file: wireguard-profile.yml
+    apply:
+      tags:
+        - network
+        - config
+        - wireguard
+  loop: '{{ network_wireguard_profiles }}'
+  loop_control:
+    loop_var: network_wireguard_profile
+    label: '{{ network_wireguard_profile.name }}'
+  when: network_wireguard_profiles | length > 0
   tags:
     - network
     - config
-
-- name: Remove existing WireGuard connections before import
-  ansible.builtin.command:
-    cmd: nmcli connection delete uuid {{ item }}
-  become: true
-  changed_when: true
-  loop: '{{ network_wg_profile_uuids }}'
-  when:
-    - network_wg_config.changed or network_wg_profile_uuids | length > 1
-  tags:
-    - network
-    - config
-
-- name: Import WireGuard connection to NetworkManager
-  ansible.builtin.command:
-    cmd: nmcli connection import type wireguard file /etc/wireguard/wg0.conf
-  become: true
-  changed_when: true
-  when:
-    - network_wg_config.changed or network_wg_profile_uuids | length == 0 or network_wg_profile_uuids | length > 1
-  tags:
-    - network
-    - config
+    - wireguard
