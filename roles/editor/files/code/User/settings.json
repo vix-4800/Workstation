@@ -502,7 +502,6 @@
     "**/.mypy_cache": true,
     "**/.phpunit.cache": true,
     "**/.pytest_cache": true,
-    "**/.serena/**": true,
     "**/.vscode-test": true,
     "**/out": true
   },
