@@ -102,7 +102,7 @@ loop-does-not-iterate = { enabled = true, level = "Error" }
 lowercase-keyword = { enabled = true, level = "Error" }
 lowercase-type-hint = { enabled = true, level = "Error" }
 middleware-in-routes = { enabled = true, level = "Warning" }
-missing-docs = { enabled = true, level = "Warning" }
+missing-docs = { enabled = false, level = "Warning" }
 no-alias-function = { enabled = true, level = "Error" }
 no-alternative-syntax = { enabled = true, level = "Error" }
 no-array-accumulation-in-loop = { enabled = true, level = "Warning" }

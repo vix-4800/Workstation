@@ -567,13 +567,16 @@
         <exclude name="Squiz.Commenting.FunctionComment.IncorrectThrowsTag" />
         <exclude name="Squiz.Commenting.FunctionComment.ParamCommentNotCapital" />
         <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
+        <severity>0</severity>
     </rule>
     <rule ref="Squiz.Commenting.DocCommentAlignment" />
     <rule ref="Squiz.Commenting.VariableComment">
         <exclude name="Squiz.Commenting.VariableComment.IncorrectVarType" />
+        <severity>0</severity>
     </rule>
     <rule ref="Generic.Commenting.DocComment.MissingShort">
         <exclude-pattern>*/config/*</exclude-pattern>
+        <severity>0</severity>
     </rule>
 
     <!-- ===== METRICS AND COMPLEXITY ===== -->
