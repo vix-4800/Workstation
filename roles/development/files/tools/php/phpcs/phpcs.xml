@@ -306,12 +306,9 @@
             <property name="groups" type="array">
                 <element value="uses" />
                 <element value="enum cases" />
-                <element value="public constants" />
                 <element value="constants" />
-                <element value="public properties, protected properties, private properties" />
-                <element value="public static properties, protected static properties, private static properties" />
+                <element value="properties" />
                 <element value="constructor" />
-                <element value="all public methods" />
                 <element value="methods" />
                 <element value="magic methods" />
             </property>
