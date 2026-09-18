@@ -15,13 +15,7 @@ approval_policy = "on-request"
 approvals_reviewer = "user"
 allow_login_shell = false
 notify = [
-  "notify-send",
-  "Codex",
-  "Codex needs your attention",
-  "-u",
-  "normal",
-  "-i",
-  "dialog-warning",
+  "codex-notify",
 ]
 # commit_attribution = "Codex <codex@openai.com>"
 disable_paste_burst = true

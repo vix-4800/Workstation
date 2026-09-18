@@ -71,6 +71,8 @@ ai_tools_repo_symlinks:
     dest: '{{ home }}/.codex/config.toml'
   - src: codex/rules/default.rules
     dest: '{{ home }}/.codex/rules/default.rules'
+  - src: codex/scripts/codex-notify
+    dest: '{{ home }}/.local/bin/codex-notify'
   - src: codex/agents
     dest: '{{ home }}/.codex/agents'
   - src: agents/commands
