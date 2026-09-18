@@ -27,7 +27,7 @@ just apply              # Packages + configs + services
 just sync               # Only configs (fast)
 just plan               # Dry-run
 just role shell         # Specific role
-just role desktop network   # Multiple roles
+just role desktop,network   # Multiple roles
 ```
 
 ### Secrets management
