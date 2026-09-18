@@ -11,8 +11,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["awk"],
-    decision = "allow",
-    justification = "Read-only text processing; no side effects.",
+    decision = "prompt",
+    justification = "May execute commands through its program; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -41,8 +41,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["diff"],
-    decision = "allow",
-    justification = "Read-only comparison; no side effects.",
+    decision = "prompt",
+    justification = "Can write output with --output; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -71,8 +71,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["env"],
-    decision = "allow",
-    justification = "Read-only environment inspection; no side effects.",
+    decision = "prompt",
+    justification = "Can execute an arbitrary command; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -83,8 +83,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["find"],
-    decision = "allow",
-    justification = "Read-only filesystem search; no side effects.",
+    decision = "prompt",
+    justification = "Can delete files or execute commands; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(pattern=["gh", "auth", "status"], decision="allow")
@@ -143,7 +143,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", ["branch", "diff", "grep", "log", "ls-files", "rev-parse", "show", "status"]],
+    pattern = ["git", ["grep", "log", "ls-files", "rev-parse", "show", "status"]],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
 )
@@ -155,15 +155,21 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["git", "branch"],
+    decision = "prompt",
+    justification = "Can delete branches; keep approval-gated outside the sandbox.",
+)
+
+prefix_rule(
     pattern = ["go", ["build", "fmt", "test", "vet"]],
-    decision = "allow",
-    justification = "Standard Go toolchain commands; no destructive side effects.",
+    decision = "prompt",
+    justification = "May write build artifacts, caches, or formatted files; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["gofmt"],
-    decision = "allow",
-    justification = "Standard Go formatter; consistent with go fmt.",
+    decision = "prompt",
+    justification = "Can rewrite source files with -w; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -240,8 +246,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["sort"],
-    decision = "allow",
-    justification = "Read-only text sorting; no side effects.",
+    decision = "prompt",
+    justification = "Can write files with -o; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -287,9 +293,9 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern=["npm", "test"],
-    decision="allow",
-    justification="Running tests is allowed without user approval",
+    pattern = ["npm", "test"],
+    decision = "prompt",
+    justification = "Project-defined test scripts may execute arbitrary commands; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
