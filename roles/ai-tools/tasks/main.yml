@@ -154,12 +154,16 @@
 
 - name: Download github-mcp-server binary
   ansible.builtin.get_url:
-    url: https://github.com/github/github-mcp-server/releases/download/v{{ ai_tools_github_mcp_server_version }}/github-mcp-server_Linux_x86_64.tar.gz
+    url: >-
+      {{ 'https://github.com/github/github-mcp-server/releases/download/v'
+         ~ ai_tools_github_mcp_server_version
+         ~ '/github-mcp-server_Linux_x86_64.tar.gz' }}
     dest: /tmp/github-mcp-server_{{ ai_tools_github_mcp_server_version }}.tar.gz
     mode: '0644'
   when: >
-    ai_tools_github_mcp_installed_version.rc != 0 or ai_tools_github_mcp_server_version not in (ai_tools_github_mcp_installed_version.stdout
-    | default(''))
+    ai_tools_github_mcp_installed_version.rc != 0 or
+    ai_tools_github_mcp_server_version not in
+    (ai_tools_github_mcp_installed_version.stdout | default(''))
   notify: Extract github-mcp-server
   tags:
     - ai-tools
@@ -190,8 +194,9 @@
 
 - name: Capture configured Claude marketplaces
   ansible.builtin.set_fact:
-    ai_tools_claude_configured_marketplaces: '{{ ai_tools_claude_marketplaces_list.stdout | regex_findall(''(?m)^\s*>\s+([^\s]+)$'')
-      }}'
+    ai_tools_claude_configured_marketplaces: >-
+      {{ ai_tools_claude_marketplaces_list.stdout
+         | regex_findall('(?m)^\s*>\s+([^\s]+)$') }}
   when: ai_tools_claude_marketplaces_list.rc == 0
   tags:
     - ai-tools
@@ -260,8 +265,9 @@
 
 - name: Capture installed Claude plugins
   ansible.builtin.set_fact:
-    ai_tools_claude_installed_plugins: '{{ ai_tools_claude_plugins_list.stdout | regex_findall(''(?m)^\s*>\s+([^\s]+)$'')
-      }}'
+    ai_tools_claude_installed_plugins: >-
+      {{ ai_tools_claude_plugins_list.stdout
+         | regex_findall('(?m)^\s*>\s+([^\s]+)$') }}
   when: ai_tools_claude_plugins_list.rc == 0
   tags:
     - ai-tools
