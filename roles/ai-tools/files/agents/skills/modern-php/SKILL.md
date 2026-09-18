@@ -19,7 +19,7 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 ## Load References When Needed
 
 | Topic | Reference | Load when |
-|---|---|---|
+| --- | --- | --- |
 | PHP 8.3-8.5 features | `references/php-8.3-8.5.md` | Selecting language features or checking version support |
 | Framework conventions | `references/framework-conventions.md` | Working inside Yii2, Laravel, or Symfony |
 | PHPStan DocBlocks and precise PHPDoc types | `references/phpstan-docblocks.md` | Writing or reviewing PHPDoc, DocBlocks, array shapes, generics, assertions, magic API annotations, callable signatures, or precise scalar/array types |
@@ -80,7 +80,7 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 ## PHP Version Features Quick Reference
 
 | Feature | Since | Syntax |
-|---|---|---|
+| --- | --- | --- |
 | Readonly properties | 8.1 | `public readonly string $name` |
 | Enums | 8.1 | `enum Status: string {}` |
 | Fibers | 8.1 | `new \Fiber(static fn() => null)` |
@@ -88,7 +88,7 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 | `never` return type | 8.1 | `function fail(): never` |
 | Intersection types | 8.1 | `Countable&Stringable $value` |
 | Readonly classes | 8.2 | `readonly class Money {}` |
-| DNF types | 8.2 | `(A&B)|null $value` |
+| DNF types | 8.2 | `(A&B) | null $value` |
 | Typed class constants | 8.3 | `public const string VERSION = '1.0'` |
 | Dynamic class constant fetch | 8.3 | `Foo::{$name}` |
 | `#[\Override]` | 8.3 | `#[\Override] public function boot(): void` |
@@ -101,7 +101,7 @@ Senior PHP developer specializing in PHP 8.4+, Yii2, Laravel, and Symfony with s
 | `array_find()` and friends | 8.4 | `array_find($items, static fn($item) => ...)` |
 | Lazy objects | 8.4 | `$reflection->newLazyProxy(...)` |
 | `mb_trim()` family | 8.4 | `mb_trim($value)` |
-| Pipe operator | 8.5 | `$value |> trim(...) |> strtolower(...)` |
+| Pipe operator | 8.5 | `$value | > trim(...) | > strtolower(...)` |
 | Clone-with | 8.5 | `clone($dto, ['name' => $name])` |
 | `#[\NoDiscard]` | 8.5 | `#[\NoDiscard] function parse(): Result` |
 | URI extension | 8.5 | `new Uri\Rfc3986\Uri($url)` |
@@ -251,7 +251,7 @@ final class Temperature
 }
 ```
 
-### JSON Input Guard With Structural Annotation
+### JSON Input Guard With Structural Validation
 
 ```php
 <?php
@@ -263,20 +263,43 @@ if (!json_validate($json)) {
     return null;
 }
 
+$data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+
+// 2. Validate the full structure before narrowing the type.
+if (
+    !is_array($data)
+    || !isset($data['blocks'])
+    || !is_array($data['blocks'])
+    || !array_is_list($data['blocks'])
+) {
+    return null;
+}
+
+foreach ($data['blocks'] as $block) {
+    if (
+        !is_array($block)
+        || !isset($block['type'], $block['data'])
+        || !is_string($block['type'])
+        || $block['type'] === ''
+        || !is_array($block['data'])
+        || (isset($block['data']['text']) && (!is_string($block['data']['text']) || $block['data']['text'] === ''))
+        || (
+            isset($block['data']['level'])
+            && (!is_int($block['data']['level']) || $block['data']['level'] < 1 || $block['data']['level'] > 6)
+        )
+    ) {
+        return null;
+    }
+}
+
 /**
  * @var array{
  *     blocks: list<array{
  *         type: non-empty-string,
  *         data: array{text?: non-empty-string, level?: int<1, 6>}
  *     }>
- * }|null $data
+ * } $data
  */
-$data = json_decode($json, true);
-
-// 2. Guard against structural mismatch after decode.
-if (!is_array($data) || !isset($data['blocks']) || !is_array($data['blocks'])) {
-    return null;
-}
 ```
 
 ### sprintf() for HTML Attribute Strings
@@ -285,8 +308,12 @@ if (!is_array($data) || !isset($data['blocks']) || !is_array($data['blocks'])) {
 // Avoid: backslash escapes inside double-quoted interpolation.
 $img = "<img src=\"{$src}\" alt=\"{$caption}\">";
 
-// Prefer: sprintf with single-quoted template.
-$img = sprintf('<img src="%s" alt="%s">', $src, $caption);
+// Prefer: a single-quoted template and escaping for the HTML attribute context.
+$img = sprintf(
+    '<img src="%s" alt="%s">',
+    htmlspecialchars($src, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+    htmlspecialchars($caption, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+);
 ```
 
 ## Framework Guidance
@@ -303,8 +330,8 @@ Load `references/framework-conventions.md` before implementing framework-specifi
 Flag these as `[blocking]` — they produce silent data loss or fatal errors at runtime.
 
 | Pattern | Problem | Fix |
-|---|---|---|
-| `$model->magicProp->field = $v` | `__get` returns a copy; assignment is silently discarded ("Indirect modification of overloaded property has no effect") | `$r = $model->magicProp; $r->field = $v; $r->save();` |
+| --- | --- | --- |
+| `$model->relation->field = $v` | The relation may be `null`, and a changed related Active Record is not persisted until it is saved. A returned object is a handle; `__get()` alone does not make its property assignment fail. | `$relation = $model->relation; if ($relation === null) { return; } $relation->field = $v; $relation->save();` |
 | `$a?->b < $threshold` then `$a->c = $v` | Nullsafe in condition does not narrow type afterward; direct access throws "Attempt to assign property on null" | Add explicit `if ($a === null)` guard before any direct access |
 | `$a?->b` compared to a scalar when `$a` is null | Returns `null`, which silently loses the comparison semantics — `null < time()` is `true` | Use explicit null check before the comparison |
 | `json_decode` result used without structural check | Returns `null` or a mixed type when input is malformed | Validate with `json_validate()` first, then check structure |
