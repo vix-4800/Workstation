@@ -78,21 +78,6 @@ description = "Allow workspace edits, restricted network, and explicit command e
 enabled = true
 allow_local_binding = false
 
-[permissions.dev-workspace.network.domains]
-"github.com" = "allow"
-"*.github.com" = "allow"
-"api.github.com" = "allow"
-"raw.githubusercontent.com" = "allow"
-"objects.githubusercontent.com" = "allow"
-"registry.npmjs.org" = "allow"
-"packagist.org" = "allow"
-"repo.packagist.org" = "allow"
-"getcomposer.org" = "allow"
-"api.openai.com" = "allow"
-"pastebin.com" = "deny"
-"webhook.site" = "deny"
-"requestbin.com" = "deny"
-
 [mcp_servers.github]
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-github"]
