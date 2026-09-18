@@ -33,6 +33,7 @@ ai_tools_claude_marketplaces_present:
   - name: claude-plugins-official
 
 ai_tools_shared_skill_names:
+  - agents-md
   - api-design
   - backend-patterns
   - coding-standards
