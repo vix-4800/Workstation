@@ -14,9 +14,7 @@ default_permissions = "dev-workspace"
 approval_policy = "on-request"
 approvals_reviewer = "user"
 allow_login_shell = false
-notify = [
-  "codex-notify",
-]
+notify = ["codex-notify"]
 # commit_attribution = "Codex <codex@openai.com>"
 disable_paste_burst = true
 model_reasoning_summary = "none"
@@ -39,7 +37,6 @@ hooks = true
 fast_mode = false
 shell_snapshot = true
 prevent_idle_sleep = true
-codex_git_commit = true
 
 [agents]
 max_concurrent_threads_per_session = 6
