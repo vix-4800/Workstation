@@ -32,13 +32,13 @@ Load `modern-php` for language-level guidance, `backend-patterns` for broader ar
 - Use `with()` or `joinWith()` intentionally to prevent N+1 queries.
 - Keep transactions explicit around multi-write use cases.
 - Prefer dedicated query methods when AR queries become dense or reused.
-- Always use `limit(1)` when fetching a single record via `one()`.
+- `one()` already fetches one record. Add `limit(1)` only when it makes a reused query's intent clearer.
 
 ### AR Runtime Pitfalls
 
-- **Indirect modification of overloaded property**: `$model->relation->field = $value` calls `__get` which returns a copy — the assignment is silently discarded and PHP emits "Indirect modification of overloaded property has no effect". Always assign the relation to a local variable first: `$rel = $model->relation; $rel->field = $value; $rel->save()`.
+- **Related model persistence**: `$model->relation->field = $value` changes the related object when the relation resolves to an object, but it does not persist the change. Read it into a local variable when an explicit null guard and save are needed: `$rel = $model->relation; if ($rel === null) { return; } $rel->field = $value; $rel->save()`.
 - **Null safety inconsistency**: A nullsafe chain `$model->relation?->field` in a condition does not guarantee `$model->relation` is non-null on the next line. Direct `$model->relation->field = $value` will throw "Attempt to assign property on null". Add an explicit null guard before any direct access.
-- **Stale relation after re-assignment**: After modifying and saving a related model, the parent's in-memory relation cache may be stale. Do not read `$parent->relation->field` after mutating it through a local variable without refreshing.
+- **Relation cache after external changes**: A local `$rel->save()` normally updates the same related object already held by the parent. Refresh the relation when another query, a database trigger, or a re-assignment can have changed the stored value.
 
 ## Review Checklist
 
