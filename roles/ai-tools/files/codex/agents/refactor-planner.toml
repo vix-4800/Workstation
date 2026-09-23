@@ -1,6 +1,6 @@
 name = "refactor-planner"
 description = "Planning-only refactor advisor for incremental, reversible steps and verification checkpoints."
-model = "gpt-5.6-sol"
+model = "gpt-6-sol"
 model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "read-only"

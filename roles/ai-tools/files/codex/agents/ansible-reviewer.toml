@@ -1,6 +1,6 @@
 name = "ansible-reviewer"
 description = "Read-only reviewer for Ansible and workstation automation changes."
-model = "gpt-5.6-terra"
+model = "gpt-6-sol"
 model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "read-only"
