@@ -84,6 +84,7 @@ Use smallest relevant lens. Do not mention selected lens in response.
 
 ## Tests
 
+- When reviewing added or changed tests, check that they exercise real behaviour and assert meaningful outcomes. Flag tests that could pass while the relevant behaviour is broken.
 - Run smallest relevant test/check.
 - If not run, say why.
 - Do not claim tests pass unless actually run.

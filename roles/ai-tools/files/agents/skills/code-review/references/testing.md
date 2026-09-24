@@ -2,7 +2,7 @@
 
 Use this reference when tests are added, removed, weakened, missing, or when the change modifies behaviour that should be protected by tests.
 
-The goal is to judge whether tests prove the important behaviour and protect against the real risk introduced by the change.
+The goal is to judge whether tests prove the important behaviour and protect against the real risk introduced by the change. Review added or modified tests against the same behaviour-first standards used when writing them. The presence or number of tests alone is not evidence of coverage.
 
 ## General Test Review
 
@@ -16,6 +16,9 @@ Ask:
 - Are error, validation, permission, and edge cases covered when relevant?
 - Are tests placed at the right level: unit, feature/integration, database, API, browser, or end-to-end?
 - Are fixtures/factories realistic enough to catch the risk?
+- Does each added or modified test execute the relevant production behaviour and assert a meaningful, observable outcome?
+- Would the test fail if the behaviour were broken or the regression reintroduced?
+- Are setup, fixtures, and test doubles valid without hiding the risk under test?
 
 ## New Feature Tests
 
@@ -103,6 +106,9 @@ Flag tests that:
 - Assert implementation details that will make safe refactors painful
 - Are too broad/flaky and do not isolate the behaviour under review
 - Remove or weaken assertions without explanation
+- Pass without executing the changed behaviour, or assert a tautology or unrelated result
+- Test source text or a mock instead of the real functional contract
+- Have incorrect setup or expectations that make them fail for the wrong reason or pass when the behaviour is broken
 
 ## When Missing Tests Are Not Worth Flagging
 

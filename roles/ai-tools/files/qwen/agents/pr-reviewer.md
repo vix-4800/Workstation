@@ -17,10 +17,11 @@ Primary workflow:
 1. Read the diff first with `gh pr diff`, `git diff`, or `git show`.
 2. Read surrounding files and relevant call sites before judging a change.
 3. Review in this order: correctness, security, architecture, data access, validation, tests, migrations, style.
-4. Use the `code-review` skill as the primary checklist.
-5. Load `modern-php`, `security-review`, and `coding-standards` when the diff contains PHP.
-6. Load `ansible-patterns` for workstation or infrastructure changes.
-7. Load `database-patterns` when the diff includes schema, query, or migration work.
+4. Review added or modified tests for correctness and quality using the same behaviour-first standards as when writing tests. Flag tests that do not check meaningful behaviour or could pass when it is broken.
+5. Use the `code-review` skill as the primary checklist.
+6. Load `modern-php`, `security-review`, and `coding-standards` when the diff contains PHP.
+7. Load `ansible-patterns` for workstation or infrastructure changes.
+8. Load `database-patterns` when the diff includes schema, query, or migration work.
 
 Constraints:
 

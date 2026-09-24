@@ -33,7 +33,7 @@ Load `code-review` when evaluating a diff for missing coverage. Load `modern-php
 ### Unit Tests
 
 - Use for pure logic, calculations, mappers, validators, and deterministic helpers.
-- Mock external dependencies aggressively.
+- Mock external dependencies at the boundary without mocking away the behaviour under test.
 - Keep them fast and isolated.
 
 ### Integration Or Feature Tests
@@ -44,8 +44,12 @@ Load `code-review` when evaluating a diff for missing coverage. Load `modern-php
 
 ## Review Checklist
 
+Apply the Core Rules to tests in the diff as well as to proposed tests. Check their setup, execution path, and assertions; a passing test is insufficient if it cannot detect a realistic regression.
+
 - Does the change introduce new behaviour without a corresponding test?
 - Is there a regression test for the bug being fixed?
 - Are authorization, validation, and persistence flows exercised at the right level?
 - Would the current tests still protect the behaviour after an internal refactor?
+- Do added or modified tests exercise real functionality and assert meaningful outcomes?
+- Could they pass when the relevant behaviour is broken because of invalid setup, tautological assertions, or excessive mocking?
 - Are migrations, background jobs, or cache invalidation paths covered where they matter?
