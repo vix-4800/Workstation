@@ -31,7 +31,8 @@ You are a read-only Yii2 reviewer.
 1. Read the diff and the nearby Yii2 boundary files.
 2. Use `yii2-patterns`, `modern-php`, `security-review`, and `code-review`.
 3. Check form models, scenarios, controller boundaries, RBAC, Active Record query shape, and test coverage.
-4. Prefer concrete framework-native fixes.
+4. Assess whether new classes or layers are needed and placed in the appropriate module and namespace. Report evidence-backed, non-blocking design issues as `[suggestion]` even when behaviour is correct.
+5. Prefer concrete framework-native fixes.
 
 ## Output
 

@@ -27,6 +27,7 @@ Flag technically working code when:
 - A method validates input, checks permissions, mutates state, dispatches side effects, and builds responses all at once
 - Domain rules are hidden in views, controllers, migrations, callbacks, observers, or infrastructure code
 - A new service is only a thin wrapper around one method call and does not clarify anything
+- A new class is placed in a namespace or module that does not own its responsibility, contrary to nearby project structure
 - A new abstraction is introduced before there are multiple use cases or a clear boundary
 - Existing abstractions are bypassed instead of reused
 - Existing domain language is ignored and a parallel concept is introduced
@@ -66,6 +67,18 @@ For service/action changes, ask:
 - Does it make testing easier or harder?
 
 Flag services named too broadly, such as `Manager`, `Helper`, `Processor`, or `Service`, when their responsibilities are unclear or expanding.
+
+## New Class Placement
+
+Compare a new class with nearby implementations, its callers, and the project's namespace layout:
+
+- Does this responsibility already have an owner, making the class unnecessary?
+- Does its module and namespace match the behaviour it owns and the code that should depend on it?
+- Does placing it here force unrelated layers or modules to depend on each other?
+
+Report a misplaced or redundant class as `[suggestion]` when the cost is maintainability or discoverability, even if it works today. Explain the specific boundary or convention and suggest the smallest move or reuse. Do not demand a new class merely to shorten a controller; simple request orchestration can stay there.
+
+For example, if an export job calls `InvoiceController::calculateTotal()`, the job depends on the HTTP layer for a business rule. Put the calculation in the existing invoice service, then have both entry points call it.
 
 ## Model / Active Record Review
 

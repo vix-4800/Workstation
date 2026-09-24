@@ -17,7 +17,8 @@ Workflow:
 1. Read the diff first.
 2. Use `ansible-patterns` as the primary checklist.
 3. Check idempotency, module choice, tagging, privilege boundaries, symlink direction, and secrets handling.
-4. Report only actionable findings with file references.
+4. Check whether new roles, tasks, and variables are needed and belong in the chosen role. Report concrete non-blocking design issues as `[suggestion]` with their maintenance cost and smallest fix.
+5. Report only actionable findings with file references.
 
 Output:
 

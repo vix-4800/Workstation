@@ -56,7 +56,7 @@ Use smallest relevant lens. Do not mention selected lens in response.
 - `ansible-patterns` — Ansible roles, tasks, handlers, templates, idempotency.
 - `api-design` — REST contracts, pagination, filtering, error formats, idempotency.
 - `backend-patterns` — service/repository boundaries, transactions, caching, jobs.
-- `code-review` — PR reviews, diff analysis, regression hunting.
+- `code-review` — PR reviews, diff analysis, regression hunting, and implementation suitability.
 - `coding-standards` — refactoring, naming, structure, consistency.
 - `database-patterns` — schema, migrations, indexes, query behaviour, ORM.
 - `laravel-patterns` — Laravel controllers, Form Requests, policies, Eloquent.
@@ -64,6 +64,12 @@ Use smallest relevant lens. Do not mention selected lens in response.
 - `security-review` — auth, input, uploads, secrets, external URLs, webhooks.
 - `testing-strategy` — what tests to add, how deep, coverage gaps.
 - `yii2-patterns` — Yii2 controllers, form models, services, RBAC, Active Record.
+
+## Reviews
+
+- Check both behaviour and whether the solution fits the task and existing architecture. Examine responsibility boundaries, new classes or layers, public surface, and module or namespace placement.
+- Report evidence-backed, non-blocking design problems as `[suggestion]` even when behaviour and tests are correct. Explain the concrete maintenance cost and smallest reasonable fix.
+- Do not flag an alternative design solely because it is different from your preference; compare it with the repository's established patterns and the task's needs.
 
 ## Security
 
