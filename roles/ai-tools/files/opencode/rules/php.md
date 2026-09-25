@@ -6,6 +6,8 @@ paths:
 - Add `declare(strict_types=1)` at the top of every file.
 - Never use debug helpers (`var_dump`, `dd`, `dump`, `print_r`, `console.log`) in committed code.
 - Declare explicit types for all function parameters and return values.
+- Refine native types with truthful PHPStan PHPDoc where useful: constrained scalars, class strings, enum values, callable signatures,
+  and guard assertions. See `modern-php/references/phpstan-docblocks.md`.
 - Use readonly classes and constructor property promotion where applicable.
 - Typed exceptions — throw specific exception types, never bare `\Exception`.
 - Use abstract and final class modifiers appropriately.

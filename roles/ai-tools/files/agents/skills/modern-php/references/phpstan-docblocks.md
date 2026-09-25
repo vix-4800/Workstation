@@ -9,7 +9,9 @@ PHPDoc must refine native PHP types, not repeat them.
 - Add PHPDoc only when PHP cannot express the contract precisely.
 - Do not duplicate native types: avoid `@param int $id` for `int $id`.
 - Do not leave meaningful `array`, `iterable`, `callable`, or `mixed` unexplained.
-- Prefer the narrowest truthful PHPStan type.
+- Prefer the narrowest PHPStan type guaranteed by validation, construction, or an invariant. Annotate the contract at its source so callers
+  benefit from it.
+- Check the project's PHPStan version and local conventions before using a less common type or tag.
 - Use `/** ... */`; plain `/* ... */` is not PHPDoc.
 - Keep annotations honest. PHPStan trusts PHPDoc.
 
@@ -36,7 +38,7 @@ When native type is too broad, refine it:
 - `array` → `list<T>`, `non-empty-list<T>`, `array<TKey, TValue>`, `array{...}`.
 - `iterable` → `iterable<TKey, TValue>`.
 - `Generator` → `Generator<TKey, TValue, TSend, TReturn>`.
-- `callable` → `callable(Arg): Return` or `Closure(Arg): Return`.
+- `callable` → `callable(Arg): Return`, `Closure(Arg): Return`, or `pure-callable(Arg): Return` when purity is guaranteed.
 - repeated complex shape → `@phpstan-type`.
 - input-output type relation → `@template` or conditional return type.
 - custom guard/helper → `@phpstan-assert*`.
@@ -53,11 +55,12 @@ Use precise string types when validation or construction guarantees them.
 public function handle(string $email, string $amount): void {}
 ```
 
-- `non-empty-string`: IDs, emails, slugs, tokens, filenames, normalized names.
+- `non-empty-string`: IDs, emails, slugs, tokens, filenames, normalized names, after excluding `''`.
 - `numeric-string`: numeric data received as strings.
-- `literal-string`: developer-authored SQL, shell, HTML, or template fragments.
+- `literal-string`: strings written by a developer or composed only from developer-written strings. Do not use it for validated user input;
+  it does not replace escaping or parameterized queries.
 - `lowercase-string` / `uppercase-string`: normalized keys and codes.
-- `class-string<T>`: factories, containers, hydrators, serializers, reflection.
+- `class-string<T>`: factories, containers, hydrators, serializers, reflection, when the class exists and satisfies the bound `T`.
 
 ## Integers
 
@@ -71,8 +74,8 @@ Use bounded integer types when the domain has limits.
 public function paginate(int $page, int $perPage): Page {}
 ```
 
-- `positive-int`: IDs, page numbers, positive counts.
-- `non-negative-int`: offsets, retry counts, indexes, sizes.
+- `positive-int`: IDs, page numbers, positive counts, only if zero and negative values are excluded.
+- `non-negative-int`: offsets, retry counts, indexes, sizes, only if negative values are excluded.
 - `int<0, 100>`: percent/rating/progress.
 - `int<1, max>`: lower-bounded values.
 - `int-mask<1, 2, 4>` / `int-mask-of<Self::FLAG_*>`: bit flags.
@@ -175,6 +178,23 @@ public function getDefault(string $key): string {}
 public function make(string $class): object {}
 ```
 
+Use `value-of<BackedEnum>` for a scalar backing value; use the enum class itself for an enum case. A validated string does not become a
+`class-string<T>` merely because it looks like a class name.
+
+```php
+enum JobStatus: string
+{
+    case Queued = 'queued';
+    case Done = 'done';
+}
+
+/** @param value-of<JobStatus> $status */
+function parseStatus(string $status): JobStatus
+{
+    return JobStatus::from($status);
+}
+```
+
 A plain string can be narrowed to `class-string` with `class_exists($class)`.
 
 ## Generics
@@ -241,7 +261,9 @@ Do not use bare `callable` when the signature is known.
 public function filterUsers(array $users, callable $filter): array {}
 ```
 
-Supported forms: `callable(string, int=): void`, `callable(string, int...): void`, `Closure(User): Response`.
+Supported forms: `callable(string, int=): void`, `callable(string, int...): void`, `Closure(User): Response`, `pure-callable(string, int=): void`.
+Use `pure-callable` only when invoking the callback has no side effects. If the callback must be a closure, use `Closure(...)` or
+`pure-Closure(...)`. Optional arguments use `=`; variadic arguments use `...`.
 Optional tags: `@param-immediately-invoked-callable`, `@param-later-invoked-callable`, `@param-closure-this Context $callback`.
 
 ## Assertions

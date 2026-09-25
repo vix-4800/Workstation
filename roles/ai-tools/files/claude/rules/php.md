@@ -6,6 +6,8 @@ paths:
 - Verify `declare(strict_types=1);` is present.
 - Flag `dd`, `dump`, `var_dump`, and `print_r`.
 - Explicit types on all properties, methods, and parameters.
+- Refine native types with truthful PHPStan PHPDoc where useful: constrained scalars, class strings, enum values, callable signatures,
+  and guard assertions. See `modern-php/references/phpstan-docblocks.md`.
 - Use `readonly` properties and constructor promotion (PHP 8.x) where appropriate.
 - Throw specific typed exceptions. Never `throw new \Exception()` for a known failure mode.
 - Classes are `abstract` or `final` unless the framework requires otherwise.
