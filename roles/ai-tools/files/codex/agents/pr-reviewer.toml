@@ -1,6 +1,6 @@
 name = "pr-reviewer"
 description = "Read-only reviewer for implementation suitability, correctness, security, architecture, data access, and missing tests."
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "read-only"

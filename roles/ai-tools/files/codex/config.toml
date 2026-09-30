@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 web_search = "cached"
 personality = "pragmatic"
 model_reasoning_effort = "high"
