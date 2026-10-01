@@ -79,6 +79,7 @@
           | list
         )
         + ai_tools_shared_skill_targets
+        + [ai_tools_codex_rules_path | dirname]
       )
       | unique
       | list
@@ -101,6 +102,18 @@
   tags:
     - ai-tools
     - config
+
+- name: Deploy Codex execution rules as regular file
+  # Codex skips symlinked .rules files when discovering execution policies.
+  ansible.builtin.copy:
+    src: codex/rules/default.rules
+    dest: '{{ ai_tools_codex_rules_path }}'
+    follow: false
+    mode: '0644'
+  tags:
+    - ai-tools
+    - config
+    - codex-rules
 
 - name: Deploy AI tool repo templates
   ansible.builtin.template:

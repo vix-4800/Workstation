@@ -1,8 +1,7 @@
-# Untrusted project entries in config.toml enable rules-based command approvals.
+# Codex discovers regular .rules files only; deploy this file with copy, not link.
 # allow skips command approval, prompt requests it, and forbidden blocks it.
-# Commands without a matching rule require approval in that mode.
-# Keep approval_policy unset: explicit on-request permits sandbox commands
-# without requiring an allow rule. Filesystem and network limits still apply.
+# Explicit prompt and forbidden rules also apply with trusted projects.
+# With on-request, commands without a matching rule use the sandbox defaults.
 
 prefix_rule(
     pattern = ["ansible-lint"],
