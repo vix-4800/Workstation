@@ -1,7 +1,8 @@
-# Codex rules only apply to commands that would run outside the sandbox.
-# Unlike Claude's permissions model, they do not support path-based read rules.
-# Read-only inspection commands are allowlisted here; mutating operations remain
-# in prompt.rules so the user keeps explicit control outside the sandbox.
+# Untrusted project entries in config.toml enable rules-based command approvals.
+# allow skips command approval, prompt requests it, and forbidden blocks it.
+# Commands without a matching rule require approval in that mode.
+# Keep approval_policy unset: explicit on-request permits sandbox commands
+# without requiring an allow rule. Filesystem and network limits still apply.
 
 prefix_rule(
     pattern = ["ansible-lint"],
@@ -89,6 +90,59 @@ prefix_rule(
 
 prefix_rule(pattern=["gh", "auth", "status"], decision="allow")
 prefix_rule(pattern=["gh", "run", "view"], decision="allow")
+
+prefix_rule(
+    pattern = ["gh", "pr", ["checkout", "close", "comment", "create", "edit", "lock", "merge", "ready", "reopen", "revert", "review", "unlock", "update-branch"]],
+    decision = "prompt",
+    justification = "Changing pull requests or local checkout state requires explicit user approval.",
+    match = [
+        "gh pr edit 1234 --body-file /tmp/pr-body.txt",
+        "gh pr merge 1234 --squash",
+        "gh pr create --title Example --body Example",
+        "gh pr comment 1234 --body Example",
+    ],
+    not_match = [
+        "gh pr view 1234",
+        "gh pr diff 1234",
+        "gh pr checks 1234",
+        "gh pr list",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "issue", ["close", "comment", "create", "delete", "develop", "edit", "lock", "pin", "reopen", "transfer", "unlock", "unpin"]],
+    decision = "prompt",
+    justification = "Changing issues or local development state requires explicit user approval.",
+    match = ["gh issue edit 1234 --body Example"],
+    not_match = ["gh issue view 1234", "gh issue list"],
+)
+
+prefix_rule(
+    pattern = ["gh", "run", ["cancel", "delete", "download", "rerun"]],
+    decision = "prompt",
+    justification = "Changing workflow runs or downloading artifacts requires explicit user approval.",
+    match = ["gh run rerun 1234", "gh run cancel 1234"],
+    not_match = ["gh run view 1234", "gh run list"],
+)
+
+prefix_rule(
+    pattern = ["gh", "workflow", ["disable", "enable", "run"]],
+    decision = "prompt",
+    justification = "Changing or triggering workflows requires explicit user approval.",
+    match = ["gh workflow run ci.yml"],
+    not_match = ["gh workflow view ci.yml", "gh workflow list"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api"],
+    decision = "prompt",
+    justification = "API requests may mutate GitHub state, including through GraphQL; review the request before approval.",
+    match = [
+        "gh api repos/owner/repo/pulls/1234 --method PATCH -f body=Example",
+        "gh api graphql -f query=Example",
+    ],
+    not_match = ["gh pr view 1234", "gh run view 1234"],
+)
 
 prefix_rule(
     pattern = ["gh", "pr", "diff"],
