@@ -8,10 +8,9 @@ plan_mode_reasoning_effort = "high"
 model_verbosity = "low"
 file_opener = "vscode"
 
-# dev-workspace - filesystem sandbox + network access, no approval required
+# dev-workspace - workspace edits and network after command approval checks
 # approval-first - minimal permissions, requires approval for most actions
 default_permissions = "dev-workspace"
-approval_policy = "on-request"
 approvals_reviewer = "user"
 allow_login_shell = false
 notify = ["codex-notify"]
@@ -60,7 +59,7 @@ extends = ":read-only"
 
 [permissions.dev-workspace]
 extends = ":workspace"
-description = "Allow workspace edits, restricted network, and explicit command exceptions."
+description = "Allow workspace edits and network with rules-based command approvals."
 
 [permissions.dev-workspace.network]
 enabled = true
