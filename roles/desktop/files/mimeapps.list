@@ -39,7 +39,7 @@ x-scheme-handler/magnet=transmission-gtk.desktop
 inode/directory=thunar.desktop
 x-scheme-handler/tg=telegram-desktop.desktop
 x-scheme-handler/claude-cli=claude-code-url-handler.desktop
-text/plain=code.desktop
+text/plain=com.microsoft.VSCode.desktop
 x-scheme-handler/mailto=userapp-Thunderbird-0HCAO3.desktop
 message/rfc822=userapp-Thunderbird-0HCAO3.desktop
 x-scheme-handler/mid=userapp-Thunderbird-0HCAO3.desktop
@@ -49,10 +49,12 @@ application/x-extension-ics=userapp-Thunderbird-E3WAO3.desktop
 x-scheme-handler/webcals=userapp-Thunderbird-E3WAO3.desktop
 x-scheme-handler/postman=Postman.desktop
 x-scheme-handler/jetbrains=jetbrainsd.desktop
+text/x-log=com.microsoft.VSCode.desktop
 
 [Added Associations]
-text/plain=code.desktop;
+text/plain=VSCode.desktop;com.microsoft.VSCode.desktop;
 x-scheme-handler/mailto=userapp-Thunderbird-0HCAO3.desktop;
 x-scheme-handler/mid=userapp-Thunderbird-0HCAO3.desktop;
 x-scheme-handler/webcal=userapp-Thunderbird-E3WAO3.desktop;
 x-scheme-handler/webcals=userapp-Thunderbird-E3WAO3.desktop;
+text/x-log=com.microsoft.VSCode.desktop;
