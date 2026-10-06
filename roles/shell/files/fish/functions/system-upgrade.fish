@@ -11,6 +11,21 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         "Updating Copilot CLI...|copilot|copilot update|Copilot CLI updated|Copilot CLI update had issues|Copilot CLI not installed, skipping|false"
     set -l total_steps (math (count $simple_update_specs) + 4)
 
+    # Capture system versions before any updates.
+    set -l kernel_before (uname -r)
+    set -l kernel_package (pacman -Qoq /usr/lib/modules/$kernel_before/pkgbase 2>/dev/null)
+    if test -n "$kernel_package"
+        set -l installed_kernel (pacman -Q "$kernel_package" 2>/dev/null | string split ' ')[2]
+        if test -n "$installed_kernel"
+            set kernel_before $installed_kernel
+        end
+    end
+    set -l fish_before (fish --version | string split ' ')[3]
+    set -l python_before ''
+    if command -v python >/dev/null
+        set python_before (python --version | string split ' ')[2]
+    end
+
     # Colors
     set -l RED (set_color red)
     set -l GRN (set_color green)
@@ -37,6 +52,14 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
 
     function print_error
         echo "$RED✗$OFF $argv"
+    end
+
+    function print_system_version
+        set -l previous ''
+        if test -n "$argv[3]"; and test "$argv[2]" != "$argv[3]"
+            set previous " (was: $argv[3])"
+        end
+        echo "    $argv[1]: $argv[2]$previous"
     end
 
     function run_simple_update_step
@@ -178,10 +201,17 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
     echo "$BOLD$GRN╚════════════════════════════════════════╝$OFF"
     echo
     echo "$MAG  System information:$OFF"
-    echo "    Kernel: $(uname -r)"
-    echo "    Fish: $(fish --version | string split ' ')[3]"
+    set -l kernel_after (uname -r)
+    if test -n "$kernel_package"
+        set -l installed_kernel (pacman -Q "$kernel_package" 2>/dev/null | string split ' ')[2]
+        if test -n "$installed_kernel"
+            set kernel_after $installed_kernel
+        end
+    end
+    print_system_version Kernel "$kernel_after" "$kernel_before"
+    print_system_version Fish "$(fish --version | string split ' ')[3]" "$fish_before"
     if command -v python >/dev/null
-        echo "    Python: $(python --version | string split ' ')[2]"
+        print_system_version Python "$(python --version | string split ' ')[2]" "$python_before"
     end
     echo
     echo "$CYN  Next steps:$OFF"
