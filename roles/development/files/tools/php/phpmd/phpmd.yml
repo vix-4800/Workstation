@@ -1,0 +1,76 @@
+---
+# PHPMD configuration, see https://phpmd.org/documentation/creating-a-ruleset.html
+name: Default PHPMD Ruleset
+description: |-
+  Global PHPMD ruleset for use across multiple projects.
+  Includes rules for clean code, code size, controversial practices,
+  design issues, naming conventions, and unused code detection.
+exclude-pattern:
+  - '*/vendor/*'
+  - '*/migrations/*'
+  - '*/cache/*'
+  - '*/storage/*'
+  - '*/bootstrap/cache/*'
+  - '*/node_modules/*'
+  - '*/database/migrations/*'
+  - '*/_ide_helper.php'
+  - '*.blade.php'
+  - '*/tests/*'
+rules:
+  - ref: rulesets/cleancode.xml
+    exclude:
+      - ElseExpression
+      - StaticAccess
+      - BooleanArgumentFlag
+  - ref: rulesets/codesize.xml/ExcessiveMethodLength
+    properties:
+      maximum: 99
+      ignore-whitespace: 'true'
+  - ref: rulesets/codesize.xml/ExcessiveParameterList
+    properties:
+      maximum: 7
+  - ref: rulesets/codesize.xml/ExcessiveClassLength
+    properties:
+      maximum: 999
+      ignore-whitespace: 'true'
+  - ref: rulesets/codesize.xml/TooManyFields
+    properties:
+      maximum: 20
+  - ref: rulesets/codesize.xml/TooManyMethods
+    properties:
+      maximum: 25
+  - ref: rulesets/codesize.xml/TooManyPublicMethods
+    properties:
+      maximum: 20
+  - ref: rulesets/codesize.xml/ExcessivePublicCount
+  - ref: rulesets/codesize.xml/ExcessiveClassComplexity
+  - ref: rulesets/controversial.xml
+    exclude:
+      - Superglobals
+      - CamelCaseParameterName
+      - CamelCaseVariableName
+      - CamelCaseMethodName
+  - ref: rulesets/design.xml/DepthOfInheritance
+    properties:
+      maximum: 8
+  - ref: rulesets/design.xml/CouplingBetweenObjects
+    properties:
+      maximum: 19
+  - ref: rulesets/design.xml/GotoStatement
+  - ref: rulesets/design.xml/NumberOfChildren
+  - ref: rulesets/design.xml/DevelopmentCodeFragment
+  - ref: rulesets/design.xml/EmptyCatchBlock
+  - ref: rulesets/design.xml/CountInLoopExpression
+  - ref: rulesets/naming.xml/ShortVariable
+    properties:
+      minimum: 2
+      exceptions: i,j,k,x,y,z,id,db,e,ex,fn,ok
+  - ref: rulesets/naming.xml/LongVariable
+    properties:
+      maximum: 35
+  - ref: rulesets/naming.xml/ConstantNamingConventions
+  - ref: rulesets/naming.xml/BooleanGetMethodName
+  - ref: rulesets/naming.xml/ConstructorWithNameAsEnclosingClass
+  - ref: rulesets/unusedcode.xml/UnusedPrivateField
+  - ref: rulesets/unusedcode.xml/UnusedLocalVariable
+  - ref: rulesets/unusedcode.xml/UnusedPrivateMethod
