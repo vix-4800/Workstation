@@ -1496,7 +1496,14 @@
       "kind": "write"
     },
     "PHP Mess Detector": {
-      "args": ["${file}", "text", "~/.config/phpmd/phpmd.xml"],
+      "args": [
+        "analyze",
+        "--no-progress",
+        "--format=text",
+        "--ruleset=~/.config/phpmd/phpmd.xml",
+        "--",
+        "${file}"
+      ],
       "command": "phpmd",
       "kind": "diagnostic",
       "parser": {
