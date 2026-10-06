@@ -44,9 +44,11 @@ rules:
       maximum: 20
   - ref: rulesets/codesize.xml/ExcessivePublicCount
   - ref: rulesets/codesize.xml/ExcessiveClassComplexity
+  - ref: rulesets/codesize.xml/CyclomaticComplexity
+  - ref: rulesets/codesize.xml/NPathComplexity
   - ref: rulesets/controversial.xml
     exclude:
-      - Superglobals
+      # - Superglobals
       - CamelCaseParameterName
       - CamelCaseVariableName
       - CamelCaseMethodName
@@ -57,6 +59,8 @@ rules:
     properties:
       maximum: 19
   - ref: rulesets/design.xml/GotoStatement
+  - ref: rulesets/design.xml/ExitExpression
+  - ref: rulesets/design.xml/EvalExpression
   - ref: rulesets/design.xml/NumberOfChildren
   - ref: rulesets/design.xml/DevelopmentCodeFragment
   - ref: rulesets/design.xml/EmptyCatchBlock
@@ -70,7 +74,7 @@ rules:
       maximum: 35
   - ref: rulesets/naming.xml/ConstantNamingConventions
   - ref: rulesets/naming.xml/BooleanGetMethodName
-  - ref: rulesets/naming.xml/ConstructorWithNameAsEnclosingClass
   - ref: rulesets/unusedcode.xml/UnusedPrivateField
   - ref: rulesets/unusedcode.xml/UnusedLocalVariable
   - ref: rulesets/unusedcode.xml/UnusedPrivateMethod
+  - ref: rulesets/unusedcode.xml/UnusedSuppression
