@@ -1500,7 +1500,7 @@
         "analyze",
         "--no-progress",
         "--format=text",
-        "--ruleset=~/.config/phpmd/phpmd.xml",
+        "--ruleset=~/.config/phpmd/phpmd.yml",
         "--",
         "${file}"
       ],
