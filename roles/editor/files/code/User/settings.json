@@ -562,16 +562,16 @@
   "github.copilot.chat.updated53CodexPrompt.enabled": true,
   "github.copilot.editor.enableCodeActions": false,
   "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false,
     ".env": false,
-    "*": false,
     "dotenv": false,
     "log": false,
     "Log": false,
-    "markdown": false,
     "mdc": false,
-    "php": false,
-    "plaintext": false,
-    "scminput": false
+    "php": true
   },
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.nextEditSuggestions.fixes": false,
