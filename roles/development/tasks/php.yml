@@ -49,7 +49,7 @@
     - vix/phpcs-sniffs:dev-main
     - phpcompatibility/php-compatibility:"^10.0.0@dev"
     # Other tools
-    - phpmd/phpmd
+    - phpmd/phpmd:^3.0
     - carthage-software/mago
   become: false
   ignore_errors: '{{ ansible_check_mode }}'
