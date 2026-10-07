@@ -11,13 +11,10 @@ use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Php84\Rector\Class_\PropertyHookRector;
-use Rector\Php85\Rector\Const_\ConstAndTraitDeprecatedAttributeRector;
 use Rector\Php85\Rector\Property\AddOverrideAttributeToOverriddenPropertiesRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferTestsWithCamelCaseRector;
-use Rector\Renaming\Rector\MethodCall\RenameDeprecatedMethodCallRector;
 use Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
@@ -53,9 +50,32 @@ use RectorLaravel\Set\LaravelSetProvider;
 use Vix\RectorRules\AddTypedClassConstantRector;
 use Vix\RectorRules\CollapseSequentialStrReplaceRector;
 use Vix\RectorRules\ExtractAssignmentFromIfConditionRector;
+use Vix\RectorRules\LegacyRector\AddParamArrayDocblockBasedOnArrayMapRector;
+use Vix\RectorRules\LegacyRector\AddReturnArrayDocblockBasedOnArrayMapRector;
+use Vix\RectorRules\LegacyRector\AddReturnDocblockForDimFetchArrayFromAssignsRector;
+use Vix\RectorRules\LegacyRector\AddSensitiveParameterAttributeRector;
+use Vix\RectorRules\LegacyRector\ChangeNestedForeachIfsToEarlyContinueRector;
+use Vix\RectorRules\LegacyRector\ChangeNestedIfsToEarlyReturnRector;
+use Vix\RectorRules\LegacyRector\ChangeOrIfContinueToMultiContinueRector;
+use Vix\RectorRules\LegacyRector\CombineIfRector;
+use Vix\RectorRules\LegacyRector\ConstAndTraitDeprecatedAttributeRector;
 use Vix\RectorRules\LegacyRector\CountArrayToEmptyArrayComparisonRector;
+use Vix\RectorRules\LegacyRector\DeprecatedAnnotationToDeprecatedAttributeRector;
+use Vix\RectorRules\LegacyRector\DisallowedEmptyRuleFixerRector;
+use Vix\RectorRules\LegacyRector\ExplicitBoolCompareRector;
+use Vix\RectorRules\LegacyRector\FluentSettersToStandaloneCallMethodRector;
+use Vix\RectorRules\LegacyRector\JsonThrowOnErrorRector;
+use Vix\RectorRules\LegacyRector\NestedFuncCallsToPipeOperatorRector;
 use Vix\RectorRules\LegacyRector\NestedTernaryToMatchRector;
+use Vix\RectorRules\LegacyRector\NewInInitializerRector;
+use Vix\RectorRules\LegacyRector\RemoveNamedArgsInDataProviderRector;
+use Vix\RectorRules\LegacyRector\RenameDeprecatedMethodCallRector;
 use Vix\RectorRules\LegacyRector\ReplaceTestFunctionPrefixWithAttributeRector;
+use Vix\RectorRules\LegacyRector\ReturnBinaryOrToEarlyReturnRector;
+use Vix\RectorRules\LegacyRector\SequentialAssignmentsToPipeOperatorRector;
+use Vix\RectorRules\LegacyRector\ShortenElseIfRector;
+use Vix\RectorRules\LegacyRector\SimplifyIfElseToTernaryRector;
+use Vix\RectorRules\LegacyRector\SwitchNegatedTernaryRector;
 use Vix\RectorRules\NullableBoolReturnToFalseRector;
 use Vix\RectorRules\ReplaceMultipleEqualWithInArrayRector;
 use Vix\RectorRules\TernaryNullCheckToNullsafeOperatorRector;
@@ -64,6 +84,7 @@ use Vix\RectorRules\Yii2\Yii2AddRelationQueryGenericRector;
 use Vix\RectorRules\Yii2\Yii2FindAllIdShortcutRector;
 use Vix\RectorRules\Yii2\Yii2FindOneFindAllShortcutRector;
 use Vix\RectorRules\Yii2\Yii2FindOneIdShortcutRector;
+use Vix\RectorRules\Yii2\Yii2MergeModelRulesRector;
 use Vix\RectorRules\Yii2\Yii2PropertyAccessRector;
 use Vix\RectorRules\Yii2\Yii2RedundantActiveRecordSelfLookupRector;
 use Vix\RectorRules\Yii2\Yii2UseExistsInsteadOfCountRector;
@@ -110,6 +131,7 @@ $yii2Rules = [
     Yii2FindAllIdShortcutRector::class, // Optimize findAll queries by ID
     Yii2FindOneFindAllShortcutRector::class, // Convert findOne/findAll patterns to more efficient forms
     Yii2FindOneIdShortcutRector::class, // Simplify findOne operations by ID
+    Yii2MergeModelRulesRector::class, // Merge model validation rules with identical validators and options
     Yii2UserFindOneToIdentityRector::class, // Replace User::findOne() with identity access patterns
     Yii2UseExistsInsteadOfOneNotNullRector::class, // Replace ->one() !== null with ->exists()
     Yii2UseExistsInsteadOfCountRector::class, // Replace ->count() > 0 with ->exists()
@@ -198,16 +220,11 @@ $rules = [
     // IssetOnPropertyObjectToPropertyExistsRector::class,
     AddParamTypeDeclarationRector::class, // Adds parameter type declaration where missing
     AddPropertyTypeDeclarationRector::class, // Adds property type declaration where missing
-    // JsonThrowOnErrorRector::class, // Adds JSON_THROW_ON_ERROR flag to json_decode/encode
     ClassPropertyAssignToConstructorPromotionRector::class, // Promotes class property assignments to constructor parameters
     AddOverrideAttributeToOverriddenMethodsRector::class, // Adds #[Override] attribute to overridden methods
     AddOverrideAttributeToOverriddenPropertiesRector::class, // Adds #[Override] attribute to overridden properties
-    ConstAndTraitDeprecatedAttributeRector::class, // Adds #[Deprecated] attribute to deprecated constants and traits
     RemoveReturnThisFromSetterClassMethodRector::class, // Remove return $this; from setter methods
     PropertyHookRector::class, // Replace getter/setter with property hook
-    // SequentialAssignmentsToPipeOperatorRector::class, // Convert sequential assignments to use the pipe operator
-    // NestedFuncCallsToPipeOperatorRector::class, // Convert nested function calls to use the pipe operator
-    RenameDeprecatedMethodCallRector::class, // Rename deprecated method calls to their new names
     NarrowBoolDocblockReturnTypeRector::class,
 
     // Custom code quality rules
@@ -219,9 +236,33 @@ $rules = [
     // AddNameToBooleanArgumentRector::class, // Add argument name to boolean arguments for better readability
     // AddNameToNullArgumentRector::class, // Add argument name to null arguments for better readability
     TernaryNullCheckToNullsafeOperatorRector::class, // Convert ternary null checks to nullsafe operator where possible
+
+    // Restored legacy rules
+    AddParamArrayDocblockBasedOnArrayMapRector::class,
+    AddReturnArrayDocblockBasedOnArrayMapRector::class,
+    AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
+    ChangeNestedForeachIfsToEarlyContinueRector::class,
+    ChangeNestedIfsToEarlyReturnRector::class,
+    ChangeOrIfContinueToMultiContinueRector::class,
+    CombineIfRector::class,
+    ConstAndTraitDeprecatedAttributeRector::class,
     CountArrayToEmptyArrayComparisonRector::class,
+    DeprecatedAnnotationToDeprecatedAttributeRector::class,
+    DisallowedEmptyRuleFixerRector::class,
+    ExplicitBoolCompareRector::class,
+    FluentSettersToStandaloneCallMethodRector::class,
+    JsonThrowOnErrorRector::class,
+    NestedFuncCallsToPipeOperatorRector::class,
     NestedTernaryToMatchRector::class,
+    NewInInitializerRector::class,
+    RemoveNamedArgsInDataProviderRector::class,
+    RenameDeprecatedMethodCallRector::class,
     ReplaceTestFunctionPrefixWithAttributeRector::class,
+    ReturnBinaryOrToEarlyReturnRector::class,
+    SequentialAssignmentsToPipeOperatorRector::class,
+    ShortenElseIfRector::class,
+    SimplifyIfElseToTernaryRector::class,
+    SwitchNegatedTernaryRector::class,
 
     // PHPUnit rules
     PreferTestsWithCamelCaseRector::class,
