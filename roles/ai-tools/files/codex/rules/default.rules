@@ -400,12 +400,6 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["sed"],
-    decision = "prompt",
-    justification = "Can modify files in-place with -i; keep approval-gated outside the sandbox.",
-)
-
-prefix_rule(
     pattern = ["xargs"],
     decision = "prompt",
     justification = "Executes arbitrary commands from input; keep approval-gated outside the sandbox.",
