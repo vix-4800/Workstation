@@ -1,4 +1,4 @@
-function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak, fish plugins, pipx packages, and CLI tools'
+function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak, Fish/Neovim plugins, Mason tools, pipx packages, and CLI tools'
     set -l step 1
     set -l failed_steps 0
     set -l simple_update_specs \
@@ -16,7 +16,7 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         "Updating just-lsp...|just-lsp|cargo install just-lsp|Just-lsp updated|Just-lsp update failed|Just-lsp not installed, skipping|false" \
         "Checking pinned nginx-lint...|nginx-lint|cargo install --git https://github.com/walf443/nginx-lint --tag v0.10.5 nginx-lint|Nginx-lint matches the repository version|Nginx-lint version check failed|Nginx-lint not installed, skipping|false" \
         "Checking pinned dotenv-linter...|dotenv-linter|cargo install dotenv-linter --version 4.0.0|Dotenv-linter matches the repository version|Dotenv-linter version check failed|Dotenv-linter not installed, skipping|false"
-    set -l total_steps (math (count $simple_update_specs) + 2)
+    set -l total_steps (math (count $simple_update_specs) + 4)
     set -l helper_functions _system_upgrade_step _system_upgrade_success \
         _system_upgrade_warning _system_upgrade_error _system_upgrade_version _system_upgrade_run
 
@@ -119,6 +119,28 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         if not _system_upgrade_run $simple_update_spec
             functions -e $helper_functions
             return 1
+        end
+    end
+
+    set -l nvim_config_home "$HOME/.config"
+    if set -q XDG_CONFIG_HOME; and test -n "$XDG_CONFIG_HOME"
+        set nvim_config_home "$XDG_CONFIG_HOME"
+    end
+    set -l nvim_app nvim
+    if set -q NVIM_APPNAME; and test -n "$NVIM_APPNAME"
+        set nvim_app "$NVIM_APPNAME"
+    end
+    for manager in lazy mason
+        _system_upgrade_step "Updating Neovim $manager packages..."
+        if not command -v nvim >/dev/null
+            _system_upgrade_warning "Neovim not installed, skipping $manager updates"
+        else if not test -f "$nvim_config_home/$nvim_app/lua/config/upgrade.lua"
+            _system_upgrade_warning "Neovim upgrade configuration not found, skipping $manager updates"
+        else if nvim --headless -u NONE -i NONE -c "lua require('config.upgrade').run(\"$manager\")"
+            _system_upgrade_success "Neovim $manager packages updated"
+        else
+            _system_upgrade_error "Neovim $manager update failed"
+            set failed_steps (math $failed_steps + 1)
         end
     end
 
