@@ -1,13 +1,22 @@
 return {
   "mistricky/codesnap.nvim",
-  build = "make",
+  version = "2.*",
   cmd = { "CodeSnap", "CodeSnapSave" },
   opts = {
-    has_breadcrumbs = true,
-    watermark = "",
-    bg_theme = "grape",
-    min_width = 720,
-    bg_x_padding = 20,
-    bg_y_padding = 20,
+    snapshot_config = {
+      code_config = {
+        breadcrumbs = { enable = true },
+      },
+      watermark = { content = "" },
+      window = {
+        margin = { x = 20, y = 20 },
+      },
+      background = {
+        stops = {
+          { position = 0, color = "#7c3aed" },
+          { position = 1, color = "#2e1065" },
+        },
+      },
+    },
   },
 }
