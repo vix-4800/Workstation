@@ -20,11 +20,11 @@
 *.txt text eol=lf
 
 # Executable scripts (no extension)
-bin/* text eol=lf
+roles/**/scripts/* text eol=lf
 
 # Ansible files
-ansible/*.yml linguist-language=YAML
-ansible/**/*.yml linguist-language=YAML
+*.yml linguist-language=YAML
+*.yaml linguist-language=YAML
 
 # Config directories
 roles/**/*.conf linguist-language=INI
