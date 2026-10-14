@@ -13,14 +13,20 @@
     - packages
 
 - name: Deploy bluetooth config
-  ansible.builtin.file:
+  # ProtectHome=true prevents bluetoothd from reading symlinks into the repository.
+  ansible.builtin.copy:
     src: '{{ dotfiles_dir }}/roles/network/files/bluetooth/main.conf'
     dest: /etc/bluetooth/main.conf
-    state: link
-    force: true
+    remote_src: true
+    follow: false
+    owner: root
+    group: root
+    mode: '0644'
   become: true
+  notify: Restart bluetooth
   tags:
     - network
+    - config
     - system
 
 - name: Enable bluetooth service
