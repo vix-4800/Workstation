@@ -25,9 +25,11 @@
     apply:
       tags:
         - network
+        - bluetooth
   tags:
     - network
     - bluetooth
+    - config
 
 - name: Configure WireGuard
   ansible.builtin.include_tasks:
