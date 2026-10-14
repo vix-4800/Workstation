@@ -50,6 +50,7 @@ show_tooltips = false
 alternate_screen = "auto"
 terminal_title = ["activity", "project", "git-branch", "model"]
 screen_reader_detection_done = true
+pet = "dewey"
 
 [permissions.approval-first]
 extends = ":read-only"
