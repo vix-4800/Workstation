@@ -4,7 +4,7 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
     set -l simple_update_specs \
         "Updating pacman mirrors with reflector...|reflector|sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist|Mirrors updated successfully|Failed to update mirrors, continuing anyway...|Reflector not installed, skipping mirror update|false" \
         "Updating official packages (pacman)...|pacman|sudo pacman -Syu --noconfirm|Official packages updated|Pacman update failed|Pacman not installed, cannot continue|true" \
-        "Updating AUR packages (yay)...|yay|yay -Syu --noconfirm|AUR packages updated|Some AUR packages failed to update|Yay not installed, skipping AUR updates|false" \
+        'Updating AUR packages (yay)...|yay|set -l go_modcache (go env GOMODCACHE); and env GOMODCACHE="$go_modcache" yay -Sua --noconfirm|AUR packages updated|Some AUR packages failed to update|Yay not installed, skipping AUR updates|false' \
         "Updating Flatpak packages...|flatpak|flatpak update -y|Flatpak packages updated|Flatpak update had issues|Flatpak not installed, skipping|false" \
         "Updating Fish shell plugins...|fisher|fisher update|Fish plugins updated|Fish plugin update had issues|Fisher not installed, skipping plugin updates|false" \
         "Updating Claude CLI...|claude|claude update|Claude CLI updated|Claude CLI update had issues|Claude CLI not installed, skipping|false" \
