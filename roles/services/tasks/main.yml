@@ -31,6 +31,7 @@
   ansible.builtin.find:
     paths: '{{ dotfiles_dir }}/roles/services/files'
     file_type: file
+    excludes: '{{ services_excluded_unit_files }}'
   register: services_unit_files
   tags:
     - services
