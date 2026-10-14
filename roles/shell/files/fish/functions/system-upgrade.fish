@@ -1,5 +1,6 @@
 function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak, fish plugins, pipx packages, and CLI tools'
     set -l step 1
+    set -l failed_steps 0
     set -l simple_update_specs \
         "Updating pacman mirrors with reflector...|reflector|sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist|Mirrors updated successfully|Failed to update mirrors, continuing anyway...|Reflector not installed, skipping mirror update|false" \
         "Updating official packages (pacman)...|pacman|sudo pacman -Syu --noconfirm|Official packages updated|Pacman update failed|Pacman not installed, cannot continue|true" \
@@ -8,8 +9,16 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         "Updating Fish shell plugins...|fisher|fisher update|Fish plugins updated|Fish plugin update had issues|Fisher not installed, skipping plugin updates|false" \
         "Updating Claude CLI...|claude|claude update|Claude CLI updated|Claude CLI update had issues|Claude CLI not installed, skipping|false" \
         "Updating OpenCode CLI...|opencode|opencode upgrade|OpenCode CLI updated|OpenCode CLI update had issues|OpenCode CLI not installed, skipping|false" \
-        "Updating Copilot CLI...|copilot|copilot update|Copilot CLI updated|Copilot CLI update had issues|Copilot CLI not installed, skipping|false"
-    set -l total_steps (math (count $simple_update_specs) + 4)
+        "Updating Copilot CLI...|copilot|copilot update|Copilot CLI updated|Copilot CLI update had issues|Copilot CLI not installed, skipping|false" \
+        "Updating global npm packages...|npm|npm -g update|Global npm packages updated|Some npm packages failed to update|NPM not installed, skipping|false" \
+        "Updating inifmt...|inifmt|go install github.com/thecrazygm/inifmt@latest|Inifmt updated|Inifmt update failed|Inifmt not installed, skipping|false" \
+        "Updating yamlfmt...|yamlfmt|go install github.com/google/yamlfmt/cmd/yamlfmt@latest|Yamlfmt updated|Yamlfmt update failed|Yamlfmt not installed, skipping|false" \
+        "Updating just-lsp...|just-lsp|cargo install just-lsp|Just-lsp updated|Just-lsp update failed|Just-lsp not installed, skipping|false" \
+        "Checking pinned nginx-lint...|nginx-lint|cargo install --git https://github.com/walf443/nginx-lint --tag v0.10.5 nginx-lint|Nginx-lint matches the repository version|Nginx-lint version check failed|Nginx-lint not installed, skipping|false" \
+        "Checking pinned dotenv-linter...|dotenv-linter|cargo install dotenv-linter --version 4.0.0|Dotenv-linter matches the repository version|Dotenv-linter version check failed|Dotenv-linter not installed, skipping|false"
+    set -l total_steps (math (count $simple_update_specs) + 2)
+    set -l helper_functions _system_upgrade_step _system_upgrade_success \
+        _system_upgrade_warning _system_upgrade_error _system_upgrade_version _system_upgrade_run
 
     # Capture system versions before any updates.
     set -l kernel_before (uname -r)
@@ -36,25 +45,25 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
     set -l BOLD (set_color --bold)
     set -l OFF (set_color normal)
 
-    function print_step
+    function _system_upgrade_step --no-scope-shadowing
         echo
         echo "$BOLD$BLU===>$OFF $BOLD($step/$total_steps)$OFF $argv"
         set step (math $step + 1)
     end
 
-    function print_success
-        echo "$GRN✓$OFF $argv"
+    function _system_upgrade_success --no-scope-shadowing
+        echo "$GRN[OK]$OFF $argv"
     end
 
-    function print_warning
-        echo "$YLW⚠$OFF $argv"
+    function _system_upgrade_warning --no-scope-shadowing
+        echo "$YLW[WARN]$OFF $argv"
     end
 
-    function print_error
-        echo "$RED✗$OFF $argv"
+    function _system_upgrade_error --no-scope-shadowing
+        echo "$RED[ERROR]$OFF $argv"
     end
 
-    function print_system_version
+    function _system_upgrade_version
         set -l previous ''
         if test -n "$argv[3]"; and test "$argv[2]" != "$argv[3]"
             set previous " (was: $argv[3])"
@@ -62,7 +71,7 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         echo "    $argv[1]: $argv[2]$previous"
     end
 
-    function run_simple_update_step
+    function _system_upgrade_run --no-scope-shadowing
         set -l spec $argv[1]
         set -l parts (string split '|' -- $spec)
         set -l title $parts[1]
@@ -73,25 +82,30 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
         set -l missing_message $parts[6]
         set -l fatal_on_failure $parts[7]
 
-        print_step $title
+        _system_upgrade_step $title
         if command -v $command_name >/dev/null 2>&1; or functions -q $command_name
             if eval $run_command
-                print_success $success_message
+                _system_upgrade_success $success_message
             else
-                if test "$fatal_on_failure" = "true"
-                    print_error $failure_message
+                if test "$fatal_on_failure" = true
+                    _system_upgrade_error $failure_message
                     return 1
                 end
 
-                print_warning $failure_message
+                if test "$command_name" = reflector
+                    _system_upgrade_warning $failure_message
+                else
+                    _system_upgrade_error $failure_message
+                    set failed_steps (math $failed_steps + 1)
+                end
             end
         else
-            if test "$fatal_on_failure" = "true"
-                print_error $missing_message
+            if test "$fatal_on_failure" = true
+                _system_upgrade_error $missing_message
                 return 1
             end
 
-            print_warning $missing_message
+            _system_upgrade_warning $missing_message
         end
 
         return 0
@@ -102,103 +116,77 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
     echo "$BOLD$CYN╚════════════════════════════════════════╝$OFF"
 
     for simple_update_spec in $simple_update_specs
-        if not run_simple_update_step $simple_update_spec
+        if not _system_upgrade_run $simple_update_spec
+            functions -e $helper_functions
             return 1
         end
     end
 
     # Reinstall pipx packages (handles Python version updates)
-    print_step "Checking and reinstalling pipx packages..."
+    _system_upgrade_step "Checking and reinstalling pipx packages..."
     if command -v pipx >/dev/null
         set -l pipx_status (pipx list 2>&1)
-        if string match -q "*invalid interpreter*" $pipx_status
+        set -l pipx_list_status $status
+        set -l python_changed false
+        if test -n "$python_before"; and command -v python >/dev/null
+            set -l python_after (python --version | string split ' ')[2]
+            if test (string match -r '^[0-9]+\.[0-9]+' -- "$python_before") != (string match -r '^[0-9]+\.[0-9]+' -- "$python_after")
+                set python_changed true
+            end
+        end
+        if string match -qr '(missing|invalid).*interpreter' -- $pipx_status; or test "$python_changed" = true
             echo "$YLW  Found broken pipx packages, reinstalling...$OFF"
             if pipx reinstall-all
-                print_success "All pipx packages reinstalled"
+                _system_upgrade_success "All pipx packages reinstalled"
             else
-                print_error "Failed to reinstall pipx packages"
+                _system_upgrade_error "Failed to reinstall pipx packages"
+                set failed_steps (math $failed_steps + 1)
             end
+        else if test $pipx_list_status -ne 0
+            _system_upgrade_error "Failed to inspect pipx packages: $pipx_status"
+            set failed_steps (math $failed_steps + 1)
         else
             # Just upgrade existing packages
             if pipx upgrade-all
-                print_success "All pipx packages upgraded"
+                _system_upgrade_success "All pipx packages upgraded"
             else
-                print_warning "Some pipx upgrades failed"
+                _system_upgrade_error "Some pipx upgrades failed"
+                set failed_steps (math $failed_steps + 1)
             end
         end
     else
-        print_warning "Pipx not installed, skipping"
-    end
-
-    # Update npm global packages
-    print_step "Updating global npm packages..."
-    if command -v npm >/dev/null
-        set -l outdated_pkgs (npm -g outdated --json --depth=0 2>/dev/null | jq -r 'keys[]' 2>/dev/null)
-        if test (count $outdated_pkgs) -gt 0
-            echo "$YLW  Found outdated npm packages:$OFF"
-            for pkg in $outdated_pkgs
-                echo "    - $pkg"
-            end
-            if npm -g update
-                print_success "Global npm packages updated"
-            else
-                print_warning "Some npm packages failed to update"
-            end
-        else
-            print_success "All global npm packages are up to date"
-        end
-    else
-        print_warning "NPM not installed, skipping"
+        _system_upgrade_warning "Pipx not installed, skipping"
     end
 
     # Update PHP composer global packages
-    print_step "Updating global Composer packages..."
+    _system_upgrade_step "Updating global Composer packages..."
     if command -v composer >/dev/null
         set -l composer_home (composer config --global home)
-        if test -d "$composer_home"
-            set -l outdated_composer_pkgs (composer global outdated --direct --format=json | jq -r '.installed[] | select(.latest_version != .version) | .name')
-            if test (count $outdated_composer_pkgs) -gt 0
-                echo "$YLW  Found outdated Composer packages:$OFF"
-                for pkg in $outdated_composer_pkgs
-                    echo "    - $pkg"
-                end
-                if composer global update
-                    print_success "Global Composer packages updated"
-                else
-                    print_warning "Some Composer packages failed to update"
-                end
+        set -l composer_home_status $status
+        if test $composer_home_status -ne 0
+            _system_upgrade_error "Failed to locate the Composer global directory"
+            set failed_steps (math $failed_steps + 1)
+        else if test -f "$composer_home/composer.json"
+            if composer global update
+                _system_upgrade_success "Global Composer packages updated"
             else
-                print_success "All global Composer packages are up to date"
+                _system_upgrade_error "Some Composer packages failed to update"
+                set failed_steps (math $failed_steps + 1)
             end
         else
-            print_warning "Composer global directory not found, skipping"
+            _system_upgrade_warning "Composer global project not found, skipping"
         end
     else
-        print_warning "Composer not installed, skipping"
-    end
-
-    # Clean up orphaned packages
-    print_step "Cleaning up orphaned packages..."
-    set -l orphans (pacman -Qtdq 2>/dev/null)
-    if test -n "$orphans"
-        echo "$YLW  Found orphaned packages:$OFF"
-        for pkg in $orphans
-            echo "    - $pkg"
-        end
-        if sudo pacman -Rns --noconfirm $orphans
-            print_success "Orphaned packages removed"
-        else
-            print_warning "Failed to remove some orphaned packages"
-        end
-    else
-        print_success "No orphaned packages found"
+        _system_upgrade_warning "Composer not installed, skipping"
     end
 
     # Final cleanup
     echo
-    echo "$BOLD$GRN╔════════════════════════════════════════╗$OFF"
-    echo "$BOLD$GRN║   System Upgrade Completed!            ║$OFF"
-    echo "$BOLD$GRN╚════════════════════════════════════════╝$OFF"
+    if test $failed_steps -eq 0
+        _system_upgrade_success "System Upgrade Completed!"
+    else
+        _system_upgrade_error "System upgrade incomplete: $failed_steps update step(s) failed"
+    end
     echo
     echo "$MAG  System information:$OFF"
     set -l kernel_after (uname -r)
@@ -208,15 +196,20 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
             set kernel_after $installed_kernel
         end
     end
-    print_system_version Kernel "$kernel_after" "$kernel_before"
-    print_system_version Fish "$(fish --version | string split ' ')[3]" "$fish_before"
+    _system_upgrade_version Kernel "$kernel_after" "$kernel_before"
+    _system_upgrade_version Fish "$(fish --version | string split ' ')[3]" "$fish_before"
     if command -v python >/dev/null
-        print_system_version Python "$(python --version | string split ' ')[2]" "$python_before"
+        _system_upgrade_version Python "$(python --version | string split ' ')[2]" "$python_before"
     end
     echo
     echo "$CYN  Next steps:$OFF"
-    echo "    • Review any warnings above"
-    echo "    • Check if reboot is needed: $BOLD ls /usr/lib/modules $OFF"
-    echo "    • Test critical applications"
+    echo "    - Review any warnings above"
+    echo "    - Check if reboot is needed: $BOLD ls /usr/lib/modules $OFF"
+    echo "    - Test critical applications"
     echo
+    functions -e $helper_functions
+    if test $failed_steps -gt 0
+        return 1
+    end
+    return 0
 end
