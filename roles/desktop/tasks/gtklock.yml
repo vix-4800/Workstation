@@ -1,9 +1,9 @@
 ---
 - name: Build gtklock-media-background-module
   ansible.builtin.command:
-    cmd: meson setup build --wipe
+    cmd: meson setup build --reconfigure
     chdir: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-media-background-module'
-    creates: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-media-background-module/build/build.ninja'
+  changed_when: true
   tags:
     - desktop
     - packages
@@ -29,9 +29,9 @@
 
 - name: Build gtklock-network-module
   ansible.builtin.command:
-    cmd: meson setup build --wipe
+    cmd: meson setup build --reconfigure
     chdir: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-network-module'
-    creates: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-network-module/build/build.ninja'
+  changed_when: true
   tags:
     - desktop
     - packages
@@ -57,9 +57,9 @@
 
 - name: Build gtklock-battery-module
   ansible.builtin.command:
-    cmd: meson setup build --wipe
+    cmd: meson setup build --reconfigure
     chdir: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module'
-    creates: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module/build/build.ninja'
+  changed_when: true
   when: has_battery
   tags:
     - desktop
