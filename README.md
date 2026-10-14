@@ -169,7 +169,7 @@ inventory/
 | `yay` | AUR helper installation |
 | `cpu` | CPU microcode (AMD/Intel); thermald thermal management service (Intel only) |
 | `gpu` | GPU drivers + fan control (NVIDIA); DRM KMS modprobe and Wayland env config |
-| `shell` | Fish, Bash, Alacritty, Tmux, aliases |
+| `shell` | Fish, Bash, Kitty (default terminal), Alacritty, Tmux, aliases |
 | `editor` | Neovim (with Lua + LuaRocks), VSCode flags, Git config |
 | `audio` | PipeWire, WirePlumber, EasyEffects, multimedia apps |
 | `network` | Firewall (nftables), Bluetooth (nm-applet + blueman tray flow), WireGuard (vault), V2RayA, USBGuard |
@@ -312,6 +312,11 @@ from vault.
 
 ### Applications
 
+- **Kitty** — default terminal for Sway, Wofi, and Waybar scripts; Fish, JetBrainsMono Nerd Font (14 pt),
+  Catppuccin Mocha, 80% background opacity, and 10,000 lines of scrollback.
+  The `shell` role links `roles/shell/files/kitty/` to `~/.config/kitty/`.
+  See the [Kitty configuration reference](https://sw.kovidgoyal.net/kitty/conf/) for available settings.
+- **Alacritty** — remains installed with its existing configuration; available for manual launch.
 - **Obsidian** — notes
 - **Bitwarden** — password manager
 - **File Roller** — archive manager

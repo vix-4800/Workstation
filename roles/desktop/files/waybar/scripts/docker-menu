@@ -85,7 +85,7 @@ fi
 # Execute selected action
 case "${action}" in
     *"Show logs"*)
-        alacritty -e sh -c "docker logs --tail 100 -f '${container_name}'; read -p 'Press Enter to close...'" &
+        kitty --hold docker logs --tail 100 -f "${container_name}" &
         ;;
     *"Restart"*)
         docker restart "${container_name}" && notify-send "Docker" "Container '${container_name}' restarted" -u normal

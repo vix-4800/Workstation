@@ -89,7 +89,7 @@ just apply
 | `yay` | AUR helper installation |
 | `cpu` | CPU microcode (conditional: `cpu_vendor`) |
 | `gpu` | GPU drivers + fan control (conditional: `gpu_vendor`) |
-| `shell` | Fish, Bash, Alacritty, Tmux, aliases |
+| `shell` | Fish, Bash, Kitty (default terminal), Alacritty, Tmux, aliases |
 | `editor` | Neovim, VSCode flags, Git config |
 | `audio` | PipeWire, WirePlumber, multimedia |
 | `network` | Firewall, Bluetooth, WireGuard, V2RayA, USBGuard, DPI bypass |
