@@ -2,6 +2,7 @@
 editor_packages:
   - git-delta
   - neovim
+  - tree-sitter-cli
 
 editor_configs:
   - src: nvim
