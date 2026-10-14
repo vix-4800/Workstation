@@ -52,15 +52,15 @@ function system-upgrade --description 'Full system upgrade: pacman, AUR, flatpak
     end
 
     function _system_upgrade_success --no-scope-shadowing
-        echo "$GRN[OK]$OFF $argv"
+        echo "$GRN""[OK]$OFF $argv"
     end
 
     function _system_upgrade_warning --no-scope-shadowing
-        echo "$YLW[WARN]$OFF $argv"
+        echo "$YLW""[WARN]$OFF $argv"
     end
 
     function _system_upgrade_error --no-scope-shadowing
-        echo "$RED[ERROR]$OFF $argv"
+        echo "$RED""[ERROR]$OFF $argv"
     end
 
     function _system_upgrade_version
