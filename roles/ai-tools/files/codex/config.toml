@@ -31,11 +31,7 @@ enabled = false
 enabled = false
 
 [features]
-multi_agent = true
-apps = true
-hooks = true
 fast_mode = false
-shell_snapshot = true
 prevent_idle_sleep = true
 
 [agents]
