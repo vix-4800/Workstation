@@ -9,25 +9,26 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     set -l OFF (set_color normal)
 
     set -l step 1
-    set -l total_steps 11
-    set -l freed 0
+    set -l total_steps 10
+    set -l cleanup_failed 0
 
-    function _cleanup_step
+    function _cleanup_step --no-scope-shadowing
         echo
         echo "$BOLD$BLU===>$OFF $BOLD($step/$total_steps)$OFF $argv"
         set step (math $step + 1)
     end
 
-    function _cleanup_ok
-        echo "$GRN✓$OFF $argv"
+    function _cleanup_ok --no-scope-shadowing
+        echo "$GRN""[OK]$OFF $argv"
     end
 
-    function _cleanup_skip
-        echo "$YLW⚠$OFF $argv"
+    function _cleanup_skip --no-scope-shadowing
+        echo "$YLW""[SKIP]$OFF $argv"
     end
 
-    function _cleanup_err
-        echo "$RED✗$OFF $argv"
+    function _cleanup_err --no-scope-shadowing
+        echo "$RED""[ERROR]$OFF $argv"
+        set cleanup_failed 1
     end
 
     echo "$BOLD$CYN╔════════════════════════════════════════╗$OFF"
@@ -38,7 +39,7 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     _cleanup_step "Removing orphaned packages..."
     set -l orphans (pacman -Qtdq 2>/dev/null)
     if test -n "$orphans"
-        if sudo pacman -Rns $orphans --noconfirm
+        if sudo pacman -Rs $orphans
             _cleanup_ok "Orphaned packages removed"
         else
             _cleanup_err "Failed to remove orphaned packages"
@@ -63,8 +64,7 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     # Step 3: Clean yay / AUR build cache
     _cleanup_step "Cleaning yay AUR build cache..."
     if command -v yay >/dev/null
-        yay -Sc --noconfirm 2>&1 | command grep -Ev 'could not open file.*/download-'
-        if test $pipestatus[1] -eq 0
+        if yay -Sc --aur --noconfirm
             _cleanup_ok "Yay cache cleaned"
         else
             _cleanup_err "Yay cache clean failed"
@@ -100,23 +100,10 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
     # Step 6: Clean uv (Python) cache
     _cleanup_step "Cleaning uv cache..."
     if command -v uv >/dev/null
-        set -l uv_tmp (mktemp)
-        uv cache clean >$uv_tmp 2>&1 &
-        set -l uv_pid $last_pid
-        sleep 1
-        if grep -q 'in-use' $uv_tmp
-            kill $uv_pid 2>/dev/null
-            rm -f $uv_tmp
-            _cleanup_skip "uv cache is in use by another process, skipping"
+        if uv cache clean
+            _cleanup_ok "uv cache cleared"
         else
-            wait $uv_pid
-            set -l uv_status $status
-            rm -f $uv_tmp
-            if test $uv_status -eq 0
-                _cleanup_ok "uv cache cleared"
-            else
-                _cleanup_err "uv cache clean failed"
-            end
+            _cleanup_err "uv cache clean failed"
         end
     else
         _cleanup_skip "uv not installed, skipping"
@@ -158,25 +145,7 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
         _cleanup_skip "Composer not installed, skipping"
     end
 
-    # Step 10: Clean workstation dotfiles backups
-    _cleanup_step "Cleaning workstation dotfiles backups..."
-    set -l workstation_backup_dir "$HOME/.local/share/dotfiles/backups"
-    if test -d "$workstation_backup_dir"
-        set -l backup_entries (find "$workstation_backup_dir" -mindepth 1 -maxdepth 1 2>/dev/null)
-        if test (count $backup_entries) -gt 0
-            if rm -rf -- $backup_entries
-                _cleanup_ok "Workstation backups removed"
-            else
-                _cleanup_err "Failed to remove workstation backups"
-            end
-        else
-            _cleanup_ok "No workstation backups found"
-        end
-    else
-        _cleanup_ok "No workstation backup directory found"
-    end
-
-    # Step 11: Empty trash and clean /tmp
+    # Step 10: Empty trash and clean /tmp
     _cleanup_step "Emptying trash and cleaning /tmp..."
     if command -v trash-empty >/dev/null
         if trash-empty
@@ -188,15 +157,10 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
         _cleanup_skip "trash-empty not installed, skipping trash"
     end
 
-    set -l tmp_entries (find /tmp -mindepth 1 -maxdepth 1 -xdev 2>/dev/null)
-    if test (count $tmp_entries) -gt 0
-        if sudo find /tmp -mindepth 1 -maxdepth 1 -xdev -exec rm -rf -- '{}' +
-            _cleanup_ok "/tmp contents removed"
-        else
-            _cleanup_err "Failed to clean /tmp"
-        end
+    if sudo systemd-tmpfiles --clean --prefix=/tmp
+        _cleanup_ok "/tmp cleaned according to systemd age rules"
     else
-        _cleanup_ok "/tmp is already empty"
+        _cleanup_err "Failed to clean /tmp"
     end
 
     # Optional: Docker cleanup
@@ -226,8 +190,15 @@ function system-cleanup --description 'Clean system caches, orphan packages, and
 
     echo
     echo "$BOLD$CYN╔════════════════════════════════════════╗$OFF"
-    echo "$BOLD$CYN║         System Cleanup Complete        ║$OFF"
+    if test $cleanup_failed -eq 0
+        echo "$BOLD$CYN║         System Cleanup Complete        ║$OFF"
+    else
+        echo "$BOLD$RED║   System Cleanup Finished With Errors  ║$OFF"
+    end
     echo "$BOLD$CYN╚════════════════════════════════════════╝$OFF"
     echo
     df -h / | awk 'NR==2 {printf "Disk usage: %s used of %s (%s free)\n", $3, $2, $4}'
+
+    functions -e _cleanup_step _cleanup_ok _cleanup_skip _cleanup_err
+    return $cleanup_failed
 end
