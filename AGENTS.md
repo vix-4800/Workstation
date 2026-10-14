@@ -20,11 +20,14 @@ This is a **machine state management repository** for Arch Linux with Sway (Wayl
 
 ## Critical Workflows
 
+Run commands from the repository root. Applying state requires local host vars,
+`vault/secrets.yml`, `.vault-password`, and the collections in `requirements.yml`.
+
 ### Apply full state
 
 ```bash
 just apply              # Packages + configs + services
-just sync               # Only configs (fast)
+just sync               # Config-tagged tasks; may use sudo and trigger handlers
 just plan               # Dry-run
 just role shell         # Specific role
 just role desktop,network   # Multiple roles
@@ -45,6 +48,7 @@ sudo pacman -Syu --needed sudo vim git ansible just base-devel
 git clone <repo> ~/Code/Workstation && cd ~/Code/Workstation
 cp inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
 cp vault/secrets.yml.example vault/secrets.yml
+# Fill in machine-specific host vars and vault secrets before continuing.
 just vault-init
 just vault-encrypt
 just deps
@@ -53,7 +57,7 @@ just apply
 
 ## Project Structure
 
-```
+```text
 ├── Justfile                    # Command interface (replaces bin/workstation)
 ├── ansible.cfg                 # Ansible settings (inventory, vault, roles_path)
 ├── requirements.yml            # Ansible Galaxy collections
@@ -80,7 +84,7 @@ just apply
 ### Roles
 
 | Role | Concern |
-|------|---------|
+| ------ | --------- |
 | `base` | Locale, hostname, essential packages, env vars, fontconfig |
 | `yay` | AUR helper installation |
 | `cpu` | CPU microcode (conditional: `cpu_vendor`) |
@@ -88,25 +92,27 @@ just apply
 | `shell` | Fish, Bash, Alacritty, Tmux, aliases |
 | `editor` | Neovim, VSCode flags, Git config |
 | `audio` | PipeWire, WirePlumber, multimedia |
-| `network` | Firewall, Bluetooth, WireGuard, V2RayA |
+| `network` | Firewall, Bluetooth, WireGuard, V2RayA, USBGuard, DPI bypass |
 | `desktop` | Sway, Waybar, Wofi, SwayNC, GTKLock, Wlogout, etc. |
 | `display-manager` | Greetd + ReGreet |
-| `development` | PHP, Python, Go, Docker, all linter configs |
+| `development` | PHP, Python, Go, Rust, Docker, linter configs |
 | `appearance` | GTK, fonts, cursors, icons, wallpapers, themes |
 | `apps` | Obsidian, Bitwarden, Flatpak, waypaper, auto-cpufreq (battery only) |
-| `services` | All systemd user services and timers |
-| `ai-tools` | Claude Code, Copilot CLI, OpenCode, Qwen, github-mcp-server, agent skills |
+| `services` | Shared systemd user services and timers; other roles manage their own services |
+| `ai-tools` | Claude Code, Codex, Copilot CLI, OpenCode, github-mcp-server, agent skills |
 
 ## Code Style Guidelines
 
 ### Ansible Tasks
 
 - Use 2-space indentation
-- Every task should include the role tag plus the most relevant type tag when one applies; common type tags are `packages`, `config`, `services`, and `system`
+- Every task should include the role tag plus the most relevant type tag when one
+  applies; common type tags are `packages`, `config`, `services`, and `system`
 - Prefer `community.general.pacman` for Arch packages, `kewlfft.aur.aur` for AUR
 - Use `become: true` only where needed (package install, system paths)
-- Config deployment: `ansible.builtin.file` with `state: link` (symlinks, not copies)
-- Templates for secrets: `ansible.builtin.template` with vault variables
+- Prefer `ansible.builtin.file` with `state: link` for static user configs.
+  Preserve existing copy deployment for system configs and Codex execution rules.
+- Use `ansible.builtin.template` for per-host values and secrets from vault variables.
 - Use variables from `defaults/main.yml`, not hardcoded values
 - Include subtasks via `ansible.builtin.include_tasks` for complex roles
 
@@ -121,10 +127,11 @@ just apply
 
 - `dotfiles_dir` — absolute path to repo root (`{{ playbook_dir }}`)
 - `username` — system username
+- `home` — target user's home (`/home/{{ username }}`); use for user config destinations
 - `hostname` — machine hostname (from `host_vars`)
 - `cpu_vendor` / `gpu_vendor` — for conditional hardware roles
 - `has_battery` — for conditional service enablement
-- Vault secrets prefixed with `vault_` (e.g., `vault_wg_private_key_saga`)
+- Vault secrets prefixed with `vault_` (e.g., `vault_wg_private_key`)
 
 ### Naming Conventions
 
@@ -135,12 +142,17 @@ just apply
 
 ## Build/Lint/Test Commands
 
+Run the smallest relevant check. Ansible checks use the prerequisites above.
+Molecule requires Docker and dependencies from `requirements-dev.txt`.
+Do not install dependencies or apply workstation state merely to validate a change.
+
 ```bash
 just lint               # ansible-lint on all roles
 just check              # Syntax check only
 just plan               # Dry-run (--check --diff)
 just molecule           # Run molecule tests
-pre-commit run -a       # All pre-commit hooks
+pre-commit run -a        # Fast hooks
+pre-commit run -a --hook-stage manual  # Heavy hooks, also run in CI
 shellcheck roles/*/scripts/*   # Lint scripts
 ```
 
@@ -154,14 +166,14 @@ shellcheck roles/*/scripts/*   # Lint scripts
    - name: Deploy <config> config
      ansible.builtin.file:
        src: "{{ dotfiles_dir }}/roles/<role>/files/<config>"
-       dest: "{{ ansible_env.HOME }}/.config/<config>"
+       dest: "{{ home }}/.config/<config>"
        state: link
        force: true
      tags: [<role>, config]
    ```
 
 4. If it needs per-host values, use a template in `roles/<role>/templates/`
-5. Commit, push, and run `just sync` on both machines
+5. Run the relevant checks. Commit, push, and apply state only when explicitly requested.
 
 ## Adding a New Machine
 
@@ -175,8 +187,10 @@ shellcheck roles/*/scripts/*   # Lint scripts
 1. **Fish shell** — scripts use `#!/usr/bin/env bash`, not Fish syntax
 2. **Wayland only** — use grim/slurp (not scrot), wl-clipboard (not xclip)
 3. **Symlink direction** — `src` is inside the repo, `dest` is the target in `~/`
-4. **Vault required** — `vault/secrets.yml` must exist (even if empty) for `site.yml` to parse
-5. **Local host vars are untracked** — `inventory/host_vars/localhost.yml` is intentionally gitignored and must be created from the example on each machine
+4. **Vault required** — `site.yml` loads `vault/secrets.yml`; keep real secrets encrypted
+   and `.vault-password` available. Never commit either file or local authentication state.
+5. **Local host vars are untracked** — `inventory/host_vars/localhost.yml` is intentionally
+   gitignored and must be created from the example on each machine
 6. **`become: false`** — needed for AUR packages (yay runs as user)
 
 ## Quick Reference
@@ -185,5 +199,5 @@ shellcheck roles/*/scripts/*   # Lint scripts
 - Ansible config: `ansible.cfg`
 - Sway config: `roles/desktop/files/sway/config`
 - Fish config: `roles/shell/files/fish/config.fish`
-- Waybar config: `roles/desktop/files/waybar/config.jsonc`
+- Waybar config template: `roles/desktop/templates/waybar/config.jsonc.j2`
 - Vault secrets: `just vault-edit`
