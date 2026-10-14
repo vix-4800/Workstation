@@ -95,13 +95,26 @@
     - audio
     - services
 
+- name: Inspect legacy ALSA restore user services
+  ansible.builtin.stat:
+    path: '{{ home }}/.config/systemd/user/{{ item }}'
+    follow: true
+  loop: '{{ audio_legacy_user_services }}'
+  register: audio_legacy_user_service_stats
+  tags:
+    - audio
+    - services
+
 - name: Disable legacy ALSA restore user services
   ansible.builtin.systemd:
-    name: '{{ item }}'
+    name: '{{ item.item }}'
     scope: user
     enabled: false
     state: stopped
-  loop: '{{ audio_legacy_user_services }}'
+  loop: '{{ audio_legacy_user_service_stats.results }}'
+  loop_control:
+    label: '{{ item.item }}'
+  when: item.stat.exists
   tags:
     - audio
     - services
