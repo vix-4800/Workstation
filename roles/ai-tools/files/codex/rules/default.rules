@@ -98,6 +98,9 @@ prefix_rule(
         "gh pr edit 1234 --body-file /tmp/pr-body.txt",
         "gh pr merge 1234 --squash",
         "gh pr create --title Example --body Example",
+        "gh pr create --title Example --body-file /tmp/pr-body.txt --assignee @me",
+        "gh pr edit 1234 --add-assignee @me",
+        "gh pr edit 1234 --body 'Closes #42'",
         "gh pr comment 1234 --body Example",
     ],
     not_match = [
@@ -112,7 +115,12 @@ prefix_rule(
     pattern = ["gh", "issue", ["close", "comment", "create", "delete", "develop", "edit", "lock", "pin", "reopen", "transfer", "unlock", "unpin"]],
     decision = "prompt",
     justification = "Changing issues or local development state requires explicit user approval.",
-    match = ["gh issue edit 1234 --body Example"],
+    match = [
+        "gh issue create --title Example --body-file /tmp/issue-body.txt --assignee @me",
+        "gh issue edit 1234 --body Example",
+        "gh issue edit 1234 --body-file /tmp/issue-body.txt",
+        "gh issue edit 1234 --add-assignee @me",
+    ],
     not_match = ["gh issue view 1234", "gh issue list"],
 )
 
@@ -211,6 +219,17 @@ prefix_rule(
     pattern = ["git", "branch"],
     decision = "prompt",
     justification = "Can delete branches; keep approval-gated outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Publishing branches or changing remote refs requires explicit user approval.",
+    match = [
+        "git push",
+        "git push --set-upstream origin feature/example",
+    ],
+    not_match = ["git pull", "git fetch", "git reset --hard"],
 )
 
 prefix_rule(
@@ -424,7 +443,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", ["am", "apply", "cherry-pick", "clean", "merge", "push", "rebase", "reset"]],
+    pattern = ["git", ["am", "apply", "cherry-pick", "clean", "merge", "rebase", "reset"]],
     decision = "forbidden",
     justification = "Blocked for safety. Use a reviewed manual workflow instead.",
 )
