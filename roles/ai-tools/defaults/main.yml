@@ -41,6 +41,7 @@ ai_tools_shared_skill_names:
   - modern-php
   - security-review
   - code-review
+  - github-workflow
   - ansible-patterns
   - database-patterns
   - testing-strategy
