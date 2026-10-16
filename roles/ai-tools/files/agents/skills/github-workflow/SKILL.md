@@ -45,10 +45,13 @@ A nonzero exit can still leave a created object. Never blindly repeat `create`.
    with the problem and resulting behavior, then relevant validation and limitations.
    Write multiline bodies to temporary files with literal newlines and use `--body-file`.
    When editing, read the existing body and preserve unrelated content and links.
-4. **Assignees:** Apply the requested assignee separately to issue and PR; assignment is not
-   inherited through linking. Use `@me` for the authenticated user when self-assignment is
-   requested. Otherwise use the supplied login; clarify an unknown requested identity.
-   Use `--assignee` on create and `--add-assignee` on edit; preserve other assignees.
+4. **Assignees:** When creating an issue or PR without an explicit assignee instruction,
+   automatically assign the authenticated GitHub user with `--assignee '@me'`.
+   Self-assignment requests also use `@me`. An explicit assignee or instruction to leave
+   the object unassigned overrides this default; clarify an unknown requested identity.
+   Apply assignment separately to issue and PR; assignment is not inherited through linking.
+   When editing an existing object, preserve its assignees unless a change is requested;
+   use `--add-assignee` for additions and preserve other assignees.
 5. **Push:** Publish the verified branch to the resolved remote, normally with
    `git push --set-upstream REMOTE BRANCH`. Investigate a rejected push; do not force it.
 6. **PR:** Pass explicit `--base` and `--head` after the push succeeds. For a personal fork,
