@@ -87,6 +87,7 @@ Use smallest relevant lens. Do not mention selected lens in response.
 
 - Conventional Commits: `feat:`, `fix:`, `refactor:`, `chore:`, `test:`, `docs:`.
 - Commit/PR text: normal professional language, not caveman.
+- Codex must include `Co-authored-by: Codex <codex@openai.com>` in every commit it creates, including amendments. Put the trailer after a blank line at the end of the commit message. Preserve existing author information and co-author trailers.
 
 ## Tests
 

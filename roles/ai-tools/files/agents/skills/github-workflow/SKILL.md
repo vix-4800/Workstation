@@ -41,6 +41,10 @@ A nonzero exit can still leave a created object. Never blindly repeat `create`.
 2. **Branch and checks:** Reuse the task branch or create one from the resolved base.
    Stage and commit only task changes when authorized. Run relevant checks before publishing;
    report actual results and any checks not run.
+   For every commit Codex creates, including amendments, include the trailer
+   `Co-authored-by: Codex <codex@openai.com>` after a blank line at the end of the message.
+   Preserve existing author information and co-author trailers. Verify the trailer with
+   `git log -1 --format=%B` after each commit and before publishing.
 3. **Descriptions:** Follow repository templates and language conventions. Lead the PR body
    with the problem and resulting behavior, then relevant validation and limitations.
    Write multiline bodies to temporary files with literal newlines and use `--body-file`.
