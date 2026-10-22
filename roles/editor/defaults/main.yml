@@ -17,8 +17,6 @@ editor_configs:
     dest: '{{ home }}/.config/Code/User/tasks.json'
   - src: code/User/mcp.json
     dest: '{{ home }}/.config/Code/User/mcp.json'
-  - src: code/User/prompts
-    dest: '{{ home }}/.config/Code/User/prompts'
   - src: git/delta.gitconfig
     dest: '{{ home }}/.gitconfig.delta'
   - src: git/gitconfig
