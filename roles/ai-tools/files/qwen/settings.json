@@ -13,13 +13,6 @@
     "hasSeenNudge": true
   },
   "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ]
-    },
     "serena": {
       "command": "uvx",
       "args": [

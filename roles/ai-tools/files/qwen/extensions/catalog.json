@@ -25,14 +25,6 @@
       "status": "core"
     },
     {
-      "name": "github",
-      "pluginName": "github",
-      "installSource": "https://github.com/anthropics/claude-plugins-official:github",
-      "source": "https://github.com/anthropics/claude-plugins-official",
-      "type": "git",
-      "status": "core"
-    },
-    {
       "name": "php-lsp",
       "pluginName": "php-lsp",
       "installSource": "https://github.com/anthropics/claude-plugins-official:php-lsp",

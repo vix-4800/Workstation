@@ -76,9 +76,6 @@
     "Global in Code: git": {
       "allowedModels": ["copilot/auto"]
     },
-    "Global in Code: io.github.github/github-mcp-server": {
-      "allowedModels": ["copilot/auto"]
-    },
     "Global in Code: microsoft/markitdown": {
       "allowedModels": ["copilot/auto"]
     },
@@ -555,7 +552,7 @@
   // ],
   "github.copilot.chat.copilotMemory.enabled": true,
   "github.copilot.chat.customInstructionsInSystemMessage": true,
-  "github.copilot.chat.githubMcpServer.enabled": true,
+  "github.copilot.chat.githubMcpServer.enabled": false,
   "github.copilot.chat.newWorkspace.useContext7": true,
   "github.copilot.chat.responsesApi.toolSearchTool.enabled": true,
   "github.copilot.chat.searchSubagent.enabled": true,

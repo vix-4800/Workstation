@@ -63,40 +63,6 @@ description = "Allow workspace edits and network with rules-based command approv
 enabled = true
 allow_local_binding = false
 
-[mcp_servers.github]
-command = "npx"
-args = ["-y", "@modelcontextprotocol/server-github"]
-
-[mcp_servers.github.tools.get_file_contents]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.search_code]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.list_commits]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.search_issues]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request_comments]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_issue]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request_status]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request_files]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request_reviews]
-approval_mode = "approve"
-
 [mcp_servers.serena]
 command = "uvx"
 args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex", "--open-web-dashboard", "False"]
@@ -118,9 +84,6 @@ approval_mode = "approve"
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 enabled = false
-
-[plugins."github@openai-curated"]
-enabled = true
 
 [plugins."codex-security@openai-curated"]
 enabled = true

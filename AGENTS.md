@@ -99,7 +99,7 @@ just apply
 | `appearance` | GTK, fonts, cursors, icons, wallpapers, themes |
 | `apps` | Obsidian, Bitwarden, Flatpak, waypaper, auto-cpufreq (battery only) |
 | `services` | Shared systemd user services and timers; other roles manage their own services |
-| `ai-tools` | Claude Code, Codex, Copilot CLI, OpenCode, github-mcp-server, agent skills |
+| `ai-tools` | Claude Code, Codex, Copilot CLI, OpenCode, agent skills |
 
 ## Code Style Guidelines
 
