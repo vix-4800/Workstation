@@ -19,6 +19,9 @@ jobs:
 
       - run: pipx install pre-commit
 
+      - name: Test Codex file hooks
+        run: python3 -m unittest discover -s tests -p test_codex_hooks.py -v
+
       - name: Run fast local hooks
         run: pre-commit run -a
 
