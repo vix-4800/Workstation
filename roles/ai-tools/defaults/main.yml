@@ -67,6 +67,10 @@ ai_tools_repo_symlinks:
     dest: '{{ home }}/.config/opencode'
   - src: codex/config.toml
     dest: '{{ home }}/.codex/config.toml'
+  - src: codex/hooks.json
+    dest: '{{ home }}/.codex/hooks.json'
+  - src: codex/hooks
+    dest: '{{ home }}/.codex/hooks'
   - src: codex/scripts/codex-notify
     dest: '{{ home }}/.local/bin/codex-notify'
   - src: codex/agents
