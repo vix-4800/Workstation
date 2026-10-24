@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # ~/.profile
 # This file is sourced by all POSIX-compatible shells
 
