@@ -67,6 +67,7 @@ jobs:
         run: |
           useradd -m ci
           echo "ci ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ci
+          echo 'Defaults env_keep += "SYSTEMD_OFFLINE"' >> /etc/sudoers.d/ci
 
       - name: Create vault password file
         run: |
@@ -96,4 +97,7 @@ jobs:
         run: chown -R ci:ci "$GITHUB_WORKSPACE"
 
       - name: Run playbook in check mode
-        run: sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True ansible-playbook site.yml --check --diff --skip-tags services
+        # Handlers still run with --skip-tags services; this container has no systemd.
+        run: >-
+          sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True SYSTEMD_OFFLINE=1
+          ansible-playbook site.yml --check --diff --skip-tags services
