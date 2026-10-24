@@ -8,6 +8,7 @@
   tags:
     - development
     - php
+    - config
 
 - name: Install Python tools
   ansible.builtin.include_tasks:
@@ -28,6 +29,7 @@
   tags:
     - development
     - docker
+    - config
 
 - name: Install Rust tools
   ansible.builtin.include_tasks:

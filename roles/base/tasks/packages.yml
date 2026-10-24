@@ -1,0 +1,18 @@
+---
+- name: Install essential packages
+  community.general.pacman:
+    name: '{{ base_essential_packages }}'
+    state: present
+  become: true
+  tags:
+    - base
+    - packages
+
+- name: Install modern CLI tools
+  community.general.pacman:
+    name: '{{ base_cli_packages }}'
+    state: present
+  become: true
+  tags:
+    - base
+    - packages

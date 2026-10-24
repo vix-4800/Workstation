@@ -27,10 +27,6 @@
       "command": ["npx", "-y", "@upstash/context7-mcp@latest"],
       "type": "local"
     },
-    "github": {
-      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
-      "type": "local"
-    },
     "serena": {
       "command": [
         "uvx",

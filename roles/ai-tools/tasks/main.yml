@@ -1,4 +1,13 @@
 ---
+- name: Install AI tools runtime dependencies
+  community.general.pacman:
+    name: '{{ ai_tools_packages }}'
+    state: present
+  become: true
+  tags:
+    - ai-tools
+    - packages
+
 - name: Ensure AI tools binary directory exists
   ansible.builtin.file:
     path: '{{ home }}/.local/bin'
@@ -44,19 +53,7 @@
     - ai-tools
     - packages
 
-- name: Check installed Playwright browsers
-  ansible.builtin.find:
-    paths: '{{ home }}/.cache/ms-playwright'
-    patterns: '{{ ai_tools_playwright_browser }}-*'
-    file_type: directory
-  register: ai_tools_playwright_browser_installation
-  failed_when: false
-  changed_when: false
-  tags:
-    - ai-tools
-    - packages
-
-- name: Install Playwright browser for MCP
+- name: Ensure Playwright browser for MCP is installed
   ansible.builtin.command:
     argv:
       - npx
@@ -64,8 +61,10 @@
       - '@playwright/mcp@latest'
       - install-browser
       - '{{ ai_tools_playwright_browser }}'
-  when: ai_tools_playwright_browser_installation.matched | default(0) == 0
-  changed_when: true
+  register: ai_tools_playwright_browser_installation
+  changed_when: >-
+    'Downloading Firefox' in ai_tools_playwright_browser_installation.stdout
+    or 'Downloading Firefox' in ai_tools_playwright_browser_installation.stderr
   tags:
     - ai-tools
     - packages
@@ -89,6 +88,7 @@
           | list
         )
         + ai_tools_shared_skill_targets
+        + [ai_tools_codex_rules_path | dirname]
       )
       | unique
       | list
@@ -111,6 +111,18 @@
   tags:
     - ai-tools
     - config
+
+- name: Deploy Codex execution rules as regular file
+  # Codex skips symlinked .rules files when discovering execution policies.
+  ansible.builtin.copy:
+    src: codex/rules/default.rules
+    dest: '{{ ai_tools_codex_rules_path }}'
+    follow: false
+    mode: '0644'
+  tags:
+    - ai-tools
+    - config
+    - codex-rules
 
 - name: Deploy AI tool repo templates
   ansible.builtin.template:
@@ -150,40 +162,6 @@
     - ai-tools
     - config
 
-- name: Get github-mcp-server installed version
-  ansible.builtin.command:
-    argv:
-      - github-mcp-server
-      - --version
-  register: ai_tools_github_mcp_installed_version
-  changed_when: false
-  failed_when: false
-  tags:
-    - ai-tools
-    - packages
-
-- name: Download github-mcp-server binary
-  ansible.builtin.get_url:
-    url: https://github.com/github/github-mcp-server/releases/download/v{{ ai_tools_github_mcp_server_version }}/github-mcp-server_Linux_x86_64.tar.gz
-    dest: /tmp/github-mcp-server_{{ ai_tools_github_mcp_server_version }}.tar.gz
-    mode: '0644'
-  when: >
-    ai_tools_github_mcp_installed_version.rc != 0 or ai_tools_github_mcp_server_version not in (ai_tools_github_mcp_installed_version.stdout
-    | default(''))
-  notify: Extract github-mcp-server
-  tags:
-    - ai-tools
-    - packages
-
-- name: Deploy github-mcp-server auth wrapper script
-  ansible.builtin.copy:
-    src: claude/scripts/github-mcp-server-with-auth
-    dest: '{{ home }}/.local/bin/github-mcp-server-with-auth'
-    mode: '0755'
-  tags:
-    - ai-tools
-    - config
-
 - name: List configured Claude marketplaces
   ansible.builtin.command:
     argv:
@@ -200,8 +178,9 @@
 
 - name: Capture configured Claude marketplaces
   ansible.builtin.set_fact:
-    ai_tools_claude_configured_marketplaces: '{{ ai_tools_claude_marketplaces_list.stdout | regex_findall(''(?m)^\s*>\s+([^\s]+)$'')
-      }}'
+    ai_tools_claude_configured_marketplaces: >-
+      {{ ai_tools_claude_marketplaces_list.stdout
+         | regex_findall('(?m)^\s*>\s+([^\s]+)$') }}
   when: ai_tools_claude_marketplaces_list.rc == 0
   tags:
     - ai-tools
@@ -270,8 +249,9 @@
 
 - name: Capture installed Claude plugins
   ansible.builtin.set_fact:
-    ai_tools_claude_installed_plugins: '{{ ai_tools_claude_plugins_list.stdout | regex_findall(''(?m)^\s*>\s+([^\s]+)$'')
-      }}'
+    ai_tools_claude_installed_plugins: >-
+      {{ ai_tools_claude_plugins_list.stdout
+         | regex_findall('(?m)^\s*>\s+([^\s]+)$') }}
   when: ai_tools_claude_plugins_list.rc == 0
   tags:
     - ai-tools

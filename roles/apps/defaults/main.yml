@@ -38,13 +38,6 @@ apps_packages:
   - gimp
   - thunderbird
 
-apps_waypaper_legacy_pip_packages:
-  - waypaper
-  - imageio
-  - imageio-ffmpeg
-  - screeninfo
-  - numpy
-
 apps_waypaper_aur_packages:
   - python-screeninfo
   - python-imageio-ffmpeg

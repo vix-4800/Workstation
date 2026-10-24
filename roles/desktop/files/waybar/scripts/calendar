@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # Custom calendar module for waybar with enhanced tooltip
 
 # Get current date info
@@ -26,13 +28,19 @@ tooltip+="<span font_size='x-large' color='${color_weekdays}'><b>${current_weekd
 
 # Parse calendar and build rows
 while IFS= read -r line; do
-    [[ -z "${line}" ]] && continue
+    [[ -z "${line// /}" ]] && continue
 
     tooltip+="<tt><span font_size='large'>"
 
-    # Parse days
-    day_in_week=0
-    for day in ${line}; do
+    # Preserve empty weekdays in cal's fixed-width columns.
+    for ((day_in_week = 0; day_in_week < 7; day_in_week++)); do
+        day=${line:day_in_week * 3:2}
+        day=${day// /}
+        if [[ -z "${day}" ]]; then
+            tooltip+="    "
+            continue
+        fi
+
         # Format day to always be 2 chars
         day_formatted=$(printf "%2s" "${day}")
 
@@ -50,8 +58,6 @@ while IFS= read -r line; do
             # Regular day
             tooltip+="<span color='${color_normal}'> ${day_formatted} </span>"
         fi
-
-        ((day_in_week++))
     done
 
     tooltip+="</span></tt>\n"
@@ -68,7 +74,7 @@ tooltip+="${days_remaining} days left"
 # Days left in year
 day_of_year=$(date +%j)
 days_in_year=$(date -d "$(date +%Y)-12-31" +%j)
-days_remaining_year=$((days_in_year - day_of_year))
+days_remaining_year=$((10#${days_in_year} - 10#${day_of_year}))
 tooltip+=" • ${days_remaining_year} days until $(date -d "next year" +%Y)"
 
 tooltip+="</span>"

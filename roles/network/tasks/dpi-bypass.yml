@@ -13,7 +13,10 @@
 
 - name: Download zapret2 release archive
   ansible.builtin.get_url:
-    url: https://github.com/bol-van/zapret2/releases/download/v{{ network_zapret2_version }}/zapret2-v{{ network_zapret2_version }}.tar.gz
+    url: >-
+      {{ 'https://github.com/bol-van/zapret2/releases/download/v'
+         ~ network_zapret2_version
+         ~ '/zapret2-v' ~ network_zapret2_version ~ '.tar.gz' }}
     dest: /tmp/zapret2-v{{ network_zapret2_version }}.tar.gz
     mode: '0644'
   become: true
@@ -35,6 +38,26 @@
     - network
     - packages
 
+- name: Inspect installed zapret2 version
+  ansible.builtin.stat:
+    path: /opt/zapret2/.ansible-version
+  register: network_zapret2_version_stat
+  when: network_dpi_bypass_provider == 'zapret2'
+  tags:
+    - network
+    - packages
+
+- name: Read installed zapret2 version
+  ansible.builtin.slurp:
+    src: /opt/zapret2/.ansible-version
+  register: network_zapret2_installed_version
+  when:
+    - network_dpi_bypass_provider == 'zapret2'
+    - network_zapret2_version_stat.stat.exists
+  tags:
+    - network
+    - packages
+
 - name: Extract zapret2 release archive
   ansible.builtin.unarchive:
     src: /tmp/zapret2-v{{ network_zapret2_version }}.tar.gz
@@ -44,10 +67,30 @@
       - --strip-components=1
     owner: root
     group: root
-    creates: /opt/zapret2/init.d/sysv/zapret2
   become: true
-  when: network_dpi_bypass_provider == 'zapret2'
+  when:
+    - network_dpi_bypass_provider == 'zapret2'
+    - >-
+      not network_zapret2_version_stat.stat.exists
+      or (network_zapret2_installed_version.content | b64decode | trim) != (network_zapret2_version | string)
   ignore_errors: '{{ ansible_check_mode }}'
+  notify: Restart zapret2
+  tags:
+    - network
+    - packages
+
+- name: Record installed zapret2 version
+  ansible.builtin.copy:
+    content: |
+      {{ network_zapret2_version }}
+    dest: /opt/zapret2/.ansible-version
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  when:
+    - network_dpi_bypass_provider == 'zapret2'
+    - not ansible_check_mode
   tags:
     - network
     - packages
@@ -76,6 +119,7 @@
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
   ignore_errors: '{{ ansible_check_mode }}'
+  notify: Restart zapret2
   tags:
     - network
     - config
@@ -90,6 +134,7 @@
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
   ignore_errors: '{{ ansible_check_mode }}'
+  notify: Restart zapret2
   tags:
     - network
     - config
@@ -105,6 +150,7 @@
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
   ignore_errors: '{{ ansible_check_mode }}'
+  notify: Restart zapret2
   tags:
     - network
     - config

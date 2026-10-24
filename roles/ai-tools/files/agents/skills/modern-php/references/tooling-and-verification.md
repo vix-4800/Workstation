@@ -70,11 +70,13 @@ vendor/bin/rector process --dry-run --config=rector.php
 
 ## PHPMD
 
-Key thresholds:
+Shared PHPMD 3 configuration: `~/.config/phpmd/phpmd.yml`.
 
-- Method length: 100 lines.
-- Parameter count: 8.
-- Class length: 1000 lines.
+Maximum accepted values (violations are reported above these limits):
+
+- Method length: 99 lines, ignoring whitespace.
+- Parameter count: 7.
+- Class length: 999 lines, ignoring whitespace.
 - Too many fields: 20.
 - Too many methods: 25.
 - Too many public methods: 20.
@@ -83,10 +85,15 @@ Key thresholds:
 Typical command pattern:
 
 ```bash
-vendor/bin/phpmd src,app text phpmd.xml
+vendor/bin/phpmd analyze --no-progress --format=text --ruleset=phpmd.yml -- src app
 ```
 
-Adjust the target paths to the current project structure.
+Adjust the target paths to the current project structure. Use space-separated paths.
+When using the shared workstation configuration:
+
+```bash
+phpmd analyze --no-progress --format=text --ruleset="$HOME/.config/phpmd/phpmd.yml" -- src app
+```
 
 ## PHP-CS-Fixer
 

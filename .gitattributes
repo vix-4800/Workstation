@@ -20,15 +20,15 @@
 *.txt text eol=lf
 
 # Executable scripts (no extension)
-bin/* text eol=lf
+roles/**/scripts/* text eol=lf
 
 # Ansible files
-ansible/*.yml linguist-language=YAML
-ansible/**/*.yml linguist-language=YAML
+*.yml linguist-language=YAML
+*.yaml linguist-language=YAML
 
 # Config directories
-config/**/*.conf linguist-language=INI
-config/**/*.toml linguist-language=TOML
+roles/**/*.conf linguist-language=INI
+roles/**/*.toml linguist-language=TOML
 
 # Binary files
 *.png binary

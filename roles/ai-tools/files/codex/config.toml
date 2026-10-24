@@ -1,6 +1,6 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
-model = "gpt-5.6-terra"
+model = "gpt-6.1-sol"
 web_search = "cached"
 personality = "pragmatic"
 model_reasoning_effort = "high"
@@ -8,21 +8,13 @@ plan_mode_reasoning_effort = "high"
 model_verbosity = "low"
 file_opener = "vscode"
 
-# dev-workspace - filesystem sandbox + network access, no approval required
+# dev-workspace - workspace edits and network after command approval checks
 # approval-first - minimal permissions, requires approval for most actions
 default_permissions = "dev-workspace"
 approval_policy = "on-request"
 approvals_reviewer = "user"
 allow_login_shell = false
-notify = [
-  "notify-send",
-  "Codex",
-  "Codex needs your attention",
-  "-u",
-  "normal",
-  "-i",
-  "dialog-warning",
-]
+notify = ["codex-notify"]
 # commit_attribution = "Codex <codex@openai.com>"
 disable_paste_burst = true
 model_reasoning_summary = "none"
@@ -39,17 +31,11 @@ enabled = false
 enabled = false
 
 [features]
-multi_agent = true
-apps = true
-hooks = true
 fast_mode = false
-shell_snapshot = true
 prevent_idle_sleep = true
-codex_git_commit = true
 
 [agents]
-max_threads = 6
-max_depth = 2
+max_concurrent_threads_per_session = 6
 
 [tui]
 theme = "catppuccin-mocha"
@@ -63,66 +49,19 @@ animations = false
 show_tooltips = false
 alternate_screen = "auto"
 terminal_title = ["activity", "project", "git-branch", "model"]
-
-[tui.model_availability_nux]
-"gpt-5.5" = 4
+screen_reader_detection_done = true
+pet = "dewey"
 
 [permissions.approval-first]
 extends = ":read-only"
 
 [permissions.dev-workspace]
 extends = ":workspace"
-description = "Allow workspace edits, restricted network, and explicit command exceptions."
+description = "Allow workspace edits and network with rules-based command approvals."
 
 [permissions.dev-workspace.network]
 enabled = true
 allow_local_binding = false
-
-[permissions.dev-workspace.network.domains]
-"github.com" = "allow"
-"*.github.com" = "allow"
-"api.github.com" = "allow"
-"raw.githubusercontent.com" = "allow"
-"objects.githubusercontent.com" = "allow"
-"registry.npmjs.org" = "allow"
-"packagist.org" = "allow"
-"repo.packagist.org" = "allow"
-"getcomposer.org" = "allow"
-"api.openai.com" = "allow"
-"pastebin.com" = "deny"
-"webhook.site" = "deny"
-"requestbin.com" = "deny"
-
-[mcp_servers.github]
-command = "npx"
-args = ["-y", "@modelcontextprotocol/server-github"]
-
-[mcp_servers.github.tools.get_file_contents]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.search_code]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.list_commits]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.search_issues]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request_comments]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_issue]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request_status]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request_files]
-approval_mode = "approve"
-
-[mcp_servers.github.tools.get_pull_request]
-approval_mode = "approve"
 
 [mcp_servers.serena]
 command = "uvx"
@@ -139,15 +78,24 @@ args = ["-y", "@upstash/context7-mcp@latest"]
 command = "npx"
 args = ["-y", "@playwright/mcp@latest", "--browser=firefox"]
 
+[mcp_servers.playwright.tools.browser_close]
+approval_mode = "approve"
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 enabled = false
-
-[plugins."github@openai-curated"]
-enabled = true
 
 [plugins."codex-security@openai-curated"]
 enabled = true
 
 [plugins."superpowers@openai-curated"]
 enabled = true
+
+[apps.connector_openai_safety_settings]
+enabled = false
+
+[apps.connector_openai_hotline]
+enabled = false
+
+[apps.connector_20205bf7d4e99a89d7154bb849718324]
+enabled = false

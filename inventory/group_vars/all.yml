@@ -17,7 +17,7 @@ gtk_theme: catppuccin-mocha-lavender-standard+default
 
 # Shell & terminal
 default_shell: /usr/bin/fish
-terminal: alacritty
+terminal: kitty
 editor: nvim
 
 # Desktop

@@ -2,6 +2,11 @@
 base_locale: en_US.UTF-8
 base_timezone: UTC
 base_reflector_country: Russia
+base_reflector_protocol: https
+base_reflector_latest: 10
+base_reflector_age: 24
+base_reflector_sort: rate
+base_reflector_exclude: wan\.metrosg\.ru
 
 base_essential_packages:
   - base-devel

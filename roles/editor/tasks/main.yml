@@ -61,3 +61,23 @@
   tags:
     - editor
     - config
+
+- name: Ensure editor script directory exists
+  ansible.builtin.file:
+    path: '{{ home }}/.local/bin'
+    state: directory
+    mode: '0755'
+  tags:
+    - editor
+    - config
+
+- name: Deploy Git hook scripts
+  ansible.builtin.file:
+    src: '{{ dotfiles_dir }}/roles/editor/scripts/{{ item }}'
+    dest: '{{ home }}/.local/bin/{{ item }}'
+    state: link
+    force: true
+  loop: '{{ editor_scripts }}'
+  tags:
+    - editor
+    - config

@@ -1,9 +1,6 @@
 ---
 - name: Install shell packages
-  community.general.pacman:
-    name: '{{ shell_packages }}'
-    state: present
-  become: true
+  ansible.builtin.import_tasks: packages.yml
   tags:
     - shell
     - packages
@@ -17,22 +14,18 @@
     - shell
 
 - name: Deploy shell configs
-  ansible.builtin.file:
-    src: '{{ dotfiles_dir }}/roles/shell/files/{{ item.src }}'
-    dest: '{{ item.dest }}'
-    state: link
-    force: true
-  loop: '{{ shell_configs }}'
-  loop_control:
-    label: '{{ item.src }}'
+  ansible.builtin.import_tasks: config.yml
   tags:
     - shell
     - config
 
 - name: Install Fisher plugin manager
   ansible.builtin.shell: # noqa: risky-shell-pipe
-    cmd: fish -c "curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher
-      install jorgebucaran/fisher"
+    cmd: |
+      fish -c '
+      set fisher_url https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish
+      curl -sL $fisher_url | source && fisher install jorgebucaran/fisher
+      '
     creates: '{{ home }}/.config/fish/functions/fisher.fish'
   tags:
     - shell
@@ -56,9 +49,10 @@
 
 - name: Install global Node.js CLI packages with nvm
   ansible.builtin.command:
-    cmd: >-
-      fish -lc "set -U nvm_default_version lts; nvm install --silent lts >/dev/null; nvm use --silent lts >/dev/null; npm
-      list --global --depth=0 {{ item }} >/dev/null 2>&1; or npm install --global {{ item }}"
+    cmd: |
+      fish -lc "set -U nvm_default_version lts; nvm install --silent lts >/dev/null;
+      nvm use --silent lts >/dev/null; npm list --global --depth=0 {{ item }} >/dev/null 2>&1;
+      or npm install --global {{ item }}"
   loop: '{{ shell_node_global_packages }}'
   loop_control:
     label: '{{ item }}'

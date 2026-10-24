@@ -5,4 +5,4 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/reflector --country Russia --latest 10 --age 24 --sort rate --save /etc/pacman.d/mirrorlist
+ExecStart=/usr/bin/reflector @/etc/xdg/reflector/reflector.conf

@@ -12,12 +12,14 @@ helper = !/usr/bin/gh auth git-credential
 
 [core]
 autocrlf = input
-untrackedCache = true
-preloadIndex = true
 fscache = true
+quotePath = false
 
 [init]
 defaultBranch = main
+
+[commit]
+verbose = true
 
 [pull]
 rebase = true
@@ -25,40 +27,60 @@ rebase = true
 [push]
 autoSetupRemote = true
 default = current
+useForceIfIncludes = true
+followTags = true
 
 [fetch]
 prune = true
-pruneTags = true
 writeCommitGraph = true
 
 [rebase]
 autoStash = true
 autoSquash = true
+missingCommitsCheck = warn
+
+[merge]
+conflictStyle = zdiff3
+
+[rerere]
+enabled = true
 
 [diff]
 algorithm = histogram
 colorMoved = default
+colorMovedWS = allow-indentation-change
+wsErrorHighlight = all
 
 [log]
 date = relative
 
+[status]
+showStash = true
+
 [branch]
 sort = -committerdate
 
+[tag]
+sort = -version:refname
+
 [http]
-postBuffer = 524288000
 lowSpeedLimit = 1000
 lowSpeedTime = 60
-
-[pack]
-threads = 0
-windowMemory = 256m
 
 [feature]
 manyFiles = true
 
-[gc]
-auto = 256
+[help]
+autoCorrect = prompt
 
 [maintenance]
 strategy = incremental
+
+[hook "php-lint"]
+event = pre-commit
+command = ~/.local/bin/check-staged-php
+
+[hook "secret-check"]
+event = pre-commit
+event = pre-push
+command = ~/.local/bin/check-secrets

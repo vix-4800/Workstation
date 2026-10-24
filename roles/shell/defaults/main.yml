@@ -1,6 +1,7 @@
 ---
 shell_packages:
   - fish
+  - kitty
   - alacritty
   - tmux
   - nodejs
@@ -24,6 +25,8 @@ shell_node_global_packages:
 shell_configs:
   - src: fish
     dest: '{{ home }}/.config/fish'
+  - src: kitty
+    dest: '{{ home }}/.config/kitty'
   - src: alacritty
     dest: '{{ home }}/.config/alacritty'
   - src: tmux
