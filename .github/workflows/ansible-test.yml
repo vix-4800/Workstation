@@ -89,6 +89,7 @@ jobs:
           has_battery: false
           base_timezone: UTC
           network_usbguard_mode: audit
+          network_zapret2_service_enabled: false
           git_user_name: CI Runner
           git_user_email: ci@example.com
           EOF
