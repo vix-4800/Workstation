@@ -79,6 +79,7 @@
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
   ignore_errors: '{{ ansible_check_mode }}'
+  notify: Restart zapret2
   tags:
     - network
     - config
@@ -93,6 +94,7 @@
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
   ignore_errors: '{{ ansible_check_mode }}'
+  notify: Restart zapret2
   tags:
     - network
     - config
@@ -108,6 +110,7 @@
   become: true
   when: network_dpi_bypass_provider == 'zapret2'
   ignore_errors: '{{ ansible_check_mode }}'
+  notify: Restart zapret2
   tags:
     - network
     - config

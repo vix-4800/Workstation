@@ -4,3 +4,20 @@
     name: bluetooth
     state: restarted
   become: true
+
+- name: Restart usbguard
+  ansible.builtin.systemd:
+    name: usbguard
+    state: restarted
+  become: true
+  when: network_usbguard_mode == 'enforce'
+
+- name: Restart zapret2
+  ansible.builtin.systemd:
+    name: zapret2.service
+    state: restarted
+    daemon_reload: true
+  become: true
+  when:
+    - network_dpi_bypass_provider == 'zapret2'
+    - network_zapret2_service_enabled | bool

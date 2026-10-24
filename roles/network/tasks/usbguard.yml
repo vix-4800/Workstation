@@ -36,6 +36,7 @@
     group: root
   become: true
   when: network_usbguard_mode == 'enforce'
+  notify: Restart usbguard
   tags:
     - network
     - config
