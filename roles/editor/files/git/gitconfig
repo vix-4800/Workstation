@@ -28,6 +28,7 @@ rebase = true
 autoSetupRemote = true
 default = current
 useForceIfIncludes = true
+followTags = true
 
 [fetch]
 prune = true
@@ -48,6 +49,7 @@ enabled = true
 algorithm = histogram
 colorMoved = default
 colorMovedWS = allow-indentation-change
+wsErrorHighlight = all
 
 [log]
 date = relative
