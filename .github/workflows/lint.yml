@@ -27,3 +27,22 @@ jobs:
 
       - name: Run heavy CI-only hooks
         run: pre-commit run -a --hook-stage manual
+
+  gtklock-media:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install gtklock module test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libplayerctl-dev libsoup-3.0-dev pkg-config
+
+      - name: Test asynchronous gtklock album art
+        run: python3 -m unittest discover -s tests -p test_gtklock_media.py -v

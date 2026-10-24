@@ -5,18 +5,31 @@
 
 #include <playerctl.h>
 #include <libsoup/soup.h>
+#include <glib/gstdio.h>
 #include <string.h>
 
 #include "gtklock-module.h"
 
 #define MODULE_DATA(x) (x->module_data[self_id])
 #define MEDIA_BG(x) ((struct media_background *)MODULE_DATA(x))
+#define ART_MAX_BYTES (8 * 1024 * 1024)
+#define ART_CHUNK_BYTES (64 * 1024)
+#define ART_TIMEOUT_MS 10000
 
 struct media_background {
     GtkCssProvider *css_provider;
-    gchar *current_art_path;
     GCancellable *cancellable;
     gboolean is_valid;
+};
+
+struct art_request {
+    GtkCssProvider *provider;
+    GCancellable *cancellable;
+    GInputStream *stream;
+    GByteArray *bytes;
+    GFile *cache_file;
+    SoupMessage *message;
+    GSource *timeout;
 };
 
 const gchar module_name[] = "media-background";
@@ -141,7 +154,11 @@ static gchar *get_cache_path(void) {
     const gchar *cache_dir = g_get_user_cache_dir();
     gchar *module_cache = g_build_filename(cache_dir, "gtklock", NULL);
     g_mkdir_with_parents(module_cache, 0755);
-    gchar *path = g_build_filename(module_cache, "media-bg.jpg", NULL);
+    gchar *id = g_uuid_string_random();
+    gchar *filename = g_strdup_printf("media-bg-%s", id);
+    gchar *path = g_build_filename(module_cache, filename, NULL);
+    g_free(filename);
+    g_free(id);
     g_free(module_cache);
     return path;
 }
@@ -208,125 +225,172 @@ static void update_background_css(struct Window *ctx, const gchar *image_path) {
     g_free(css_data);
 }
 
-static void on_image_saved(const gchar *path, struct Window *ctx) {
-    if (!ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) return;
+static void remove_cached_art(gpointer data) {
+    gchar *path = data;
+    g_unlink(path);
+    g_free(path);
+}
 
-    g_free(MEDIA_BG(ctx)->current_art_path);
-    MEDIA_BG(ctx)->current_art_path = g_strdup(path);
+static void art_request_free(struct art_request *request) {
+    g_source_destroy(request->timeout);
+    g_source_unref(request->timeout);
+    if (request->stream) {
+        g_input_stream_close_async(request->stream, G_PRIORITY_DEFAULT, NULL, NULL, NULL);
+    }
+    if (request->cache_file) {
+        remove_cached_art(g_file_get_path(request->cache_file));
+    }
+    g_clear_object(&request->provider);
+    g_clear_object(&request->cancellable);
+    g_clear_object(&request->stream);
+    g_clear_object(&request->cache_file);
+    g_clear_object(&request->message);
+    g_byte_array_unref(request->bytes);
+    g_free(request);
+}
 
-    update_background_css(ctx, path);
+static void art_request_error(struct art_request *request, GError *error) {
+    if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+        g_warning("media-background: Failed to load album art: %s", error->message);
+    }
+    g_error_free(error);
+    art_request_free(request);
+}
+
+static gboolean art_request_timeout(gpointer data) {
+    g_cancellable_cancel(G_CANCELLABLE(data));
+    return G_SOURCE_REMOVE;
+}
+
+static void art_saved_callback(GObject *source_object, GAsyncResult *res, gpointer user_data) {
+    struct art_request *request = user_data;
+    GError *error = NULL;
+    if (!g_file_replace_contents_finish(G_FILE(source_object), res, NULL, &error)) {
+        art_request_error(request, error);
+        return;
+    }
+    if (is_active && !g_cancellable_is_cancelled(request->cancellable)) {
+        gchar *path = g_file_get_path(request->cache_file);
+        gchar *css = build_background_css(path);
+        if (gtk_css_provider_load_from_data(request->provider, css, -1, &error)) {
+            g_object_set_data_full(G_OBJECT(request->provider), "media-bg-cache", path, remove_cached_art);
+            g_clear_object(&request->cache_file);
+        } else {
+            g_warning("media-background: Failed to load CSS: %s", error->message);
+            g_error_free(error);
+            g_free(path);
+        }
+        g_free(css);
+    }
+    art_request_free(request);
+}
+
+static void read_art_chunk(struct art_request *request);
+
+static void art_read_callback(GObject *source_object, GAsyncResult *res, gpointer user_data) {
+    struct art_request *request = user_data;
+    GError *error = NULL;
+    GBytes *chunk = g_input_stream_read_bytes_finish(G_INPUT_STREAM(source_object), res, &error);
+    if (!chunk) {
+        art_request_error(request, error);
+        return;
+    }
+    if (!is_active || g_cancellable_is_cancelled(request->cancellable)) {
+        g_bytes_unref(chunk);
+        art_request_free(request);
+        return;
+    }
+    gsize size = 0;
+    gconstpointer data = g_bytes_get_data(chunk, &size);
+    if (size > ART_MAX_BYTES - request->bytes->len) {
+        g_bytes_unref(chunk);
+        art_request_error(request, g_error_new_literal(G_IO_ERROR, G_IO_ERROR_NO_SPACE, "Album art exceeds 8 MiB"));
+        return;
+    }
+    if (size) g_byte_array_append(request->bytes, data, size);
+    g_bytes_unref(chunk);
+    if (size) {
+        read_art_chunk(request);
+    } else if (request->bytes->len) {
+        g_file_replace_contents_async(
+            request->cache_file, (const gchar *)request->bytes->data, request->bytes->len,
+            NULL, FALSE, G_FILE_CREATE_PRIVATE | G_FILE_CREATE_REPLACE_DESTINATION,
+            request->cancellable, art_saved_callback, request);
+    } else {
+        art_request_error(request, g_error_new_literal(G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "Empty album art"));
+    }
+}
+
+static void read_art_chunk(struct art_request *request) {
+    g_input_stream_read_bytes_async(request->stream, ART_CHUNK_BYTES, G_PRIORITY_DEFAULT,
+                                   request->cancellable, art_read_callback, request);
 }
 
 static void file_read_callback(GObject *source_object, GAsyncResult *res, gpointer user_data) {
-    struct Window *ctx = user_data;
+    struct art_request *request = user_data;
     GError *error = NULL;
-    GFileInputStream *input_stream = g_file_read_finish(G_FILE(source_object), res, &error);
-
-    if (error != NULL) {
-        if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-            g_warning("media-background: Failed to read file: %s", error->message);
-        }
-        g_error_free(error);
+    request->stream = G_INPUT_STREAM(g_file_read_finish(G_FILE(source_object), res, &error));
+    if (!request->stream) {
+        art_request_error(request, error);
         return;
     }
-
-    if (!is_active || !ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) {
-        g_object_unref(input_stream);
-        return;
-    }
-
-    gchar *cache_path = get_cache_path();
-
-    GFile *cache_file = g_file_new_for_path(cache_path);
-    GFileOutputStream *output_stream = g_file_replace(
-        cache_file, NULL, FALSE, G_FILE_CREATE_REPLACE_DESTINATION, NULL, &error);
-
-    if (error != NULL) {
-        g_warning("media-background: Failed to create cache: %s", error->message);
-        g_error_free(error);
-        g_object_unref(input_stream);
-        g_object_unref(cache_file);
-        g_free(cache_path);
-        return;
-    }
-
-    g_output_stream_splice(
-        G_OUTPUT_STREAM(output_stream),
-        G_INPUT_STREAM(input_stream),
-        G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
-        NULL, &error);
-
-    g_object_unref(input_stream);
-    g_object_unref(output_stream);
-    g_object_unref(cache_file);
-
-    if (error != NULL) {
-        g_warning("media-background: Failed to save: %s", error->message);
-        g_error_free(error);
-        g_free(cache_path);
-        return;
-    }
-
-    on_image_saved(cache_path, ctx);
-    g_free(cache_path);
+    read_art_chunk(request);
 }
 
 static void http_callback(GObject *source_object, GAsyncResult *res, gpointer user_data) {
-    struct Window *ctx = user_data;
+    struct art_request *request = user_data;
     GError *error = NULL;
-    GInputStream *stream = soup_session_send_finish(SOUP_SESSION(source_object), res, &error);
+    request->stream = soup_session_send_finish(SOUP_SESSION(source_object), res, &error);
+    if (!request->stream) {
+        art_request_error(request, error);
+        return;
+    }
+    if (!SOUP_STATUS_IS_SUCCESSFUL(soup_message_get_status(request->message))) {
+        art_request_error(request, g_error_new(G_IO_ERROR, G_IO_ERROR_FAILED,
+                          "Album art HTTP status: %u", soup_message_get_status(request->message)));
+        return;
+    }
+    read_art_chunk(request);
+}
 
-    if (error != NULL) {
-        if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-            g_warning("media-background: HTTP request failed: %s", error->message);
+static gboolean start_art_request(struct Window *ctx, const gchar *uri) {
+    const gchar *scheme = g_uri_peek_scheme(uri);
+    gboolean local = g_strcmp0(scheme, "file") == 0;
+    if (!local && g_strcmp0(scheme, "http") != 0 && g_strcmp0(scheme, "https") != 0) return FALSE;
+
+    struct art_request *request = g_new0(struct art_request, 1);
+    request->provider = g_object_ref(MEDIA_BG(ctx)->css_provider);
+    request->cancellable = g_object_ref(MEDIA_BG(ctx)->cancellable);
+    request->bytes = g_byte_array_new();
+    gchar *path = get_cache_path();
+    request->cache_file = g_file_new_for_path(path);
+    g_free(path);
+    request->timeout = g_timeout_source_new(ART_TIMEOUT_MS);
+    g_source_set_callback(request->timeout, art_request_timeout,
+                          g_object_ref(request->cancellable), g_object_unref);
+    g_source_attach(request->timeout, NULL);
+
+    if (local) {
+        GFile *file = g_file_new_for_uri(uri);
+        g_file_read_async(file, G_PRIORITY_DEFAULT, request->cancellable, file_read_callback, request);
+        g_object_unref(file);
+    } else {
+        request->message = soup_message_new(SOUP_METHOD_GET, uri);
+        if (!request->message) {
+            art_request_free(request);
+            return FALSE;
         }
-        g_error_free(error);
-        return;
+        soup_session_send_async(soup_session, request->message, G_PRIORITY_DEFAULT,
+                                request->cancellable, http_callback, request);
     }
-
-    if (!is_active || !ctx || !MEDIA_BG(ctx) || !MEDIA_BG(ctx)->is_valid) {
-        g_object_unref(stream);
-        return;
-    }
-
-    gchar *cache_path = get_cache_path();
-
-    GFile *cache_file = g_file_new_for_path(cache_path);
-    GFileOutputStream *output_stream = g_file_replace(
-        cache_file, NULL, FALSE, G_FILE_CREATE_REPLACE_DESTINATION, NULL, &error);
-
-    if (error != NULL) {
-        g_warning("media-background: Failed to create cache: %s", error->message);
-        g_error_free(error);
-        g_object_unref(stream);
-        g_object_unref(cache_file);
-        g_free(cache_path);
-        return;
-    }
-
-    g_output_stream_splice(
-        G_OUTPUT_STREAM(output_stream),
-        stream,
-        G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
-        NULL, &error);
-
-    g_object_unref(output_stream);
-    g_object_unref(cache_file);
-
-    if (error != NULL) {
-        g_warning("media-background: Failed to save: %s", error->message);
-        g_error_free(error);
-        g_free(cache_path);
-        return;
-    }
-
-    on_image_saved(cache_path, ctx);
-    g_free(cache_path);
+    return TRUE;
 }
 
 static void load_fallback(struct Window *ctx) {
+    if (MEDIA_BG(ctx)->cancellable) g_cancellable_cancel(MEDIA_BG(ctx)->cancellable);
     // Clear album art, let style.css show default background
     update_background_css(ctx, NULL);
+    g_object_set_data(G_OBJECT(MEDIA_BG(ctx)->css_provider), "media-bg-cache", NULL);
 }
 
 static void load_album_art(struct Window *ctx) {
@@ -360,23 +424,7 @@ static void load_album_art(struct Window *ctx) {
         return;
     }
 
-    const char *scheme = g_uri_peek_scheme(uri);
-
-    if (g_strcmp0("file", scheme) == 0) {
-        GFile *file = g_file_new_for_uri(uri);
-        g_file_read_async(file, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, file_read_callback, ctx);
-        g_object_unref(file);
-    } else if (g_strcmp0("http", scheme) == 0 || g_strcmp0("https", scheme) == 0) {
-        SoupMessage *msg = soup_message_new(SOUP_METHOD_GET, uri);
-        if (msg) {
-            soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, http_callback, ctx);
-            g_object_unref(msg);
-        } else {
-            load_fallback(ctx);
-        }
-    } else {
-        load_fallback(ctx);
-    }
+    if (!start_art_request(ctx, uri)) load_fallback(ctx);
 
     g_free(uri);
 }
@@ -409,23 +457,7 @@ static void load_album_art_from_metadata(struct Window *ctx, GVariant *metadata)
         return;
     }
 
-    const char *scheme = g_uri_peek_scheme(uri);
-
-    if (g_strcmp0("file", scheme) == 0) {
-        GFile *file = g_file_new_for_uri(uri);
-        g_file_read_async(file, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, file_read_callback, ctx);
-        g_object_unref(file);
-    } else if (g_strcmp0("http", scheme) == 0 || g_strcmp0("https", scheme) == 0) {
-        SoupMessage *msg = soup_message_new(SOUP_METHOD_GET, uri);
-        if (msg) {
-            soup_session_send_async(soup_session, msg, G_PRIORITY_DEFAULT, MEDIA_BG(ctx)->cancellable, http_callback, ctx);
-            g_object_unref(msg);
-        } else {
-            load_fallback(ctx);
-        }
-    } else {
-        load_fallback(ctx);
-    }
+    if (!start_art_request(ctx, uri)) load_fallback(ctx);
 
     g_variant_unref(art_url_variant);
 }
@@ -589,7 +621,6 @@ void on_window_create(struct GtkLock *gtklock, struct Window *ctx) {
     MODULE_DATA(ctx) = g_malloc0(sizeof(struct media_background));
 
     MEDIA_BG(ctx)->css_provider = gtk_css_provider_new();
-    MEDIA_BG(ctx)->current_art_path = NULL;
     MEDIA_BG(ctx)->cancellable = NULL;
     MEDIA_BG(ctx)->is_valid = TRUE;
 
@@ -603,6 +634,9 @@ void on_window_create(struct GtkLock *gtklock, struct Window *ctx) {
 }
 
 void on_focus_change(struct GtkLock *gtklock, struct Window *win, struct Window *old) {
+    if (old && old != win && MODULE_DATA(old) && MEDIA_BG(old)->cancellable) {
+        g_cancellable_cancel(MEDIA_BG(old)->cancellable);
+    }
     if (is_active && win && MODULE_DATA(win)) {
         load_album_art(win);
     }
@@ -630,7 +664,6 @@ void on_window_destroy(struct GtkLock *gtklock, struct Window *ctx) {
                 GTK_STYLE_PROVIDER(MEDIA_BG(ctx)->css_provider));
             g_object_unref(MEDIA_BG(ctx)->css_provider);
         }
-        g_free(MEDIA_BG(ctx)->current_art_path);
         g_free(MODULE_DATA(ctx));
         MODULE_DATA(ctx) = NULL;
     }
