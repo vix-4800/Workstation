@@ -1,9 +1,9 @@
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
+from pathlib import Path
 
 try:
     import yaml
@@ -50,10 +50,10 @@ class AnsibleTagsTest(unittest.TestCase):
                 "gather_facts": False,
                 "roles": [{"role": role, "tags": [role]} for role in ("network", "desktop", "development")],
             }]))
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: S603
                 [ANSIBLE, "-i", "localhost,", str(playbook), "--tags", "config"],
                 cwd=work, env=os.environ | {"ANSIBLE_CONFIG": str(config), "ANSIBLE_LOCAL_TEMP": str(work / "tmp")},
-                text=True, capture_output=True, timeout=30,
+                text=True, capture_output=True, timeout=30, check=False,
             )
             output = result.stdout + result.stderr
             self.assertEqual(result.returncode, 0, output)

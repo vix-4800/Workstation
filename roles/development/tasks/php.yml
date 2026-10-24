@@ -45,7 +45,8 @@
       - --json
       - allow-plugins.phpstan/extension-installer
       - 'true'
-  when: "'[allow-plugins.phpstan/extension-installer] true' not in development_composer_config.stdout_lines"
+  when: >-
+    '[allow-plugins.phpstan/extension-installer] true' not in development_composer_config.stdout_lines
   changed_when: true
   become: false
   tags:
