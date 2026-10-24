@@ -1,0 +1,9 @@
+---
+- name: Install shell packages
+  community.general.pacman:
+    name: '{{ shell_packages }}'
+    state: present
+  become: true
+  tags:
+    - shell
+    - packages

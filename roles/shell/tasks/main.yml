@@ -1,9 +1,6 @@
 ---
 - name: Install shell packages
-  community.general.pacman:
-    name: '{{ shell_packages }}'
-    state: present
-  become: true
+  ansible.builtin.import_tasks: packages.yml
   tags:
     - shell
     - packages
@@ -17,14 +14,7 @@
     - shell
 
 - name: Deploy shell configs
-  ansible.builtin.file:
-    src: '{{ dotfiles_dir }}/roles/shell/files/{{ item.src }}'
-    dest: '{{ item.dest }}'
-    state: link
-    force: true
-  loop: '{{ shell_configs }}'
-  loop_control:
-    label: '{{ item.src }}'
+  ansible.builtin.import_tasks: config.yml
   tags:
     - shell
     - config

@@ -25,6 +25,11 @@ jobs:
       - name: Install Ansible collections
         run: ansible-galaxy collection install -r requirements.yml
 
+      - name: Test config tag routing and WireGuard secret handling
+        run: |
+          python3 -m unittest discover -s tests -p test_ansible_tags.py -v
+          python3 -m unittest discover -s tests -p test_wireguard_deployment.py -v
+
       - name: Create vault password file
         run: echo "ci" > .vault-password && chmod 600 .vault-password
 
