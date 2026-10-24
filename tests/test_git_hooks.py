@@ -26,6 +26,10 @@ class GitHooksTest(unittest.TestCase):
             (binary / name).symlink_to(ROOT / "roles/editor/scripts" / name)
         self.config = home / ".gitconfig"
         self.config.write_text((ROOT / "roles/editor/files/git/gitconfig").read_text())
+        self.gitleaks_config = home / ".gitleaks.toml"
+        self.gitleaks_config.write_text(
+            (ROOT / "roles/development/files/tools/gitleaks/.gitleaks.toml").read_text(),
+        )
         self.env = {key: value for key, value in os.environ.items()
                     if not key.startswith(("GIT_", "GITLEAKS_"))}
         self.env.update(HOME=str(home), GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL="/dev/null")
@@ -107,6 +111,28 @@ class GitHooksTest(unittest.TestCase):
             with self.subTest(config=config):
                 self.write(".gitleaks.toml", config.read_text())
                 self.test_staged_secret_blocks_and_is_redacted()
+
+    def test_global_gitleaks_policy_overrides_repository_and_environment(self):
+        with self.gitleaks_config.open("a") as config:
+            config.write('\n[[rules]]\nid = "global-policy"\n'
+                         'description = "Test global policy"\n'
+                         "regex = '''workstation-secret-check-fixture'''\n")
+        self.write(".gitleaks.toml", "[extend]\nuseDefault = true\n"
+                   "[[allowlists]]\npaths = ['.*']\n")
+        self.env["GITLEAKS_CONFIG"] = str(self.repo / ".gitleaks.toml")
+        self.write("policy.txt", "workstation-secret-check-fixture\n")
+        self.git("add", ".")
+        result = self.hook("pre-commit")
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("leaks found", result.stderr)
+
+        self.git("commit", "-qm", "policy fixture")
+        local = self.git("rev-parse", "HEAD")
+        updates = self.work / "updates"
+        updates.write_text(f"refs/heads/main {local} refs/heads/main {'0' * len(local)}\n")
+        result = self.hook(f"--to-stdin={updates}", "pre-push", "--", "origin", "/unused")
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("leaks found", result.stderr)
 
     def test_pre_push_scans_commits_with_empty_index(self):
         self.write("clean.txt", "clean\n")
