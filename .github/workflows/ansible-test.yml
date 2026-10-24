@@ -56,8 +56,9 @@ jobs:
 
       - uses: actions/checkout@v7
 
-      - name: Install Ansible
-        run: pacman -S --noconfirm ansible
+      - name: Install Ansible and check-mode prerequisites
+        # Check mode does not install packages that own config directories and users.
+        run: pacman -S --noconfirm ansible bluez wireguard-tools greetd
 
       - name: Install Ansible collections system-wide
         run: ansible-galaxy collection install -r requirements.yml -p /usr/share/ansible/collections
