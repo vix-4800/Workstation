@@ -1,4 +1,13 @@
 ---
+- name: Install AI tools runtime dependencies
+  community.general.pacman:
+    name: '{{ ai_tools_packages }}'
+    state: present
+  become: true
+  tags:
+    - ai-tools
+    - packages
+
 - name: Ensure AI tools binary directory exists
   ansible.builtin.file:
     path: '{{ home }}/.local/bin'

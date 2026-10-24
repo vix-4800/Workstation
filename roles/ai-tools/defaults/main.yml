@@ -1,4 +1,7 @@
 ---
+ai_tools_packages:
+  - uv
+
 ai_tools_global_instruction_repo_src: agents/instructions/AGENTS.md
 ai_tools_global_instruction_home_path: '{{ home }}/.agents/instructions/AGENTS.md'
 ai_tools_health_timeout_seconds: 30
