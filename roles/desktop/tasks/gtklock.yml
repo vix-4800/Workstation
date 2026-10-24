@@ -1,7 +1,18 @@
 ---
+- name: Install gtklock companion modules
+  community.general.pacman:
+    name: '{{ desktop_gtklock_packages }}'
+    state: present
+  become: true
+  tags:
+    - desktop
+    - packages
+
 - name: Build gtklock-media-background-module
   ansible.builtin.command:
-    cmd: meson setup build --reconfigure
+    cmd: >-
+      meson setup build --reconfigure
+      --prefix={{ desktop_gtklock_prefix }} --libdir={{ desktop_gtklock_libdir }}
     chdir: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-media-background-module'
   changed_when: true
   tags:
@@ -29,7 +40,9 @@
 
 - name: Build gtklock-network-module
   ansible.builtin.command:
-    cmd: meson setup build --reconfigure
+    cmd: >-
+      meson setup build --reconfigure
+      --prefix={{ desktop_gtklock_prefix }} --libdir={{ desktop_gtklock_libdir }}
     chdir: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-network-module'
   changed_when: true
   tags:
@@ -57,10 +70,11 @@
 
 - name: Build gtklock-battery-module
   ansible.builtin.command:
-    cmd: meson setup build --reconfigure
+    cmd: >-
+      meson setup build --reconfigure
+      --prefix={{ desktop_gtklock_prefix }} --libdir={{ desktop_gtklock_libdir }}
     chdir: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module'
   changed_when: true
-  when: has_battery
   tags:
     - desktop
     - packages
@@ -70,7 +84,6 @@
     cmd: meson compile -C build
     chdir: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module'
   changed_when: true
-  when: has_battery
   tags:
     - desktop
     - packages
@@ -81,7 +94,6 @@
     chdir: '{{ dotfiles_dir }}/roles/desktop/files/gtklock/gtklock-battery-module'
   become: true
   changed_when: true
-  when: has_battery
   tags:
     - desktop
     - packages

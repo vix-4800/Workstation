@@ -1,4 +1,10 @@
 ---
+desktop_gtklock_prefix: /usr
+desktop_gtklock_libdir: lib
+desktop_gtklock_packages:
+  - gtklock-userinfo-module
+  - gtklock-playerctl-module
+
 desktop_configs:
   - src: sway
     dest: '{{ home }}/.config/sway'

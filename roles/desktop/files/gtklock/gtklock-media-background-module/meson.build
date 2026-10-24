@@ -32,9 +32,10 @@ else
 endif
 
 shared_module(
-  'media-background',
+  'media-background-module',
   gtklock_media_background_module_set,
   dependencies: dependencies,
   install: true,
-  install_dir: gtklock_module_dir / 'modules',
+  name_prefix: '',
+  install_dir: gtklock_module_dir,
 )
