@@ -142,11 +142,14 @@ return {
     lint.linters.phpmd = lint.linters.phpmd or {}
     lint.linters.phpmd.cmd = vim.fn.expand("~/.config/composer/vendor/bin/phpmd")
     lint.linters.phpmd.args = {
+      "analyze",
+      "--no-progress",
+      "--format=json",
+      "--ruleset=" .. configs.getConfig("phpmd"),
+      "--",
       function()
         return vim.api.nvim_buf_get_name(0)
       end,
-      "json",
-      configs.getConfig("phpmd"),
     }
     lint.linters.phpmd.stdin = false
 

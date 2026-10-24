@@ -17,9 +17,10 @@ else
 endif
 
 shared_module(
-  'network',
+  'network-module',
   files('source.c'),
   dependencies : dependencies,
   install       : true,
-  install_dir   : gtklock_module_dir / 'modules',
+  name_prefix   : '',
+  install_dir   : gtklock_module_dir,
 )

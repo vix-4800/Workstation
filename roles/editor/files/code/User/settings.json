@@ -63,6 +63,7 @@
   "chat.checkpoints.enabled": false,
   "chat.customAgentInSubagent.enabled": true,
   "chat.editing.confirmEditRequestRemoval": false,
+  "chat.experimental.richLinks.enabled": true,
   "chat.instructionsFilesLocations": {
     ".cursor/rules": false,
     ".github/instructions": true,
@@ -73,9 +74,6 @@
   "chat.mcp.gallery.enabled": true,
   "chat.mcp.serverSampling": {
     "Global in Code: git": {
-      "allowedModels": ["copilot/auto"]
-    },
-    "Global in Code: io.github.github/github-mcp-server": {
       "allowedModels": ["copilot/auto"]
     },
     "Global in Code: microsoft/markitdown": {
@@ -256,6 +254,7 @@
     "blueman",
     "bluez",
     "brightnessctl",
+    "captainhook",
     "catppuccin",
     "certbot",
     "certonly",
@@ -327,10 +326,10 @@
     "pycache",
     "pyright",
     "Queueable",
-    "qwen",
     "Redirector",
     "redisinsight",
     "regreet",
+    "Remnawave",
     "renderable",
     "rgba",
     "sallersphere",
@@ -381,6 +380,7 @@
     "капча",
     "линтинг",
     "разработке",
+    "токену",
     "Успешно",
     "хелпер"
   ],
@@ -394,6 +394,8 @@
   "diffEditor.experimental.showMoves": false,
   "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.maxComputationTime": 0,
+  "diffEditor.renderSideBySide": true,
+  "diffEditor.useInlineViewWhenSpaceIsLimited": false,
   "docker.extension.enableComposeLanguageServer": true,
   "docker.lsp.telemetry": "off",
   "editor.accessibilitySupport": "off",
@@ -497,7 +499,6 @@
     "**/.mypy_cache": true,
     "**/.phpunit.cache": true,
     "**/.pytest_cache": true,
-    "**/.serena/**": true,
     "**/.vscode-test": true,
     "**/out": true
   },
@@ -550,7 +551,7 @@
   // ],
   "github.copilot.chat.copilotMemory.enabled": true,
   "github.copilot.chat.customInstructionsInSystemMessage": true,
-  "github.copilot.chat.githubMcpServer.enabled": true,
+  "github.copilot.chat.githubMcpServer.enabled": false,
   "github.copilot.chat.newWorkspace.useContext7": true,
   "github.copilot.chat.responsesApi.toolSearchTool.enabled": true,
   "github.copilot.chat.searchSubagent.enabled": true,
@@ -558,16 +559,16 @@
   "github.copilot.chat.updated53CodexPrompt.enabled": true,
   "github.copilot.editor.enableCodeActions": false,
   "github.copilot.enable": {
-    ".env": false,
     "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false,
+    ".env": false,
     "dotenv": false,
     "log": false,
     "Log": false,
-    "markdown": true,
-    "mdc": true,
-    "php": true,
-    "plaintext": true,
-    "scminput": false
+    "mdc": false,
+    "php": true
   },
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.nextEditSuggestions.fixes": false,
@@ -1492,7 +1493,14 @@
       "kind": "write"
     },
     "PHP Mess Detector": {
-      "args": ["${file}", "text", "~/.config/phpmd/phpmd.xml"],
+      "args": [
+        "analyze",
+        "--no-progress",
+        "--format=text",
+        "--ruleset=~/.config/phpmd/phpmd.yml",
+        "--",
+        "${file}"
+      ],
       "command": "phpmd",
       "kind": "diagnostic",
       "parser": {
@@ -1681,6 +1689,7 @@
   "php.suggest.basic": false,
   "phpImportHelper.autoAliasConflicts": true,
   "phpImportHelper.autoAliasPrefixes": ["Core", "Base"],
+  "phpImportHelper.autoFixCase": true,
   "phpImportHelper.autoFoldUses": false,
   "phpImportHelper.autoImportOnSave": true,
   "phpImportHelper.autoSort": false,

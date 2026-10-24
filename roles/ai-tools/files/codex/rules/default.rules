@@ -1,7 +1,7 @@
-# Codex rules only apply to commands that would run outside the sandbox.
-# Unlike Claude's permissions model, they do not support path-based read rules.
-# Read-only inspection commands are allowlisted here; mutating operations remain
-# in prompt.rules so the user keeps explicit control outside the sandbox.
+# Codex discovers regular .rules files only; deploy this file with copy, not link.
+# allow skips command approval, prompt requests it, and forbidden blocks it.
+# Explicit prompt and forbidden rules also apply with trusted projects.
+# With on-request, commands without a matching rule use the sandbox defaults.
 
 prefix_rule(
     pattern = ["ansible-lint"],
@@ -11,8 +11,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["awk"],
-    decision = "allow",
-    justification = "Read-only text processing; no side effects.",
+    decision = "prompt",
+    justification = "May execute commands through its program; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -41,8 +41,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["diff"],
-    decision = "allow",
-    justification = "Read-only comparison; no side effects.",
+    decision = "prompt",
+    justification = "Can write output with --output; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -71,8 +71,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["env"],
-    decision = "allow",
-    justification = "Read-only environment inspection; no side effects.",
+    decision = "prompt",
+    justification = "Can execute an arbitrary command; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -83,12 +83,73 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["find"],
-    decision = "allow",
-    justification = "Read-only filesystem search; no side effects.",
+    decision = "prompt",
+    justification = "Can delete files or execute commands; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(pattern=["gh", "auth", "status"], decision="allow")
 prefix_rule(pattern=["gh", "run", "view"], decision="allow")
+
+prefix_rule(
+    pattern = ["gh", "pr", ["checkout", "close", "comment", "create", "edit", "lock", "merge", "ready", "reopen", "revert", "review", "unlock", "update-branch"]],
+    decision = "prompt",
+    justification = "Changing pull requests or local checkout state requires explicit user approval.",
+    match = [
+        "gh pr edit 1234 --body-file /tmp/pr-body.txt",
+        "gh pr merge 1234 --squash",
+        "gh pr create --title Example --body Example",
+        "gh pr create --title Example --body-file /tmp/pr-body.txt --assignee @me",
+        "gh pr edit 1234 --add-assignee @me",
+        "gh pr edit 1234 --body 'Closes #42'",
+        "gh pr comment 1234 --body Example",
+    ],
+    not_match = [
+        "gh pr view 1234",
+        "gh pr diff 1234",
+        "gh pr checks 1234",
+        "gh pr list",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "issue", ["close", "comment", "create", "delete", "develop", "edit", "lock", "pin", "reopen", "transfer", "unlock", "unpin"]],
+    decision = "prompt",
+    justification = "Changing issues or local development state requires explicit user approval.",
+    match = [
+        "gh issue create --title Example --body-file /tmp/issue-body.txt --assignee @me",
+        "gh issue edit 1234 --body Example",
+        "gh issue edit 1234 --body-file /tmp/issue-body.txt",
+        "gh issue edit 1234 --add-assignee @me",
+    ],
+    not_match = ["gh issue view 1234", "gh issue list"],
+)
+
+prefix_rule(
+    pattern = ["gh", "run", ["cancel", "delete", "download", "rerun"]],
+    decision = "prompt",
+    justification = "Changing workflow runs or downloading artifacts requires explicit user approval.",
+    match = ["gh run rerun 1234", "gh run cancel 1234"],
+    not_match = ["gh run view 1234", "gh run list"],
+)
+
+prefix_rule(
+    pattern = ["gh", "workflow", ["disable", "enable", "run"]],
+    decision = "prompt",
+    justification = "Changing or triggering workflows requires explicit user approval.",
+    match = ["gh workflow run ci.yml"],
+    not_match = ["gh workflow view ci.yml", "gh workflow list"],
+)
+
+prefix_rule(
+    pattern = ["gh", "api"],
+    decision = "prompt",
+    justification = "API requests may mutate GitHub state, including through GraphQL; review the request before approval.",
+    match = [
+        "gh api repos/owner/repo/pulls/1234 --method PATCH -f body=Example",
+        "gh api graphql -f query=Example",
+    ],
+    not_match = ["gh pr view 1234", "gh run view 1234"],
+)
 
 prefix_rule(
     pattern = ["gh", "pr", "diff"],
@@ -143,7 +204,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", ["branch", "diff", "grep", "log", "ls-files", "rev-parse", "show", "status"]],
+    pattern = ["git", ["grep", "log", "ls-files", "rev-parse", "show", "status"]],
     decision = "allow",
     justification = "Low-risk inspection command approved for Codex outside the sandbox.",
 )
@@ -155,15 +216,32 @@ prefix_rule(
 )
 
 prefix_rule(
+    pattern = ["git", "branch"],
+    decision = "prompt",
+    justification = "Can delete branches; keep approval-gated outside the sandbox.",
+)
+
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Publishing branches or changing remote refs requires explicit user approval.",
+    match = [
+        "git push",
+        "git push --set-upstream origin feature/example",
+    ],
+    not_match = ["git pull", "git fetch", "git reset --hard"],
+)
+
+prefix_rule(
     pattern = ["go", ["build", "fmt", "test", "vet"]],
-    decision = "allow",
-    justification = "Standard Go toolchain commands; no destructive side effects.",
+    decision = "prompt",
+    justification = "May write build artifacts, caches, or formatted files; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
     pattern = ["gofmt"],
-    decision = "allow",
-    justification = "Standard Go formatter; consistent with go fmt.",
+    decision = "prompt",
+    justification = "Can rewrite source files with -w; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -240,8 +318,8 @@ prefix_rule(
 
 prefix_rule(
     pattern = ["sort"],
-    decision = "allow",
-    justification = "Read-only text sorting; no side effects.",
+    decision = "prompt",
+    justification = "Can write files with -o; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -287,9 +365,9 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern=["npm", "test"],
-    decision="allow",
-    justification="Running tests is allowed without user approval",
+    pattern = ["npm", "test"],
+    decision = "prompt",
+    justification = "Project-defined test scripts may execute arbitrary commands; keep approval-gated outside the sandbox.",
 )
 
 prefix_rule(
@@ -341,12 +419,6 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["sed"],
-    decision = "prompt",
-    justification = "Can modify files in-place with -i; keep approval-gated outside the sandbox.",
-)
-
-prefix_rule(
     pattern = ["xargs"],
     decision = "prompt",
     justification = "Executes arbitrary commands from input; keep approval-gated outside the sandbox.",
@@ -371,7 +443,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["git", ["am", "apply", "cherry-pick", "clean", "merge", "push", "rebase", "reset"]],
+    pattern = ["git", ["am", "apply", "cherry-pick", "clean", "merge", "rebase", "reset"]],
     decision = "forbidden",
     justification = "Blocked for safety. Use a reviewed manual workflow instead.",
 )

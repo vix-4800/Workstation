@@ -3,6 +3,9 @@
 
 title = "Dotfiles Gitleaks Config"
 
+[extend]
+useDefault = true
+
 [allowlist]
 description = "Allowlist for known false positives"
 
@@ -11,7 +14,7 @@ description = "Allowlist for known false positives"
 
 # Ignore specific paths that are known to be safe
 paths = [
-  '''config/git/gitconfig''', # May contain example emails/names
+  '''roles/editor/files/git/gitconfig''', # May contain example emails/names
   '''themes/''',              # Theme files may have placeholder tokens
   '''wallpapers/''',          # Image files
   '''\.png$''',

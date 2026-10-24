@@ -26,6 +26,7 @@ Challenge the implementation when it introduces:
 - A new CRUD controller for a narrow internal operation
 - A new endpoint where an existing endpoint/action could be extended safely
 - A new service, action, repository, DTO, enum, event, job, listener, policy, or config option that does not reduce complexity
+- A new class that duplicates an existing responsibility or lives outside the module that owns it
 - Copied logic instead of shared logic
 - Changes to unrelated modules, formatting, generated files, or public APIs
 - A broad refactor mixed into a bug fix
@@ -61,6 +62,9 @@ Good:
 - This adds a dedicated table for a value that is already derived from `orders.status` and `payments.status`, creating a second source of truth. A query/view/computed method would avoid data drift.
 - This creates a full CRUD controller, but the ticket only needs one internal approve/reject action. The extra create/update/delete paths expand the authorization and testing surface without supporting the requirement.
 - This duplicates the existing eligibility calculation from `SubscriptionPolicy`, so future rule changes will need to be made in two places.
+- This adds `App\Services\OrderStatusResolver`, but the existing order service already owns this rule. Reuse that service so future status changes do not have to update two implementations.
+
+Use `[suggestion]` for a justified design concern that does not currently break behaviour. Explain the concrete maintenance cost and a proportionate fix; a passing test suite does not make the concern irrelevant.
 
 ## Scope Review
 

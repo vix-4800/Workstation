@@ -14,3 +14,7 @@ services_common:
 
 # Additional services per host (merged in tasks)
 services_host: []
+
+# Keep legacy unit files available for existing symlinks without deploying them.
+services_excluded_unit_files:
+  - alsa-restore.service

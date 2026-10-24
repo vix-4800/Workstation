@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "^apply_patch$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/check-files.py\"",
+            "timeout": 25,
+            "statusMessage": "Checking edited file syntax"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.codex/hooks/check-files.py\"",
+            "timeout": 60,
+            "statusMessage": "Linting edited files"
+          }
+        ]
+      }
+    ]
+  }
+}

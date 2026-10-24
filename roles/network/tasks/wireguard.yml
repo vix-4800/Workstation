@@ -18,6 +18,8 @@
     group: root
     mode: '0600'
   become: true
+  diff: false
+  no_log: true
   register: network_wg_config
   tags:
     - network

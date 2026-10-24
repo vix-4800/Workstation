@@ -21,6 +21,8 @@
     "luacheck",
     "luacheckrc",
     "luarocks",
+    "mago",
+    "phpmnd",
     "pyproject",
     "regreet",
     "sqlfluff",

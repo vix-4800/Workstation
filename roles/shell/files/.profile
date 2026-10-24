@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # ~/.profile
 # This file is sourced by all POSIX-compatible shells
 
@@ -15,9 +16,6 @@ export PATH="${HOME}/.config/composer/vendor/bin:${PATH}"
 if [[ -d "${HOME}/.cargo/bin" ]]; then
     export PATH="${HOME}/.cargo/bin:${PATH}"
 fi
-
-# Add Neovim AppImage path
-export PATH="/opt/nvim-linux-x86_64/bin:${PATH}"
 
 # Add Node.js path (nvm - resolve latest installed version)
 nvm_dir="${HOME}/.local/share/nvm"

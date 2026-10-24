@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+notify-send \
+  --app-name=Codex \
+  --urgency=normal \
+  --icon=dialog-warning \
+  'Codex needs your attention'

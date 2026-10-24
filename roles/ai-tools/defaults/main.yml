@@ -1,15 +1,15 @@
 ---
+ai_tools_packages:
+  - uv
+
 ai_tools_global_instruction_repo_src: agents/instructions/AGENTS.md
 ai_tools_global_instruction_home_path: '{{ home }}/.agents/instructions/AGENTS.md'
 ai_tools_health_timeout_seconds: 30
 ai_tools_run_health_checks: false
-ai_tools_github_mcp_server_version: 0.32.0
 ai_tools_playwright_browser: firefox
+ai_tools_codex_rules_path: '{{ home }}/.codex/rules/default.rules'
 
 ai_tools_claude_mcp_servers_present:
-  - name: github
-    command: '{{ home }}/.local/bin/github-mcp-server-with-auth'
-    args: []
   - name: playwright
     command: npx
     args:
@@ -33,12 +33,14 @@ ai_tools_claude_marketplaces_present:
   - name: claude-plugins-official
 
 ai_tools_shared_skill_names:
+  - agents-md
   - api-design
   - backend-patterns
   - coding-standards
   - modern-php
   - security-review
   - code-review
+  - github-workflow
   - ansible-patterns
   - database-patterns
   - testing-strategy
@@ -68,8 +70,12 @@ ai_tools_repo_symlinks:
     dest: '{{ home }}/.config/opencode'
   - src: codex/config.toml
     dest: '{{ home }}/.codex/config.toml'
-  - src: codex/rules/default.rules
-    dest: '{{ home }}/.codex/rules/default.rules'
+  - src: codex/hooks.json
+    dest: '{{ home }}/.codex/hooks.json'
+  - src: codex/hooks
+    dest: '{{ home }}/.codex/hooks'
+  - src: codex/scripts/codex-notify
+    dest: '{{ home }}/.local/bin/codex-notify'
   - src: codex/agents
     dest: '{{ home }}/.codex/agents'
   - src: agents/commands

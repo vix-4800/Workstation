@@ -163,11 +163,11 @@ return {
               undefinedFunctions = true,
               undefinedMethods = true,
               undefinedProperties = true,
-              undefinedVariables = true,
+              undefinedVariables = "on",
               undefinedConstants = true,
               undefinedClassConstants = true,
               duplicateSymbols = true,
-              argumentCount = true,
+              argumentCount = "on",
               deprecated = true,
               languageConstraints = true,
               implementationErrors = true,
@@ -291,6 +291,9 @@ return {
       -- Bash
       vim.lsp.config("bashls", { capabilities = capabilities })
 
+      -- Fish
+      vim.lsp.config("fish_lsp", { capabilities = capabilities })
+
       -- JSON
       vim.lsp.config("jsonls", { capabilities = capabilities })
 
@@ -344,6 +347,7 @@ return {
       vim.lsp.enable("ts_ls")
       vim.lsp.enable("gopls")
       vim.lsp.enable("bashls")
+      vim.lsp.enable("fish_lsp")
       vim.lsp.enable("jsonls")
       vim.lsp.enable("yamlls")
       vim.lsp.enable("html")

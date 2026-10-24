@@ -1,0 +1,5 @@
+---
+interface:
+  display_name: GitHub Workflow
+  short_description: GitHub issues, branch push, and linked pull requests
+  default_prompt: Use $github-workflow for the requested issue and PR workflow with command approvals.

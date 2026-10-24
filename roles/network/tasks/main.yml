@@ -18,6 +18,7 @@
   tags:
     - network
     - usbguard
+    - config
 
 - name: Configure Bluetooth
   ansible.builtin.include_tasks:
@@ -25,9 +26,11 @@
     apply:
       tags:
         - network
+        - bluetooth
   tags:
     - network
     - bluetooth
+    - config
 
 - name: Configure WireGuard
   ansible.builtin.include_tasks:
@@ -38,6 +41,7 @@
   tags:
     - network
     - wireguard
+    - config
 
 - name: Configure v2raya
   ansible.builtin.include_tasks:
@@ -58,6 +62,7 @@
   tags:
     - network
     - dpi-bypass
+    - config
 
 - name: Ensure network config parent directories exist
   ansible.builtin.file:

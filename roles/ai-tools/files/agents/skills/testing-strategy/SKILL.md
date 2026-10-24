@@ -20,18 +20,20 @@ Load `code-review` when evaluating a diff for missing coverage. Load `modern-php
 
 ## Core Rules
 
-1. Test behaviour, not private implementation details.
-2. Match the test level to the risk.
-3. Prefer one clear regression test over many redundant shallow assertions.
-4. Cover the changed behaviour and the critical edge cases introduced by the change.
-5. Test root causes, not individual observed examples. Do not test only the reported narrow case; identify the underlying failure class and cover representative similar cases.
+1. Test behaviour, not private implementation details. Tests should exercise realistic use cases and verify outcomes that matter to users or calling code.
+2. Write tests only when they provide meaningful protection: do not add empty, trivial, or redundant tests just to make a suite report success or increase test count or coverage.
+3. Do not test source text or code structure as a substitute for behaviour. For example, checking that a method name is absent from a class with `!str_contains` does not verify a functional outcome. If the absence of a capability is part of the contract, verify it through the relevant public interface.
+4. Match the test level to the risk.
+5. Prefer one clear regression test over many redundant shallow assertions.
+6. Cover the changed behaviour and the critical edge cases introduced by the change.
+7. Test root causes, not individual observed examples. Do not test only the reported narrow case; identify the underlying failure class and cover representative similar cases.
 
 ## Test-Level Guidance
 
 ### Unit Tests
 
 - Use for pure logic, calculations, mappers, validators, and deterministic helpers.
-- Mock external dependencies aggressively.
+- Mock external dependencies at the boundary without mocking away the behaviour under test.
 - Keep them fast and isolated.
 
 ### Integration Or Feature Tests
@@ -42,8 +44,12 @@ Load `code-review` when evaluating a diff for missing coverage. Load `modern-php
 
 ## Review Checklist
 
+Apply the Core Rules to tests in the diff as well as to proposed tests. Check their setup, execution path, and assertions; a passing test is insufficient if it cannot detect a realistic regression.
+
 - Does the change introduce new behaviour without a corresponding test?
 - Is there a regression test for the bug being fixed?
 - Are authorization, validation, and persistence flows exercised at the right level?
 - Would the current tests still protect the behaviour after an internal refactor?
+- Do added or modified tests exercise real functionality and assert meaningful outcomes?
+- Could they pass when the relevant behaviour is broken because of invalid setup, tautological assertions, or excessive mocking?
 - Are migrations, background jobs, or cache invalidation paths covered where they matter?

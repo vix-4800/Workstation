@@ -2,7 +2,6 @@
 !.gitignore
 
 # Custom completions
-!workstation.fish
 !waybar.fish
 
 !phpcs.fish
@@ -16,3 +15,4 @@
 !flake8.fish
 !black.fish
 !php.fish
+!codex.fish

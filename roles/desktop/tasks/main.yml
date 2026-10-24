@@ -18,6 +18,7 @@
   tags:
     - desktop
     - waybar
+    - config
 
 - name: Build and install gtklock modules
   ansible.builtin.include_tasks:
@@ -28,6 +29,7 @@
   tags:
     - desktop
     - gtklock
+    - config
 
 - name: Setup notifications
   ansible.builtin.include_tasks:

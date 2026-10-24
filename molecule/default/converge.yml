@@ -9,6 +9,8 @@
   gather_facts: true
 
   vars:
+    ansible_user: molecule
+    ansible_remote_tmp: /tmp/ansible-molecule
     # Reduced package lists — sufficient to prove pacman tasks work
     base_essential_packages:
       - git
@@ -26,105 +28,22 @@
       - tmux
 
   tasks:
-    # ── base: packages ──────────────────────────────────────────────────────
-    - name: Install base essential packages
-      community.general.pacman:
-        name: '{{ base_essential_packages }}'
-        state: present
-      become: true
-      tags:
-        - base
-        - packages
+    - name: Install base packages through the production role
+      ansible.builtin.import_role:
+        name: base
+        tasks_from: packages
 
-    - name: Install base CLI packages
-      community.general.pacman:
-        name: '{{ base_cli_packages }}'
-        state: present
-      become: true
-      tags:
-        - base
-        - packages
+    - name: Deploy base configs through the production role
+      ansible.builtin.import_role:
+        name: base
+        tasks_from: config
 
-    # ── base: config symlinks ────────────────────────────────────────────────
-    - name: Deploy /etc/environment symlink
-      ansible.builtin.file:
-        src: '{{ dotfiles_dir }}/roles/base/files/environment'
-        dest: /etc/environment
-        state: link
-        force: true
-      become: true
-      tags:
-        - base
-        - config
+    - name: Install shell packages through the production role
+      ansible.builtin.import_role:
+        name: shell
+        tasks_from: packages
 
-    - name: Deploy user-dirs config symlink
-      ansible.builtin.file:
-        src: '{{ dotfiles_dir }}/roles/base/files/user-dirs.dirs'
-        dest: '{{ home }}/.config/user-dirs.dirs'
-        state: link
-        force: true
-      become: true
-      become_user: molecule
-      tags:
-        - base
-        - config
-
-    - name: Deploy fontconfig symlink
-      ansible.builtin.file:
-        src: '{{ dotfiles_dir }}/roles/base/files/fontconfig'
-        dest: '{{ home }}/.config/fontconfig'
-        state: link
-        force: true
-      become: true
-      become_user: molecule
-      tags:
-        - base
-        - config
-
-    - name: Deploy editorconfig symlink
-      ansible.builtin.file:
-        src: '{{ dotfiles_dir }}/roles/base/files/.editorconfig'
-        dest: '{{ home }}/.editorconfig'
-        state: link
-        force: true
-      become: true
-      become_user: molecule
-      tags:
-        - base
-        - config
-
-    # ── shell: packages ──────────────────────────────────────────────────────
-    - name: Install shell packages
-      community.general.pacman:
-        name: '{{ shell_packages }}'
-        state: present
-      become: true
-      tags:
-        - shell
-        - packages
-
-    # ── shell: config symlinks ───────────────────────────────────────────────
-    - name: Deploy shell config symlinks
-      ansible.builtin.file:
-        src: '{{ dotfiles_dir }}/roles/shell/files/{{ item.src }}'
-        dest: '{{ item.dest }}'
-        state: link
-        force: true
-      become: true
-      become_user: molecule
-      loop:
-        - src: fish
-          dest: '{{ home }}/.config/fish'
-        - src: tmux
-          dest: '{{ home }}/.config/tmux'
-        - src: shell/aliases
-          dest: '{{ home }}/.aliases'
-        - src: bash/.bash_profile
-          dest: '{{ home }}/.bash_profile'
-        - src: bash/bashrc
-          dest: '{{ home }}/.bashrc'
-      loop_control:
-        label: '{{ item.src }}'
-      tags:
-        - shell
-        - config
+    - name: Deploy shell configs through the production role
+      ansible.builtin.import_role:
+        name: shell
+        tasks_from: config

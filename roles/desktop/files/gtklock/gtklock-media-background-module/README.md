@@ -31,7 +31,7 @@ Custom gtklock module that sets the current media album art as the lock screen b
 ## Build & Install
 
 ```bash
-cd config/gtklock/gtklock-media-background-module
+cd roles/desktop/files/gtklock/gtklock-media-background-module
 
 meson setup build
 meson compile -C build

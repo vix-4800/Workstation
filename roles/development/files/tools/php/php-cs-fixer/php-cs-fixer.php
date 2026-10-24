@@ -75,7 +75,16 @@ return new Config()
                 'var',
             ],
         ], // Aligns tags like @param, @return, etc.
-        'phpdoc_order' => ['order' => ['param', 'return', 'throws']], // Orders tags: @param → @return → @throws
+        'phpdoc_order' => [
+            'order' => [
+                'property',
+                'property-read',
+                'property-write',
+                'param',
+                'return',
+                'throws',
+            ],
+        ], // Orders tags: @param → @return → @throws
         'phpdoc_summary' => false, // Doesn't require a period at the end of the first sentence
         'phpdoc_to_comment' => false, // Doesn't convert /** */ into regular // comments
         'phpdoc_scalar' => [
@@ -91,7 +100,16 @@ return new Config()
                 'str',
             ],
         ], // Normalizes scalar types (e.g., integer → int)
-        'phpdoc_separation' => true, // Ensures separation between different types of tags
+        'phpdoc_separation' => [
+            'groups' => [
+                ['author', 'copyright', 'license'],
+                ['category', 'package', 'subpackage'],
+                ['deprecated', 'link', 'see', 'since'],
+                ['property'],
+                ['property-read'],
+                ['property-write'],
+            ],
+        ], // Ensures separation between different types of tags
         'phpdoc_trim' => true, // Trims PHPDoc comments
         'phpdoc_trim_consecutive_blank_line_separation' => true, // Trims blank line separation in PHPDoc comments
         // 'no_superfluous_phpdoc_tags' => true, // Removes unnecessary PHPDoc tags
@@ -369,6 +387,8 @@ return new Config()
         'VixFixer/nullsafe_property_chain_in_null_coalesce' => true,
         'VixFixer/array_elements_new_line' => true, // Ensures each array element is on its own line
         'VixFixer/multiline_condition_parentheses' => true, // Ensures each condition in a multiline if statement is on its own line
+        'VixFixer/multiline_condition_line_breaks' => true, // Ensures each condition in a multiline if statement is on its own line
+        'VixFixer/multiline_ternary_expression' => true, // Ensures each part of a multiline ternary expression is on its own line
 
         // ─────────────────────────────────────────────────────────────────────────
         // Misc

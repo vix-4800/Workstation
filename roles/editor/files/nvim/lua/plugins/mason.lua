@@ -5,6 +5,7 @@ return {
     opts = function()
       local icons = require("config.icons")
       return {
+        PATH = "append",
         ui = {
           icons = icons.mason,
         },
