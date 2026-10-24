@@ -56,8 +56,9 @@ jobs:
 
       - uses: actions/checkout@v7
 
-      - name: Install Ansible
-        run: pacman -S --noconfirm ansible
+      - name: Install Ansible and check-mode prerequisites
+        # Check mode does not install packages that own config directories and users.
+        run: pacman -S --noconfirm ansible bluez wireguard-tools greetd
 
       - name: Install Ansible collections system-wide
         run: ansible-galaxy collection install -r requirements.yml -p /usr/share/ansible/collections
@@ -66,6 +67,7 @@ jobs:
         run: |
           useradd -m ci
           echo "ci ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ci
+          echo 'Defaults env_keep += "SYSTEMD_OFFLINE"' >> /etc/sudoers.d/ci
 
       - name: Create vault password file
         run: |
@@ -87,6 +89,7 @@ jobs:
           has_battery: false
           base_timezone: UTC
           network_usbguard_mode: audit
+          network_zapret2_service_enabled: false
           git_user_name: CI Runner
           git_user_email: ci@example.com
           EOF
@@ -95,4 +98,7 @@ jobs:
         run: chown -R ci:ci "$GITHUB_WORKSPACE"
 
       - name: Run playbook in check mode
-        run: sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True ansible-playbook site.yml --check --diff --skip-tags services
+        # Handlers still run with --skip-tags services; this container has no systemd.
+        run: >-
+          sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True SYSTEMD_OFFLINE=1
+          ansible-playbook site.yml --check --diff --skip-tags services
