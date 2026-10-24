@@ -1,9 +1,8 @@
 import os
-from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "roles/shell/files/fish/functions/system-upgrade.fish"
@@ -19,7 +18,8 @@ class SystemUpgradeTest(unittest.TestCase):
             for name, body in {
                 "uname": "echo test-kernel",
                 "fish": "echo 'fish, version 4.0.0'",
-                "pacman": 'case "$1" in -Qoq) exit 1;; esac',
+                "pacman": 'case "$1" in -Qoq) exit 1;; -Syu) echo PACMAN_UPGRADE_RAN;; esac',
+                "reflector": "echo REFLECTOR_WAS_INVOKED; exit 1",
                 "sudo": 'exec "$@"',
             }.items():
                 path = binary / name
@@ -44,9 +44,9 @@ class SystemUpgradeTest(unittest.TestCase):
                 "NVIM_TEST_FAILURE": failure,
             }
             env.pop("NVIM_APPNAME", None)
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: S603 - arguments are controlled test fixtures.
                 ["/usr/bin/fish", "--no-config", "-c", f"source '{SCRIPT}'; system-upgrade"],
-                env=env, text=True, capture_output=True, timeout=15,
+                env=env, text=True, capture_output=True, timeout=15, check=False,
             )
             return result, log.read_text().splitlines() if log.exists() else []
 
@@ -60,6 +60,12 @@ class SystemUpgradeTest(unittest.TestCase):
             self.assertIn("--headless", call)
             self.assertIn("-u NONE", call)
             self.assertIn("-i NONE", call)
+
+    def test_upgrades_packages_without_refreshing_mirrors(self):
+        result, _ = self.run_upgrade()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("PACMAN_UPGRADE_RAN", result.stdout)
+        self.assertNotIn("REFLECTOR_WAS_INVOKED", result.stdout)
 
     def test_manager_failure_is_reported_and_other_manager_still_runs(self):
         for manager in ("lazy", "mason"):

@@ -47,17 +47,6 @@
     - base
     - packages
 
-- name: Update mirror list with reflector
-  ansible.builtin.command:
-    cmd: >-
-      reflector --country {{ base_reflector_country }} --latest 10 --age 24
-      --sort rate --save /etc/pacman.d/mirrorlist
-  become: true
-  changed_when: false
-  tags:
-    - base
-    - system
-
 - name: Deploy base configs
   ansible.builtin.import_tasks: config.yml
   tags:
@@ -98,6 +87,30 @@
   tags:
     - base
     - services
+
+- name: Create reflector config directory
+  ansible.builtin.file:
+    path: /etc/xdg/reflector
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  tags:
+    - base
+    - config
+
+- name: Deploy reflector config
+  ansible.builtin.template:
+    src: reflector.conf.j2
+    dest: /etc/xdg/reflector/reflector.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags:
+    - base
+    - config
 
 - name: Deploy reflector systemd units
   ansible.builtin.file:
