@@ -3,6 +3,9 @@
 
 title = "Dotfiles Gitleaks Config"
 
+[extend]
+useDefault = true
+
 [allowlist]
 description = "Allowlist for known false positives"
 

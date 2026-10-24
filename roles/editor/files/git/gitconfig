@@ -75,3 +75,12 @@ autoCorrect = prompt
 
 [maintenance]
 strategy = incremental
+
+[hook "php-lint"]
+event = pre-commit
+command = ~/.local/bin/check-staged-php
+
+[hook "secret-check"]
+event = pre-commit
+event = pre-push
+command = ~/.local/bin/check-secrets

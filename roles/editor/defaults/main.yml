@@ -25,3 +25,7 @@ editor_configs:
 editor_templates:
   - src: git/gitconfig.user.j2
     dest: '{{ home }}/.gitconfig.user'
+
+editor_scripts:
+  - check-staged-php
+  - check-secrets
