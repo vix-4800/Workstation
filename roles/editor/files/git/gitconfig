@@ -47,6 +47,7 @@ enabled = true
 [diff]
 algorithm = histogram
 colorMoved = default
+colorMovedWS = allow-indentation-change
 
 [log]
 date = relative
