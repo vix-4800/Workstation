@@ -185,7 +185,7 @@
 - name: Add splash parameter to GRUB kernel cmdline
   ansible.builtin.replace:
     path: /etc/default/grub
-    regexp: ^(GRUB_CMDLINE_LINUX_DEFAULT="(?!.*\bsplash\b)[^"]*)"$'
+    regexp: ^(GRUB_CMDLINE_LINUX_DEFAULT="(?!.*\bsplash\b)[^"]*)"$
     replace: \1 splash"
   become: true
   ignore_errors: '{{ ansible_check_mode }}'
