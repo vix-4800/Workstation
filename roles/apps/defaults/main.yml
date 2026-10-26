@@ -56,3 +56,5 @@ apps_power_packages:
 
 apps_tlp_settings:
   TLP_ENABLE: 1
+  START_CHARGE_THRESH_BAT0: 0
+  STOP_CHARGE_THRESH_BAT0: 90

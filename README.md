@@ -190,8 +190,9 @@ and enables `tlp.service`. The retired `auto-cpufreq` package is no longer insta
 remove an existing installation with the migration commands below.
 
 TLP uses its built-in power-saving defaults. Ansible deploys `/etc/tlp.d/10-workstation.conf`
-with `TLP_ENABLE=1`; override `apps_tlp_settings` in local host vars for hardware-specific settings.
-Settings in `/etc/tlp.conf` take precedence over this drop-in. No battery charge limits are set.
+with `TLP_ENABLE=1`, `START_CHARGE_THRESH_BAT0=0` and `STOP_CHARGE_THRESH_BAT0=90` to stop
+charging the primary battery at 90% on supported hardware. Override `apps_tlp_settings` in local
+host vars for hardware-specific settings. Settings in `/etc/tlp.conf` take precedence over this drop-in.
 See the [TLP configuration documentation](https://linrunner.de/tlp/settings/introduction.html).
 
 Powertop is installed for interactive diagnostics with `sudo powertop`. It needs no repository
@@ -212,7 +213,7 @@ sudo tlp-stat -c
 
 The first two commands apply only if `auto-cpufreq` is still installed. The user service restart
 loads the corrected batsignal command: notifications at 20% and 10%, and an unplug reminder at
-90%. These thresholds do not limit charging or trigger automatic suspend.
+90%. These notification thresholds do not control charging or trigger automatic suspend.
 
 ### Tags
 
