@@ -4,7 +4,7 @@ Documentation=man:batsignal(1)
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/batsignal -w 20 -c 10 -d 5 -f 90 -W "Battery Low" -C "Battery Critical" -F "Battery Full" -D "Unplug charger"
+ExecStart=/usr/bin/batsignal -w 20 -c 10 -f 90 -W "Battery Low" -C "Battery Critical" -F "Unplug charger"
 Restart=on-failure
 
 [Install]

@@ -177,9 +177,42 @@ inventory/
 | `display-manager` | Greetd + ReGreet |
 | `development` | PHP, Python, Go, Docker, linter configs |
 | `appearance` | GTK themes (nwg-look), fonts, cursors, icons, wallpapers, plymouth |
-| `apps` | Obsidian, Bitwarden, file-roller, gvfs-goa, Flatpak + Flathub, waypaper, auto-cpufreq (battery only) |
+| `apps` | Obsidian, Bitwarden, file-roller, gvfs-goa, Flatpak + Flathub, waypaper, TLP + Powertop (battery only) |
 | `services` | All systemd user services and timers (xdg-user-dirs, etc.) |
 | `ai-tools` | Claude Code, Codex, OpenCode, MCP/Serena, agent skills |
+
+### Laptop power management
+
+With `has_battery: true`, the `apps` role installs TLP and Powertop, disables existing
+`auto-cpufreq` and `power-profiles-daemon` services, masks `power-profiles-daemon` when present
+and the systemd rfkill service and socket,
+and enables `tlp.service`. The retired `auto-cpufreq` package is no longer installed or enabled;
+remove an existing installation with the migration commands below.
+
+TLP uses its built-in power-saving defaults. Ansible deploys `/etc/tlp.d/10-workstation.conf`
+with `TLP_ENABLE=1`; override `apps_tlp_settings` in local host vars for hardware-specific settings.
+Settings in `/etc/tlp.conf` take precedence over this drop-in. No battery charge limits are set.
+See the [TLP configuration documentation](https://linrunner.de/tlp/settings/introduction.html).
+
+Powertop is installed for interactive diagnostics with `sudo powertop`. It needs no repository
+configuration or service. Do not enable `powertop --auto-tune` at boot: it overwrites settings
+managed by TLP. See [TLP and Powertop](https://linrunner.de/tlp/faq/powertop.html).
+
+For an existing workstation, migrate before applying the updated roles:
+
+```bash
+sudo systemctl disable --now auto-cpufreq.service
+sudo pacman -R auto-cpufreq
+just role apps,services
+systemctl --user daemon-reload
+systemctl --user restart batsignal.service
+sudo tlp-stat -s
+sudo tlp-stat -c
+```
+
+The first two commands apply only if `auto-cpufreq` is still installed. The user service restart
+loads the corrected batsignal command: notifications at 20% and 10%, and an unplug reminder at
+90%. These thresholds do not limit charging or trigger automatic suspend.
 
 ### Tags
 

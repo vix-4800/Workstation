@@ -1,0 +1,98 @@
+---
+- name: Gather services before configuring laptop power management
+  ansible.builtin.service_facts:
+  tags:
+    - apps
+    - packages
+    - config
+    - services
+    - system
+
+- name: Disable conflicting power management services
+  ansible.builtin.systemd:
+    name: '{{ item }}'
+    enabled: false
+    state: stopped
+  become: true
+  loop:
+    - auto-cpufreq.service
+    - power-profiles-daemon.service
+  when: item in ansible_facts.services
+  tags:
+    - apps
+    - packages
+    - config
+    - services
+    - system
+
+- name: Mask power profiles daemon to prevent activation alongside TLP
+  ansible.builtin.systemd:
+    name: power-profiles-daemon.service
+    masked: true
+  become: true
+  when: ansible_facts.services['power-profiles-daemon.service'] is defined
+  tags:
+    - apps
+    - packages
+    - config
+    - services
+    - system
+
+- name: Install laptop power management packages
+  community.general.pacman:
+    name: '{{ apps_power_packages }}'
+    state: present
+  become: true
+  tags:
+    - apps
+    - packages
+
+- name: Ensure TLP configuration directory exists
+  ansible.builtin.file:
+    path: /etc/tlp.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+  tags:
+    - apps
+    - config
+    - system
+
+- name: Deploy TLP configuration
+  ansible.builtin.template:
+    src: tlp.conf.j2
+    dest: /etc/tlp.d/10-workstation.conf
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: Apply TLP configuration
+  tags:
+    - apps
+    - config
+    - system
+
+- name: Mask systemd rfkill units managed by TLP
+  ansible.builtin.systemd:
+    name: '{{ item }}'
+    masked: true
+    state: stopped
+  become: true
+  loop:
+    - systemd-rfkill.service
+    - systemd-rfkill.socket
+  tags:
+    - apps
+    - services
+
+- name: Enable TLP service
+  ansible.builtin.systemd:
+    name: tlp.service
+    enabled: true
+    state: started
+  become: true
+  tags:
+    - apps
+    - services
