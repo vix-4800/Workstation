@@ -127,16 +127,11 @@
     - apps
     - packages
 
-- name: Enable auto-cpufreq service
-  ansible.builtin.systemd:
-    name: auto-cpufreq
-    enabled: true
-    state: started
-  become: true
+- name: Configure laptop power management
+  ansible.builtin.import_tasks: power.yml
   when: has_battery | default(false)
   tags:
     - apps
-    - services
 
 - name: Add Flathub remote
   community.general.flatpak_remote:

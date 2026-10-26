@@ -97,7 +97,7 @@ just apply
 | `display-manager` | Greetd + ReGreet |
 | `development` | PHP, Python, Go, Rust, Docker, linter configs |
 | `appearance` | GTK, fonts, cursors, icons, wallpapers, themes |
-| `apps` | Obsidian, Bitwarden, Flatpak, waypaper, auto-cpufreq (battery only) |
+| `apps` | Obsidian, Bitwarden, Flatpak, waypaper, TLP + Powertop (battery only) |
 | `services` | Shared systemd user services and timers; other roles manage their own services |
 | `ai-tools` | Claude Code, Codex, Copilot CLI, OpenCode, agent skills |
 

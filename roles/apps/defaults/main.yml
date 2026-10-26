@@ -46,7 +46,15 @@ apps_waypaper_aur_packages:
 apps_aur_packages:
   - spotify
   - batsignal
-  - auto-cpufreq
   - better-control
   - obsidian
   - bitwarden
+
+apps_power_packages:
+  - tlp
+  - powertop
+
+apps_tlp_settings:
+  TLP_ENABLE: 1
+  START_CHARGE_THRESH_BAT0: 0
+  STOP_CHARGE_THRESH_BAT0: 90

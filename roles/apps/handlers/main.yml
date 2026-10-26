@@ -1,0 +1,7 @@
+---
+- name: Apply TLP configuration
+  ansible.builtin.command:
+    cmd: tlp start
+  changed_when: true
+  become: true
+  when: has_battery | default(false)
