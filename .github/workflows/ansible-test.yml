@@ -1,7 +1,7 @@
 ---
 name: Ansible Test
 
-on:
+'on':
   push:
   pull_request:
 
@@ -100,5 +100,5 @@ jobs:
       - name: Run playbook in check mode
         # Handlers still run with --skip-tags services; this container has no systemd.
         run: >-
-          sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True SYSTEMD_OFFLINE=1
-          ansible-playbook site.yml --check --diff --skip-tags services
+          sudo -u ci env HOME=/home/ci ANSIBLE_FORCE_COLOR=True SYSTEMD_OFFLINE=1 ansible-playbook site.yml --check --diff
+          --skip-tags services
