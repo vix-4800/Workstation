@@ -59,3 +59,23 @@ lint:
 # Validate syntax only
 check:
     ansible-playbook {{yml_file}} --syntax-check
+
+# Apply Debian-family workstation state
+debian-apply: _debian
+
+# Preview Debian-family workstation state
+debian-plan: (_debian "--check")
+
+# Check the Debian-family playbook without local credentials
+debian-check:
+    ANSIBLE_CONFIG=ansible-debian.cfg ansible-playbook debian.yml --syntax-check
+
+[private]
+_debian preview="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    vault_args=()
+    if [[ -r .vault-password ]]; then
+        vault_args=(--vault-password-file .vault-password)
+    fi
+    ANSIBLE_CONFIG=ansible-debian.cfg ansible-playbook debian.yml --ask-become-pass --diff "${vault_args[@]}" {{preview}}

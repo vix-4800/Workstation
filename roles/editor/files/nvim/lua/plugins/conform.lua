@@ -63,7 +63,7 @@ return {
         },
       },
       php_cs_fixer = {
-        command = vim.fn.expand("~/.config/composer/vendor/bin/php-cs-fixer"),
+        command = configs.composerBin("php-cs-fixer"),
         args = {
           "fix",
           "--config=" .. configs.getConfig("php_cs_fixer"),

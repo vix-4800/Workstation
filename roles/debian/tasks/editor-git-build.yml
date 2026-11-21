@@ -1,0 +1,80 @@
+---
+- name: Check the pinned Git installation
+  ansible.builtin.stat:
+    path: '{{ debian_git_prefix }}/bin/git'
+  register: debian_git_upstream
+
+- name: Install a verified Git from kernel.org
+  when: not debian_git_upstream.stat.executable | default(false)
+  vars:
+    debian_git_archive: 'git-{{ debian_git_release }}.tar.xz'
+    debian_git_build_jobs: '{{ [ansible_facts.processor_vcpus | default(2), 4] | min }}'
+  block:
+    - name: Check for an existing libcurl development package
+      ansible.builtin.stat:
+        path: /usr/bin/curl-config
+      register: debian_git_curl_config
+
+    - name: Install the Git build dependencies
+      ansible.builtin.apt:
+        name: '{{ debian_git_build_packages + ([] if debian_git_curl_config.stat.exists else ["libcurl4-openssl-dev"]) }}'
+        state: present
+        fail_on_autoremove: true
+      become: true
+
+    - name: Create the user Git installation parent directory
+      ansible.builtin.file:
+        path: '{{ debian_git_prefix | dirname }}'
+        state: directory
+        mode: '0755'
+
+    - name: Create a private directory to stage the Git build
+      ansible.builtin.tempfile:
+        path: '{{ debian_git_prefix | dirname }}'
+        state: directory
+        prefix: .build-
+      register: debian_git_build_dir
+
+    - name: Download the pinned Git source release and verify its checksum
+      ansible.builtin.get_url:
+        url: 'https://cdn.kernel.org/pub/software/scm/git/{{ debian_git_archive }}'
+        dest: '{{ debian_git_build_dir.path }}/{{ debian_git_archive }}'
+        checksum: 'sha256:{{ debian_git_release_sha256 }}'
+        mode: '0600'
+
+    - name: Extract the verified Git source release
+      ansible.builtin.unarchive:
+        src: '{{ debian_git_build_dir.path }}/{{ debian_git_archive }}'
+        dest: '{{ debian_git_build_dir.path }}'
+        remote_src: true
+
+    - name: Compile and stage the pinned Git release
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/make
+          - '-j{{ debian_git_build_jobs }}'
+          - 'prefix={{ debian_git_prefix }}'
+          - 'DESTDIR={{ debian_git_build_dir.path }}/install'
+          - PYTHON_PATH=/usr/bin/python3
+          - NO_TCLTK=YesPlease
+          - USE_LIBPCRE2=YesPlease
+          - install
+        chdir: '{{ debian_git_build_dir.path }}/git-{{ debian_git_release }}'
+        creates: '{{ debian_git_build_dir.path }}/install{{ debian_git_prefix }}/bin/git'
+
+    - name: Publish the completed Git installation atomically
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/mv
+          - --no-clobber
+          - --no-target-directory
+          - '{{ debian_git_build_dir.path }}/install{{ debian_git_prefix }}'
+          - '{{ debian_git_prefix }}'
+        creates: '{{ debian_git_prefix }}/bin/git'
+
+  always:
+    - name: Remove the temporary Git build directory
+      ansible.builtin.file:
+        path: '{{ debian_git_build_dir.path }}'
+        state: absent
+      when: debian_git_build_dir.path is defined

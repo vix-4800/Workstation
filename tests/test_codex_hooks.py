@@ -28,6 +28,7 @@ class CodexHooksTest(unittest.TestCase):
             "TMPDIR": str(self.root),
             "HOOK_TEST_LOG": str(self.log),
             "HOOK_TEST_FAIL": "",
+            "XDG_CONFIG_HOME": "",
         }
         for name in (
             "php",
@@ -149,6 +150,16 @@ class CodexHooksTest(unittest.TestCase):
         self.assertNotIn("decision", result)
         self.assertIn("fixture diagnostic", result["systemMessage"])
         self.assertEqual(len(self.calls()), 2)
+
+    def test_lint_reads_configuration_from_xdg_config_home(self):
+        self.file("file.py", "value = 1\n")
+        config = self.root / "custom configuration/ruff/pyproject.toml"
+        config.parent.mkdir(parents=True)
+        config.write_text("[lint]\n")
+        self.env["XDG_CONFIG_HOME"] = str(config.parent.parent)
+        self.hook("PostToolUse", patch="*** Add File: file.py")
+        self.assertEqual(self.hook("Stop"), {})
+        self.assertIn(str(config), self.calls()[0])
 
     def test_turns_and_sessions_are_isolated(self):
         self.file("one.py", "value = 1\n")

@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Identify the package base of a Debian-family workstation."""
+
+import re
+import shlex
+import sys
+from pathlib import Path
+
+
+def read_release(path):
+    values = {}
+    for line in path.read_text().splitlines():
+        key, separator, value = line.partition("=")
+        if separator and key in {"ID", "ID_LIKE", "VERSION_ID", "VERSION_CODENAME", "UBUNTU_CODENAME", "DEBIAN_CODENAME"}:
+            values[key] = " ".join(shlex.split(value, comments=True))
+    return values
+
+
+def detect_platform(release):
+    distro = release.get("ID", "")
+    relatives = set(release.get("ID_LIKE", "").split())
+    codename = release.get("VERSION_CODENAME", "")
+    version = release.get("VERSION_ID", "")
+    version_parts = tuple(map(int, version.split("."))) if re.fullmatch(r"\d+(?:\.\d+)*", version) else ()
+    ubuntu_base = release.get("UBUNTU_CODENAME", "")
+    if distro == "kali" or "kali" in relatives:
+        return "kali", codename or "kali-rolling"
+    if distro == "ubuntu":
+        if version_parts >= (24, 4):
+            return "ubuntu", ubuntu_base or codename or "unknown"
+    elif "ubuntu" in relatives or ubuntu_base:
+        ubuntu_base = ubuntu_base or codename
+        if ubuntu_base in {"noble", "oracular", "plucky", "questing", "resolute", "stonking"}:
+            return "ubuntu", ubuntu_base
+    elif distro == "debian" or "debian" in relatives:
+        if distro != "debian" or not version_parts or version_parts >= (12,):
+            return "debian", release.get("DEBIAN_CODENAME") or codename or "unknown"
+    raise ValueError(f"Unsupported distribution: {distro or 'unknown'} ({version or codename or 'unknown release'}). "
+                     "Use Debian 12+, Ubuntu 24.04+, Kali Rolling or a compatible derivative.")
+
+
+if __name__ == "__main__":
+    try:
+        for field in detect_platform(read_release(Path(sys.argv[1]))):
+            print(field)
+    except (OSError, ValueError) as error:
+        sys.exit(str(error))

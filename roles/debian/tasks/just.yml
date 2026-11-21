@@ -1,0 +1,39 @@
+---
+- name: Check for an available just executable
+  ansible.builtin.command:
+    argv: [/bin/sh, -c, 'command -v just']
+  environment:
+    PATH: '{{ home }}/.local/bin:{{ ansible_facts.env.PATH }}'
+  register: debian_just_command
+  failed_when: debian_just_command.rc not in [0, 1]
+  changed_when: false
+  check_mode: false
+
+- name: Install just from its verified upstream release when missing
+  when:
+    - debian_just_command.rc == 1
+    - not ansible_check_mode
+  vars:
+    debian_just_archive: 'just-{{ debian_just_version }}-{{ ansible_facts.architecture }}-unknown-linux-musl.tar.gz'
+  block:
+    - name: Create the user release cache
+      ansible.builtin.file:
+        path: '{{ debian_data_home }}/workstation'
+        state: directory
+
+    - name: Download the just release archive
+      ansible.builtin.get_url:
+        url: '{{ debian_just_release_url }}/{{ debian_just_archive }}'
+        checksum: 'sha256:{{ debian_just_release_url }}/SHA256SUMS'
+        dest: '{{ debian_data_home }}/workstation/{{ debian_just_archive }}'
+        mode: '0644'
+      vars:
+        debian_just_release_url: 'https://github.com/casey/just/releases/download/{{ debian_just_version }}'
+
+    - name: Extract only the just executable
+      ansible.builtin.unarchive:
+        src: '{{ debian_data_home }}/workstation/{{ debian_just_archive }}'
+        dest: '{{ home }}/.local/bin'
+        include: [just]
+        remote_src: true
+        creates: '{{ home }}/.local/bin/just'

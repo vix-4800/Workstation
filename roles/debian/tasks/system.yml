@@ -1,0 +1,183 @@
+---
+- name: Validate the system hostname
+  ansible.builtin.assert:
+    that:
+      - hostname | length <= 64
+      - hostname is match('^[a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*$')
+    fail_msg: Set hostname to a valid hostname in the localhost host variables.
+  tags: [base, system]
+
+- name: Set the hostname through systemd
+  ansible.builtin.hostname:
+    name: '{{ hostname }}'
+    use: systemd
+  become: true
+  when: debian_systemd_available | bool
+  tags: [base, system]
+
+- name: Set the hostname file when systemd is unavailable
+  ansible.builtin.copy:
+    content: '{{ hostname }}{{ "\n" }}'
+    dest: /etc/hostname
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  when: not debian_systemd_available | bool
+  tags: [base, system]
+
+- name: Ensure the system hostname resolves locally
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1\s'
+    line: "127.0.1.1\t{{ hostname }}"
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags: [base, system]
+
+- name: Configure the system locale
+  tags: [base, system]
+  vars:
+    debian_locale_path_pattern: 'Default:\s*(/etc/(?:default/locale|locale\.conf))\b'
+  block:
+    - name: Check whether the locale tooling is available
+      ansible.builtin.stat:
+        path: /usr/sbin/update-locale
+      register: debian_locale_tool
+
+    - name: Configure the locale using the installed locale tooling
+      when: not ansible_check_mode or debian_locale_tool.stat.exists
+      block:
+        - name: List generated locales
+          ansible.builtin.command:
+            argv: [locale, -a]
+          environment:
+            LC_ALL: C
+          register: debian_generated_locales
+          check_mode: false
+          changed_when: false
+
+        - name: Check the requested locale against supported locale definitions
+          ansible.builtin.command:
+            argv: [cat, /usr/share/i18n/SUPPORTED]
+          register: debian_supported_locales
+          check_mode: false
+          changed_when: false
+
+        - name: Select the locale definition to enable
+          ansible.builtin.set_fact:
+            debian_locale_definition: >-
+              {{ debian_supported_locales.stdout_lines
+                   | select('match', '^' ~ (base_locale | regex_escape) ~ '\s+')
+                   | first | default('') }}
+            debian_locale_generated: >-
+              {{ (base_locale | lower | replace('-', '')) in
+                   (debian_generated_locales.stdout_lines | map('lower') | map('replace', '-', '') | list) }}
+
+        - name: Validate the requested locale
+          ansible.builtin.assert:
+            that:
+              - base_locale is match('^[a-zA-Z0-9_.@-]+$')
+              - debian_locale_generated or debian_locale_definition | length > 0
+            fail_msg: Set base_locale to an available locale, such as en_US.UTF-8.
+
+        - name: Enable the requested locale
+          ansible.builtin.lineinfile:
+            path: /etc/locale.gen
+            regexp: '^#?\s*{{ base_locale | regex_escape }}\s+'
+            line: '{{ debian_locale_definition }}'
+            create: true
+            owner: root
+            group: root
+            mode: '0644'
+          become: true
+          when: debian_locale_definition | length > 0
+
+        - name: Generate the requested locale
+          ansible.builtin.command:
+            argv: [/usr/sbin/locale-gen]
+          become: true
+          changed_when: true
+          when:
+            - not ansible_check_mode
+            - not debian_locale_generated
+
+        - name: Read the installed locale tool's help
+          ansible.builtin.command:
+            argv: [/usr/sbin/update-locale, --help]
+          environment:
+            LC_ALL: C
+          register: debian_locale_help
+          check_mode: false
+          changed_when: false
+
+        - name: Identify the default locale file
+          ansible.builtin.set_fact:
+            debian_locale_file: >-
+              {{ (debian_locale_help.stdout ~ '\n' ~ debian_locale_help.stderr)
+                 | regex_findall(debian_locale_path_pattern) | first | default('') }}
+
+        - name: Check the default locale file path
+          ansible.builtin.assert:
+            that: debian_locale_file | length > 0
+            fail_msg: Could not identify the default locale file from update-locale.
+
+        - name: Set the default locale
+          ansible.builtin.lineinfile:
+            path: '{{ debian_locale_file }}'
+            regexp: '^\s*(?:export\s+)?LANG='
+            line: 'LANG={{ base_locale }}'
+            create: true
+            owner: root
+            group: root
+            mode: '0644'
+          become: true
+
+- name: Set the system timezone
+  tags: [base, system]
+  block:
+    - name: Validate the timezone path
+      ansible.builtin.assert:
+        that:
+          - base_timezone is match('^[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*$')
+        fail_msg: Set base_timezone to an IANA timezone, such as UTC or Europe/Saratov.
+
+    - name: Check whether the timezone data is present
+      ansible.builtin.stat:
+        path: '/usr/share/zoneinfo/{{ base_timezone }}'
+        follow: true
+      register: debian_timezone_data
+
+    - name: Check the requested timezone exists
+      ansible.builtin.assert:
+        that: debian_timezone_data.stat.isreg | default(false)
+        fail_msg: The requested base_timezone does not exist in /usr/share/zoneinfo.
+      when: not ansible_check_mode
+
+    - name: Link the selected timezone
+      ansible.builtin.file:
+        src: '/usr/share/zoneinfo/{{ base_timezone }}'
+        dest: /etc/localtime
+        state: link
+        owner: root
+        group: root
+        force: true
+      become: true
+      when: debian_timezone_data.stat.isreg | default(false)
+
+    - name: Check whether the system maintains a legacy timezone file
+      ansible.builtin.stat:
+        path: /etc/timezone
+      register: debian_timezone_legacy
+
+    - name: Update the legacy timezone file
+      ansible.builtin.copy:
+        content: '{{ base_timezone }}{{ "\n" }}'
+        dest: /etc/timezone
+        owner: root
+        group: root
+        mode: '0644'
+      become: true
+      when: debian_timezone_legacy.stat.isreg | default(false) and debian_timezone_data.stat.isreg | default(false)

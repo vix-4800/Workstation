@@ -11,29 +11,23 @@ readonly GRN='\033[0;32m'
 readonly YLW='\033[1;33m'
 readonly NC='\033[0m'
 
-# Determine repository root directory by following symlink
-SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
-SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
-REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null || true)"
-
-if [[ -z "${REPO_ROOT}" ]]; then
-    err "Unable to determine git repository root from: ${SCRIPT_DIR}"
-    exit 1
-fi
-
 # Logging functions
 msg() { echo -e "${1}"; }
 ok() { msg "${GRN}✓${NC} ${1}"; }
 warn() { msg "${YLW}⚠${NC} ${1}"; }
 err() { msg "${RED}✗${NC} ${1}"; }
 
-# Change to repository directory
+# Determine repository root directory by following symlink
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "${SCRIPT_PATH}")"
+if ! REPO_ROOT="$(git -C "${SCRIPT_DIR}" rev-parse --show-toplevel 2>/dev/null)"; then
+    err "Unable to determine git repository root from: ${SCRIPT_DIR}"
+    exit 1
+fi
 cd "${REPO_ROOT}"
 
-# Check if we're in a git repository
-if [[ ! -d .git ]]; then
-    err "Not a git repository: ${REPO_ROOT}"
-    exit 1
+if ! CURRENT_BRANCH="$(git symbolic-ref --quiet --short HEAD)"; then
+    exit 0
 fi
 
 # Fetch latest changes from origin (quietly)
@@ -42,18 +36,12 @@ if ! git fetch origin --quiet 2>/dev/null; then
     exit 1
 fi
 
-# Get current branch name
-CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if ! git show-ref --verify --quiet "refs/remotes/origin/${CURRENT_BRANCH}"; then
+    exit 0
+fi
 
-# Get local and remote commit hashes
-LOCAL_HASH=$(git rev-parse HEAD)
-REMOTE_HASH=$(git rev-parse "origin/${CURRENT_BRANCH}")
-
-# Compare hashes
-if [[ "${LOCAL_HASH}" != "${REMOTE_HASH}" ]]; then
-    # Get number of commits behind
-    COMMITS_BEHIND=$(git rev-list --count HEAD..origin/"${CURRENT_BRANCH}")
-
+COMMITS_BEHIND=$(git rev-list --count "HEAD..refs/remotes/origin/${CURRENT_BRANCH}")
+if (( COMMITS_BEHIND > 0 )); then
     # Send notification
     notify-send \
         -u normal \

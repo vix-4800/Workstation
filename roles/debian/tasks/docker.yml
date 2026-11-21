@@ -1,0 +1,114 @@
+---
+- name: Inspect installed Docker package family
+  ansible.builtin.command:
+    argv:
+      - dpkg-query
+      - --show
+      - '--showformat=${db:Status-Status}\n'
+      - docker-ce
+      - docker-ce-cli
+  register: debian_docker_vendor
+  check_mode: false
+  changed_when: false
+  failed_when: debian_docker_vendor.rc not in [0, 1]
+  tags: [debian, development, docker, packages]
+
+- name: Select native Docker packages
+  ansible.builtin.set_fact:
+    debian_docker_engine_packages: >-
+      {{ ['docker-ce', 'docker-ce-cli', 'containerd.io'] if debian_docker_uses_vendor
+         else ['docker.io'] + (['docker-cli'] if 'docker-cli' in debian_apt_candidates else []) }}
+    debian_docker_compose_package: >-
+      {{ ('docker-compose-plugin' if 'docker-compose-plugin' in debian_apt_candidates else '')
+         if debian_docker_uses_vendor
+         else ('docker-compose-v2' if 'docker-compose-v2' in debian_apt_candidates
+               else ('docker-compose' if debian_compose_version is version('2', '>=') else '')) }}
+    debian_docker_buildx_package: >-
+      {{ debian_buildx_name if debian_buildx_name in debian_apt_candidates else '' }}
+  vars:
+    debian_docker_uses_vendor: "{{ 'installed' in debian_docker_vendor.stdout_lines }}"
+    debian_buildx_name: '{{ "docker-buildx-plugin" if debian_docker_uses_vendor else "docker-buildx" }}'
+    debian_compose_version: >-
+      {{ debian_apt_candidates.get('docker-compose', '0') | regex_replace('^[0-9]+:', '')
+         | regex_search('^[0-9]+(?:[.][0-9]+)*') | default('0', true) }}
+  tags: [debian, development, docker, packages]
+
+- name: Install Docker Engine and available native CLI plugins
+  ansible.builtin.apt:
+    name: >-
+      {{ debian_docker_engine_packages
+         + ([debian_docker_compose_package, debian_docker_buildx_package] | map('trim') | reject('equalto', '') | list) }}
+    state: present
+    fail_on_autoremove: true
+    policy_rc_d: '{{ omit if debian_systemd_available else 101 }}'
+  become: true
+  tags: [debian, development, docker, packages]
+
+- name: Provision portable Docker CLI plugins when the package archive lacks them
+  ansible.builtin.include_tasks:
+    file: docker-plugin.yml
+    apply:
+      tags: [debian, development, docker, packages]
+  vars:
+    debian_docker_config: '{{ ansible_facts.env.DOCKER_CONFIG | default(home ~ "/.docker", true) }}'
+    debian_docker_plugin_platform: "{{ {'amd64': 'x86_64', 'arm64': 'aarch64'}[debian_arch] }}"
+  loop:
+    - name: compose
+      package: '{{ debian_docker_compose_package | trim }}'
+      version: '2.32.4'
+      release_url: https://github.com/docker/compose/releases/download/v2.32.4
+      asset: 'docker-compose-linux-{{ debian_docker_plugin_platform }}'
+    - name: buildx
+      package: '{{ debian_docker_buildx_package | trim }}'
+      version: '0.21.3'
+      release_url: https://github.com/docker/buildx/releases/download/v0.21.3
+      asset: 'buildx-v0.21.3.linux-{{ debian_arch }}'
+  loop_control:
+    loop_var: debian_docker_plugin
+    label: '{{ debian_docker_plugin.name }}'
+  when:
+    - not ansible_check_mode
+    - debian_docker_plugin.package | length == 0
+  tags: [debian, development, docker, packages]
+
+- name: Verify Docker CLI plugins are available
+  ansible.builtin.command:
+    argv: [/usr/bin/docker, '{{ item }}', version]
+  loop: [compose, buildx]
+  changed_when: false
+  when: not ansible_check_mode
+  tags: [debian, development, docker, packages]
+
+- name: Look up the Docker group
+  ansible.builtin.getent:
+    database: group
+    key: docker
+    fail_key: false
+  tags: [debian, development, docker, system]
+
+- name: Add the workstation user to the Docker group
+  ansible.builtin.user:
+    name: '{{ username }}'
+    groups: docker
+    append: true
+  become: true
+  when: ansible_facts.getent_group.docker | default(none) is not none
+  tags: [debian, development, docker, system]
+
+- name: Check for the Docker service unit
+  ansible.builtin.stat:
+    path: /usr/lib/systemd/system/docker.service
+  register: debian_docker_service_unit
+  when: debian_systemd_available
+  tags: [debian, development, docker, services]
+
+- name: Enable and start Docker
+  ansible.builtin.systemd:
+    name: docker.service
+    enabled: true
+    state: started
+  become: true
+  when:
+    - debian_systemd_available
+    - debian_docker_service_unit.stat.exists
+  tags: [debian, development, docker, services]

@@ -1,0 +1,177 @@
+---
+- name: Install Fish, Kitty and tmux
+  ansible.builtin.apt:
+    name: '{{ debian_shell_packages }}'
+    state: present
+    fail_on_autoremove: true
+  become: true
+  tags: [shell, packages]
+
+- name: Prepare writable Fish and Kitty directories
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/python3
+      - '{{ role_path }}/scripts/adopt-config'
+      - directory
+      - '{{ dotfiles_dir }}/roles/shell/files/{{ item }}'
+      - '{{ debian_config_home }}/{{ item }}'
+  loop: [fish, kitty]
+  register: debian_shell_directory
+  changed_when: debian_shell_directory.stdout == 'changed'
+  when: not ansible_check_mode
+  tags: [shell, config, packages]
+
+- name: Create user terminal and Fish configuration directories
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+  loop:
+    - '{{ debian_config_home }}/fish/conf.d'
+    - '{{ debian_config_home }}/fish/functions'
+    - '{{ debian_config_home }}/fish/completions'
+    - '{{ debian_config_home }}/kitty'
+    - '{{ debian_config_home }}/bat/themes'
+    - '{{ debian_config_home }}/btop/themes'
+    - '{{ debian_config_home }}/environment.d'
+  tags: [shell, config, packages]
+
+- name: Expose user tools to graphical applications launched by systemd
+  ansible.builtin.copy:
+    dest: '{{ debian_config_home }}/environment.d/60-workstation-path.conf'
+    content: |
+      PATH={{ home }}/.local/bin:{{ home }}/go/bin:{{ home }}/.cargo/bin:{{ debian_composer_home }}/vendor/bin:$PATH
+    mode: '0644'
+    backup: true
+  vars:
+    debian_composer_home: '{{ ansible_facts.env.COMPOSER_HOME | default(debian_config_home ~ "/composer", true) }}'
+  when: not ansible_check_mode
+  tags: [shell, config]
+
+- name: Deploy portable Fish settings
+  ansible.builtin.copy:
+    src: workstation.fish
+    dest: '{{ debian_config_home }}/fish/conf.d/99-workstation.fish'
+    mode: '0644'
+    backup: true
+    validate: /usr/bin/fish --no-execute %s
+  when: not ansible_check_mode
+  tags: [shell, config, packages]
+
+- name: Bootstrap Fisher and the workstation plugins
+  ansible.builtin.import_tasks: fish_plugins.yml
+  tags: [shell, packages]
+
+- name: Link shared terminal and editor assets
+  ansible.builtin.include_tasks:
+    file: user_links.yml
+    apply:
+      tags: [shell, config]
+  vars:
+    debian_user_links: '{{ debian_shell_links }}'
+  when: not ansible_check_mode
+  tags: [shell, config]
+
+- name: Check the active bat theme cache
+  ansible.builtin.command:
+    argv: [/usr/bin/batcat, --list-themes]
+  register: debian_bat_themes
+  when: not ansible_check_mode
+  changed_when: false
+  tags: [shell, config]
+
+- name: Build the Catppuccin bat theme cache
+  ansible.builtin.command:
+    argv: [/usr/bin/batcat, cache, --build]
+  when:
+    - not ansible_check_mode
+    - "'Catppuccin Mocha' not in debian_bat_themes.stdout_lines"
+  changed_when: true
+  tags: [shell, config]
+
+- name: Deploy the Kitty config with automatic X11 or Wayland selection
+  ansible.builtin.copy:
+    dest: '{{ debian_config_home }}/kitty/kitty.conf'
+    content: >-
+      {{ lookup('file', dotfiles_dir ~ '/roles/shell/files/kitty/kitty.conf', rstrip=false)
+         | regex_replace('(?m)^linux_display_server wayland$', 'linux_display_server auto') }}
+    mode: '0644'
+    backup: true
+  when: not ansible_check_mode
+  tags: [shell, config]
+
+- name: Check whether XFCE is installed
+  ansible.builtin.stat:
+    path: /usr/bin/xfce4-session
+  register: debian_xfce_session
+  tags: [shell, config]
+
+- name: Check for the installed XFCE Kitty helper
+  ansible.builtin.stat:
+    path: /usr/share/xfce4/helpers/kitty.desktop
+  register: debian_xfce_kitty_helper
+  tags: [shell, config]
+
+- name: Set Kitty as the preferred terminal on XFCE systems
+  when: debian_xfce_session.stat.exists
+  tags: [shell, config]
+  block:
+    - name: Create the XFCE config directory
+      ansible.builtin.file:
+        path: '{{ debian_config_home }}/xfce4'
+        state: directory
+
+    - name: Provide the Kitty helper for XFCE releases without one
+      when:
+        - not ansible_check_mode
+        - not debian_xfce_kitty_helper.stat.exists
+      block:
+        - name: Create the XFCE user helpers directory
+          ansible.builtin.file:
+            path: '{{ debian_data_home }}/xfce4/helpers'
+            state: directory
+
+        - name: Install the XFCE Kitty helper
+          ansible.builtin.copy:
+            dest: '{{ debian_data_home }}/xfce4/helpers/kitty.desktop'
+            force: false
+            mode: '0644'
+            content: |
+              [Desktop Entry]
+              Type=X-XFCE-Helper
+              Name=Kitty
+              Icon=kitty
+              NoDisplay=true
+              StartupNotify=false
+              X-XFCE-Binaries=kitty;
+              X-XFCE-Category=TerminalEmulator
+              X-XFCE-Commands=%B;
+              X-XFCE-CommandsWithParameter=%B %s;
+
+    - name: Set the XFCE terminal preference
+      ansible.builtin.lineinfile:
+        path: '{{ debian_config_home }}/xfce4/helpers.rc'
+        regexp: '^TerminalEmulator='
+        line: TerminalEmulator=kitty
+        create: true
+        mode: '0644'
+        backup: true
+      when: not ansible_check_mode
+
+- name: Install JetBrainsMono Nerd Font for the current user
+  ansible.builtin.import_tasks: font.yml
+  tags: [shell, packages]
+
+- name: Verify Fish is available as a login shell
+  ansible.builtin.command:
+    argv: [/bin/sh, -c, "test -x /usr/bin/fish && rg -Fxq /usr/bin/fish /etc/shells"]
+  changed_when: false
+  when: not ansible_check_mode
+  tags: [shell, system]
+
+- name: Make Fish the workstation login shell
+  ansible.builtin.user:
+    name: '{{ username }}'
+    shell: /usr/bin/fish
+  become: true
+  when: not ansible_check_mode
+  tags: [shell, system]

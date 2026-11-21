@@ -1,0 +1,162 @@
+---
+- name: Load the shared AI tool configuration
+  ansible.builtin.include_vars: '{{ dotfiles_dir }}/roles/ai-tools/defaults/main.yml'
+  tags: [debian, ai-tools, packages, config]
+
+- name: Load Debian-family AI tool settings
+  ansible.builtin.include_vars: '{{ role_path }}/vars/ai_tools.yml'
+  tags: [debian, ai-tools, packages, config]
+
+- name: Install AI tool runtime and available Firefox dependencies
+  ansible.builtin.apt:
+    name: >-
+      {{ debian_ai_packages
+         + [debian_ai_libavcodec | select('in', debian_apt_candidates) | first | default('ffmpeg')]
+         + (['libdbus-glib-1-2'] if 'libdbus-glib-1-2' in debian_apt_candidates else []) }}
+    state: present
+    fail_on_autoremove: true
+  become: true
+  tags: [debian, ai-tools, packages]
+
+- name: Install the verified Lua language server
+  ansible.builtin.include_tasks:
+    file: development-release.yml
+    apply:
+      tags: [debian, ai-tools, packages]
+  vars:
+    debian_release: '{{ debian_ai_lua_release }}'
+  when: not ansible_check_mode
+  tags: [debian, ai-tools, packages]
+
+- name: Install and verify user AI command-line tools
+  environment: '{{ debian_ai_environment }}'
+  when: not ansible_check_mode
+  tags: [debian, ai-tools, packages]
+  block:
+    - name: Find installed AI commands and language servers
+      ansible.builtin.command:
+        argv: [/bin/sh, -c, 'command -v "$1"', sh, '{{ item.binary }}']
+      loop: '{{ debian_ai_npm_tools }}'
+      loop_control:
+        label: '{{ item.binary }}'
+      register: debian_ai_command_paths
+      failed_when: debian_ai_command_paths.rc not in [0, 1]
+      changed_when: false
+
+    - name: Install missing AI tools and language servers in the user npm prefix
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/fish
+          - -c
+          - 'nvm use --silent lts && command npm install --global --prefix "$argv[1]" "$argv[2]"'
+          - --
+          - '{{ home }}/.local'
+          - '{{ item.item.package }}'
+      loop: '{{ debian_ai_command_paths.results }}'
+      loop_control:
+        label: '{{ item.item.package }}'
+      when: item.rc == 1
+      changed_when: true
+
+    - name: Find uv and uvx
+      ansible.builtin.command:
+        argv: [/bin/sh, -c, 'command -v uv && command -v uvx']
+      register: debian_ai_uv_path
+      changed_when: false
+      failed_when: debian_ai_uv_path.rc not in [0, 1]
+
+    - name: Install uv through pipx
+      ansible.builtin.command:
+        argv: [/usr/bin/pipx, install, uv]
+      environment:
+        PIPX_BIN_DIR: '{{ home }}/.local/bin'
+        PIPX_HOME: '{{ debian_data_home }}/pipx'
+      register: debian_ai_uv_install
+      when: debian_ai_uv_path.rc == 1
+      changed_when: "'already seems to be installed' not in (debian_ai_uv_install.stdout ~ debian_ai_uv_install.stderr)"
+
+    - name: Verify Codex, runtime tools and language servers can start
+      ansible.builtin.command:
+        argv: [timeout, 30s, '{{ item }}', --version]
+      loop: [codex, uv, uvx, npx, pyright, lua-language-server]
+      changed_when: false
+
+    - name: Verify the Go language server can start
+      ansible.builtin.command:
+        argv: [gopls, version]
+      changed_when: false
+
+    - name: Install the Firefox version used by Playwright MCP
+      ansible.builtin.command:
+        argv: [npx, --yes, '@playwright/mcp@latest', install-browser, '{{ ai_tools_playwright_browser }}']
+      register: debian_ai_playwright_install
+      changed_when: "'Downloading' in (debian_ai_playwright_install.stdout ~ debian_ai_playwright_install.stderr)"
+
+- name: Deploy Codex configuration with local backups
+  when: not ansible_check_mode
+  tags: [debian, ai-tools, config]
+  block:
+    - name: Adopt the shared Codex settings
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/python3
+          - '{{ debian_ai_adopt_script }}'
+          - codex
+          - '{{ debian_ai_files }}/codex/config.toml'
+          - '{{ home }}/.codex/config.toml'
+      register: debian_ai_adopted_settings
+      changed_when: debian_ai_adopted_settings.stdout == 'changed'
+
+    - name: Link Codex assets and shared instructions
+      ansible.builtin.command:
+        argv: [/usr/bin/python3, '{{ debian_ai_adopt_script }}', link, '{{ debian_ai_files }}/{{ item.src }}', '{{ item.dest }}']
+      loop: >-
+        {{ (ai_tools_repo_symlinks
+            | selectattr('dest', 'match', '^' ~ ((home ~ '/.codex/') | regex_escape))
+            | rejectattr('src', 'equalto', 'codex/config.toml') | list)
+           + (ai_tools_repo_symlinks
+              | selectattr('dest', 'in', [home ~ '/.local/bin/codex-notify', ai_tools_global_instruction_home_path]) | list) }}
+      loop_control:
+        label: '{{ item.dest }}'
+      register: debian_ai_linked_settings
+      changed_when: debian_ai_linked_settings.stdout == 'changed'
+
+    - name: Link the Codex instruction entry point
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/python3
+          - '{{ debian_ai_adopt_script }}'
+          - link
+          - '{{ ai_tools_global_instruction_home_path }}'
+          - '{{ home }}/.codex/AGENTS.md'
+      register: debian_ai_linked_instructions
+      changed_when: debian_ai_linked_instructions.stdout == 'changed'
+
+    - name: Link the repository's AI skills
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/python3
+          - '{{ debian_ai_adopt_script }}'
+          - link
+          - '{{ debian_ai_files }}/agents/skills/{{ item.1 }}'
+          - '{{ item.0 }}/{{ item.1 }}'
+      loop: '{{ [home ~ "/.agents/skills", home ~ "/.codex/skills"] | product(ai_tools_shared_skill_names) | list }}'
+      loop_control:
+        label: '{{ item.0 }}/{{ item.1 }}'
+      register: debian_ai_linked_skills
+      changed_when: debian_ai_linked_skills.stdout == 'changed'
+
+    - name: Ensure the Codex execution rules directory exists
+      ansible.builtin.file:
+        path: '{{ ai_tools_codex_rules_path | dirname }}'
+        state: directory
+        mode: '0700'
+
+    - name: Deploy Codex execution rules as a regular file
+      ansible.builtin.copy:
+        src: '{{ debian_ai_files }}/codex/rules/default.rules'
+        dest: '{{ ai_tools_codex_rules_path }}'
+        follow: false
+        backup: true
+        mode: '0644'
+      tags: [codex-rules]

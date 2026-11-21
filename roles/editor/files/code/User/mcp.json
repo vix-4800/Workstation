@@ -37,7 +37,6 @@
         "git+https://github.com/oraios/serena",
         "serena",
         "start-mcp-server",
-        "serena@latest",
         "--context",
         "ide-assistant"
       ],

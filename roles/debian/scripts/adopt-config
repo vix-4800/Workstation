@@ -1,0 +1,132 @@
+#!/usr/bin/env python3
+"""Adopt workstation configuration while keeping a private copy of local state."""
+
+import argparse
+from contextlib import contextmanager
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+
+
+def write_config(destination, previous, content):
+    if previous == content and not destination.is_symlink():
+        return False
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    lock = destination.with_name(f"{destination.name}.lock")
+    descriptor = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    try:
+        with os.fdopen(descriptor, "wb") as staged:
+            staged.write(content)
+        if current_config(destination) != previous:
+            raise RuntimeError(f"Configuration changed during provisioning: {destination}")
+        if previous is not None:
+            with tempfile.NamedTemporaryFile(
+                dir=destination.parent, prefix=f"{destination.name}.workstation-backup-", delete=False,
+            ) as backup:
+                backup.write(previous)
+        lock.replace(destination)
+    except BaseException:
+        lock.unlink(missing_ok=True)
+        raise
+    return True
+
+
+def current_config(destination):
+    try:
+        return destination.read_bytes()
+    except FileNotFoundError:
+        return None
+
+
+def adopt_git(source, destination):
+    previous = current_config(destination)
+    if previous == source.read_bytes():
+        # An existing Arch deployment already loads the shared configuration.
+        return False
+    include = f"./{source.name}"
+    if previous is not None:
+        result = subprocess.run(
+            ["/usr/bin/git", "config", "--file", str(destination), "--no-includes",
+             "--null", "--get-all", "include.path"],
+            capture_output=True, check=False,
+        )
+        if result.returncode not in (0, 1):
+            result.check_returncode()
+        if include.encode() in result.stdout.split(b"\0"):
+            return False
+    content = (previous or b"") + f"\n[include]\n\tpath = {include}\n".encode()
+    return write_config(destination, previous, content)
+
+
+def adopt_codex(source, destination):
+    import tomlkit
+
+    base = tomlkit.parse(source.read_text())
+    previous = current_config(destination)
+    if previous is not None:
+        local = tomlkit.parse(previous.decode())
+        for key in ("desktop", "projects", "marketplaces"):
+            if key in local:
+                base[key] = local[key]
+        if "node_repl" in local.get("mcp_servers", {}):
+            base["mcp_servers"]["node_repl"] = local["mcp_servers"]["node_repl"]
+    return write_config(destination, previous, tomlkit.dumps(base).encode())
+
+
+@contextmanager
+def save_existing_path(destination):
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    backup = None
+    if destination.exists() or destination.is_symlink():
+        backup = Path(tempfile.mkdtemp(
+            dir=destination.parent, prefix=f"{destination.name}.workstation-backup-",
+        ))
+        destination.rename(backup / destination.name)
+    try:
+        yield
+    except OSError:
+        if backup is not None and not destination.exists() and not destination.is_symlink():
+            (backup / destination.name).rename(destination)
+            backup.rmdir()
+        raise
+
+
+def adopt_link(source, destination):
+    source = source.resolve(strict=True)
+    if destination.resolve() == source:
+        return False
+
+    with save_existing_path(destination):
+        destination.symlink_to(source)
+    return True
+
+
+def adopt_directory(source, destination):
+    legacy_link = destination.is_symlink() and destination.resolve() == source.resolve(strict=True)
+    if destination.is_dir() and not legacy_link:
+        return False
+
+    with save_existing_path(destination):
+        destination.mkdir()
+    return True
+
+
+def main():
+    actions = {
+        "git": adopt_git,
+        "codex": adopt_codex,
+        "link": adopt_link,
+        "directory": adopt_directory,
+    }
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("kind", choices=actions)
+    parser.add_argument("source", type=Path)
+    parser.add_argument("destination", type=Path)
+    args = parser.parse_args()
+    print("changed" if actions[args.kind](args.source, args.destination) else "unchanged")
+
+
+if __name__ == "__main__":
+    main()

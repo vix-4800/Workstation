@@ -1,8 +1,70 @@
 # Workstation
 
-Machine state management for Arch Linux with Sway (Wayland) desktop environment.
+Machine state management for Arch Linux with Sway and for Debian-family workstations.
 
 Ansible-driven provisioning and configuration for multiple workstations from a single repository.
+
+## Debian-family workstations
+
+`debian.yml` targets Debian 12 and later, Kali Rolling, Ubuntu 24.04 and
+later, Linux Mint 22 and LMDE 6/7 on amd64 and arm64. Other derivatives need
+a supported package base and compatible APT packages. The playbook keeps
+the desktop environment and selects Kitty as the preferred terminal on XFCE.
+
+Install Ansible Core 2.14 or later, Git and the Python APT bindings. On
+Ubuntu-based systems, enable the Universe component of the base archive.
+
+```bash
+sudo apt install ansible-core git python3-apt
+# Run the following from the Workstation checkout as the account being configured.
+cp -n inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
+```
+
+Set `username`, `hostname`, `base_timezone`, `git_user_name` and
+`git_user_email` in the shared host vars. Set `base_locale` there to override
+the default of `en_US.UTF-8`.
+
+For optional WireGuard setup, copy `vault/secrets.yml.example` to
+`vault/secrets.yml`, fill in the values and encrypt it with
+`ansible-vault encrypt --vault-password-file .vault-password vault/secrets.yml`.
+Use a private password file with permissions `0600`.
+
+```bash
+ANSIBLE_CONFIG=ansible-debian.cfg ansible-playbook debian.yml --syntax-check
+ANSIBLE_CONFIG=ansible-debian.cfg ansible-playbook debian.yml --ask-become-pass --check --diff
+ANSIBLE_CONFIG=ansible-debian.cfg ansible-playbook debian.yml --ask-become-pass --diff
+```
+
+The first run installs `just` if it is missing. The equivalent recipes are
+`just debian-check`, `just debian-plan` and `just debian-apply`. Check mode
+simulates the APT changes available from the current package indexes. Downloads
+and actions that need a freshly installed program run during application.
+
+- Find the `wg0` profile in NetworkManager, then connect on demand with
+  `nmcli connection up wg0`. Supply IPv4 and IPv6 addresses in Vault for a
+  dual-stack tunnel. The playbook skips WireGuard when the vault file is
+  absent. Set `debian_wireguard_enabled: false` to disable it explicitly.
+  With a vault, add `--vault-password-file .vault-password` to the direct
+  Ansible command. The `just` recipes pick up the local password file.
+- Log out and back in after the first apply so the new login shell, desktop
+  tool paths and `docker` group membership take effect. The Docker group grants
+  root-equivalent access. A session with a systemd user manager is required to
+  activate the Composer and Workstation notification timers.
+- For HTTPS Git authentication, run `gh auth login` after installation.
+  The Debian-family playbook provisions Codex with its shared skills and MCP
+  settings.
+- Obsidian uses an available APT package first, then the vendor `.deb` on
+  amd64 or Flathub on arm64. Spotify on Flathub is available on amd64 only.
+- Git 2.54 or later is required for the shared commit and push hooks. When
+  APT offers only an older release, the playbook builds a verified upstream
+  release in the user's home and leaves the system Git package in place.
+- Docker uses the configured archive's engine and CLI packages. If it lacks
+  Buildx or Compose v2, the playbook installs the missing CLI plugins from
+  their upstream releases for the current user.
+- PHP 8.2 and 8.3 use compatible Composer tools and configs. On Ubuntu
+  Noble-based systems, `debian_php84_ppa_enabled: true` opts into a signed
+  PHP 8.4 repository for the complete custom rule set. Debian, LMDE and
+  Kali use the PHP version from their own archives.
 
 ## Quick Start
 

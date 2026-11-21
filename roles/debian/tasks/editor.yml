@@ -1,0 +1,96 @@
+---
+- name: Load Debian-family editor settings
+  ansible.builtin.include_vars: '{{ role_path }}/vars/editor.yml'
+  tags: [debian, editor, config, packages]
+
+- name: Provision Git with configuration-based hook support
+  ansible.builtin.import_tasks: editor-git.yml
+  tags: [debian, editor, packages]
+
+- name: Install verified editor releases
+  ansible.builtin.include_tasks:
+    file: development-release.yml
+    apply:
+      tags: [debian, editor, packages]
+  loop: '{{ debian_editor_releases }}'
+  loop_control:
+    loop_var: debian_release
+    label: '{{ debian_release.name }} {{ debian_release.version }}'
+  when: not ansible_check_mode
+  tags: [debian, editor, packages]
+
+- name: List installed Visual Studio Code extensions
+  ansible.builtin.command:
+    argv: [/usr/bin/code, --list-extensions]
+  environment:
+    XDG_CONFIG_HOME: '{{ debian_config_home }}'
+    VSCODE_IPC_HOOK_CLI: ''
+  register: debian_code_installed_extensions
+  changed_when: false
+  when: not ansible_check_mode
+  tags: [debian, editor, packages]
+
+- name: Install Catppuccin extensions for Visual Studio Code
+  ansible.builtin.command:
+    argv: [/usr/bin/code, --install-extension, '{{ item }}']
+  environment:
+    XDG_CONFIG_HOME: '{{ debian_config_home }}'
+    VSCODE_IPC_HOOK_CLI: ''
+  loop: '{{ debian_code_extensions }}'
+  when:
+    - not ansible_check_mode
+    - item | lower not in (debian_code_installed_extensions.stdout_lines | map('lower'))
+  changed_when: true
+  tags: [debian, editor, packages]
+
+- name: Link editor configuration and hook scripts with local backups
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/python3
+      - '{{ debian_config_adopt_script }}'
+      - link
+      - '{{ item.src }}'
+      - '{{ item.dest }}'
+  loop: '{{ debian_editor_config_links }}'
+  loop_control:
+    label: '{{ item.dest }}'
+  register: debian_editor_links
+  changed_when: debian_editor_links.stdout == 'changed'
+  when: not ansible_check_mode
+  tags: [debian, editor, config]
+
+- name: Deploy Git identity from host variables
+  ansible.builtin.template:
+    src: '{{ dotfiles_dir }}/roles/editor/templates/git/gitconfig.user.j2'
+    dest: '{{ home }}/.gitconfig.user'
+    backup: true
+    mode: '0600'
+  diff: false
+  tags: [debian, editor, config]
+
+- name: Deploy Visual Studio Code settings with local tool paths
+  ansible.builtin.copy:
+    content: >-
+      {{
+        lookup('ansible.builtin.file', debian_editor_files ~ '/code/User/settings.json', rstrip=False)
+        | replace('~/.config/', (debian_config_home | to_json(ensure_ascii=False))[1:-1] ~ '/')
+      }}
+    dest: '{{ debian_config_home }}/Code/User/settings.json'
+    backup: true
+    follow: false
+    mode: '0644'
+  when: not ansible_check_mode
+  tags: [debian, editor, config]
+
+- name: Include workstation settings in the user's Git configuration
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/python3
+      - '{{ debian_config_adopt_script }}'
+      - git
+      - '{{ home }}/.gitconfig.workstation'
+      - '{{ home }}/.gitconfig'
+  register: debian_editor_git_config
+  changed_when: debian_editor_git_config.stdout == 'changed'
+  when: not ansible_check_mode
+  tags: [debian, editor, config]

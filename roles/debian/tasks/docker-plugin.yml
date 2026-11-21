@@ -1,0 +1,36 @@
+---
+- name: Check for an existing usable Docker CLI plugin
+  ansible.builtin.command:
+    argv: [/usr/bin/docker, '{{ debian_docker_plugin.name }}', version]
+  register: debian_docker_plugin_version
+  changed_when: false
+  failed_when: false
+
+- name: Install a verified Docker CLI plugin for the current user
+  when: debian_docker_plugin_version.rc != 0
+  vars:
+    debian_docker_plugin_cache: '{{ home }}/.local/lib/workstation/docker-{{ debian_docker_plugin.name }}/{{ debian_docker_plugin.version }}'
+  block:
+    - name: Prepare the Docker plugin download directory
+      ansible.builtin.file:
+        path: '{{ debian_docker_plugin_cache }}'
+        state: directory
+        mode: '0755'
+
+    - name: Download the official Docker plugin with its release checksum
+      ansible.builtin.get_url:
+        url: '{{ debian_docker_plugin.release_url }}/{{ debian_docker_plugin.asset }}'
+        checksum: 'sha256:{{ debian_docker_plugin.release_url }}/checksums.txt'
+        dest: '{{ debian_docker_plugin_cache }}/docker-{{ debian_docker_plugin.name }}'
+        mode: '0755'
+
+    - name: Expose the Docker plugin with a local backup
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/python3
+          - '{{ role_path }}/scripts/adopt-config'
+          - link
+          - '{{ debian_docker_plugin_cache }}/docker-{{ debian_docker_plugin.name }}'
+          - '{{ debian_docker_config }}/cli-plugins/docker-{{ debian_docker_plugin.name }}'
+      register: debian_docker_plugin_link
+      changed_when: debian_docker_plugin_link.stdout == 'changed'

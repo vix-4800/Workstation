@@ -1,0 +1,126 @@
+---
+base_locale: en_US.UTF-8
+debian_git_min_version: '2.54'
+
+debian_apt_packages:
+  - build-essential
+  - ca-certificates
+  - curl
+  - wget
+  - gpg
+  - less
+  - unzip
+  - zip
+  - xz-utils
+  - man-db
+  - manpages
+  - openssh-client
+  - htop
+  - tree
+  - jq
+  - xdg-user-dirs
+  - xdg-utils
+  - locales
+  - tzdata
+  - bat
+  - ripgrep
+  - fd-find
+  - fzf
+  - chafa
+  - trash-cli
+  - btop
+  - lm-sensors
+  - xclip
+  - wl-clipboard
+  - libnotify-bin
+  - fontconfig
+  - fonts-noto-color-emoji
+  - git
+
+debian_apt_optional_packages: [eza, tealdeer, just]
+debian_apt_probe_packages:
+  - 7zip
+  - p7zip-full
+  - git
+  - gh
+  - code
+  - obsidian
+  - docker.io
+  - docker-ce
+  - docker-cli
+  - docker-buildx
+  - docker-buildx-plugin
+  - docker-compose
+  - docker-compose-v2
+  - docker-compose-plugin
+  - golang-go
+  - rustc
+  - cargo
+  - cargo-1.85
+  - rustc-1.85
+  - rustup
+  - php8.4-cli
+  - libasound2
+  - libasound2t64
+  - libatk1.0-0
+  - libatk1.0-0t64
+  - libdbus-glib-1-2
+  - libglib2.0-0
+  - libglib2.0-0t64
+  - libgtk-3-0
+  - libgtk-3-0t64
+  - libavcodec59
+  - libavcodec60
+  - libavcodec61
+  - libavcodec62
+  - libavcodec63
+  - ffmpeg
+
+debian_apt_repositories:
+  - package: gh
+    name: workstation-github-cli
+    uri: https://cli.github.com/packages
+    suite: stable
+    key: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    key_type: gpg
+    fingerprints: [2C6106201985B60E6C7AC87323F3D4EA75716059, 7F38BBB59D064DBCB3D84D725612B36462313325]
+  - package: code
+    name: workstation-vscode
+    uri: https://packages.microsoft.com/repos/code
+    suite: stable
+    key: https://packages.microsoft.com/keys/microsoft.asc
+    key_type: asc
+    fingerprints: [BC528686B50D79E339D3721CEB3E94ADBE1229CF]
+
+debian_fisher_version: '4.4.5'
+debian_fish_plugins:
+  - 'jorgebucaran/fisher@{{ debian_fisher_version }}'
+  - ilancosman/tide@v6
+  - jorgebucaran/nvm.fish
+  - catppuccin/fish
+  - jorgebucaran/autopair.fish
+  - franciscolourenco/done
+debian_nerd_fonts_version: v3.4.0
+debian_just_version: '1.46.0'
+debian_obsidian_version: '1.15.1'
+debian_obsidian_sha256: f77b6dfc8c040214f2febad2b1b9b051b6a838a47b0f4fb90a31cfcb79b8fcec
+
+debian_shell_packages:
+  - fish
+  - kitty
+  - tmux
+debian_shell_links:
+  - {src: base/files/.editorconfig, dest: '{{ home }}/.editorconfig'}
+  - {src: shell/files/tmux/tmux.conf, dest: '{{ home }}/.tmux.conf'}
+  - {src: shell/files/kitty/catppuccin-mocha.conf, dest: '{{ debian_config_home }}/kitty/catppuccin-mocha.conf'}
+  - {src: appearance/files/bat/config, dest: '{{ debian_config_home }}/bat/config'}
+  - {src: 'appearance/files/bat/themes/Catppuccin Mocha.tmTheme', dest: '{{ debian_config_home }}/bat/themes/Catppuccin Mocha.tmTheme'}
+  - {src: appearance/files/btop/btop.conf, dest: '{{ debian_config_home }}/btop/btop.conf'}
+  - {src: appearance/files/btop/themes/catppuccin_mocha.theme, dest: '{{ debian_config_home }}/btop/themes/catppuccin_mocha.theme'}
+  - {src: shell/files/fish/conf.d/tide.fish, dest: '{{ debian_config_home }}/fish/conf.d/tide.fish'}
+  - {src: shell/files/fish/functions/is_laptop.fish, dest: '{{ debian_config_home }}/fish/functions/is_laptop.fish'}
+  - {src: shell/files/fish/functions/refactor.fish, dest: '{{ debian_config_home }}/fish/functions/refactor.fish'}
+  - {src: shell/files/fish/functions/sysinfo.fish, dest: '{{ debian_config_home }}/fish/functions/sysinfo.fish'}
+  - {src: shell/files/fish/functions/timer.fish, dest: '{{ debian_config_home }}/fish/functions/timer.fish'}
+  - {src: shell/files/fish/functions/trash.fish, dest: '{{ debian_config_home }}/fish/functions/trash.fish'}
+  - {src: shell/files/fish/completions/codex.fish, dest: '{{ debian_config_home }}/fish/completions/codex.fish'}

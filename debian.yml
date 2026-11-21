@@ -1,0 +1,65 @@
+---
+- name: Provision a Debian-family workstation
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  pre_tasks:
+    - name: Identify the Debian or Ubuntu package base
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/python3
+          - '{{ playbook_dir }}/roles/debian/scripts/detect-platform'
+          - /etc/os-release
+      register: debian_platform_result
+      changed_when: false
+      check_mode: false
+      tags: [always, debian, system]
+
+    - name: Verify the local platform architecture and Python
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.architecture in ['x86_64', 'aarch64']
+          - >-
+            (ansible_facts.python.version.major ~ '.' ~ ansible_facts.python.version.minor) is version('3.11', '>=')
+        fail_msg: Run the Debian-family playbook on amd64 or arm64 with Python 3.11 or newer.
+      tags: [always, debian, system]
+
+    - name: Verify the local workstation user and required variables
+      ansible.builtin.assert:
+        that:
+          - username | default('') == ansible_facts.user_id
+          - ansible_facts.user_uid != 0
+          - home == ansible_facts.user_dir
+          - hostname | default('') | trim | length > 0
+          - base_timezone | default('') | trim | length > 0
+          - git_user_name | default('') | trim not in ['', 'Your Name']
+          - git_user_email | default('') | trim not in ['', 'your.email@example.com']
+        fail_msg: Fill in inventory/host_vars/localhost.yml and run the playbook as that user with --ask-become-pass.
+      tags: [always, debian, system]
+
+    - name: Check whether the system manager is reachable
+      ansible.builtin.command:
+        argv: [systemctl, show, --property=Version, --value]
+      register: debian_systemd_probe
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      tags: [always, debian, system]
+
+    - name: Set runtime facts for the Debian-family role
+      ansible.builtin.set_fact:
+        debian_platform: '{{ debian_platform_result.stdout_lines[0] }}'
+        debian_base_codename: '{{ debian_platform_result.stdout_lines[1] }}'
+        debian_arch: "{{ {'x86_64': 'amd64', 'aarch64': 'arm64'}[ansible_facts.architecture] }}"
+        debian_config_home: >-
+          {{ ansible_facts.env.XDG_CONFIG_HOME | default(home ~ '/.config', true) }}
+        debian_data_home: >-
+          {{ ansible_facts.env.XDG_DATA_HOME | default(home ~ '/.local/share', true) }}
+        debian_systemd_available: >-
+          {{ debian_systemd_probe.rc == 0 and debian_systemd_probe.stdout | length > 0 }}
+      tags: [always, debian, system]
+
+  roles:
+    - role: debian
+      tags: [debian]

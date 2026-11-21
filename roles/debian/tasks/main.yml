@@ -1,0 +1,47 @@
+---
+- name: Prepare the optional WireGuard profile
+  ansible.builtin.import_tasks: wireguard_preflight.yml
+
+- name: Install Debian-family workstation packages
+  ansible.builtin.import_tasks: packages.yml
+
+- name: Configure the local system
+  ansible.builtin.import_tasks: system.yml
+
+- name: Prepare the user's configuration directories
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+  loop:
+    - '{{ debian_config_home }}'
+    - '{{ debian_data_home }}'
+    - '{{ home }}/.local/bin'
+  tags: [config, packages]
+
+- name: Install the workstation command runner
+  ansible.builtin.import_tasks: just.yml
+  tags: [packages]
+
+- name: Configure Fish and terminal applications
+  ansible.builtin.import_tasks: shell.yml
+
+- name: Configure development tools
+  ansible.builtin.import_tasks: development.yml
+
+- name: Configure Docker
+  ansible.builtin.import_tasks: docker.yml
+
+- name: Configure Git and editors
+  ansible.builtin.import_tasks: editor.yml
+
+- name: Install desktop applications
+  ansible.builtin.import_tasks: apps.yml
+
+- name: Configure AI tools
+  ansible.builtin.import_tasks: ai_tools.yml
+
+- name: Configure WireGuard
+  ansible.builtin.import_tasks: wireguard.yml
+
+- name: Configure update notifications
+  ansible.builtin.import_tasks: services.yml

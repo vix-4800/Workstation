@@ -10,6 +10,7 @@ vault/secrets.yml
 
 # Ansible
 *.retry
+__pycache__/
 
 inventory/host_vars/*.yml
 

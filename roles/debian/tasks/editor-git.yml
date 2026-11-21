@@ -1,0 +1,61 @@
+---
+- name: Read the installed distribution Git version
+  ansible.builtin.command:
+    argv: [/usr/bin/git, --version]
+  register: debian_git_system_version
+  check_mode: false
+  changed_when: false
+  failed_when: not ansible_check_mode and debian_git_system_version.rc != 0
+
+- name: Select Git with support for configuration-based hooks
+  ansible.builtin.set_fact:
+    debian_git_executable: '{{ "/usr/bin/git" if debian_git_system_supported or debian_git_candidate_supported else debian_git_prefix ~ "/bin/git" }}'
+    debian_git_upgrade_system: '{{ not debian_git_system_supported and debian_git_candidate_supported }}'
+  vars:
+    debian_git_version_pattern: '[0-9]+(?:\.[0-9]+)+'
+    debian_git_candidate: >-
+      {{ (debian_apt_candidates.get('git', '') | regex_replace('^[0-9]+:', '')
+          | regex_search('^' ~ debian_git_version_pattern)) or '0' }}
+    debian_git_installed: >-
+      {{ (debian_git_system_version.stdout | default('') | regex_search(debian_git_version_pattern)) or '0' }}
+    debian_git_system_supported: "{{ debian_git_installed is version(debian_git_min_version, '>=') }}"
+    debian_git_candidate_supported: "{{ debian_git_candidate is version(debian_git_min_version, '>=') }}"
+
+- name: Upgrade the distribution Git when its candidate supports the configured hooks
+  ansible.builtin.apt:
+    name: 'git={{ debian_apt_candidates.git }}'
+    state: present
+    fail_on_autoremove: true
+  become: true
+  when: debian_git_upgrade_system
+
+- name: Build the pinned upstream Git when distribution Git is too old
+  ansible.builtin.include_tasks:
+    file: editor-git-build.yml
+    apply:
+      tags: [debian, editor, packages]
+  when:
+    - not ansible_check_mode
+    - debian_git_executable != '/usr/bin/git'
+
+- name: Verify the selected Git supports configuration-based hooks
+  ansible.builtin.command:
+    argv: ['{{ debian_git_executable }}', --version]
+  register: debian_git_verified
+  changed_when: false
+  failed_when: >-
+    debian_git_verified.rc != 0
+    or debian_git_verified.stdout.split()[2] is version(debian_git_min_version, '<')
+  when: not ansible_check_mode
+
+- name: Expose the selected Git on the user path with a local backup
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/python3
+      - '{{ debian_config_adopt_script }}'
+      - link
+      - '{{ debian_git_executable }}'
+      - '{{ home }}/.local/bin/git'
+  register: debian_git_link
+  changed_when: debian_git_link.stdout == 'changed'
+  when: not ansible_check_mode

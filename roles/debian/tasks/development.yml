@@ -1,0 +1,107 @@
+---
+- name: Load Debian-family development settings
+  ansible.builtin.include_vars: '{{ dotfiles_dir }}/roles/debian/vars/development.yml'
+  tags: [debian, development, packages, config]
+
+- name: Ensure development binaries directory exists
+  ansible.builtin.file:
+    path: '{{ debian_development_bin }}'
+    state: directory
+    mode: '0755'
+  tags: [debian, development, packages, config]
+
+- name: Install Debian-family development packages
+  ansible.builtin.apt:
+    name: '{{ debian_development_packages }}'
+    state: present
+    fail_on_autoremove: true
+  become: true
+  tags: [debian, development, packages]
+
+- name: Set up PHP development tools
+  ansible.builtin.import_tasks: development-php.yml
+
+- name: Set up Node.js development tools
+  ansible.builtin.import_tasks: development-node.yml
+
+- name: Install Python development tools with pipx
+  tags: [debian, development, packages]
+  when: not ansible_check_mode
+  environment: '{{ debian_development_environment | combine({"PIPX_BIN_DIR": debian_development_bin}) }}'
+  block:
+    - name: Read installed pipx tools
+      ansible.builtin.command:
+        argv: [/usr/bin/pipx, list, --json]
+      register: debian_pipx_tools
+      changed_when: false
+
+    - name: Install missing pipx tools
+      ansible.builtin.command:
+        argv: [/usr/bin/pipx, install, '{{ item }}']
+      loop: '{{ debian_python_tools }}'
+      when: item not in (debian_pipx_tools.stdout | from_json).venvs
+      changed_when: true
+
+- name: Set up Go development tools
+  ansible.builtin.import_tasks: development-go.yml
+
+- name: Set up Rust development tools
+  ansible.builtin.import_tasks: development-rust.yml
+
+- name: Install LuaCheck for Lua 5.4
+  ansible.builtin.command:
+    argv: [/usr/bin/luarocks, --lua-version, '5.4', install, --local, luacheck]
+    creates: '{{ home }}/.luarocks/bin/luacheck'
+  environment: '{{ debian_development_environment }}'
+  tags: [debian, development, packages]
+
+- name: Install upstream development utilities
+  ansible.builtin.include_tasks:
+    file: development-release.yml
+    apply:
+      tags: [debian, development, packages]
+  loop: '{{ debian_development_releases }}'
+  loop_control:
+    loop_var: debian_release
+    label: '{{ debian_release.name }}'
+  when: not ansible_check_mode
+  tags: [debian, development, packages]
+
+- name: Create development config parent directories
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+    mode: '0755'
+  loop: >-
+    {{
+      debian_development_config_links
+      | map(attribute='dest')
+      | map('dirname')
+      | reject('equalto', home)
+      | unique
+      | list
+    }}
+  tags: [debian, development, config]
+
+- name: Deploy development tool configs and helper scripts
+  ansible.builtin.include_tasks:
+    file: user_links.yml
+    apply:
+      tags: [debian, development, config]
+  vars:
+    debian_user_links: '{{ debian_development_config_links }}'
+  when: not ansible_check_mode
+  tags: [debian, development, config]
+
+- name: Deploy development helper scripts
+  ansible.builtin.include_tasks:
+    file: user_links.yml
+    apply:
+      tags: [debian, development, config]
+  vars:
+    debian_user_links:
+      - { src: development/scripts/check-composer-updates, dest: '{{ debian_development_bin }}/check-composer-updates' }
+      - { src: development/scripts/check-dotfiles-updates, dest: '{{ debian_development_bin }}/check-dotfiles-updates' }
+      - { src: development/scripts/luacheck, dest: '{{ debian_development_bin }}/luacheck' }
+  when: not ansible_check_mode
+  tags: [debian, development, config]

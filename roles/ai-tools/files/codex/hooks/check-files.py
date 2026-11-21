@@ -173,6 +173,8 @@ def syntax_checks(paths, cwd, deadline):
 
 def lint_checks(paths, cwd, deadline):
     home = Path.home()
+    config_home = Path(os.environ.get("XDG_CONFIG_HOME") or home / ".config")
+    composer_home = Path(os.environ.get("COMPOSER_HOME") or config_home / "composer")
     groups = {}
     notices = []
     for path in paths:
@@ -189,25 +191,24 @@ def lint_checks(paths, cwd, deadline):
             groups.setdefault("actions", []).append(str(path))
     # One linter per file type. Project-wide analysis and automatic fixes stay manual.
     checks = {
-        "php": (str(home / ".config/composer/vendor/bin/phpcs"), ".config/phpcs/phpcs.xml", ["--no-cache", "-q"]),
-        "py": ("ruff", ".config/ruff/pyproject.toml", ["check", "--no-cache"]),
-        "eslint": ("eslint", ".config/eslint/eslint.config.js", []),
-        "css": ("stylelint", ".stylelintrc.json", []),
-        "html": ("linthtml", ".linthtmlrc", []),
-        "yaml": ("yamllint", ".config/yamllint/config", []),
-        "md": ("markdownlint-cli2", ".config/markdownlint/.markdownlint.jsonc", []),
-        "shell": ("shellcheck", ".shellcheckrc", ["--severity=warning"]),
-        "lua": ("luacheck", ".config/luacheck/.luacheckrc", ["--no-color", "--codes"]),
-        "docker": ("hadolint", ".config/hadolint.yaml", []),
-        "make": ("checkmake", ".config/checkmake/checkmake.ini", []),
+        "php": (str(composer_home / "vendor/bin/phpcs"), config_home / "phpcs/phpcs.xml", ["--no-cache", "-q"]),
+        "py": ("ruff", config_home / "ruff/pyproject.toml", ["check", "--no-cache"]),
+        "eslint": ("eslint", config_home / "eslint/eslint.config.js", []),
+        "css": ("stylelint", home / ".stylelintrc.json", []),
+        "html": ("linthtml", home / ".linthtmlrc", []),
+        "yaml": ("yamllint", config_home / "yamllint/config", []),
+        "md": ("markdownlint-cli2", config_home / "markdownlint/.markdownlint.jsonc", []),
+        "shell": ("shellcheck", home / ".shellcheckrc", ["--severity=warning"]),
+        "lua": ("luacheck", config_home / "luacheck/.luacheckrc", ["--no-color", "--codes"]),
+        "docker": ("hadolint", config_home / "hadolint.yaml", []),
+        "make": ("checkmake", config_home / "checkmake/checkmake.ini", []),
         "go": ("gofmt", None, ["-l"]),
         "actions": ("actionlint", None, ["-no-color", "-pyflakes="]),
     }
     for kind, files in groups.items():
         if kind not in checks:
             continue
-        binary, config_name, options = checks[kind]
-        config = home / config_name if config_name else None
+        binary, config, options = checks[kind]
         args = [binary, *options]
         if config is not None:
             flag = {"php": "--standard=", "shell": "--rcfile=", "yaml": "--config-file="}.get(kind)
