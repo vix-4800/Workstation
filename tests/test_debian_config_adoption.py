@@ -33,36 +33,6 @@ class ConfigAdoptionTest(unittest.TestCase):
         return result.stdout.strip()
 
     @unittest.skipUnless(shutil.which("git"), "requires Git")
-    def test_git_adopts_settings_without_replacing_existing_local_hooks(self):
-        git = shutil.which("git")
-        config = self.home / ".gitconfig"
-        hooks = self.home / "custom-hooks"
-        hooks.mkdir()
-        existing = f"[core]\n\thooksPath = {hooks}\n[alias]\n\twhere = rev-parse --show-toplevel\n"
-        config.write_text(existing)
-        managed = self.home / ".gitconfig.workstation"
-        managed.symlink_to(GIT_CONFIG)
-        env = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
-        env.update(HOME=str(self.home), GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=str(config))
-
-        def git_config(key):
-            return subprocess.check_output(  # noqa: S603
-                [git, "config", "--get-all", key], text=True, env=env, cwd=self.home,
-            ).splitlines()
-
-        self.assertEqual(self.adopt("git", managed, config), "changed")
-        self.assertEqual(self.adopt("git", managed, config), "unchanged")
-        self.assertEqual(git_config("core.hooksPath"), [str(hooks)])
-        self.assertEqual(git_config("alias.where"), ["rev-parse --show-toplevel"])
-        self.assertEqual(git_config("hook.php-lint.event"), ["pre-commit"])
-        self.assertEqual(git_config("hook.secret-check.event"), ["pre-commit", "pre-push"])
-        self.assertEqual(git_config("credential.https://github.com.helper")[-1],
-                         "!/usr/bin/gh auth git-credential")
-        backups = list(self.home.glob(".gitconfig.workstation-backup-*"))
-        self.assertEqual(len(backups), 1)
-        self.assertEqual(backups[0].read_text(), existing)
-
-    @unittest.skipUnless(shutil.which("git"), "requires Git")
     def test_git_runs_configured_and_local_precommit_hooks(self):
         git = shutil.which("git")
         reported_version = subprocess.check_output([git, "--version"], text=True).split()[2]  # noqa: S603
@@ -70,9 +40,7 @@ class ConfigAdoptionTest(unittest.TestCase):
             self.skipTest("requires Git 2.54 config-based hook support")
 
         config = self.home / ".gitconfig"
-        managed = self.home / ".gitconfig.workstation"
-        managed.symlink_to(GIT_CONFIG)
-        self.adopt("git", managed, config)
+        self.adopt("link", GIT_CONFIG, config)
         repo = self.home / "repo"
         repo.mkdir()
         env = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
@@ -104,7 +72,10 @@ class ConfigAdoptionTest(unittest.TestCase):
         config_home = self.home / "config with spaces"
         settings = config_home / "Code/User/settings.json"
         codex = self.home / ".codex/config.toml"
-        originals = {settings: '{"editor.tabSize": 8}\n', codex: "[desktop]\nsetting = true\n"}
+        originals = {
+            self.home / ".gitconfig": "[alias]\nlocal-only = status\n",
+            settings: '{"editor.tabSize": 8}\n', codex: "[desktop]\nsetting = true\n",
+        }
         for path, content in originals.items():
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(content)
@@ -151,6 +122,7 @@ class ConfigAdoptionTest(unittest.TestCase):
                 self.assertRegex(result.stdout, r"changed=0\b")
 
         for destination, source in (
+            (self.home / ".gitconfig", repo / "roles/editor/files/git/gitconfig"),
             (settings, repo / "roles/editor/files/code/User/settings.json"),
             (codex, repo / "roles/ai-tools/files/codex/config.toml"),
         ):

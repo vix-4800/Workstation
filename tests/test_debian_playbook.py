@@ -42,7 +42,7 @@ class DebianPlaybookTest(unittest.TestCase):
         ai = yaml.safe_load((directory / "ai_tools.yml").read_text())
         ai_tasks = next(task["block"] for task in ai if task["name"] == "Install and verify user AI command-line tools")
         commands = {task["name"]: task["ansible.builtin.command"]["argv"] for task in ai_tasks}
-        ai_probe = commands["Find installed AI commands and language servers"][:-1] + ["intelephense"]
+        ai_probe = [*commands["Find installed AI commands and language servers"][:-1], "intelephense"]
         just_probe = yaml.safe_load((directory / "just.yml").read_text())[0]["ansible.builtin.command"]["argv"]
         uv_probe = commands["Find uv and uvx"]
         cases = (
@@ -54,14 +54,16 @@ class DebianPlaybookTest(unittest.TestCase):
             with self.subTest(command=argv, available=available), tempfile.TemporaryDirectory() as workspace:
                 for binary in available:
                     (Path(workspace) / binary).symlink_to("/bin/true")
-                result = subprocess.run(argv, env=os.environ | {"PATH": workspace},
-                                        text=True, capture_output=True, timeout=5, check=False)
+                result = subprocess.run(  # noqa: S603 - Test-controlled command and isolated executable lookup.
+                    argv, env=os.environ | {"PATH": workspace},
+                    text=True, capture_output=True, timeout=5, check=False,
+                )
                 self.assertEqual(result.returncode, status, result.stderr)
 
     @unittest.skipUnless(yaml, "requires PyYAML")
     def test_spotify_fetch_failure_leaves_required_flatpak_apps_independent(self):
         try:
-            import ansible.template
+            import ansible.template  # noqa: PLC0415 - Optional dependency; skip this test when unavailable.
         except ImportError:
             self.skipTest("requires Ansible Core")
 
@@ -70,11 +72,14 @@ class DebianPlaybookTest(unittest.TestCase):
         spotify = tasks.get("Install Spotify separately from Flathub")
         self.assertIsNotNone(spotify)
         self.assertEqual(spotify["ansible.builtin.command"]["argv"][-1], "com.spotify.Client")
-        self.assertNotIn("com.spotify.Client", yaml.safe_dump(tasks["Install Bitwarden and any required Obsidian Flatpak"]))
+        self.assertNotIn(
+            "com.spotify.Client", yaml.safe_dump(tasks["Install Bitwarden and any required Obsidian Flatpak"]),
+        )
         self.assertIn("Report a deferred Spotify installation", tasks)
 
         from_snapcraft = (
-            "Error: Failed to install com.spotify.Client: While downloading https://api.snapcraft.io/download/example.snap: "
+            "Error: Failed to install com.spotify.Client: "
+            "While downloading https://api.snapcraft.io/download/example.snap: "
             "While fetching https://api.snapcraft.io/download/example.snap: [35] SSL connect error"
         )
         trust = getattr(ansible.template, "trust_as_template", lambda value: value)
@@ -86,12 +91,12 @@ class DebianPlaybookTest(unittest.TestCase):
     @unittest.skipUnless(yaml, "requires PyYAML")
     def test_fish_plugin_install_respects_the_standalone_fisher_bootstrap(self):
         try:
-            import ansible.template
+            import ansible.template  # noqa: PLC0415 - Optional dependency; skip this test when unavailable.
         except ImportError:
             self.skipTest("requires Ansible Core")
 
         role = ROOT / "roles" / "debian"
-        defaults = yaml.safe_load((role / "defaults" / "main.yml").read_text())
+        defaults = yaml.safe_load((role / "defaults" / "main" / "debian.yml").read_text())
         tasks = yaml.safe_load((role / "tasks" / "fish_plugins.yml").read_text())
         install = next(task for task in tasks if task["name"] == "Install the missing workstation Fish plugins")
         plugins = [
@@ -133,8 +138,10 @@ class DebianPlaybookTest(unittest.TestCase):
             for info, platform, codename in releases:
                 with self.subTest(info=info):
                     os_release.write_text(info)
-                    result = subprocess.run([sys.executable, str(script), str(os_release)],
-                                            text=True, capture_output=True, check=False)
+                    result = subprocess.run(  # noqa: S603 - Fixed script with test-controlled input file.
+                        [sys.executable, str(script), str(os_release)],
+                        text=True, capture_output=True, check=False,
+                    )
                     if platform is None:
                         self.assertNotEqual(result.returncode, 0, result.stdout)
                         self.assertIn("Unsupported", result.stderr)
@@ -145,7 +152,7 @@ class DebianPlaybookTest(unittest.TestCase):
     @unittest.skipUnless(yaml, "requires PyYAML")
     def test_docker_and_firefox_use_packages_from_the_base_archive(self):
         try:
-            import ansible.template
+            import ansible.template  # noqa: PLC0415 - Optional dependency; skip this test when unavailable.
         except ImportError:
             self.skipTest("requires Ansible Core")
 
@@ -171,7 +178,8 @@ class DebianPlaybookTest(unittest.TestCase):
             ("Kali", {"docker-cli": "28", "docker-compose": "1:2.40.3-3", "docker-buildx": "0.29", "libavcodec62": "1"},
              [], ["docker.io", "docker-cli", "docker-compose", "docker-buildx"], "libavcodec62"),
             ("Existing Docker CE", {"docker-compose-plugin": "2", "docker-buildx-plugin": "0.30", "libavcodec62": "1"},
-             ["installed"], ["docker-ce", "docker-ce-cli", "containerd.io", "docker-compose-plugin", "docker-buildx-plugin"],
+             ["installed"],
+             ["docker-ce", "docker-ce-cli", "containerd.io", "docker-compose-plugin", "docker-buildx-plugin"],
              "libavcodec62"),
         )
         for target, versions, installed, docker_packages, codec in matrix:
@@ -180,11 +188,15 @@ class DebianPlaybookTest(unittest.TestCase):
                 variables = {"debian_apt_candidates": dict(versions, **dict.fromkeys(libraries, "1")),
                              "debian_docker_vendor": {"stdout_lines": installed}}
                 variables.update({key: trust(value) for key, value in docker_selection["vars"].items()})
-                variables.update({key: trust(value) for key, value in docker_selection["ansible.builtin.set_fact"].items()})
+                variables.update({
+                    key: trust(value) for key, value in docker_selection["ansible.builtin.set_fact"].items()
+                })
                 variables["debian_ai_packages"] = [trust(value) for value in ai_vars["debian_ai_packages"]]
                 variables["debian_ai_libavcodec"] = ai_vars["debian_ai_libavcodec"]
                 renderer = ansible.template.Templar(variables=variables)
-                self.assertEqual(renderer.template(trust(docker_install["ansible.builtin.apt"]["name"])), docker_packages)
+                self.assertEqual(
+                    renderer.template(trust(docker_install["ansible.builtin.apt"]["name"])), docker_packages,
+                )
                 firefox_packages = renderer.template(trust(firefox_install["ansible.builtin.apt"]["name"]))
                 self.assertIn(codec, firefox_packages)
                 self.assertEqual(set(firefox_packages) & (set(transitions) | set(transitions.values())), set(libraries))
@@ -216,7 +228,7 @@ class DebianPlaybookTest(unittest.TestCase):
             }
             env.pop("ANSIBLE_VAULT_PASSWORD_FILE", None)
             for option in ("--syntax-check", "--list-tags"):
-                result = subprocess.run(
+                result = subprocess.run(  # noqa: S603 - Fixed Ansible command only checks syntax and lists tags.
                     [ANSIBLE, str(self.playbook), option],
                     cwd=ROOT, env=env, text=True, capture_output=True, timeout=90, check=False,
                 )
