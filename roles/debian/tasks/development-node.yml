@@ -22,7 +22,13 @@
                 set -U nvm_default_version lts
                 echo workstation-node-default-set
             end
-            printf 'workstation-node-bin:%s\n' (path dirname (command -s node))
+            set -l node_bin (path resolve -- "$nvm_data/$nvm_current_version/bin"); or exit
+            if not test -x "$node_bin/node"
+                echo 'The selected nvm runtime has no executable Node.js binary.' >&2
+                exit 1
+            end
+            "$node_bin/node" --version >/dev/null; or exit
+            printf 'workstation-node-bin:%s\n' "$node_bin"
       register: debian_node_setup
       changed_when: >-
         'workstation-node-installed' in debian_node_setup.stdout_lines or
