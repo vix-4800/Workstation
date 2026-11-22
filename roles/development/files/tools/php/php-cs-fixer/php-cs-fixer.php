@@ -10,8 +10,9 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 use Vix\PhpCsFixerFixers\Fixers;
 
-$home = getenv('HOME');
-$globalComposerAutoloadPath = $home . '/.config/composer/vendor/autoload.php';
+$configHome = getenv('XDG_CONFIG_HOME') ?: getenv('HOME') . '/.config';
+$composerHome = getenv('COMPOSER_HOME') ?: $configHome . '/composer';
+$globalComposerAutoloadPath = $composerHome . '/vendor/autoload.php';
 
 require_once $globalComposerAutoloadPath;
 

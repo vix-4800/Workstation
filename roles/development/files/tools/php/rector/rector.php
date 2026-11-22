@@ -87,8 +87,9 @@ use Vix\RectorRules\Yii2\Yii2UserFindOneToIdentityRector;
 define('LARAVEL_RULES_ENABLED', value: false);
 define('YII2_RULES_ENABLED', value: false);
 
-$home = getenv('HOME');
-$globalComposerAutoloadPath = $home . '/.config/composer/vendor/autoload.php';
+$configHome = getenv('XDG_CONFIG_HOME') ?: getenv('HOME') . '/.config';
+$composerHome = getenv('COMPOSER_HOME') ?: $configHome . '/composer';
+$globalComposerAutoloadPath = $composerHome . '/vendor/autoload.php';
 
 require_once $globalComposerAutoloadPath;
 
