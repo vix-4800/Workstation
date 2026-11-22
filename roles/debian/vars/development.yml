@@ -65,7 +65,7 @@ debian_cargo_tools:
   - { name: just-lsp, args: [just-lsp] }
   - { name: nginx-lint, args: [--git, 'https://github.com/walf443/nginx-lint', --tag, v0.10.5, nginx-lint] }
   - { name: dotenv-linter, args: [dotenv-linter, --version, '4.0.0'] }
-  - { name: stylua, args: [stylua, --features, all] }
+  - { name: stylua, args: [stylua, --all-features] }
 
 debian_rustup_version: '1.28.2'
 debian_rust_targets:
