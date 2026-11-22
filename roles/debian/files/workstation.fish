@@ -30,7 +30,7 @@ if status is-interactive
         alias la 'eza -la --icons --group-directories-first'
         alias lt 'eza --tree --icons --group-directories-first'
     end
-    alias update 'sudo apt update'
+    alias update 'sudo apt update && sudo apt upgrade'
     alias install 'sudo apt install'
     alias remove 'sudo apt remove'
     alias search 'apt search'
