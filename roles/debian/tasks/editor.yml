@@ -68,20 +68,6 @@
   diff: false
   tags: [debian, editor, config]
 
-- name: Deploy Visual Studio Code settings with local tool paths
-  ansible.builtin.copy:
-    content: >-
-      {{
-        lookup('ansible.builtin.file', debian_editor_files ~ '/code/User/settings.json', rstrip=False)
-        | replace('~/.config/', (debian_config_home | to_json(ensure_ascii=False))[1:-1] ~ '/')
-      }}
-    dest: '{{ debian_config_home }}/Code/User/settings.json'
-    backup: true
-    follow: false
-    mode: '0644'
-  when: not ansible_check_mode
-  tags: [debian, editor, config]
-
 - name: Include workstation settings in the user's Git configuration
   ansible.builtin.command:
     argv:

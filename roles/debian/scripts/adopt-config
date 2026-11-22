@@ -2,10 +2,10 @@
 """Adopt workstation configuration while keeping a private copy of local state."""
 
 import argparse
-from contextlib import contextmanager
 import os
 import subprocess
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 
 
@@ -20,7 +20,8 @@ def write_config(destination, previous, content):
         with os.fdopen(descriptor, "wb") as staged:
             staged.write(content)
         if current_config(destination) != previous:
-            raise RuntimeError(f"Configuration changed during provisioning: {destination}")
+            # Keep conflict detection inside the lock cleanup handler.
+            raise RuntimeError(f"Configuration changed during provisioning: {destination}")  # noqa: TRY301
         if previous is not None:
             with tempfile.NamedTemporaryFile(
                 dir=destination.parent, prefix=f"{destination.name}.workstation-backup-", delete=False,
@@ -47,7 +48,7 @@ def adopt_git(source, destination):
         return False
     include = f"./{source.name}"
     if previous is not None:
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603 - Fixed executable with separate arguments, without a shell.
             ["/usr/bin/git", "config", "--file", str(destination), "--no-includes",
              "--null", "--get-all", "include.path"],
             capture_output=True, check=False,
@@ -58,21 +59,6 @@ def adopt_git(source, destination):
             return False
     content = (previous or b"") + f"\n[include]\n\tpath = {include}\n".encode()
     return write_config(destination, previous, content)
-
-
-def adopt_codex(source, destination):
-    import tomlkit
-
-    base = tomlkit.parse(source.read_text())
-    previous = current_config(destination)
-    if previous is not None:
-        local = tomlkit.parse(previous.decode())
-        for key in ("desktop", "projects", "marketplaces"):
-            if key in local:
-                base[key] = local[key]
-        if "node_repl" in local.get("mcp_servers", {}):
-            base["mcp_servers"]["node_repl"] = local["mcp_servers"]["node_repl"]
-    return write_config(destination, previous, tomlkit.dumps(base).encode())
 
 
 @contextmanager
@@ -116,7 +102,6 @@ def adopt_directory(source, destination):
 def main():
     actions = {
         "git": adopt_git,
-        "codex": adopt_codex,
         "link": adopt_link,
         "directory": adopt_directory,
     }

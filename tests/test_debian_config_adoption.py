@@ -1,18 +1,21 @@
-import importlib.util
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
-import tomllib
 import unittest
 from pathlib import Path
+
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
 
 ROOT = Path(__file__).resolve().parents[1]
 ADOPT = ROOT / "roles/debian/scripts/adopt-config"
 GIT_CONFIG = ROOT / "roles/editor/files/git/gitconfig"
-CODEX_CONFIG = ROOT / "roles/ai-tools/files/codex/config.toml"
+ANSIBLE = shutil.which("ansible-playbook")
 
 
 class ConfigAdoptionTest(unittest.TestCase):
@@ -31,6 +34,7 @@ class ConfigAdoptionTest(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("git"), "requires Git")
     def test_git_adopts_settings_without_replacing_existing_local_hooks(self):
+        git = shutil.which("git")
         config = self.home / ".gitconfig"
         hooks = self.home / "custom-hooks"
         hooks.mkdir()
@@ -43,7 +47,7 @@ class ConfigAdoptionTest(unittest.TestCase):
 
         def git_config(key):
             return subprocess.check_output(  # noqa: S603
-                ["git", "config", "--get-all", key], text=True, env=env, cwd=self.home,
+                [git, "config", "--get-all", key], text=True, env=env, cwd=self.home,
             ).splitlines()
 
         self.assertEqual(self.adopt("git", managed, config), "changed")
@@ -92,36 +96,75 @@ class ConfigAdoptionTest(unittest.TestCase):
         self.assertEqual(set(run_git("hook", "run", "pre-commit").splitlines()),
                          {"check-staged-php", "check-secrets", "pre-commit"})
 
-    @unittest.skipUnless(importlib.util.find_spec("tomlkit"), "requires tomlkit")
-    def test_codex_keeps_desktop_projects_and_node_repl_with_backup(self):
-        codex = self.home / ".codex"
-        codex.mkdir()
-        config = codex / "config.toml"
-        original = (
-            'model = "old-model"\n[desktop]\nsetting = true\n'
-            '[projects."/work/Example Project"]\ntrust_level = "trusted"\n'
-            '[mcp_servers.node_repl]\ncommand = "/existing/node_repl"\n'
-            '[mcp_servers.node_repl.env]\nNODE_REPL_HOME = "/existing/node"\n'
-        )
-        config.write_text(original)
-        auth = codex / "auth.json"
+    @unittest.skipUnless(ANSIBLE and yaml, "requires ansible-playbook and PyYAML")
+    def test_deployed_editor_and_codex_settings_write_through_to_repository(self):
+        repo = self.home / "repo"
+        for role in ("editor", "ai-tools"):
+            shutil.copytree(ROOT / f"roles/{role}/files", repo / f"roles/{role}/files")
+        config_home = self.home / "config with spaces"
+        settings = config_home / "Code/User/settings.json"
+        codex = self.home / ".codex/config.toml"
+        originals = {settings: '{"editor.tabSize": 8}\n', codex: "[desktop]\nsetting = true\n"}
+        for path, content in originals.items():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content)
+        auth = self.home / ".codex/auth.json"
         auth.write_text('{"example": "local auth"}')
 
-        self.assertEqual(self.adopt("codex", CODEX_CONFIG, config), "changed")
-        self.assertEqual(self.adopt("codex", CODEX_CONFIG, config), "unchanged")
-        effective = tomllib.loads(config.read_text())
-        local = tomllib.loads(original)
-        base = tomllib.loads(CODEX_CONFIG.read_text())
-        self.assertEqual(effective["desktop"], local["desktop"])
-        self.assertEqual(effective["projects"], local["projects"])
-        self.assertEqual(effective["mcp_servers"]["node_repl"], local["mcp_servers"]["node_repl"])
-        self.assertEqual(effective["mcp_servers"]["playwright"], base["mcp_servers"]["playwright"])
-        self.assertEqual(effective["model"], base["model"])
+        editor = yaml.safe_load((ROOT / "roles/debian/tasks/editor.yml").read_text())
+        ai = yaml.safe_load((ROOT / "roles/debian/tasks/ai_tools.yml").read_text())
+        codex_tasks = next(
+            task["block"] for task in ai if task["name"] == "Deploy Codex configuration with local backups"
+        )
+        tasks = [task for task in editor if task["name"] in {
+            "Link editor configuration and hook scripts with local backups",
+            "Deploy Visual Studio Code settings with local tool paths",
+        }]
+        tasks += [task for task in codex_tasks if task["name"] in {
+            "Adopt the shared Codex settings", "Link Codex assets and shared instructions",
+        }]
+        variables = yaml.safe_load((ROOT / "roles/ai-tools/defaults/main.yml").read_text())
+        variables.update(yaml.safe_load((ROOT / "roles/debian/vars/editor.yml").read_text()))
+        variables.update({
+            "home": str(self.home), "dotfiles_dir": str(repo),
+            "debian_config_home": str(config_home),
+            "debian_config_adopt_script": str(ADOPT), "debian_ai_adopt_script": str(ADOPT),
+            "debian_editor_scripts": str(ROOT / "roles/editor/scripts"),
+            "debian_ai_files": str(repo / "roles/ai-tools/files"),
+        })
+        playbook = self.home / "deploy.yml"
+        playbook.write_text(yaml.safe_dump([{
+            "hosts": "localhost", "gather_facts": False, "vars": variables, "tasks": tasks,
+        }]))
+        env = os.environ | {
+            "ANSIBLE_CONFIG": str(ROOT / "ansible-debian.cfg"),
+            "ANSIBLE_HOME": str(self.home / "ansible"), "ANSIBLE_NOCOLOR": "1",
+            "ANSIBLE_REMOTE_TMP": str(self.home / "ansible-remote"),
+        }
+        for run in range(2):
+            result = subprocess.run(  # noqa: S603 - Test-controlled executable, playbook and arguments.
+                [ANSIBLE, "-i", "localhost,", "-c", "local", str(playbook)],
+                cwd=self.home, env=env, text=True, capture_output=True, timeout=90, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            if run == 1:
+                self.assertRegex(result.stdout, r"changed=0\b")
+
+        for destination, source in (
+            (settings, repo / "roles/editor/files/code/User/settings.json"),
+            (codex, repo / "roles/ai-tools/files/codex/config.toml"),
+        ):
+            with self.subTest(destination=destination.name):
+                self.assertTrue(destination.is_symlink())
+                self.assertEqual(destination.resolve(), source)
+                self.assertEqual(source.read_bytes(), (ROOT / source.relative_to(repo)).read_bytes())
+                backups = list(destination.parent.glob(f"{destination.name}.workstation-backup-*/{destination.name}"))
+                self.assertEqual(len(backups), 1)
+                self.assertEqual(backups[0].read_text(), originals[destination])
+                marker = "\n// local edit\n" if destination == settings else "\n# local edit\n"
+                destination.write_text(destination.read_text() + marker)
+                self.assertTrue(source.read_text().endswith(marker))
         self.assertEqual(auth.read_text(), '{"example": "local auth"}')
-        backups = list(codex.glob("config.toml.workstation-backup-*"))
-        self.assertEqual(len(backups), 1)
-        self.assertEqual(backups[0].read_text(), original)
-        self.assertEqual(backups[0].stat().st_mode & 0o777, 0o600)
 
     def test_link_backs_up_existing_directory_and_applies_once(self):
         config = self.home / "nvim"

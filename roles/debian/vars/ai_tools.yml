@@ -5,7 +5,9 @@ debian_ai_environment:
   HOME: '{{ home }}'
   XDG_CONFIG_HOME: '{{ debian_config_home }}'
   XDG_DATA_HOME: '{{ debian_data_home }}'
-  PATH: '{{ home }}/.local/bin:{{ home }}/.cargo/bin:{{ ansible_facts.env.PATH | default("/usr/local/bin:/usr/bin:/bin") }}'
+  PATH: >-
+    {{ home }}/.local/bin:{{ home }}/.cargo/bin:{{ ansible_facts.env.PATH
+       | default("/usr/local/bin:/usr/bin:/bin") }}
 
 debian_ai_npm_tools:
   - { binary: codex, package: '@openai/codex' }
@@ -14,8 +16,8 @@ debian_ai_npm_tools:
 
 debian_ai_lua_release:
   name: lua-language-server
-  version: '3.19.2'
-  tag: '3.19.2'
+  version: 3.19.2
+  tag: 3.19.2
   repo: LuaLS/lua-language-server
   asset:
     amd64: lua-language-server-3.19.2-linux-x64.tar.gz
@@ -33,7 +35,6 @@ debian_ai_packages:
   - bubblewrap
   - gopls
   - pipx
-  - python3-tomlkit
   - socat
   - xvfb
   - '{{ "libasound2t64" if "libasound2t64" in debian_apt_candidates else "libasound2" }}'
