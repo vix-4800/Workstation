@@ -11,23 +11,40 @@ local M = {}
 -- │ Configuration Paths                                     │
 -- ╰─────────────────────────────────────────────────────────╯
 
+local config_home = vim.env.XDG_CONFIG_HOME
+if not config_home or config_home == "" then
+  config_home = vim.fn.expand("~/.config")
+end
+
+function M.configPath(path)
+  return vim.fs.joinpath(config_home, path)
+end
+
+function M.composerBin(name)
+  local composer_home = vim.env.COMPOSER_HOME
+  if not composer_home or composer_home == "" then
+    composer_home = M.configPath("composer")
+  end
+  return vim.fs.joinpath(composer_home, "vendor", "bin", name)
+end
+
 M.configs = {
   -- PHP
-  php_cs_fixer = vim.fn.expand("~/.config/php-cs-fixer/php-cs-fixer.php"),
-  phpstan = vim.fn.expand("~/.config/phpstan/phpstan.neon"),
-  phpcs = vim.fn.expand("~/.config/phpcs/phpcs.xml"),
-  phpmd = vim.fn.expand("~/.config/phpmd/phpmd.yml"),
-  rector = vim.fn.expand("~/.config/rector/rector.php"),
-  pint = vim.fn.expand("~/.config/pint/pint.json"),
-  blade_formatter = vim.fn.expand("~/.config/blade-formatter/.bladeformatterrc.json"),
+  php_cs_fixer = M.configPath("php-cs-fixer/php-cs-fixer.php"),
+  phpstan = M.configPath("phpstan/phpstan.neon"),
+  phpcs = M.configPath("phpcs/phpcs.xml"),
+  phpmd = M.configPath("phpmd/phpmd.yml"),
+  rector = M.configPath("rector/rector.php"),
+  pint = M.configPath("pint/pint.json"),
+  blade_formatter = M.configPath("blade-formatter/.bladeformatterrc.json"),
 
   -- Python
-  ruff = vim.fn.expand("~/.config/ruff/pyproject.toml"),
+  ruff = M.configPath("ruff/pyproject.toml"),
 
   -- JavaScript/TypeScript/JSON/CSS/HTML/Markdown
   prettier = vim.fn.expand("~/.prettierrc"),
   prettier_ignore = vim.fn.expand("~/.prettierignore"),
-  eslint = vim.fn.expand("~/.config/eslint/eslint.config.js"),
+  eslint = M.configPath("eslint/eslint.config.js"),
   stylelint = vim.fn.expand("~/.stylelintrc.json"),
   linthtml = vim.fn.expand("~/.linthtmlrc"),
   jsonlintrc = vim.fn.expand("~/.jsonlintrc"),
@@ -36,33 +53,33 @@ M.configs = {
   shellcheck = vim.fn.expand("~/.shellcheckrc"),
 
   -- YAML
-  yamllint = vim.fn.expand("~/.config/yamllint/config"),
-  yamlfmt = vim.fn.expand("~/.config/yamlfmt/.yamlfmt"),
+  yamllint = M.configPath("yamllint/config"),
+  yamlfmt = M.configPath("yamlfmt/.yamlfmt"),
 
   -- TOML
-  taplo = vim.fn.expand("~/.config/taplo/taplo.toml"),
+  taplo = M.configPath("taplo/taplo.toml"),
 
   -- Markdown
-  markdownlint = vim.fn.expand("~/.config/markdownlint/.markdownlint.jsonc"),
+  markdownlint = M.configPath("markdownlint/.markdownlint.jsonc"),
 
   -- Docker
-  hadolint = vim.fn.expand("~/.config/hadolint.yaml"),
+  hadolint = M.configPath("hadolint.yaml"),
 
   -- Lua
-  stylua = vim.fn.expand("~/.config/stylua/stylua.toml"),
-  luacheck = vim.fn.expand("~/.config/luacheck/.luacheckrc"),
+  stylua = M.configPath("stylua/stylua.toml"),
+  luacheck = M.configPath("luacheck/.luacheckrc"),
 
   -- SQL
   sqlfluff = vim.fn.expand("~/.sqlfluff"),
 
   -- NGINX
-  nginx_lint = vim.fn.expand("~/.config/nginx-lint/.nginx-lint.toml"),
+  nginx_lint = M.configPath("nginx-lint/.nginx-lint.toml"),
 
   -- Ansible
   ansible_lint = vim.fn.expand("~/.ansible-lint"),
 
   -- Make
-  checkmake = vim.fn.expand("~/.config/checkmake/checkmake.ini"),
+  checkmake = M.configPath("checkmake/checkmake.ini"),
 
   -- EditorConfig
   editorconfig_checker = vim.fn.expand("~/.editorconfig-checker.json"),

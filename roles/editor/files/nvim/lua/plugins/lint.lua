@@ -110,7 +110,7 @@ return {
 
     -- Configure phpstan to use custom config
     lint.linters.phpstan = lint.linters.phpstan or {}
-    lint.linters.phpstan.cmd = vim.fn.expand("~/.config/composer/vendor/bin/phpstan")
+    lint.linters.phpstan.cmd = configs.composerBin("phpstan")
     lint.linters.phpstan.args = {
       "analyse",
       "--error-format=json",
@@ -123,7 +123,7 @@ return {
     }
 
     -- Configure phpcs to use custom config
-    lint.linters.phpcs.cmd = vim.fn.expand("~/.config/composer/vendor/bin/phpcs")
+    lint.linters.phpcs.cmd = configs.composerBin("phpcs")
     lint.linters.phpcs.args = {
       "--standard=" .. configs.getConfig("phpcs"),
       "--report=json",
@@ -140,7 +140,7 @@ return {
 
     -- Configure phpmd to use custom config
     lint.linters.phpmd = lint.linters.phpmd or {}
-    lint.linters.phpmd.cmd = vim.fn.expand("~/.config/composer/vendor/bin/phpmd")
+    lint.linters.phpmd.cmd = configs.composerBin("phpmd")
     lint.linters.phpmd.args = {
       "analyze",
       "--no-progress",

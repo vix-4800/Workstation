@@ -1,4 +1,5 @@
 local icons = require("config.icons")
+local configs = require("config.linter-configs")
 
 local function project_root()
   local uv = vim.uv
@@ -22,7 +23,7 @@ end
 vim.keymap.set("n", "<leader>cpr", function()
   vim.cmd("write")
   local file = vim.fn.expand("%:p")
-  local cfg = vim.fn.expand("~/.config/rector/rector.php")
+  local cfg = configs.getConfig("rector")
   vim.notify(icons.notifications.rector_start .. " Rector: refactoring " .. vim.fn.expand("%:t"))
   vim.system(
     { "rector", "process", file, "--ansi", "--no-progress-bar", "--config=" .. cfg },
