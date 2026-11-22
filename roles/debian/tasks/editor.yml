@@ -67,16 +67,3 @@
     mode: '0600'
   diff: false
   tags: [debian, editor, config]
-
-- name: Include workstation settings in the user's Git configuration
-  ansible.builtin.command:
-    argv:
-      - /usr/bin/python3
-      - '{{ debian_config_adopt_script }}'
-      - git
-      - '{{ home }}/.gitconfig.workstation'
-      - '{{ home }}/.gitconfig'
-  register: debian_editor_git_config
-  changed_when: debian_editor_git_config.stdout == 'changed'
-  when: not ansible_check_mode
-  tags: [debian, editor, config]

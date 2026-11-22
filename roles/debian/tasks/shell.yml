@@ -47,13 +47,10 @@
   when: not ansible_check_mode
   tags: [shell, config]
 
-- name: Deploy portable Fish settings
-  ansible.builtin.copy:
-    src: workstation.fish
-    dest: '{{ debian_config_home }}/fish/conf.d/99-workstation.fish'
-    mode: '0644'
-    backup: true
-    validate: /usr/bin/fish --no-execute %s
+- name: Validate portable Fish settings
+  ansible.builtin.command:
+    argv: [/usr/bin/fish, --no-execute, '{{ role_path }}/files/workstation.fish']
+  changed_when: false
   when: not ansible_check_mode
   tags: [shell, config, packages]
 
@@ -84,19 +81,9 @@
     argv: [/usr/bin/batcat, cache, --build]
   when:
     - not ansible_check_mode
-    - "'Catppuccin Mocha' not in debian_bat_themes.stdout_lines"
+    - >-
+      'Catppuccin Mocha' not in debian_bat_themes.stdout_lines
   changed_when: true
-  tags: [shell, config]
-
-- name: Deploy the Kitty config with automatic X11 or Wayland selection
-  ansible.builtin.copy:
-    dest: '{{ debian_config_home }}/kitty/kitty.conf'
-    content: >-
-      {{ lookup('file', dotfiles_dir ~ '/roles/shell/files/kitty/kitty.conf', rstrip=false)
-         | regex_replace('(?m)^linux_display_server wayland$', 'linux_display_server auto') }}
-    mode: '0644'
-    backup: true
-  when: not ansible_check_mode
   tags: [shell, config]
 
 - name: Check whether XFCE is installed
@@ -150,7 +137,7 @@
     - name: Set the XFCE terminal preference
       ansible.builtin.lineinfile:
         path: '{{ debian_config_home }}/xfce4/helpers.rc'
-        regexp: '^TerminalEmulator='
+        regexp: ^TerminalEmulator=
         line: TerminalEmulator=kitty
         create: true
         mode: '0644'
@@ -163,7 +150,7 @@
 
 - name: Verify Fish is available as a login shell
   ansible.builtin.command:
-    argv: [/bin/sh, -c, "test -x /usr/bin/fish && rg -Fxq /usr/bin/fish /etc/shells"]
+    argv: [/bin/sh, -c, test -x /usr/bin/fish && rg -Fxq /usr/bin/fish /etc/shells]
   changed_when: false
   when: not ansible_check_mode
   tags: [shell, system]

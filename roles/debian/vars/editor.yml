@@ -17,7 +17,7 @@ debian_git_build_packages:
   - zlib1g-dev
 
 debian_editor_config_links:
-  - { src: '{{ debian_editor_files }}/git/gitconfig', dest: '{{ home }}/.gitconfig.workstation' }
+  - { src: '{{ debian_editor_files }}/git/gitconfig', dest: '{{ home }}/.gitconfig' }
   - { src: '{{ debian_editor_files }}/git/delta.gitconfig', dest: '{{ home }}/.gitconfig.delta' }
   - { src: '{{ debian_editor_files }}/nvim', dest: '{{ debian_config_home }}/nvim' }
   - src: '{{ debian_editor_files }}/code/User/settings.json'

@@ -1,8 +1,4 @@
 ---
-- name: Load the shared AI tool configuration
-  ansible.builtin.include_vars: '{{ dotfiles_dir }}/roles/ai-tools/defaults/main.yml'
-  tags: [debian, ai-tools, packages, config]
-
 - name: Load Debian-family AI tool settings
   ansible.builtin.include_vars: '{{ role_path }}/vars/ai_tools.yml'
   tags: [debian, ai-tools, packages, config]

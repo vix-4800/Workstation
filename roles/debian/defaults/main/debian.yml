@@ -92,7 +92,7 @@ debian_apt_repositories:
     key_type: asc
     fingerprints: [BC528686B50D79E339D3721CEB3E94ADBE1229CF]
 
-debian_fisher_version: '4.4.5'
+debian_fisher_version: 4.4.5
 # The standalone bootstrap manages Fisher itself.
 debian_fish_plugins:
   - ilancosman/tide@v6
@@ -101,8 +101,8 @@ debian_fish_plugins:
   - jorgebucaran/autopair.fish
   - franciscolourenco/done
 debian_nerd_fonts_version: v3.4.0
-debian_just_version: '1.46.0'
-debian_obsidian_version: '1.15.1'
+debian_just_version: 1.46.0
+debian_obsidian_version: 1.15.1
 debian_obsidian_sha256: f77b6dfc8c040214f2febad2b1b9b051b6a838a47b0f4fb90a31cfcb79b8fcec
 
 debian_shell_packages:
@@ -110,13 +110,18 @@ debian_shell_packages:
   - kitty
   - tmux
 debian_shell_links:
+  - {src: debian/files/workstation.fish, dest: '{{ debian_config_home }}/fish/conf.d/99-workstation.fish'}
   - {src: base/files/.editorconfig, dest: '{{ home }}/.editorconfig'}
   - {src: shell/files/tmux/tmux.conf, dest: '{{ home }}/.tmux.conf'}
+  - {src: shell/files/kitty/kitty.conf, dest: '{{ debian_config_home }}/kitty/workstation.conf'}
+  - {src: debian/files/kitty/kitty.conf, dest: '{{ debian_config_home }}/kitty/kitty.conf'}
   - {src: shell/files/kitty/catppuccin-mocha.conf, dest: '{{ debian_config_home }}/kitty/catppuccin-mocha.conf'}
   - {src: appearance/files/bat/config, dest: '{{ debian_config_home }}/bat/config'}
-  - {src: 'appearance/files/bat/themes/Catppuccin Mocha.tmTheme', dest: '{{ debian_config_home }}/bat/themes/Catppuccin Mocha.tmTheme'}
+  - src: appearance/files/bat/themes/Catppuccin Mocha.tmTheme
+    dest: '{{ debian_config_home }}/bat/themes/Catppuccin Mocha.tmTheme'
   - {src: appearance/files/btop/btop.conf, dest: '{{ debian_config_home }}/btop/btop.conf'}
-  - {src: appearance/files/btop/themes/catppuccin_mocha.theme, dest: '{{ debian_config_home }}/btop/themes/catppuccin_mocha.theme'}
+  - src: appearance/files/btop/themes/catppuccin_mocha.theme
+    dest: '{{ debian_config_home }}/btop/themes/catppuccin_mocha.theme'
   - {src: shell/files/fish/conf.d/tide.fish, dest: '{{ debian_config_home }}/fish/conf.d/tide.fish'}
   - {src: shell/files/fish/functions/is_laptop.fish, dest: '{{ debian_config_home }}/fish/functions/is_laptop.fish'}
   - {src: shell/files/fish/functions/refactor.fish, dest: '{{ debian_config_home }}/fish/functions/refactor.fish'}
