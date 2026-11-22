@@ -36,6 +36,34 @@ class DebianPlaybookTest(unittest.TestCase):
         self.assertIn("codex", binaries)
         self.assertTrue(binaries.isdisjoint({"claude", "opencode", "copilot"}))
 
+    @unittest.skipUnless(yaml, "requires PyYAML")
+    def test_fish_plugin_install_respects_the_standalone_fisher_bootstrap(self):
+        try:
+            import ansible.template
+        except ImportError:
+            self.skipTest("requires Ansible Core")
+
+        role = ROOT / "roles" / "debian"
+        defaults = yaml.safe_load((role / "defaults" / "main.yml").read_text())
+        tasks = yaml.safe_load((role / "tasks" / "fish_plugins.yml").read_text())
+        install = next(task for task in tasks if task["name"] == "Install the missing workstation Fish plugins")
+        plugins = [
+            "ilancosman/tide@v6", "jorgebucaran/nvm.fish", "catppuccin/fish",
+            "jorgebucaran/autopair.fish", "franciscolourenco/done",
+        ]
+        trust = getattr(ansible.template, "trust_as_template", lambda value: value)
+        for installed, missing in (([], plugins), (plugins, []), (plugins[:-1], plugins[-1:])):
+            with self.subTest(installed=installed):
+                renderer = ansible.template.Templar(variables={
+                    "debian_fisher_version": defaults["debian_fisher_version"],
+                    "debian_fish_plugins": [trust(plugin) for plugin in defaults["debian_fish_plugins"]],
+                    "debian_fisher_installed": {"stdout_lines": installed},
+                })
+                self.assertCountEqual(
+                    renderer.template(trust(install["vars"]["debian_fisher_missing"])),
+                    missing,
+                )
+
     def test_debian_family_platform_detection(self):
         script = ROOT / "roles" / "debian" / "scripts" / "detect-platform"
         releases = (

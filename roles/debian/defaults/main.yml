@@ -93,8 +93,8 @@ debian_apt_repositories:
     fingerprints: [BC528686B50D79E339D3721CEB3E94ADBE1229CF]
 
 debian_fisher_version: '4.4.5'
+# The standalone bootstrap manages Fisher itself.
 debian_fish_plugins:
-  - 'jorgebucaran/fisher@{{ debian_fisher_version }}'
   - ilancosman/tide@v6
   - jorgebucaran/nvm.fish
   - catppuccin/fish
