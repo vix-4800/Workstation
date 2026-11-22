@@ -37,6 +37,28 @@ class DebianPlaybookTest(unittest.TestCase):
         self.assertTrue(binaries.isdisjoint({"claude", "opencode", "copilot"}))
 
     @unittest.skipUnless(yaml, "requires PyYAML")
+    def test_optional_command_lookups_use_portable_exit_statuses(self):
+        directory = ROOT / "roles" / "debian" / "tasks"
+        ai = yaml.safe_load((directory / "ai_tools.yml").read_text())
+        ai_tasks = next(task["block"] for task in ai if task["name"] == "Install and verify user AI command-line tools")
+        commands = {task["name"]: task["ansible.builtin.command"]["argv"] for task in ai_tasks}
+        ai_probe = commands["Find installed AI commands and language servers"][:-1] + ["intelephense"]
+        just_probe = yaml.safe_load((directory / "just.yml").read_text())[0]["ansible.builtin.command"]["argv"]
+        uv_probe = commands["Find uv and uvx"]
+        cases = (
+            (ai_probe, [], 1), (ai_probe, ["intelephense"], 0),
+            (just_probe, [], 1), (just_probe, ["just"], 0),
+            (uv_probe, [], 1), (uv_probe, ["uv"], 1), (uv_probe, ["uv", "uvx"], 0),
+        )
+        for argv, available, status in cases:
+            with self.subTest(command=argv, available=available), tempfile.TemporaryDirectory() as workspace:
+                for binary in available:
+                    (Path(workspace) / binary).symlink_to("/bin/true")
+                result = subprocess.run(argv, env=os.environ | {"PATH": workspace},
+                                        text=True, capture_output=True, timeout=5, check=False)
+                self.assertEqual(result.returncode, status, result.stderr)
+
+    @unittest.skipUnless(yaml, "requires PyYAML")
     def test_spotify_fetch_failure_leaves_required_flatpak_apps_independent(self):
         try:
             import ansible.template

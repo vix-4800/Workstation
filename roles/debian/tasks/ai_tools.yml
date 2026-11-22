@@ -35,7 +35,7 @@
   block:
     - name: Find installed AI commands and language servers
       ansible.builtin.command:
-        argv: [/bin/sh, -c, 'command -v "$1"', sh, '{{ item.binary }}']
+        argv: [/bin/sh, -c, 'command -v "$1" || exit 1', sh, '{{ item.binary }}']
       loop: '{{ debian_ai_npm_tools }}'
       loop_control:
         label: '{{ item.binary }}'
@@ -60,7 +60,7 @@
 
     - name: Find uv and uvx
       ansible.builtin.command:
-        argv: [/bin/sh, -c, 'command -v uv && command -v uvx']
+        argv: [/bin/sh, -c, 'command -v uv && command -v uvx || exit 1']
       register: debian_ai_uv_path
       changed_when: false
       failed_when: debian_ai_uv_path.rc not in [0, 1]

@@ -1,7 +1,7 @@
 ---
 - name: Check for an available just executable
   ansible.builtin.command:
-    argv: [/bin/sh, -c, 'command -v just']
+    argv: [/bin/sh, -c, 'command -v just || exit 1']
   environment:
     PATH: '{{ home }}/.local/bin:{{ ansible_facts.env.PATH }}'
   register: debian_just_command
