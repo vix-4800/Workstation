@@ -1,6 +1,7 @@
 ---
 debian_development_tools_dir: '{{ dotfiles_dir }}/roles/development/files/tools'
 debian_development_bin: '{{ home }}/.local/bin'
+debian_development_php: /usr/bin/php
 debian_cargo_home: '{{ ansible_facts.env.CARGO_HOME | default(home + "/.cargo", true) }}'
 debian_rustup_home: '{{ ansible_facts.env.RUSTUP_HOME | default(home + "/.rustup", true) }}'
 debian_development_environment:
@@ -15,18 +16,11 @@ debian_development_environment:
 
 debian_development_packages:
   - build-essential
-  - composer
   - liblua5.4-dev
   - libssl-dev
   - libxml2-utils
   - lua5.4
   - luarocks
-  - php-cli
-  - php-curl
-  - php-mbstring
-  - php-xml
-  - php-xdebug
-  - php-zip
   - pipx
   - pkg-config
   - python3
@@ -135,15 +129,6 @@ debian_php84_packages:
   - php8.4-xml
   - php8.4-xdebug
   - php8.4-zip
-
-debian_php84_repository:
-  package: php8.4-cli
-  name: workstation-php84
-  uri: https://ppa.launchpadcontent.net/ondrej/php/ubuntu
-  suite: noble
-  key: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xB8DC7E53946656EFBCE4C1DD71DAEAAB4AD4CAB6
-  key_type: asc
-  fingerprints: [B8DC7E53946656EFBCE4C1DD71DAEAAB4AD4CAB6]
 
 debian_php_strict_configs:
   - { src: php/phpstan/phpstan.neon, dest: '{{ debian_config_home }}/phpstan/phpstan.neon' }

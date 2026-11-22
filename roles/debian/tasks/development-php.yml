@@ -1,133 +1,36 @@
 ---
-- name: Set up the optional PHP 8.4 packages on Ubuntu 24.04
-  when:
-    - debian_platform == 'ubuntu'
-    - debian_base_codename == 'noble'
-    - debian_php84_ppa_enabled | default(ubuntu_php84_ppa_enabled | default(false)) | bool
-  tags: [debian, development, packages]
-  block:
-    - name: Check the APT candidate for PHP 8.4
-      ansible.builtin.command:
-        argv: [apt-cache, policy, php8.4-cli]
-      environment:
-        LC_ALL: C
-      register: debian_php84_candidate
-      check_mode: false
-      changed_when: false
+- name: Require PHP 8.4 packages in the configured APT repositories
+  ansible.builtin.assert:
+    that: debian_apt_candidates.get('php8.4-cli', '') | length > 0
+    fail_msg: Configure an APT repository providing PHP 8.4 before running the Debian playbook.
+  tags: [debian, development, php, packages]
 
-    - name: Restrict the optional PHP repository to the PHP 8.4 packages
-      ansible.builtin.copy:
-        dest: /etc/apt/preferences.d/workstation-php84
-        mode: '0644'
-        content: |
-          Package: php8.4*
-          Pin: release o=LP-PPA-ondrej-php
-          Pin-Priority: 500
-
-          Package: *
-          Pin: release o=LP-PPA-ondrej-php
-          Pin-Priority: -1
-      become: true
-      when: not ansible_check_mode
-
-    - name: Add the signed PHP 8.4 repository if needed
-      ansible.builtin.include_tasks: apt_repository.yml
-      vars:
-        debian_apt_source: '{{ debian_php84_repository }}'
-      when: >-
-        debian_php84_candidate.stdout | regex_search('(?m)^  Candidate: (?![(]none[)])\S+') is none
-
-    - name: Refresh APT metadata for the PHP 8.4 repository
-      ansible.builtin.apt:
-        update_cache: true
-      become: true
-      when:
-        - not ansible_check_mode
-        - debian_php84_candidate.stdout | regex_search('(?m)^  Candidate: (?![(]none[)])\S+') is none
-
-    - name: Install PHP 8.4 and Xdebug alongside distribution PHP
-      ansible.builtin.apt:
-        name: '{{ debian_php84_packages }}'
-        state: present
-        fail_on_autoremove: true
-      become: true
-      when: not ansible_check_mode
-
-- name: Find the versioned PHP 8.4 CLI
-  ansible.builtin.stat:
-    path: /usr/bin/php8.4
-  register: debian_php84
-  tags: [debian, development, packages, config]
-
-- name: Expose the opted-in PHP CLI to user development tools
-  when:
-    - not ansible_check_mode
-    - debian_platform == 'ubuntu'
-    - debian_base_codename == 'noble'
-    - debian_php84_ppa_enabled | default(ubuntu_php84_ppa_enabled | default(false)) | bool
-    - debian_php84.stat.exists
-  tags: [debian, development, packages]
-  block:
-    - name: Check for user-provided PHP and Composer executables
-      ansible.builtin.stat:
-        path: '{{ debian_development_bin }}/{{ item }}'
-        follow: false
-      loop: [php, composer]
-      register: debian_php_user_executables
-
-    - name: Link PHP 8.4 from the user bin directory
-      ansible.builtin.file:
-        src: /usr/bin/php8.4
-        dest: '{{ debian_development_bin }}/php'
-        state: link
-      when: not debian_php_user_executables.results[0].stat.exists
-
-    - name: Add a user-level Composer wrapper for PHP 8.4
-      ansible.builtin.copy:
-        content: |
-          #!/usr/bin/env bash
-          set -euo pipefail
-          exec /usr/bin/php8.4 /usr/bin/composer "$@"
-        dest: '{{ debian_development_bin }}/composer'
-        mode: '0755'
-        force: false
-      when: not debian_php_user_executables.results[1].stat.exists
-
-- name: Select the PHP CLI used by Composer
-  ansible.builtin.set_fact:
-    debian_development_php: >-
-      {{
-        "/usr/bin/php8.4"
-        if debian_platform | default('') == "ubuntu" and debian_base_codename == "noble" and debian_php84.stat.exists
-        else "/usr/bin/php"
-      }}
-  tags: [debian, development, packages, config]
+- name: Install PHP 8.4 and Composer
+  ansible.builtin.apt:
+    name: '{{ debian_php84_packages + ["composer"] }}'
+    state: present
+    install_recommends: false
+    fail_on_autoremove: true
+  become: true
+  tags: [debian, development, php, packages]
 
 - name: Read the PHP version used by Composer
   ansible.builtin.command:
     argv: ['{{ debian_development_php }}', -r, 'echo PHP_MAJOR_VERSION, ".", PHP_MINOR_VERSION;']
   register: debian_composer_php_version
-  check_mode: false
   changed_when: false
-  failed_when: debian_composer_php_version.rc not in [0, 2]
-  tags: [debian, development, packages, config]
+  failed_when: false
+  when: not ansible_check_mode
+  tags: [debian, development, php, packages, config]
 
-- name: Select the compatible Composer rules
-  ansible.builtin.set_fact:
-    debian_php_custom_rules: >-
-      {{ debian_composer_php_version.stdout | default('0', true) is version('8.4', '>=') }}
-  tags: [debian, development, packages, config]
-
-- name: Explain PHP 8.2 and 8.3 rule compatibility
-  ansible.builtin.debug:
-    msg: >-
-      The Vix PHPStan, Rector, PHP-CS-Fixer and PHP_CodeSniffer extensions require PHP 8.4 or newer.
-      This workstation will use the standard tools and compatible configs for PHP 8.2 and 8.3.
-      On Ubuntu 24.04, set debian_php84_ppa_enabled: true to opt in to the signed PHP 8.4 APT source.
-  when:
-    - not ansible_check_mode
-    - not debian_php_custom_rules
-  tags: [debian, development, packages, config]
+- name: Require global PHP 8.4 or newer
+  ansible.builtin.assert:
+    that:
+      - debian_composer_php_version.rc == 0
+      - debian_composer_php_version.stdout | default('0', true) is version('8.4', '>=')
+    fail_msg: Set the global /usr/bin/php CLI to PHP 8.4 or newer before configuring Composer tools.
+  when: not ansible_check_mode
+  tags: [debian, development, php, packages, config]
 
 - name: Read global Composer configuration
   ansible.builtin.command:
@@ -204,7 +107,7 @@
           }}
         debian_missing_composer: >-
           {{
-            (debian_composer_tools + (debian_composer_custom_tools if debian_php_custom_rules else []))
+            (debian_composer_tools + debian_composer_custom_tools)
             | reject('match', '^(?:' + (debian_installed_composer_names | map('regex_escape') | join('|')) + ')(?::|$)')
             | list
           }}
@@ -297,9 +200,7 @@
       when:
         - not ansible_check_mode
         - item.stat.islnk | default(false)
-        - >-
-          not debian_php_custom_rules
-          or item.stat.lnk_source != (debian_development_tools_dir + '/' + (item.item.src | dirname))
+        - item.stat.lnk_source != (debian_development_tools_dir + '/' + (item.item.src | dirname))
       changed_when: true
 
     - name: Ensure PHP tool config parent directories exist
@@ -313,9 +214,8 @@
       when:
         - not (ansible_check_mode and item.stat.islnk | default(false))
         - >-
-          not (debian_php_custom_rules
-               and item.stat.lnk_source | default('')
-               == (debian_development_tools_dir + '/' + (item.item.src | dirname)))
+          item.stat.lnk_source | default('')
+          != (debian_development_tools_dir + '/' + (item.item.src | dirname))
 
     - name: Deploy the shared PHP config for PHP 8.4 or newer
       ansible.builtin.include_tasks:
@@ -332,24 +232,6 @@
         label: '{{ debian_php_config_path.item.dest }}'
       when:
         - not ansible_check_mode
-        - debian_php_custom_rules
         - >-
           debian_php_config_path.stat.lnk_source | default('')
           != (debian_development_tools_dir + '/' + (debian_php_config_path.item.src | dirname))
-
-    - name: Link the config compatible with PHP 8.3
-      ansible.builtin.include_tasks:
-        file: user_links.yml
-        apply:
-          tags: [debian, development, config]
-      vars:
-        debian_user_links:
-          - src: debian/files/php83/{{ debian_php_config_path.item.dest | basename }}
-            dest: '{{ debian_php_config_path.item.dest }}'
-      loop: '{{ debian_php_config_paths.results }}'
-      loop_control:
-        loop_var: debian_php_config_path
-        label: '{{ debian_php_config_path.item.dest }}'
-      when:
-        - not ansible_check_mode
-        - not debian_php_custom_rules

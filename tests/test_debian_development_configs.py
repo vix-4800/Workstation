@@ -25,7 +25,7 @@ class DevelopmentConfigTest(unittest.TestCase):
         self.home = Path(temporary.name)
         self.repo = self.home / "repo"
         self.config = self.home / "config with spaces"
-        for directory in ("roles/development/files/tools", "roles/debian/files/php83", "roles/debian/scripts"):
+        for directory in ("roles/development/files/tools", "roles/debian/scripts"):
             shutil.copytree(ROOT / directory, self.repo / directory,
                             ignore=shutil.ignore_patterns("node_modules", "package-lock.json"))
         self.variables = yaml.safe_load((ROOT / "roles/debian/vars/development.yml").read_text())
@@ -34,7 +34,7 @@ class DevelopmentConfigTest(unittest.TestCase):
             "debian_config_home": str(self.config), "ansible_facts": {"env": {}},
         })
 
-    def deploy(self, tasks, *, check=False):
+    def deploy(self, tasks, *, check=False, expected_success=True):
         # Keep real Ansible task bodies; resolve their role-relative includes in this isolated playbook.
         tasks = yaml.safe_load(yaml.safe_dump(tasks).replace(
             "file: user_links.yml", f"file: {ROOT / 'roles/debian/tasks/user_links.yml'}",
@@ -53,8 +53,23 @@ class DevelopmentConfigTest(unittest.TestCase):
             [ANSIBLE, "-i", "localhost,", "-c", "local", str(playbook), *(["--check"] if check else [])],
             cwd=self.home, env=env, text=True, capture_output=True, timeout=90, check=False,
         )
-        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.returncode == 0, expected_success, result.stdout + result.stderr)
         return result.stdout
+
+    def test_global_php_below_84_is_rejected_before_configuring_tools(self):
+        tasks = yaml.safe_load((ROOT / "roles/debian/tasks/development-php.yml").read_text())
+        tasks = [task for task in tasks if task["name"] in {
+            "Read the PHP version used by Composer", "Require global PHP 8.4 or newer",
+        }]
+        php = self.home / "php"
+        self.variables["debian_development_php"] = str(php)
+        for version, supported in (("8.2", False), ("8.3", False), ("8.4", True), ("8.5", True)):
+            with self.subTest(version=version):
+                php.write_text(f"#!/bin/sh\nprintf '%s' '{version}'\n")
+                php.chmod(0o755)
+                output = self.deploy(tasks, expected_success=supported)
+                if not supported:
+                    self.assertIn("PHP 8.4 or newer", output)
 
     def assert_backup(self, destination, content):
         backups = list(destination.parent.glob(f"{destination.name}.workstation-backup-*/{destination.name}"))
@@ -84,41 +99,37 @@ class DevelopmentConfigTest(unittest.TestCase):
                 self.assertTrue((destination.resolve() / config.name).read_text().endswith("// local edit\n"))
                 self.assertTrue((destination / "package.json").is_file())
 
-    def test_php_version_branches_link_tracked_configs_without_writing_through_legacy_directory_links(self):
+    def test_shared_php_configs_preserve_local_files_and_legacy_directory_links(self):
         tasks = yaml.safe_load((ROOT / "roles/debian/tasks/development-php.yml").read_text())
         tasks = [tasks[-1]]
-        for custom in (False, True):
-            with self.subTest(custom=custom):
-                self.config = self.home / f"php-{custom}"
-                self.variables.update(debian_config_home=str(self.config), debian_php_custom_rules=custom)
-                sources = {
-                    "phpstan/phpstan.neon": "php/phpstan/phpstan.neon",
-                    "rector/rector.php": "php/rector/rector.php",
-                    "php-cs-fixer/php-cs-fixer.php": "php/php-cs-fixer/php-cs-fixer.php",
-                    "phpcs/phpcs.xml": "php/phpcs/phpcs.xml",
-                }
-                local = self.config / "rector/rector.php"
-                local.parent.mkdir(parents=True)
-                local.write_text("<?php // local config\n")
-                shared = self.repo / "roles/development/files/tools/php/phpstan"
-                self.config.mkdir(exist_ok=True)
-                (self.config / "phpstan").symlink_to(shared)
-                shared_content = (shared / "phpstan.neon").read_bytes()
+        self.config = self.home / "php-config"
+        self.variables.update(debian_config_home=str(self.config))
+        sources = {
+            "phpstan/phpstan.neon": "php/phpstan/phpstan.neon",
+            "rector/rector.php": "php/rector/rector.php",
+            "php-cs-fixer/php-cs-fixer.php": "php/php-cs-fixer/php-cs-fixer.php",
+            "phpcs/phpcs.xml": "php/phpcs/phpcs.xml",
+        }
+        local = self.config / "rector/rector.php"
+        local.parent.mkdir(parents=True)
+        local.write_text("<?php // local config\n")
+        shared = self.repo / "roles/development/files/tools/php/phpstan"
+        self.config.mkdir(exist_ok=True)
+        (self.config / "phpstan").symlink_to(shared)
+        shared_content = (shared / "phpstan.neon").read_bytes()
 
-                self.deploy(tasks)
-                self.assertRegex(self.deploy(tasks), r"changed=0\b")
-                self.assert_backup(local, "<?php // local config\n")
-                self.assertEqual((shared / "phpstan.neon").read_bytes(), shared_content)
-                for relative, source in sources.items():
-                    destination = self.config / relative
-                    expected = self.repo / (
-                        f"roles/development/files/tools/{source}" if custom
-                        else f"roles/debian/files/php83/{Path(relative).name}"
-                    )
-                    self.assertEqual(destination.resolve(), expected)
-                    self.assertTrue(destination.is_symlink() or destination.parent.is_symlink())
-                    destination.write_text(destination.read_text() + "\n# local edit\n")
-                    self.assertTrue(expected.read_text().endswith("# local edit\n"))
+        self.deploy(tasks)
+        self.assertRegex(self.deploy(tasks), r"changed=0\b")
+        self.assert_backup(local, "<?php // local config\n")
+        self.assertEqual((shared / "phpstan.neon").read_bytes(), shared_content)
+        for relative, source in sources.items():
+            destination = self.config / relative
+            expected = self.repo / f"roles/development/files/tools/{source}"
+            self.assertEqual(destination.resolve(), expected)
+            self.assertTrue(destination.is_symlink() or destination.parent.is_symlink())
+            destination.write_text(destination.read_text() + "\n# local edit\n")
+            self.assertTrue(expected.read_text().endswith("# local edit\n"))
+
 
     @unittest.skipUnless(NODE and Path("/usr/bin/fish").exists(), "requires Node.js and Fish")
     def test_node_configs_resolve_dependencies_from_their_real_repository_paths(self):

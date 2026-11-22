@@ -63,10 +63,10 @@ and actions that need a freshly installed program run during application.
 - Docker uses the configured archive's engine and CLI packages. If it lacks
   Buildx or Compose v2, the playbook installs the missing CLI plugins from
   their upstream releases for the current user.
-- PHP 8.2 and 8.3 use compatible Composer tools and configs. On Ubuntu
-  Noble-based systems, `debian_php84_ppa_enabled: true` opts into a signed
-  PHP 8.4 repository for the complete custom rule set. Debian, LMDE and
-  Kali use the PHP version from their own archives.
+- PHP uses the shared Arch tool configs and the complete custom rule set.
+  The configured APT repositories must provide PHP 8.4 and its extensions;
+  the global `/usr/bin/php` CLI must run PHP 8.4 or newer. Configure a suitable
+  package source first on distributions with an older default PHP release.
 
 ## Quick Start
 
