@@ -55,6 +55,8 @@ and actions that need a freshly installed program run during application.
   settings.
 - Obsidian uses an available APT package first, then the vendor `.deb` on
   amd64 or Flathub on arm64. Spotify on Flathub is available on amd64 only.
+  If Snapcraft cannot deliver Spotify's download, the playbook reports it
+  as pending and retries on the next apply.
 - Git 2.54 or later is required for the shared commit and push hooks. When
   APT offers only an older release, the playbook builds a verified upstream
   release in the user's home and leaves the system Git package in place.

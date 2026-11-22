@@ -37,6 +37,31 @@ class DebianPlaybookTest(unittest.TestCase):
         self.assertTrue(binaries.isdisjoint({"claude", "opencode", "copilot"}))
 
     @unittest.skipUnless(yaml, "requires PyYAML")
+    def test_spotify_fetch_failure_leaves_required_flatpak_apps_independent(self):
+        try:
+            import ansible.template
+        except ImportError:
+            self.skipTest("requires Ansible Core")
+
+        path = ROOT / "roles" / "debian" / "tasks" / "apps.yml"
+        tasks = {task["name"]: task for task in yaml.safe_load(path.read_text())}
+        spotify = tasks.get("Install Spotify separately from Flathub")
+        self.assertIsNotNone(spotify)
+        self.assertEqual(spotify["ansible.builtin.command"]["argv"][-1], "com.spotify.Client")
+        self.assertNotIn("com.spotify.Client", yaml.safe_dump(tasks["Install Bitwarden and any required Obsidian Flatpak"]))
+        self.assertIn("Report a deferred Spotify installation", tasks)
+
+        from_snapcraft = (
+            "Error: Failed to install com.spotify.Client: While downloading https://api.snapcraft.io/download/example.snap: "
+            "While fetching https://api.snapcraft.io/download/example.snap: [35] SSL connect error"
+        )
+        trust = getattr(ansible.template, "trust_as_template", lambda value: value)
+        for rc, stderr, fails in ((0, "", False), (1, from_snapcraft, False), (1, "Error: No such ref", True)):
+            with self.subTest(rc=rc, stderr=stderr):
+                renderer = ansible.template.Templar(variables={spotify["register"]: {"rc": rc, "stderr": stderr}})
+                self.assertEqual(renderer.template(trust("{{ " + spotify["failed_when"] + " }}")), fails)
+
+    @unittest.skipUnless(yaml, "requires PyYAML")
     def test_fish_plugin_install_respects_the_standalone_fisher_bootstrap(self):
         try:
             import ansible.template
