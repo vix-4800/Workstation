@@ -108,7 +108,7 @@ class ConfigAdoptionTest(unittest.TestCase):
             "hosts": "localhost", "gather_facts": False, "vars": variables, "tasks": tasks,
         }]))
         env = os.environ | {
-            "ANSIBLE_CONFIG": str(ROOT / "ansible-debian.cfg"),
+            "ANSIBLE_CONFIG": str(ROOT / "ansible.cfg"),
             "ANSIBLE_HOME": str(self.home / "ansible"), "ANSIBLE_NOCOLOR": "1",
             "ANSIBLE_REMOTE_TMP": str(self.home / "ansible-remote"),
         }

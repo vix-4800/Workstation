@@ -9,7 +9,7 @@ gpu_vendor: nvidia  # nvidia | amd | none
 has_battery: false  # true for laptops
 base_timezone: Europe/Saratov  # override default UTC, see timedatectl list-timezones
 # base_locale: en_US.UTF-8    # optional locale override
-# debian_wireguard_enabled: false  # Debian-family playbook, defaults to enabling when a vault exists
+# debian_wireguard_enabled: false  # Debian-family systems enable WireGuard when a vault exists
 # weather_location: Saratov  # optional override for weather module; omit to use Geoclue
 network_usbguard_mode: audit  # audit | enforce
 # network_usbguard_rules:

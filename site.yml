@@ -1,79 +1,29 @@
 ---
-- name: Provision workstation
+- name: Detect the workstation platform
   hosts: all
   gather_facts: true
+  tags: [always]
 
-  vars_files:
-    - vault/secrets.yml
+  vars:
+    workstation_platform_groups:
+      Archlinux: workstation_arch
+      Debian: workstation_debian
 
-  pre_tasks:
-    - name: Verify running on Arch Linux
+  tasks:
+    - name: Verify the OS family is supported
       ansible.builtin.assert:
-        that: ansible_facts['os_family'] == "Archlinux"
-        fail_msg: This playbook only supports Arch Linux
-      tags:
-        - always
+        that: ansible_facts.os_family in workstation_platform_groups
+        fail_msg: >-
+          Unsupported OS family {{ ansible_facts.os_family }}.
+          Use Arch Linux or a supported Debian-family distribution.
 
-    - name: Ensure config directory exists
-      ansible.builtin.file:
-        path: '{{ home }}/.config'
-        state: directory
-        mode: '0755'
-      tags:
-        - always
-
-  roles:
-    - role: base
-      tags:
-        - base
-    - role: yay
-      tags:
-        - yay
-    - role: cpu
-      tags:
-        - cpu
-    - role: gpu
-      tags:
-        - gpu
-    - role: shell
-      tags:
-        - shell
-    - role: editor
-      tags:
-        - editor
-    - role: audio
-      tags:
-        - audio
-    - role: network
-      tags:
-        - network
-    - role: desktop
-      tags:
-        - desktop
-    - role: appearance
-      tags:
-        - appearance
-    - role: display-manager
-      tags:
-        - display-manager
-    - role: development
-      tags:
-        - development
-    - role: apps
-      tags:
-        - apps
-    - role: services
-      tags:
-        - services
-    - role: ai-tools
-      tags:
-        - ai-tools
-
-  post_tasks:
-    - name: Clean package cache
-      ansible.builtin.command:
-        cmd: paccache -rk2
-      become: true
+    - name: Select the platform play for this workstation
+      ansible.builtin.group_by:
+        key: '{{ workstation_platform_groups[ansible_facts.os_family] }}'
       changed_when: false
-      tags:
-        - cleanup
+
+- name: Load Arch Linux provisioning
+  ansible.builtin.import_playbook: arch.yml
+
+- name: Load Debian-family provisioning
+  ansible.builtin.import_playbook: debian.yml

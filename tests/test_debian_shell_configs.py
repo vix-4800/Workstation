@@ -87,7 +87,7 @@ class DebianShellConfigTest(unittest.TestCase):
             result = subprocess.run(  # noqa: S603 - Only isolated configuration tasks run in the temporary home.
                 [ANSIBLE, "-i", "localhost,", "-c", "local", str(playbook)],
                 env=os.environ | {
-                    "ANSIBLE_CONFIG": str(ROOT / "ansible-debian.cfg"),
+                    "ANSIBLE_CONFIG": str(ROOT / "ansible.cfg"),
                     "ANSIBLE_HOME": str(self.home / "ansible"),
                     "ANSIBLE_REMOTE_TMP": str(self.home / "remote"), "ANSIBLE_NOCOLOR": "1",
                 },

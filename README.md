@@ -4,95 +4,24 @@ Machine state management for Arch Linux with Sway and for Debian-family workstat
 
 Ansible-driven provisioning and configuration for multiple workstations from a single repository.
 
-## Debian-family workstations
-
-`debian.yml` targets Debian 12 and later, Kali Rolling, Ubuntu 24.04 and
-later, Linux Mint 22 and LMDE 6/7 on amd64 and arm64. Other derivatives need
-a supported package base and compatible APT packages. The playbook keeps
-the desktop environment and selects Kitty as the preferred terminal on XFCE.
-
-Install Ansible Core 2.14 or later, Git and the Python APT bindings. On
-Ubuntu-based systems, enable the Universe component of the base archive.
-
-```bash
-sudo apt install ansible-core git python3-apt
-# Run the following from the Workstation checkout as the account being configured.
-cp -n inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
-```
-
-Set `username`, `hostname`, `base_timezone`, `git_user_name` and
-`git_user_email` in the shared host vars. Set `base_locale` there to override
-the default of `en_US.UTF-8`.
-
-For optional WireGuard setup, copy `vault/secrets.yml.example` to
-`vault/secrets.yml`, fill in the values and encrypt it with
-`ansible-vault encrypt --vault-password-file .vault-password vault/secrets.yml`.
-Use a private password file with permissions `0600`.
-
-```bash
-ANSIBLE_CONFIG=ansible-debian.cfg ansible-playbook debian.yml --syntax-check
-ANSIBLE_CONFIG=ansible-debian.cfg ansible-playbook debian.yml --ask-become-pass --check --diff
-ANSIBLE_CONFIG=ansible-debian.cfg ansible-playbook debian.yml --ask-become-pass --diff
-```
-
-The first run installs `just` if it is missing. The equivalent recipes are
-`just debian-check`, `just debian-plan` and `just debian-apply`. Check mode
-simulates the APT changes available from the current package indexes. Downloads
-and actions that need a freshly installed program run during application.
-
-- Find the `wg0` profile in NetworkManager, then connect on demand with
-  `nmcli connection up wg0`. Supply IPv4 and IPv6 addresses in Vault for a
-  dual-stack tunnel. The playbook skips WireGuard when the vault file is
-  absent. Set `debian_wireguard_enabled: false` to disable it explicitly.
-  With a vault, add `--vault-password-file .vault-password` to the direct
-  Ansible command. The `just` recipes pick up the local password file.
-- Log out and back in after the first apply so the new login shell, desktop
-  tool paths and `docker` group membership take effect. The Docker group grants
-  root-equivalent access. A session with a systemd user manager is required to
-  activate the Composer and Workstation notification timers.
-- For HTTPS Git authentication, run `gh auth login` after installation.
-  The Debian-family playbook provisions Codex with its shared skills and MCP
-  settings.
-- Obsidian uses an available APT package first, then the vendor `.deb` on
-  amd64 or Flathub on arm64. Spotify on Flathub is available on amd64 only.
-  If Snapcraft cannot deliver Spotify's download, the playbook reports it
-  as pending and retries on the next apply.
-- Git 2.54 or later is required for the shared commit and push hooks. When
-  APT offers only an older release, the playbook builds a verified upstream
-  release in the user's home and leaves the system Git package in place.
-- Docker uses the configured archive's engine and CLI packages. If it lacks
-  Buildx or Compose v2, the playbook installs the missing CLI plugins from
-  their upstream releases for the current user.
-- PHP uses the shared Arch tool configs and the complete custom rule set.
-  The configured APT repositories must provide PHP 8.4 and its extensions;
-  the global `/usr/bin/php` CLI must run PHP 8.4 or newer. Configure a suitable
-  package source first on distributions with an older default PHP release.
+Ansible detects the OS when you run `just apply`, `just plan`, `just sync` or `just role`.
+Arch Linux gets the managed Sway desktop. Debian 12+, Kali Rolling, Ubuntu 24.04+,
+Linux Mint 22 and LMDE 6/7 use APT on amd64 or arm64 and keep their existing desktop.
+On XFCE, Kitty is configured as the preferred terminal. Other derivatives must be
+recognized by Ansible as Debian-family and have a supported package base.
 
 ## Quick Start
 
-### First run on a fresh system
-
-```bash
-sudo pacman -Syu --needed sudo vim git ansible just base-devel
-git clone https://github.com/vix-4800/Workstation ~/Code/Workstation
-cd ~/Code/Workstation
-cp inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
-cp vault/secrets.yml.example vault/secrets.yml
-just vault-init
-# edit inventory/host_vars/localhost.yml and vault/secrets.yml
-just vault-encrypt
-just deps
-just apply
-```
+Follow [Fresh System Setup](#fresh-system-setup) on a new machine.
 
 ### Daily usage
 
 ```bash
 just apply              # Full state: packages + configs + services
-just sync               # Only configs (fast, no package installs)
+just sync               # Run config-tagged tasks
 just plan               # Dry-run: show what would change
 just role shell         # Apply specific role
-just role desktop network   # Multiple roles
+just role shell,editor   # Multiple roles
 ```
 
 ### Secrets
@@ -105,14 +34,14 @@ just vault-edit         # Edit encrypted secrets
 
 ## Fresh System Setup
 
-Use this order on a clean Arch install. `just apply` is not enough by itself on a fresh machine.
+Run these steps as the local account you want Ansible to configure.
 
 ### 1. Prepare the user and sudo
 
 The target user must exist before running this repo and must be allowed to use `sudo`, because `just apply` runs
 `ansible-playbook --ask-become-pass`.
 
-Example:
+On Arch Linux, for example:
 
 ```bash
 useradd -m -G wheel -s /bin/bash <username>
@@ -126,24 +55,31 @@ Enable sudo for the `wheel` group in `/etc/sudoers`:
 %wheel ALL=(ALL:ALL) ALL
 ```
 
-Then log in as that user.
+On Debian-family systems, use an account with sudo access, typically through the `sudo` group.
+Then log in as the target user.
 
 ### 2. Install required packages
 
-Install the base tools that are needed before this repository can manage the rest of the system:
+On Arch Linux:
 
 ```bash
 sudo pacman -Syu --needed sudo vim git ansible just base-devel
 ```
 
-These are needed for:
+On APT-based systems:
 
-- `sudo` — privilege escalation for Ansible tasks
-- `vim` — editing `host_vars`, vault files, and `visudo`
-- `git` — cloning and updating the repository
-- `ansible` — running the playbook
-- `just` — command runner used by this repo
-- `base-devel` — required for AUR builds during `yay`/AUR tasks
+```bash
+sudo apt install sudo vim git ansible-core python3-apt
+```
+
+The shared playbook needs Ansible Core 2.18 or newer for its pinned collections.
+If APT supplies an older release, install a compatible version in a Python virtual environment
+and activate it before running the commands below. Use Python 3.11 or newer and keep
+`/usr/bin/python3` and `python3-apt` installed for managed tasks.
+On Ubuntu-based systems, enable the Universe component. The configured repositories must
+provide PHP 8.4 or newer and its extensions, with PHP 8.4 or newer selected at `/usr/bin/php`.
+Install `just` from your package manager or an upstream release. The first APT-based run
+can also install it when you bootstrap through Ansible.
 
 ### 3. Clone the repository
 
@@ -161,17 +97,14 @@ cp inventory/host_vars/localhost.yml.example inventory/host_vars/localhost.yml
 vim inventory/host_vars/localhost.yml
 ```
 
-At minimum, fill in the machine-specific values such as:
-
-- `username`
-- `hostname`
-- `cpu_vendor`
-- `gpu_vendor`
-- `has_battery`
+Set `username`, `hostname`, `base_timezone`, `git_user_name` and `git_user_email`.
+Use `base_locale` to override the default locale. On Arch Linux, also set
+`cpu_vendor`, `gpu_vendor` and `has_battery` for the machine.
 
 ### 5. Create vault secrets
 
-`site.yml` always loads `vault/secrets.yml`, so the file must exist before you run the playbook.
+Arch Linux requires `vault/secrets.yml`. On Debian-family systems, create it if you want
+to provision WireGuard. Set `debian_wireguard_enabled: false` to disable the profile explicitly.
 
 ```bash
 cp vault/secrets.yml.example vault/secrets.yml
@@ -191,7 +124,7 @@ including `kewlfft.aur`. On a clean system install them before the first apply:
 just deps
 ```
 
-Equivalent command:
+If `just` is unavailable, run:
 
 ```bash
 ansible-galaxy collection install -r requirements.yml
@@ -203,12 +136,30 @@ ansible-galaxy collection install -r requirements.yml
 just apply
 ```
 
+On APT-based systems without `just`, bootstrap with `ansible-playbook site.yml --ask-become-pass --diff`.
+Add `--vault-password-file .vault-password` when using an encrypted vault. Provisioning installs
+`just` into `~/.local/bin` if needed. Subsequent runs use the shared recipes.
+
+Log out and back in to pick up the login shell, tool paths and Docker group membership.
+The Docker group grants root-equivalent access. A systemd user session is required
+for user timers. Run `gh auth login` if you use HTTPS for Git authentication.
+
+On APT-based systems, check mode uses the current package indexes. Downloads and actions
+that require a newly installed program run during application. Docker uses archive packages
+and fills in missing Buildx or Compose v2 plugins from upstream releases. If the archive supplies
+Git older than 2.54, the playbook builds a verified upstream version in the user's home for the shared hooks.
+
+Obsidian uses APT when available, then the vendor package on amd64 or Flathub on arm64.
+Spotify on Flathub is available on amd64. If Snapcraft cannot deliver the download,
+the next apply retries it.
+
 ## Architecture
 
 ### Single tool, single workflow
 
 Everything is managed through **Ansible roles** — packages, configs, services, and secrets. `just` provides a thin UX
-layer on top of `ansible-playbook`.
+layer on top of `ansible-playbook`. `site.yml` gathers Ansible facts and selects the
+platform play for each host.
 
 ### Inventory
 
@@ -243,11 +194,12 @@ inventory/
 | `appearance` | GTK themes (nwg-look), fonts, cursors, icons, wallpapers, plymouth |
 | `apps` | Obsidian, Bitwarden, file-roller, gvfs-goa, Flatpak + Flathub, waypaper, TLP + Powertop (battery only) |
 | `services` | All systemd user services and timers (xdg-user-dirs, etc.) |
-| `ai-tools` | Claude Code, Codex, OpenCode, MCP/Serena, agent skills |
+| `ai-tools` | Claude Code, Codex, OpenCode, MCP/Serena, agent skills on Arch Linux |
+| `debian` | APT packages, shared shell and development configs, Docker, desktop apps, Codex and optional WireGuard on Debian-family systems |
 
 ### Laptop power management
 
-With `has_battery: true`, the `apps` role installs TLP and Powertop, disables existing
+On Arch Linux with `has_battery: true`, the `apps` role installs TLP and Powertop, disables existing
 `auto-cpufreq` and `power-profiles-daemon` services, masks `power-profiles-daemon` when present
 and the systemd rfkill service and socket,
 and enables `tlp.service`. The retired `auto-cpufreq` package is no longer installed or enabled;
@@ -286,7 +238,7 @@ tags (`packages`, `config`, `services`, `system`), and narrower subgroup tags su
 
 | Tag           | Scope                                                                 |
 | ------------- | --------------------------------------------------------------------- |
-| `config`      | Deploy user-space config files (symlinks, no sudo)                    |
+| `config`      | Deploy configuration                                                  |
 | `system`      | System-level configs requiring sudo (/etc/, /boot/)                   |
 | `packages`    | Install packages                                                      |
 | `services`    | Manage systemd units                                                  |
@@ -295,13 +247,8 @@ tags (`packages`, `config`, `services`, `system`), and narrower subgroup tags su
 
 ### Secrets
 
-WireGuard keys are stored in `vault/secrets.yml`, encrypted with `ansible-vault`. Per-host variables in
-`host_vars/localhost.yml` and vault variables render the final configs.
-
-```text
-vault/secrets.yml ──> host_vars/localhost.yml ──> templates/wg0.conf.j2 ──> /etc/wireguard/wg0.conf
-     (encrypted)           (local vars)             (Jinja2 template)        (deployed config)
-```
+WireGuard uses encrypted values from `vault/secrets.yml` and local settings from
+`inventory/host_vars/localhost.yml`.
 
 Create the vault file like this:
 
@@ -313,12 +260,13 @@ just vault-edit
 ```
 
 Before running `just vault-encrypt`, `vault/secrets.yml` may exist temporarily as plain YAML copied from the example.
-After that step, `site.yml` loads it through `vars_files`, so the file must remain actual `ansible-vault` ciphertext.
+Keep the file encrypted and store the password separately in `.vault-password` with mode `0600`.
+The shared `just` recipes pass the password file to Ansible when it exists.
 
 If you already created `vault/secrets.yml` as plain YAML, re-encrypt it:
 
 ```bash
-ansible-vault encrypt vault/secrets.yml
+just vault-encrypt
 ```
 
 You can verify the file is encrypted if the first line starts with:
@@ -327,13 +275,19 @@ You can verify the file is encrypted if the first line starts with:
 $ANSIBLE_VAULT;
 ```
 
+On Arch Linux, the playbook writes `/etc/wireguard/wg0.conf`. On Debian-family systems,
+it creates a NetworkManager `wg0` profile. Provide IPv4 and IPv6 addresses in the vault for
+a dual-stack tunnel and connect on demand with `nmcli connection up wg0`.
+
 ## Structure
 
 ```text
 ├── Justfile                    # Command interface
 ├── ansible.cfg                 # Ansible settings
 ├── requirements.yml            # Galaxy collections
-├── site.yml                    # Master playbook
+├── site.yml                    # Shared entry point and OS detection
+├── arch.yml                    # Arch Linux provisioning
+├── debian.yml                  # Debian-family provisioning
 ├── inventory/                  # Machine definitions + variables
 ├── vault/                      # Encrypted secrets
 └── roles/
@@ -369,7 +323,7 @@ Host-specific state lives in the local untracked `inventory/host_vars/localhost.
 `hostname`, GPU setup depends on `gpu_vendor`, battery services depend on `has_battery`, and WireGuard gets its secrets
 from vault.
 
-## Desktop Stack
+## Sway Desktop Stack on Arch Linux
 
 ### Core Compositor & Shell
 
@@ -420,20 +374,12 @@ from vault.
 - **File Roller** — archive manager
 - **Flatpak + Flathub** — additional applications
 
-## Prerequisites
-
-- Arch Linux
-- A local user account already created
-- The user is in `wheel` (or otherwise configured in `sudoers`)
-- `sudo`, `vim`, `git`, `ansible`, `just`, and `base-devel` installed
-- Internet connection
-
 ## Just Commands
 
 | Command              | Description                 |
 | -------------------- | --------------------------- |
 | `just apply`         | Full state apply            |
-| `just sync`          | Deploy configs only         |
+| `just sync`          | Run config-tagged tasks     |
 | `just plan`          | Dry-run (check mode)        |
 | `just role <tags>`   | Apply specific role(s)      |
 | `just deps`          | Install Galaxy collections  |

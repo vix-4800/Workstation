@@ -47,7 +47,7 @@ class DebianAIDefaultsTest(unittest.TestCase):
             ],
         }]))
         env = os.environ | {
-            "ANSIBLE_CONFIG": str(ROOT / "ansible-debian.cfg"),
+            "ANSIBLE_CONFIG": str(ROOT / "ansible.cfg"),
             "ANSIBLE_HOME": str(self.workspace / "ansible"),
             "ANSIBLE_LOCAL_TEMP": str(self.workspace / "ansible-local"),
             "ANSIBLE_REMOTE_TMP": str(self.workspace / "ansible-remote"),

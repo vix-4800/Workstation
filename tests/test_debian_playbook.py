@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import subprocess
@@ -17,16 +18,57 @@ ANSIBLE = shutil.which("ansible-playbook")
 
 
 class DebianPlaybookTest(unittest.TestCase):
-    def setUp(self):
-        self.playbook = ROOT / "debian.yml"
+    @unittest.skipUnless(ANSIBLE and yaml, "requires Ansible and PyYAML")
+    def test_shared_entrypoint_routes_each_os_in_check_mode_with_tags(self):
+        with tempfile.TemporaryDirectory() as directory:
+            work = Path(directory)
+            config = work / "ansible.cfg"
+            shutil.copy(ROOT / "ansible.cfg", config)
+            site = work / "site.yml"
+            shutil.copy(ROOT / site.name, site)
+            for entry in yaml.safe_load(site.read_text()):
+                path = entry.get("ansible.builtin.import_playbook")
+                if not path:
+                    continue
+                [play] = yaml.safe_load((ROOT / path).read_text())
+                # Exercise play targeting and vault scope without provisioning the test host.
+                play["pre_tasks"] = [
+                    task for task in play.get("pre_tasks", []) if "ansible.builtin.include_vars" in task
+                ]
+                play.pop("post_tasks", None)
+                for role in play["roles"]:
+                    tasks = work / "roles" / role["role"] / "tasks"
+                    tasks.mkdir(parents=True)
+                    (tasks / "main.yml").write_text(yaml.safe_dump([{
+                        "name": f"Run the {role['role']} config",
+                        "ansible.builtin.debug": {"msg": "selected"},
+                        "tags": ["config"],
+                    }]))
+                (work / path).write_text(yaml.safe_dump([play]))
 
-    @unittest.skipUnless(yaml, "requires PyYAML")
-    def test_debian_entrypoint_is_local_and_independent_of_arch(self):
-        [play] = yaml.safe_load(self.playbook.read_text())
-        self.assertEqual(play["hosts"], "localhost")
-        self.assertEqual(play["connection"], "local")
-        self.assertEqual([entry["role"] for entry in play["roles"]], ["debian"])
-        self.assertNotIn("vars_files", play)
+            env = os.environ | {
+                "ANSIBLE_CONFIG": str(config),
+                "ANSIBLE_HOME": str(work / "ansible"),
+                "ANSIBLE_REMOTE_TMP": str(work / "remote"),
+                "ANSIBLE_NOCOLOR": "1",
+            }
+            env.pop("ANSIBLE_VAULT_PASSWORD_FILE", None)
+            for family in ("Debian", "Archlinux", "RedHat"):
+                with self.subTest(family=family):
+                    if family == "Archlinux":
+                        (work / "vault").mkdir()
+                        (work / "vault" / "secrets.yml").write_text("--- {}\n")
+                    result = subprocess.run(  # noqa: S603 - Fixed command in a temporary workspace.
+                        [ANSIBLE, "-i", "localhost,", str(site), "--check", "--tags", "config",
+                         "-e", json.dumps({"ansible_facts": {"os_family": family}})],
+                        cwd=work, env=env, text=True, capture_output=True, timeout=90, check=False,
+                    )
+                    output = result.stdout + result.stderr
+                    self.assertEqual(result.returncode == 0, family != "RedHat", output)
+                    if family == "RedHat":
+                        self.assertIn("Unsupported OS family RedHat", output)
+                    self.assertEqual("Run the debian config" in output, family == "Debian", output)
+                    self.assertEqual("Run the base config" in output, family == "Archlinux", output)
 
     @unittest.skipUnless(yaml, "requires PyYAML")
     def test_debian_installs_codex_as_the_only_ai_client(self):
@@ -222,14 +264,14 @@ class DebianPlaybookTest(unittest.TestCase):
     def test_syntax_and_tags_do_not_require_local_credentials(self):
         with tempfile.TemporaryDirectory() as workspace:
             env = os.environ | {
-                "ANSIBLE_CONFIG": str(ROOT / "ansible-debian.cfg"),
+                "ANSIBLE_CONFIG": str(ROOT / "ansible.cfg"),
                 "ANSIBLE_HOME": workspace,
                 "ANSIBLE_NOCOLOR": "1",
             }
             env.pop("ANSIBLE_VAULT_PASSWORD_FILE", None)
             for option in ("--syntax-check", "--list-tags"):
                 result = subprocess.run(  # noqa: S603 - Fixed Ansible command only checks syntax and lists tags.
-                    [ANSIBLE, str(self.playbook), option],
+                    [ANSIBLE, str(ROOT / "debian.yml"), option],
                     cwd=ROOT, env=env, text=True, capture_output=True, timeout=90, check=False,
                 )
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
