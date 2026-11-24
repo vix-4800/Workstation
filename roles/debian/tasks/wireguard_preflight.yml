@@ -1,0 +1,61 @@
+---
+- name: Check whether to deploy the WireGuard profile
+  tags: [wireguard, config]
+  vars:
+    debian_wg_vault_path: '{{ dotfiles_dir }}/vault/secrets.yml'
+    debian_wg_enabled: >-
+      {{ debian_wireguard_enabled | default(ubuntu_wireguard_enabled | default(true)) | bool }}
+    debian_wg_setting_exists: '{{ debian_wireguard_enabled is defined or ubuntu_wireguard_enabled is defined }}'
+  block:
+    - name: Check whether the WireGuard vault exists
+      ansible.builtin.stat:
+        path: '{{ debian_wg_vault_path }}'
+        follow: true
+        get_attributes: false
+        get_checksum: false
+        get_mime: false
+      register: debian_wg_vault_status
+      when: debian_wg_enabled
+
+    - name: Determine whether WireGuard was requested
+      ansible.builtin.set_fact:
+        debian_wg_requested: >-
+          {{ debian_wg_enabled and (debian_wg_setting_exists or debian_wg_vault_status.stat.exists | default(false)) }}
+
+    - name: Report optional WireGuard deployment without a vault
+      ansible.builtin.debug:
+        msg: WireGuard deployment skipped because vault/secrets.yml is absent.
+      when: not debian_wg_setting_exists and not debian_wg_requested
+
+    - name: Prepare the WireGuard credentials from the vault
+      when: debian_wg_requested
+      block:
+        - name: Check that the vault is a regular file
+          ansible.builtin.assert:
+            that: debian_wg_vault_status.stat.isreg | default(false)
+
+        - name: Read the encrypted vault header
+          ansible.builtin.command:
+            argv: [head, -c, '15', --, '{{ debian_wg_vault_path }}']
+          register: debian_wg_vault_header
+          no_log: true
+          check_mode: false
+          changed_when: false
+          failed_when: debian_wg_vault_header.rc != 0 or debian_wg_vault_header.stdout != '$ANSIBLE_VAULT;'
+
+        - name: Load WireGuard vault variables
+          ansible.builtin.include_vars:
+            file: '{{ debian_wg_vault_path }}'
+            name: debian_wg_vault
+          no_log: true
+
+        - name: Validate WireGuard vault variables
+          ansible.builtin.set_fact:
+            debian_wg_profile: '{{ debian_wg_vault | debian_wireguard_profile }}'
+          no_log: true
+      rescue:
+        - name: Report missing or invalid WireGuard credentials
+          ansible.builtin.fail:
+            msg: >-
+              Set valid vault_wg_* values in encrypted vault/secrets.yml and provide the vault password,
+              or set debian_wireguard_enabled to false for this host.

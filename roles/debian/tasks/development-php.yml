@@ -1,0 +1,237 @@
+---
+- name: Require PHP 8.4 packages in the configured APT repositories
+  ansible.builtin.assert:
+    that: debian_apt_candidates.get('php8.4-cli', '') | length > 0
+    fail_msg: Configure an APT repository providing PHP 8.4 before running the Debian playbook.
+  tags: [debian, development, php, packages]
+
+- name: Install PHP 8.4 and Composer
+  ansible.builtin.apt:
+    name: '{{ debian_php84_packages + ["composer"] }}'
+    state: present
+    install_recommends: false
+    fail_on_autoremove: true
+  become: true
+  tags: [debian, development, php, packages]
+
+- name: Read the PHP version used by Composer
+  ansible.builtin.command:
+    argv: ['{{ debian_development_php }}', -r, 'echo PHP_MAJOR_VERSION, ".", PHP_MINOR_VERSION;']
+  register: debian_composer_php_version
+  changed_when: false
+  failed_when: false
+  when: not ansible_check_mode
+  tags: [debian, development, php, packages, config]
+
+- name: Require global PHP 8.4 or newer
+  ansible.builtin.assert:
+    that:
+      - debian_composer_php_version.rc == 0
+      - debian_composer_php_version.stdout | default('0', true) is version('8.4', '>=')
+    fail_msg: Set the global /usr/bin/php CLI to PHP 8.4 or newer before configuring Composer tools.
+  when: not ansible_check_mode
+  tags: [debian, development, php, packages, config]
+
+- name: Read global Composer configuration
+  ansible.builtin.command:
+    argv: ['{{ debian_development_php }}', /usr/bin/composer, config, --global, --list, --no-interaction]
+  environment: '{{ debian_development_environment }}'
+  register: debian_composer_config
+  no_log: true
+  changed_when: false
+  when: not ansible_check_mode
+  tags: [debian, development, php, packages]
+
+- name: Allow the Composer coding-standard installer plugins
+  ansible.builtin.command:
+    argv:
+      - '{{ debian_development_php }}'
+      - /usr/bin/composer
+      - config
+      - --global
+      - --json
+      - allow-plugins.{{ item }}
+      - 'true'
+      - --no-interaction
+  loop: [phpstan/extension-installer, dealerdirect/phpcodesniffer-composer-installer]
+  environment: '{{ debian_development_environment }}'
+  changed_when: true
+  when:
+    - not ansible_check_mode
+    - '''[allow-plugins.'' ~ item ~ ''] true'' not in debian_composer_config.stdout_lines'
+  tags: [debian, development, php, packages]
+
+- name: Install global Composer development tools
+  environment: '{{ debian_development_environment }}'
+  when: not ansible_check_mode
+  tags: [debian, development, php, packages]
+  block:
+    - name: Locate the global Composer directory
+      ansible.builtin.command:
+        argv: ['{{ debian_development_php }}', /usr/bin/composer, config, --global, home, --no-interaction]
+      register: debian_composer_dir
+      changed_when: false
+
+    - name: Check for a global Composer manifest
+      ansible.builtin.stat:
+        path: '{{ debian_composer_dir.stdout }}/composer.json'
+      register: debian_composer_manifest
+
+    - name: Read installed global Composer tools
+      ansible.builtin.command:
+        argv:
+          - '{{ debian_development_php }}'
+          - /usr/bin/composer
+          - global
+          - show
+          - --direct
+          - --format=json
+          - --no-interaction
+      register: debian_installed_composer
+      changed_when: false
+      when: debian_composer_manifest.stat.exists
+
+    - name: Install missing global Composer tools
+      ansible.builtin.command:
+        argv: >-
+          {{
+            [debian_development_php, "/usr/bin/composer", "global", "require", "--no-interaction", "--no-progress"]
+            + (debian_missing_composer | map('regex_replace', '^([^:]+)$', '\1:*') | list)
+          }}
+      vars:
+        debian_installed_composer_names: >-
+          {{
+            (debian_installed_composer.stdout | default('{"installed": []}') | from_json).installed
+            | map(attribute='name')
+            | list
+          }}
+        debian_missing_composer: >-
+          {{
+            (debian_composer_tools + debian_composer_custom_tools)
+            | reject('match', '^(?:' + (debian_installed_composer_names | map('regex_escape') | join('|')) + ')(?::|$)')
+            | list
+          }}
+      when: debian_missing_composer | length > 0
+      changed_when: true
+
+- name: Find PHP configuration directories
+  ansible.builtin.stat:
+    path: /etc/php
+  register: debian_php_config_dir
+  tags: [debian, development, php, config]
+
+- name: Find installed Xdebug module declarations
+  ansible.builtin.find:
+    paths: /etc/php
+    recurse: true
+    patterns: xdebug.ini
+    file_type: file
+  register: debian_xdebug_modules
+  when: debian_php_config_dir.stat.isdir | default(false)
+  tags: [debian, development, php, config]
+
+- name: Deploy workstation Xdebug settings separately from the packaged module
+  ansible.builtin.copy:
+    content: |
+      ; priority=99
+      {{ lookup('ansible.builtin.file', debian_development_tools_dir + '/php/xdebug/xdebug.ini') |
+         regex_replace('(?m)^zend_extension\s*=.*\n', '') }}
+    dest: '{{ item | dirname }}/workstation-xdebug.ini'
+    mode: '0644'
+  loop: >-
+    {{
+      debian_xdebug_modules.files | default([])
+      | map(attribute='path')
+      | select('search', '/mods-available/xdebug[.]ini$')
+      | list
+    }}
+  become: true
+  tags: [debian, development, php, config]
+
+- name: Enable workstation Xdebug settings for installed PHP SAPIs
+  ansible.builtin.shell:
+    cmd: |
+      php_dir={{ (item | dirname | dirname) | quote }}
+      version="${php_dir##*/}"
+      for sapi in "$php_dir"/*/conf.d; do
+        if [ -d "$sapi" ] && [ ! -e "$sapi/99-workstation-xdebug.ini" ]; then
+          phpenmod -v "$version" workstation-xdebug || exit
+          printf '%s\n' 'Enabled workstation Xdebug settings'
+          break
+        fi
+      done
+  loop: >-
+    {{
+      debian_xdebug_modules.files | default([])
+      | map(attribute='path')
+      | select('search', '/mods-available/xdebug[.]ini$')
+      | list
+    }}
+  register: debian_xdebug_enable
+  changed_when: '''Enabled workstation Xdebug settings'' in debian_xdebug_enable.stdout_lines'
+  become: true
+  when: not ansible_check_mode
+  tags: [debian, development, php, config]
+
+- name: Deploy configuration for the selected PHP tools
+  tags: [debian, development, config]
+  block:
+    - name: Inspect PHP tool config directories
+      ansible.builtin.stat:
+        path: '{{ item.dest | dirname }}'
+        follow: false
+      loop: '{{ debian_php_strict_configs }}'
+      loop_control:
+        label: '{{ item.dest }}'
+      register: debian_php_config_paths
+
+    - name: Back up PHP tool config directory links before replacing them
+      ansible.builtin.command:
+        argv:
+          - mv
+          - --no-target-directory
+          - --backup=numbered
+          - --
+          - '{{ item.item.dest | dirname }}'
+          - '{{ (item.item.dest | dirname) + ".workstation-backup" }}'
+      loop: '{{ debian_php_config_paths.results }}'
+      loop_control:
+        label: '{{ item.item.dest }}'
+      when:
+        - not ansible_check_mode
+        - item.stat.islnk | default(false)
+        - item.stat.lnk_source != (debian_development_tools_dir + '/' + (item.item.src | dirname))
+      changed_when: true
+
+    - name: Ensure PHP tool config parent directories exist
+      ansible.builtin.file:
+        path: '{{ item.item.dest | dirname }}'
+        state: directory
+        mode: '0755'
+      loop: '{{ debian_php_config_paths.results }}'
+      loop_control:
+        label: '{{ item.item.dest }}'
+      when:
+        - not (ansible_check_mode and item.stat.islnk | default(false))
+        - >-
+          item.stat.lnk_source | default('')
+          != (debian_development_tools_dir + '/' + (item.item.src | dirname))
+
+    - name: Deploy the shared PHP config for PHP 8.4 or newer
+      ansible.builtin.include_tasks:
+        file: user_links.yml
+        apply:
+          tags: [debian, development, config]
+      vars:
+        debian_user_links:
+          - src: development/files/tools/{{ debian_php_config_path.item.src }}
+            dest: '{{ debian_php_config_path.item.dest }}'
+      loop: '{{ debian_php_config_paths.results }}'
+      loop_control:
+        loop_var: debian_php_config_path
+        label: '{{ debian_php_config_path.item.dest }}'
+      when:
+        - not ansible_check_mode
+        - >-
+          debian_php_config_path.stat.lnk_source | default('')
+          != (debian_development_tools_dir + '/' + (debian_php_config_path.item.src | dirname))

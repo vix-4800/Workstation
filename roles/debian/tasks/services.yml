@@ -1,0 +1,69 @@
+---
+- name: Deploy workstation update notifications
+  vars:
+    debian_update_checks:
+      - composer-update-check
+      - dotfiles-update-check
+  tags: [services]
+  block:
+    - name: Create directories for notification scripts and units
+      ansible.builtin.file:
+        path: '{{ item }}'
+        state: directory
+        mode: '0755'
+      loop:
+        - '{{ home }}/.local/bin'
+        - '{{ debian_config_home }}/systemd/user'
+      tags: [config]
+
+    - name: Deploy update notification scripts
+      ansible.builtin.file:
+        src: '{{ dotfiles_dir }}/roles/development/scripts/{{ item }}'
+        dest: '{{ home }}/.local/bin/{{ item }}'
+        state: link
+        force: true
+      loop:
+        - check-composer-updates
+        - check-dotfiles-updates
+      tags: [config]
+
+    - name: Deploy update notification unit files
+      ansible.builtin.file:
+        src: '{{ dotfiles_dir }}/roles/services/files/{{ item | join(".") }}'
+        dest: '{{ debian_config_home }}/systemd/user/{{ item | join(".") }}'
+        state: link
+        force: true
+      loop: '{{ debian_update_checks | product(["service", "timer"]) | list }}'
+      tags: [config]
+
+    - name: Probe the systemd user manager
+      ansible.builtin.command:
+        argv: [systemctl, --user, show, --property=Version]
+      environment:
+        XDG_RUNTIME_DIR: '/run/user/{{ ansible_facts.user_uid }}'
+      register: debian_user_manager
+      check_mode: false
+      changed_when: false
+      failed_when: false
+      when: debian_systemd_available | bool
+
+    - name: Report deferred update timer activation
+      ansible.builtin.debug:
+        msg: The update timer files are deployed. The timers can be enabled when the systemd user manager is available.
+      when: not ansible_check_mode and debian_user_manager.rc | default(1) != 0
+
+    - name: Enable the update notification timers
+      ansible.builtin.systemd:
+        name: '{{ item }}.timer'
+        daemon_reload: '{{ ansible_loop.first }}'
+        scope: user
+        enabled: true
+        state: started
+      environment:
+        XDG_RUNTIME_DIR: '/run/user/{{ ansible_facts.user_uid }}'
+      loop: '{{ debian_update_checks }}'
+      loop_control:
+        extended: true
+      when:
+        - not ansible_check_mode
+        - debian_user_manager.rc | default(1) == 0

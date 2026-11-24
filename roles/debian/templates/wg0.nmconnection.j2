@@ -1,0 +1,40 @@
+{{ debian_wg_marker }}
+[connection]
+id=wg0
+uuid={{ debian_wg_uuid }}
+type=wireguard
+interface-name=wg0
+autoconnect=false
+
+[wireguard]
+private-key={{ debian_wg_profile.private_key }}
+private-key-flags=0
+peer-routes=true
+
+[wireguard-peer.{{ debian_wg_profile.peer_public_key }}]
+endpoint={{ debian_wg_profile.endpoint }}
+allowed-ips=0.0.0.0/0;::/0;
+{% if debian_wg_profile.preshared_key %}
+preshared-key={{ debian_wg_profile.preshared_key }}
+preshared-key-flags=0
+{% endif %}
+{% if debian_wg_profile.keepalive %}
+persistent-keepalive={{ debian_wg_profile.keepalive }}
+{% endif %}
+{% for family, config in debian_wg_profile.families.items() %}
+
+[{{ family }}]
+{% if config.addresses %}
+method=manual
+{% for address in config.addresses %}
+address{{ loop.index }}={{ address }}
+{% endfor %}
+{% if config.dns %}
+dns={{ config.dns | join(';') }};
+dns-search={{ debian_wg_profile.dns_search | join(';') }};
+dns-priority=-50
+{% endif %}
+{% else %}
+method=disabled
+{% endif %}
+{% endfor %}

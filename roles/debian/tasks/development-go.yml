@@ -1,0 +1,37 @@
+---
+- name: Set up Go with toolchain auto-selection
+  tags: [debian, development, packages]
+  vars:
+    debian_go_package_version: >-
+      {{
+        debian_apt_candidates.get('golang-go', '0')
+        | regex_replace('^\d+:', '')
+        | regex_search('^\d+(?:[.]\d+)*')
+        | default('0', true)
+      }}
+    debian_go_use_apt: "{{ debian_go_package_version is version('1.21', '>=') }}"
+  block:
+    - name: Install Go from the distribution
+      ansible.builtin.apt:
+        name: golang-go
+        state: present
+        fail_on_autoremove: true
+      become: true
+      when: debian_go_use_apt
+
+    - name: Install a verified Go release if APT lacks toolchain auto-selection
+      ansible.builtin.include_tasks: development-release.yml
+      vars:
+        debian_release: '{{ debian_go_release }}'
+      when:
+        - not ansible_check_mode
+        - not debian_go_use_apt
+
+    - name: Install Go tools
+      ansible.builtin.command:
+        argv: ['{{ "/usr/bin/go" if debian_go_use_apt else debian_development_bin + "/go" }}', install, '{{ item.module }}']
+        creates: '{{ debian_development_bin }}/{{ item.name }}'
+      environment: '{{ debian_development_environment | combine({"GOBIN": debian_development_bin, "GOTOOLCHAIN": "auto"}) }}'
+      loop: '{{ debian_go_tools }}'
+      loop_control:
+        label: '{{ item.name }}'

@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""Adopt workstation configuration while keeping a private copy of local state."""
+
+import argparse
+import tempfile
+from contextlib import contextmanager
+from pathlib import Path
+
+
+@contextmanager
+def save_existing_path(destination):
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    backup = None
+    if destination.exists() or destination.is_symlink():
+        backup = Path(tempfile.mkdtemp(
+            dir=destination.parent, prefix=f"{destination.name}.workstation-backup-",
+        ))
+        destination.rename(backup / destination.name)
+    try:
+        yield
+    except OSError:
+        if backup is not None and not destination.exists() and not destination.is_symlink():
+            (backup / destination.name).rename(destination)
+            backup.rmdir()
+        raise
+
+
+def adopt_link(source, destination):
+    source = source.resolve(strict=True)
+    if destination.resolve() == source:
+        return False
+
+    with save_existing_path(destination):
+        destination.symlink_to(source)
+    return True
+
+
+def adopt_directory(source, destination):
+    legacy_link = destination.is_symlink() and destination.resolve() == source.resolve(strict=True)
+    if destination.is_dir() and not legacy_link:
+        return False
+
+    with save_existing_path(destination):
+        destination.mkdir()
+    return True
+
+
+def main():
+    actions = {
+        "link": adopt_link,
+        "directory": adopt_directory,
+    }
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("kind", choices=actions)
+    parser.add_argument("source", type=Path)
+    parser.add_argument("destination", type=Path)
+    args = parser.parse_args()
+    print("changed" if actions[args.kind](args.source, args.destination) else "unchanged")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,32 @@
+---
+- name: Find the existing Fisher function
+  ansible.builtin.stat:
+    path: '{{ debian_config_home }}/fish/functions/fisher.fish'
+  register: debian_fisher_function
+
+- name: Bootstrap the pinned Fisher function
+  ansible.builtin.get_url:
+    url: 'https://raw.githubusercontent.com/jorgebucaran/fisher/{{ debian_fisher_version }}/functions/fisher.fish'
+    dest: '{{ debian_config_home }}/fish/functions/fisher.fish'
+    mode: '0644'
+  when:
+    - not ansible_check_mode
+    - not debian_fisher_function.stat.exists
+
+- name: List the installed Fish plugins
+  ansible.builtin.command:
+    argv: [/usr/bin/fish, -c, fisher list]
+  register: debian_fisher_installed
+  changed_when: false
+  failed_when: debian_fisher_installed.rc not in [0, 1]
+  when: not ansible_check_mode
+
+- name: Install the missing workstation Fish plugins
+  ansible.builtin.command:
+    argv: "{{ ['/usr/bin/fish', '-c', 'fisher install $argv'] + debian_fisher_missing }}"
+  vars:
+    debian_fisher_missing: "{{ debian_fish_plugins | difference(debian_fisher_installed.stdout_lines | default([])) }}"
+  when:
+    - not ansible_check_mode
+    - debian_fisher_missing | length > 0
+  changed_when: true

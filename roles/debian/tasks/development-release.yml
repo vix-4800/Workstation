@@ -1,0 +1,61 @@
+---
+- name: Provision the verified upstream release
+  vars:
+    debian_release_dir: '{{ home }}/.local/lib/workstation/{{ debian_release.name }}/{{ debian_release.version }}'
+    debian_release_filename: '{{ debian_release.asset[debian_arch] }}'
+    debian_release_tag: '{{ debian_release.tag | default("v" ~ debian_release.version) }}'
+    debian_release_executable: >-
+      {{ debian_release_dir }}/{{
+        (debian_release.binary_path | default({})).get(
+          debian_arch, debian_release.name if debian_release.archive | default(false) else debian_release_filename
+        )
+      }}
+  block:
+    - name: Ensure the upstream utility directory exists
+      ansible.builtin.file:
+        path: '{{ debian_release_dir }}'
+        state: directory
+        mode: '0755'
+
+    - name: Fetch the pinned upstream utility
+      ansible.builtin.get_url:
+        url: '{{ debian_release.url if debian_release.url is defined else debian_github_release_url }}/{{ debian_release_filename }}'
+        dest: '{{ debian_release_dir }}/{{ debian_release_filename }}'
+        checksum: 'sha256:{{ debian_release.sha256[debian_arch] }}'
+        mode: '{{ "0644" if debian_release.archive | default(false) else "0755" }}'
+      vars:
+        debian_github_release_url: >-
+          https://github.com/{{ debian_release.repo }}/releases/download/{{ debian_release_tag }}
+
+    - name: Extract the upstream utility release
+      ansible.builtin.unarchive:
+        src: '{{ debian_release_dir }}/{{ debian_release_filename }}'
+        dest: '{{ debian_release_dir }}'
+        remote_src: true
+        creates: '{{ debian_release_dir }}/.extracted'
+      when: debian_release.archive | default(false)
+
+    - name: Verify the release executable exists
+      ansible.builtin.stat:
+        path: '{{ debian_release_executable }}'
+        follow: true
+      register: debian_release_binary
+      failed_when: not debian_release_binary.stat.executable | default(false)
+
+    - name: Record completed upstream extraction
+      ansible.builtin.copy:
+        dest: '{{ debian_release_dir }}/.extracted'
+        content: ''
+        mode: '0644'
+      when: debian_release.archive | default(false)
+
+    - name: Deploy the upstream utility executable with a local backup
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/python3
+          - '{{ dotfiles_dir }}/roles/debian/scripts/adopt-config'
+          - link
+          - '{{ debian_release_executable }}'
+          - '{{ home }}/.local/bin/{{ debian_release.name }}'
+      register: debian_release_link
+      changed_when: debian_release_link.stdout == 'changed'

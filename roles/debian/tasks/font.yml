@@ -1,0 +1,47 @@
+---
+- name: Install the user Nerd Font release
+  when: not ansible_check_mode
+  vars:
+    debian_nerd_font_url: 'https://github.com/ryanoasis/nerd-fonts/releases/download/{{ debian_nerd_fonts_version }}'
+    debian_nerd_font_dir: '{{ debian_data_home }}/fonts/JetBrainsMonoNerdFont'
+    debian_nerd_font_archive: '{{ debian_data_home }}/workstation/JetBrainsMono-{{ debian_nerd_fonts_version }}.tar.xz'
+  block:
+    - name: Check the installed Nerd Font release marker
+      ansible.builtin.stat:
+        path: '{{ debian_nerd_font_dir }}/.installed-{{ debian_nerd_fonts_version }}'
+      register: debian_nerd_font
+
+    - name: Download and install the Nerd Font release
+      when: not debian_nerd_font.stat.exists
+      block:
+        - name: Create the font and download directories
+          ansible.builtin.file:
+            path: '{{ item }}'
+            state: directory
+          loop:
+            - '{{ debian_nerd_font_dir }}'
+            - '{{ debian_nerd_font_archive | dirname }}'
+
+        - name: Download the verified JetBrainsMono Nerd Font archive
+          ansible.builtin.get_url:
+            url: '{{ debian_nerd_font_url }}/JetBrainsMono.tar.xz'
+            checksum: 'sha256:{{ debian_nerd_font_url }}/SHA-256.txt'
+            dest: '{{ debian_nerd_font_archive }}'
+            mode: '0644'
+
+        - name: Extract the Nerd Font into the user font directory
+          ansible.builtin.unarchive:
+            src: '{{ debian_nerd_font_archive }}'
+            dest: '{{ debian_nerd_font_dir }}'
+            remote_src: true
+
+        - name: Refresh the user font cache
+          ansible.builtin.command:
+            argv: [fc-cache, -f, '{{ debian_nerd_font_dir }}']
+          changed_when: true
+
+        - name: Record the installed font release
+          ansible.builtin.copy:
+            content: '{{ debian_nerd_fonts_version }}'
+            dest: '{{ debian_nerd_font_dir }}/.installed-{{ debian_nerd_fonts_version }}'
+            mode: '0644'

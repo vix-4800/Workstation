@@ -1,0 +1,144 @@
+---
+- name: Manage the WireGuard profile
+  when: debian_wg_requested
+  tags: [wireguard, config]
+  vars:
+    debian_wg_path: /etc/NetworkManager/system-connections/workstation-wg0.nmconnection
+    # Keep the UUID of profiles deployed by the original Ubuntu role.
+    debian_wg_uuid: "{{ 'workstation-ubuntu-wireguard-wg0' | to_uuid }}"
+    debian_wg_marker: '# Managed by the Workstation Debian role'
+    debian_wg_legacy_marker: '# Managed by the Workstation Ubuntu role'
+    debian_wg_record: '^{{ debian_wg_uuid }}:wireguard:[^:]*:wg0:{{ debian_wg_path | regex_escape }}$'
+  block:
+    - name: Check whether NetworkManager is already running
+      ansible.builtin.command:
+        argv: [nmcli, --terse, --fields, RUNNING, general, status]
+      environment:
+        LC_ALL: C
+      register: debian_wg_nm_status
+      check_mode: false
+      changed_when: false
+      failed_when: false
+
+    - name: Report deferred WireGuard deployment
+      ansible.builtin.debug:
+        msg: WireGuard deployment requires a running NetworkManager. The profile is deferred on this host.
+      when: debian_wg_nm_status.stdout | default('') != 'running'
+
+    - name: Configure the profile on the running NetworkManager
+      when: debian_wg_nm_status.stdout | default('') == 'running'
+      become: true
+      block:
+        - name: List NetworkManager connection profiles
+          ansible.builtin.command:
+            argv: [nmcli, --terse, --escape, 'no', --fields, 'UUID,TYPE,DEVICE,NAME,FILENAME', connection, show]
+          register: debian_wg_nm_profiles
+          check_mode: false
+          changed_when: false
+
+        - name: Refuse an existing connection using the WireGuard profile name or UUID
+          ansible.builtin.assert:
+            that:
+              - >-
+                debian_wg_nm_profiles.stdout_lines
+                | reject('match', debian_wg_record)
+                | select('match', '(^' ~ debian_wg_uuid ~ ':|^[^:]+:[^:]+:[^:]*:wg0:)')
+                | list | length == 0
+            fail_msg: >-
+              An existing NetworkManager connection uses wg0 or this profile's UUID.
+              Resolve the conflict before deploying the Workstation WireGuard profile.
+
+        - name: Inspect interface bindings of other WireGuard profiles
+          ansible.builtin.command:
+            argv: [nmcli, --get-values, connection.interface-name, connection, show, uuid, '{{ item }}']
+          loop: >-
+            {{ debian_wg_nm_profiles.stdout_lines
+               | reject('match', debian_wg_record)
+               | select('match', '^[^:]+:wireguard:')
+               | map('split', ':') | map('first') | list }}
+          register: debian_wg_other_interfaces
+          check_mode: false
+          changed_when: false
+
+        - name: Inspect existing WireGuard interface and profile paths
+          ansible.builtin.stat:
+            path: '{{ item }}'
+            get_checksum: false
+            get_mime: false
+          loop:
+            - /sys/class/net/wg0
+            - /etc/wireguard/wg0.conf
+            - '{{ debian_wg_path }}'
+          register: debian_wg_existing
+
+        - name: Refuse conflicting WireGuard interfaces or files
+          ansible.builtin.assert:
+            that:
+              - >-
+                not debian_wg_existing.results[0].stat.exists
+                or (debian_wg_nm_profiles.stdout_lines | select('match', '^' ~ debian_wg_uuid ~ ':wireguard:wg0:wg0:')
+                | list | length == 1)
+              - not debian_wg_existing.results[1].stat.exists
+              - "'wg0' not in (debian_wg_other_interfaces.results | map(attribute='stdout') | list)"
+              - >-
+                not debian_wg_existing.results[2].stat.exists
+                or (debian_wg_existing.results[2].stat.isreg and debian_wg_existing.results[2].stat.nlink == 1)
+            fail_msg: An existing interface or file is using wg0. Resolve the conflict before deploying the Workstation WireGuard profile.
+
+        - name: Inspect the existing keyfile owner marker
+          when: debian_wg_existing.results[2].stat.exists
+          block:
+            - name: Read the existing WireGuard keyfile
+              ansible.builtin.slurp:
+                src: '{{ debian_wg_path }}'
+              register: debian_wg_existing_keyfile
+              no_log: true
+
+            - name: Check the UUID and ownership marker of the existing keyfile
+              ansible.builtin.set_fact:
+                debian_wg_keyfile_owned: >-
+                  {{ debian_wg_existing_keyfile.content | b64decode
+                     | debian_wireguard_keyfile_owned(debian_wg_uuid, [debian_wg_marker, debian_wg_legacy_marker]) }}
+              no_log: true
+
+            - name: Refuse an unmanaged existing keyfile
+              ansible.builtin.assert:
+                that: debian_wg_keyfile_owned
+                fail_msg: >-
+                  The destination WireGuard keyfile is already in use.
+                  Resolve the conflict before deploying the Workstation WireGuard profile.
+
+        - name: Check the NetworkManager connection directory
+          ansible.builtin.stat:
+            path: '{{ debian_wg_path | dirname }}'
+          register: debian_wg_connection_directory
+
+        - name: Create the NetworkManager connection directory
+          ansible.builtin.file:
+            path: '{{ debian_wg_path | dirname }}'
+            state: directory
+            owner: root
+            group: root
+            mode: '0700'
+          when: not debian_wg_connection_directory.stat.exists
+
+        - name: Deploy the WireGuard NetworkManager keyfile
+          ansible.builtin.template:
+            src: wg0.nmconnection.j2
+            dest: '{{ debian_wg_path }}'
+            owner: root
+            group: root
+            mode: '0600'
+          register: debian_wg_deployed
+          diff: false
+          no_log: true
+          when: not ansible_check_mode or debian_wg_connection_directory.stat.isdir | default(false)
+
+        - name: Load the WireGuard profile into NetworkManager
+          ansible.builtin.command:
+            argv: [nmcli, connection, load, '{{ debian_wg_path }}']
+          changed_when: >-
+            debian_wg_deployed.changed
+            or (debian_wg_nm_profiles.stdout_lines | select('match', debian_wg_record) | list | length == 0)
+          no_log: true
+          when: not ansible_check_mode

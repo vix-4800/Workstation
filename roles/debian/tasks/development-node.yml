@@ -1,0 +1,128 @@
+---
+- name: Activate Node.js LTS with nvm.fish
+  when: not ansible_check_mode
+  environment: '{{ debian_development_environment }}'
+  tags: [debian, development, packages]
+  block:
+    - name: Install and locate the selected Node.js LTS runtime
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/fish
+          - -c
+          - |
+            if not functions --query nvm
+                echo 'Install nvm.fish with the shell tasks before provisioning Node.js.' >&2
+                exit 1
+            end
+            if not nvm use --silent lts
+                nvm install --silent lts; or exit
+                echo workstation-node-installed
+            end
+            if not set -q nvm_default_version; or test "$nvm_default_version" != lts
+                set -U nvm_default_version lts
+                echo workstation-node-default-set
+            end
+            set -l node_bin (path resolve -- "$nvm_data/$nvm_current_version/bin"); or exit
+            if not test -x "$node_bin/node"
+                echo 'The selected nvm runtime has no executable Node.js binary.' >&2
+                exit 1
+            end
+            "$node_bin/node" --version >/dev/null; or exit
+            printf 'workstation-node-bin:%s\n' "$node_bin"
+      register: debian_node_setup
+      changed_when: >-
+        'workstation-node-installed' in debian_node_setup.stdout_lines or
+        'workstation-node-default-set' in debian_node_setup.stdout_lines
+
+    - name: Locate the user-level Node link directory
+      ansible.builtin.file:
+        path: '{{ home }}/.local/lib/workstation'
+        state: directory
+        mode: '0755'
+
+    - name: Link the default Node.js runtime
+      ansible.builtin.file:
+        src: >-
+          {{
+            debian_node_setup.stdout_lines
+            | select('match', '^workstation-node-bin:')
+            | first
+            | regex_replace('^workstation-node-bin:', '')
+          }}
+        dest: '{{ home }}/.local/lib/workstation/node-bin'
+        state: link
+        follow: false
+
+    - name: Check for existing Node.js executables in the user bin directory
+      ansible.builtin.stat:
+        path: '{{ debian_development_bin }}/{{ item }}'
+        follow: false
+      loop: [node, npm, npx]
+      register: debian_node_bins
+
+    - name: Expose Node.js tools to programs outside Fish
+      ansible.builtin.file:
+        src: '{{ home }}/.local/lib/workstation/node-bin/{{ item.item }}'
+        dest: '{{ debian_development_bin }}/{{ item.item }}'
+        state: link
+        follow: false
+      loop: '{{ debian_node_bins.results }}'
+      loop_control:
+        label: '{{ item.item }}'
+      when: not item.stat.exists
+
+    - name: Install global Node.js development tools
+      ansible.builtin.command:
+        argv:
+          - /usr/bin/fish
+          - -c
+          - |
+            nvm use --silent lts; or exit
+            if not command npm list --global --depth=0 --prefix "$argv[1]" "$argv[2]" >/dev/null 2>&1
+                command npm install --global --prefix "$argv[1]" --no-audit --no-fund "$argv[2]"; or exit
+                echo workstation-npm-installed
+            end
+          - --
+          - '{{ home }}/.local'
+          - '{{ item }}'
+      loop: '{{ debian_npm_tools }}'
+      register: debian_npm_install
+      changed_when: '''workstation-npm-installed'' in debian_npm_install.stdout_lines'
+
+- name: Link Node.js tool config directories with local backups
+  ansible.builtin.include_tasks:
+    file: user_links.yml
+    apply:
+      tags: [debian, development, packages, config]
+  vars:
+    debian_user_links:
+      - src: development/files/tools/{{ debian_npm_config_project.source }}
+        dest: '{{ debian_config_home }}/{{ debian_npm_config_project.name }}'
+  loop: '{{ debian_npm_config_projects }}'
+  loop_control:
+    loop_var: debian_npm_config_project
+    label: '{{ debian_npm_config_project.name }}'
+  when: not ansible_check_mode
+  tags: [debian, development, packages, config]
+
+- name: Install local dependencies for Node.js tool configs
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/fish
+      - -c
+      - |
+        nvm use --silent lts; or exit
+        if not command npm list --all --prefix "$argv[1]" >/dev/null 2>&1
+            command npm install --prefix "$argv[1]" --no-audit --no-fund; or exit
+            echo workstation-npm-installed
+        end
+      - --
+      - '{{ debian_development_tools_dir }}/{{ item.source }}'
+  environment: '{{ debian_development_environment }}'
+  register: debian_npm_config_install
+  changed_when: '''workstation-npm-installed'' in debian_npm_config_install.stdout_lines'
+  loop: '{{ debian_npm_config_projects }}'
+  loop_control:
+    label: '{{ item.name }}'
+  when: not ansible_check_mode
+  tags: [debian, development, packages]

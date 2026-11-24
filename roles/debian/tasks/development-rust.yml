@@ -1,0 +1,124 @@
+---
+- name: Configure Rust with an official stable toolchain
+  tags: [debian, development, packages]
+  vars:
+    debian_rustup_user: '{{ debian_cargo_home }}/bin/rustup'
+    debian_rustup_system: /usr/bin/rustup
+    debian_rustup_target: '{{ debian_rust_targets[debian_arch] }}'
+    debian_rustup_toolchain: 'stable-{{ debian_rustup_target }}'
+    debian_rustup_archive: 'https://static.rust-lang.org/rustup/archive/{{ debian_rustup_version }}/{{ debian_rustup_target }}'
+    debian_rustup_cache: '{{ home }}/.local/lib/workstation/rustup/{{ debian_rustup_version }}'
+    debian_rustup_command: >-
+      {{ debian_rustup_system if debian_system_rustup.stat.exists or debian_install_apt_rustup else debian_rustup_user }}
+  block:
+    - name: Find a user Rust toolchain manager
+      ansible.builtin.stat:
+        path: '{{ debian_rustup_user }}'
+      register: debian_user_rustup
+
+    - name: Find a system Rust toolchain manager
+      ansible.builtin.stat:
+        path: '{{ debian_rustup_system }}'
+      register: debian_system_rustup
+
+    - name: Detect installed Rust packages that can conflict with APT rustup
+      ansible.builtin.command:
+        argv:
+          - dpkg-query
+          - --show
+          - '--showformat=${db:Status-Status}\n'
+          - 'cargo*'
+          - 'rustc*'
+          - rust-analyzer
+          - rust-clippy
+          - rust-doc
+          - rust-gdb
+          - rust-lldb
+          - 'rustfmt*'
+      register: debian_rust_package_status
+      check_mode: false
+      changed_when: false
+      failed_when: debian_rust_package_status.rc not in [0, 1]
+      when:
+        - not debian_user_rustup.stat.exists
+        - not debian_system_rustup.stat.exists
+
+    - name: Select native rustup when it can coexist with installed packages
+      ansible.builtin.set_fact:
+        debian_install_apt_rustup: >-
+          {{
+            not debian_user_rustup.stat.exists
+            and not debian_system_rustup.stat.exists
+            and 'rustup' in debian_apt_candidates
+            and 'installed' not in debian_rust_package_status.stdout_lines | default([])
+          }}
+
+    - name: Install rustup from APT
+      ansible.builtin.apt:
+        name: rustup
+        state: present
+        fail_on_autoremove: true
+      become: true
+      when: debian_install_apt_rustup
+
+    - name: Install upstream rustup without replacing system Rust packages
+      when:
+        - not ansible_check_mode
+        - not debian_user_rustup.stat.exists
+        - not debian_system_rustup.stat.exists
+        - not debian_install_apt_rustup
+      block:
+        - name: Create the rustup download directory
+          ansible.builtin.file:
+            path: '{{ debian_rustup_cache }}'
+            state: directory
+            mode: '0755'
+
+        - name: Download the versioned rustup installer and check its published checksum
+          ansible.builtin.get_url:
+            url: '{{ debian_rustup_archive }}/rustup-init'
+            checksum: 'sha256:{{ debian_rustup_archive }}/rustup-init.sha256'
+            dest: '{{ debian_rustup_cache }}/rustup-init'
+            mode: '0755'
+
+        - name: Bootstrap the user Rust toolchain manager
+          ansible.builtin.command:
+            argv: ['{{ debian_rustup_cache }}/rustup-init', -y, --no-modify-path, --default-toolchain, none]
+            creates: '{{ debian_rustup_user }}'
+          environment: '{{ debian_development_environment | combine({"RUSTUP_INIT_SKIP_PATH_CHECK": "yes"}) }}'
+
+    - name: Set up and use the stable Rust toolchain
+      when: not ansible_check_mode
+      environment: '{{ debian_development_environment }}'
+      block:
+        - name: Ensure a stable Rust toolchain is available
+          ansible.builtin.command:
+            argv: ['{{ debian_rustup_command }}', toolchain, install, '{{ debian_rustup_toolchain }}', --profile, minimal]
+            creates: '{{ debian_rustup_home }}/toolchains/{{ debian_rustup_toolchain }}/bin/cargo'
+
+        - name: Read the current default Rust toolchain
+          ansible.builtin.command:
+            argv: ['{{ debian_rustup_command }}', default]
+          register: debian_rustup_default
+          changed_when: false
+          failed_when:
+            - debian_rustup_default.rc != 0
+            - "'no default toolchain configured' not in debian_rustup_default.stderr"
+
+        - name: Set stable as the initial default Rust toolchain
+          ansible.builtin.command:
+            argv: ['{{ debian_rustup_command }}', default, '{{ debian_rustup_toolchain }}']
+          when: "'no default toolchain configured' in (debian_rustup_default.stderr + debian_rustup_default.stdout)"
+          changed_when: true
+
+        - name: Install Cargo development tools
+          ansible.builtin.command:
+            argv: >-
+              {{
+                [debian_rustup_command, 'run', debian_rustup_toolchain, 'cargo', 'install', '--locked', '--root', home + '/.local']
+                + item.args
+              }}
+            creates: '{{ debian_development_bin }}/{{ item.name }}'
+          loop: '{{ debian_cargo_tools }}'
+          loop_control:
+            label: '{{ item.name }}'

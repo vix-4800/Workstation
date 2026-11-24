@@ -1,0 +1,14 @@
+---
+- name: Link the workstation user configuration with local backups
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/python3
+      - '{{ dotfiles_dir }}/roles/debian/scripts/adopt-config'
+      - link
+      - '{{ dotfiles_dir }}/roles/{{ item.src }}'
+      - '{{ item.dest }}'
+  loop: '{{ debian_user_links }}'
+  loop_control:
+    label: '{{ item.dest }}'
+  register: debian_user_link
+  changed_when: debian_user_link.stdout == 'changed'

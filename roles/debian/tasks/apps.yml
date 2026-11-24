@@ -1,0 +1,118 @@
+---
+- name: Install VLC, FFmpeg and Flatpak
+  ansible.builtin.apt:
+    name: [vlc, ffmpeg, flatpak]
+    state: present
+    fail_on_autoremove: true
+  become: true
+  tags: [apps, packages]
+
+- name: Inspect user Flatpak remotes
+  ansible.builtin.command:
+    argv: [flatpak, remotes, --user, '--columns=name']
+  register: debian_flatpak_remotes
+  changed_when: false
+  when: not ansible_check_mode
+  tags: [apps, packages]
+
+- name: Enable Flathub for the workstation user
+  ansible.builtin.command:
+    argv: [flatpak, remote-add, --user, --if-not-exists, flathub, 'https://dl.flathub.org/repo/flathub.flatpakrepo']
+  when:
+    - not ansible_check_mode
+    - "'flathub' not in (debian_flatpak_remotes.stdout_lines | map('trim') | list)"
+  changed_when: true
+  tags: [apps, packages]
+
+- name: Inspect installed user Flatpak apps
+  ansible.builtin.command:
+    argv: [flatpak, list, --user, --app, '--columns=application']
+  register: debian_flatpak_existing
+  changed_when: false
+  when: not ansible_check_mode
+  tags: [apps, packages]
+
+- name: Install Bitwarden and any required Obsidian Flatpak
+  ansible.builtin.command:
+    argv: "{{ ['flatpak', 'install', '--user', '--noninteractive', 'flathub'] + debian_flatpak_missing }}"
+  vars:
+    debian_flatpak_obsidian: >-
+      {{ ['md.obsidian.Obsidian'] if debian_arch == 'arm64' and 'obsidian' not in debian_apt_candidates else [] }}
+    debian_flatpak_missing: >-
+      {{ (['com.bitwarden.desktop'] + debian_flatpak_obsidian)
+         | difference(debian_flatpak_existing.stdout_lines | default([]) | map('trim') | list) }}
+  when:
+    - not ansible_check_mode
+    - debian_flatpak_missing | length > 0
+  changed_when: true
+  tags: [apps, packages]
+
+- name: Install Spotify separately from Flathub
+  ansible.builtin.command:
+    argv: [flatpak, install, --user, --noninteractive, flathub, com.spotify.Client]
+  environment:
+    LC_ALL: C
+  register: debian_flatpak_spotify
+  changed_when: debian_flatpak_spotify.rc == 0
+  failed_when: >-
+    debian_flatpak_spotify.rc != 0
+    and 'While fetching https://api.snapcraft.io/' not in debian_flatpak_spotify.stderr
+  when:
+    - not ansible_check_mode
+    - debian_arch == 'amd64'
+    - "'com.spotify.Client' not in (debian_flatpak_existing.stdout_lines | map('trim') | list)"
+  tags: [apps, packages]
+
+- name: Report a deferred Spotify installation
+  ansible.builtin.debug:
+    msg: >-
+      Spotify installation was deferred after a Snapcraft download failure.
+      The next apply will retry it. {{ debian_flatpak_spotify.stderr | trim }}
+  when: debian_flatpak_spotify.rc | default(0) != 0
+  tags: [apps, packages]
+
+- name: Report Spotify availability on ARM
+  ansible.builtin.debug:
+    msg: Spotify is currently published on Flathub for x86_64 only.
+  when: debian_arch == 'arm64'
+  tags: [apps, packages]
+
+- name: Install Obsidian from the configured package archive when available
+  ansible.builtin.apt:
+    name: obsidian
+    state: present
+    fail_on_autoremove: true
+  become: true
+  when: "'obsidian' in debian_apt_candidates"
+  tags: [apps, packages]
+
+- name: Install the vendor Obsidian package on amd64
+  become: true
+  when:
+    - debian_arch == 'amd64'
+    - "'obsidian' not in debian_apt_candidates"
+    - not ansible_check_mode
+  vars:
+    debian_obsidian_deb: 'obsidian_{{ debian_obsidian_version }}_amd64.deb'
+  tags: [apps, packages]
+  block:
+    - name: Prepare the workstation package cache
+      ansible.builtin.file:
+        path: /var/cache/workstation
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Download and verify the Obsidian package
+      ansible.builtin.get_url:
+        url: 'https://github.com/obsidianmd/obsidian-releases/releases/download/v{{ debian_obsidian_version }}/{{ debian_obsidian_deb }}'
+        checksum: 'sha256:{{ debian_obsidian_sha256 }}'
+        dest: '/var/cache/workstation/{{ debian_obsidian_deb }}'
+        mode: '0644'
+
+    - name: Install the pinned Obsidian package
+      ansible.builtin.apt:
+        deb: '/var/cache/workstation/{{ debian_obsidian_deb }}'
+        state: present
+        fail_on_autoremove: true

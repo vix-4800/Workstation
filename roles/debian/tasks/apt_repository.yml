@@ -1,0 +1,82 @@
+---
+- name: Show planned signed APT repository in check mode
+  ansible.builtin.debug:
+    msg: "Would configure {{ debian_apt_source.uri }} for {{ debian_apt_source.package }}."
+  when: ansible_check_mode
+
+- name: Set up the signed APT repository
+  become: true
+  when: not ansible_check_mode
+  block:
+    - name: Create a temporary directory for the signing key
+      ansible.builtin.tempfile:
+        state: directory
+        prefix: workstation-apt-
+      register: debian_apt_key_tmp
+      changed_when: false
+
+    - name: Download the repository signing key
+      ansible.builtin.get_url:
+        url: '{{ debian_apt_source.key }}'
+        dest: '{{ debian_apt_key_tmp.path }}/signing-key'
+        mode: '0600'
+      changed_when: false
+
+    - name: Inspect repository signing-key fingerprints
+      ansible.builtin.command:
+        argv:
+          - gpg
+          - --batch
+          - --homedir
+          - '{{ debian_apt_key_tmp.path }}'
+          - --with-colons
+          - --show-keys
+          - '{{ debian_apt_key_tmp.path }}/signing-key'
+      register: debian_apt_key_details
+      changed_when: false
+
+    - name: Verify every primary signing-key fingerprint
+      ansible.builtin.assert:
+        that:
+          - debian_apt_key_fingerprints | length > 0
+          - debian_apt_key_fingerprints | difference(debian_apt_source.fingerprints) | length == 0
+        fail_msg: "Unexpected APT signing key for {{ debian_apt_source.package }}."
+      vars:
+        debian_apt_key_fingerprints: >-
+          {{ debian_apt_key_details.stdout | regex_findall('(?m)^pub:[^\n]+\nfpr:::::::::([A-F0-9]+):') }}
+
+    - name: Prepare the local APT keyrings directory
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Install the verified keyring
+      ansible.builtin.copy:
+        src: '{{ debian_apt_key_tmp.path }}/signing-key'
+        dest: '/etc/apt/keyrings/{{ debian_apt_source.name }}.{{ debian_apt_source.key_type }}'
+        remote_src: true
+        mode: '0644'
+
+    - name: Deploy APT source with its own keyring
+      ansible.builtin.copy:
+        dest: '/etc/apt/sources.list.d/{{ debian_apt_source.name }}.sources'
+        mode: '0644'
+        content: |
+          Types: deb
+          URIs: {{ debian_apt_source.uri }}
+          Suites: {{ debian_apt_source.suite }}
+          Components: main
+          Architectures: {{ debian_arch }}
+          Signed-By: /etc/apt/keyrings/{{ debian_apt_source.name }}.{{ debian_apt_source.key_type }}
+
+    - name: Record whether repository metadata needs refreshing
+      ansible.builtin.set_fact:
+        debian_apt_sources_changed: true
+  always:
+    - name: Remove the temporary signing key files
+      ansible.builtin.file:
+        path: '{{ debian_apt_key_tmp.path }}'
+        state: absent
+      changed_when: false
+      when: debian_apt_key_tmp.path is defined

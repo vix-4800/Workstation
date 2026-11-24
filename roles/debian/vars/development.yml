@@ -1,0 +1,189 @@
+---
+debian_development_tools_dir: '{{ dotfiles_dir }}/roles/development/files/tools'
+debian_development_bin: '{{ home }}/.local/bin'
+debian_development_php: /usr/bin/php
+debian_cargo_home: '{{ ansible_facts.env.CARGO_HOME | default(home + "/.cargo", true) }}'
+debian_rustup_home: '{{ ansible_facts.env.RUSTUP_HOME | default(home + "/.rustup", true) }}'
+debian_development_environment:
+  HOME: '{{ home }}'
+  XDG_CONFIG_HOME: '{{ debian_config_home }}'
+  COMPOSER_HOME: '{{ ansible_facts.env.COMPOSER_HOME | default(debian_config_home + "/composer", true) }}'
+  CARGO_HOME: '{{ debian_cargo_home }}'
+  RUSTUP_HOME: '{{ debian_rustup_home }}'
+  PATH: >-
+    {{ debian_development_bin }}:{{ debian_cargo_home }}/bin:{{ ansible_facts.env.PATH |
+    default("/usr/local/bin:/usr/bin:/bin") }}
+
+debian_development_packages:
+  - build-essential
+  - liblua5.4-dev
+  - libssl-dev
+  - libxml2-utils
+  - lua5.4
+  - luarocks
+  - pipx
+  - pkg-config
+  - python3
+  - python3-venv
+  - shellcheck
+  - shfmt
+  - yamllint
+
+debian_python_tools:
+  - pre-commit
+  - ruff
+  - mypy
+  - ansible-lint
+  - sqlfluff
+
+debian_go_release:
+  name: go
+  version: 1.26.10
+  url: https://go.dev/dl
+  asset:
+    amd64: go1.26.10.linux-amd64.tar.gz
+    arm64: go1.26.10.linux-arm64.tar.gz
+  sha256:
+    amd64: ccfe7ae822d2c2f41f4fe7c956199967a4dac22d0ee0d2b2bfdb440aab3b20c5
+    arm64: 3f4227ce7b206a513e794f1393adb473a07b46e94d18bd15d1c684bbb7319797
+  binary_path:
+    amd64: go/bin/go
+    arm64: go/bin/go
+  archive: true
+
+debian_go_tools:
+  - { name: inifmt, module: github.com/thecrazygm/inifmt@latest }
+  - { name: yamlfmt, module: github.com/google/yamlfmt/cmd/yamlfmt@latest }
+  - { name: actionlint, module: github.com/rhysd/actionlint/cmd/actionlint@v1.7.11 }
+  - { name: editorconfig-checker,
+      module: github.com/editorconfig-checker/editorconfig-checker/v4/cmd/editorconfig-checker@v4.0.2 }
+
+debian_cargo_tools:
+  - { name: just-lsp, args: [just-lsp] }
+  - { name: nginx-lint, args: [--git, https://github.com/walf443/nginx-lint, --tag, v0.10.5, nginx-lint] }
+  - { name: dotenv-linter, args: [dotenv-linter, --version, 4.0.0] }
+  - { name: stylua, args: [stylua, --all-features] }
+
+debian_rustup_version: 1.28.2
+debian_rust_targets:
+  amd64: x86_64-unknown-linux-gnu
+  arm64: aarch64-unknown-linux-gnu
+
+debian_development_releases:
+  - name: gitleaks
+    version: 8.30.1
+    repo: gitleaks/gitleaks
+    asset:
+      amd64: gitleaks_8.30.1_linux_x64.tar.gz
+      arm64: gitleaks_8.30.1_linux_arm64.tar.gz
+    sha256:
+      amd64: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+      arm64: e4a487ee7ccd7d3a7f7ec08657610aa3606637dab924210b3aee62570fb4b080
+    archive: true
+  - name: hadolint
+    version: 2.15.1
+    repo: hadolint/hadolint
+    asset:
+      amd64: hadolint-linux-x86_64
+      arm64: hadolint-linux-arm64
+    sha256:
+      amd64: c7187db94eeeeca956519a6af171adc31453941a1e777961f6e680f697c8c507
+      arm64: f6198ef8090f404dbb771abfee086eb8c48ac177f30da7fd3510aca35b344b5d
+  - name: checkmake
+    version: 0.3.2
+    repo: checkmake/checkmake
+    asset:
+      amd64: checkmake-v0.3.2.linux.amd64
+      arm64: checkmake-v0.3.2.linux.arm64
+    sha256:
+      amd64: e2effb876913f3ee2caef0ba35f6202c5e8a3cd55a077d8d2b9ce2034257b6af
+      arm64: 409167c4abb99407bd232c3bbd351b8a39df57997feafde5a08bddffb0f2dcb4
+
+debian_composer_tools:
+  - phpstan/phpstan
+  - phpstan/extension-installer
+  - phpstan/phpstan-strict-rules
+  - phpstan/phpstan-deprecation-rules
+  - phpat/phpat
+  - shipmonk/phpstan-rules
+  - rector/rector
+  - driftingly/rector-laravel
+  - friendsofphp/php-cs-fixer
+  - squizlabs/php_codesniffer
+  - slevomat/coding-standard
+  - phpcompatibility/php-compatibility:^10.0.0@dev
+  - phpmd/phpmd:^3.0
+  - carthage-software/mago
+  - laravel/pint
+
+debian_composer_custom_tools:
+  - vix/phpstan-rules:dev-main
+  - vix/rector-rules:dev-main
+  - vix/php-cs-fixer-fixers:dev-main
+  - vix/phpcs-sniffs:dev-main
+
+debian_php84_packages:
+  - php8.4-cli
+  - php8.4-curl
+  - php8.4-mbstring
+  - php8.4-xml
+  - php8.4-xdebug
+  - php8.4-zip
+
+debian_php_strict_configs:
+  - { src: php/phpstan/phpstan.neon, dest: '{{ debian_config_home }}/phpstan/phpstan.neon' }
+  - { src: php/rector/rector.php, dest: '{{ debian_config_home }}/rector/rector.php' }
+  - { src: php/php-cs-fixer/php-cs-fixer.php, dest: '{{ debian_config_home }}/php-cs-fixer/php-cs-fixer.php' }
+  - { src: php/phpcs/phpcs.xml, dest: '{{ debian_config_home }}/phpcs/phpcs.xml' }
+
+debian_npm_tools:
+  - blade-formatter
+  - markdownlint-cli
+  - markdownlint-cli2
+  - nginxbeautifier
+  - '@commitlint/cli'
+  - '@commitlint/config-conventional'
+  - '@prantlf/jsonlint'
+  - '@fsouza/prettierd'
+  - eslint
+  - htmlhint
+  - prettier
+  - stylelint
+  - '@taplo/cli'
+  - '@linthtml/linthtml'
+
+debian_development_config_links:
+  - { src: development/files/tools/php/pint, dest: '{{ debian_config_home }}/pint' }
+  - { src: development/files/tools/php/phpmd, dest: '{{ debian_config_home }}/phpmd' }
+  - { src: development/files/tools/php/mago/mago.toml, dest: '{{ debian_config_home }}/mago.toml' }
+  - { src: development/files/tools/blade/.bladeformatterrc.json,
+      dest: '{{ debian_config_home }}/blade-formatter/.bladeformatterrc.json' }
+  - { src: development/files/tools/python/ruff, dest: '{{ debian_config_home }}/ruff' }
+  - { src: development/files/tools/shellcheck/.shellcheckrc, dest: '{{ home }}/.shellcheckrc' }
+  - { src: development/files/tools/toml/taplo.toml, dest: '{{ debian_config_home }}/taplo/taplo.toml' }
+  - { src: development/files/tools/yaml/yamllint.yml, dest: '{{ debian_config_home }}/yamllint/config' }
+  - { src: development/files/tools/yaml/yamlfmt/.yamlfmt, dest: '{{ debian_config_home }}/yamlfmt/.yamlfmt' }
+  - { src: development/files/tools/markdown/markdownlint, dest: '{{ debian_config_home }}/markdownlint' }
+  - { src: development/files/tools/prettier/.prettierrc, dest: '{{ home }}/.prettierrc' }
+  - { src: development/files/tools/prettier/.prettierignore, dest: '{{ home }}/.prettierignore' }
+  - { src: development/files/tools/docker/hadolint.yaml, dest: '{{ debian_config_home }}/hadolint.yaml' }
+  - { src: development/files/tools/lua/stylua, dest: '{{ debian_config_home }}/stylua' }
+  - { src: development/files/tools/lua/luacheck/.luacheckrc, dest: '{{ debian_config_home }}/luacheck/.luacheckrc' }
+  - { src: development/files/tools/css/stylelint/.stylelintrc.json, dest: '{{ home }}/.stylelintrc.json' }
+  - { src: development/files/tools/html/htmlhint/.htmlhintrc, dest: '{{ home }}/.htmlhintrc' }
+  - { src: development/files/tools/html/linthtml/.linthtmlrc, dest: '{{ home }}/.linthtmlrc' }
+  - { src: development/files/tools/ansible/ansible-lint/.ansible-lint, dest: '{{ home }}/.ansible-lint' }
+  - { src: development/files/tools/sql/sqlfluff/.sqlfluff, dest: '{{ home }}/.sqlfluff' }
+  - { src: development/files/tools/nginx/nginx-lint/.nginx-lint.toml,
+      dest: '{{ debian_config_home }}/nginx-lint/.nginx-lint.toml' }
+  - { src: development/files/tools/editorconfig/.editorconfig-checker.json,
+      dest: '{{ home }}/.editorconfig-checker.json' }
+  - { src: development/files/tools/json/jsonlint/.jsonlintrc, dest: '{{ home }}/.jsonlintrc' }
+  - { src: development/files/tools/make/checkmake, dest: '{{ debian_config_home }}/checkmake' }
+  - { src: development/files/tools/gitleaks/.gitleaks.toml, dest: '{{ home }}/.gitleaks.toml' }
+
+debian_npm_config_projects:
+  - name: eslint
+    source: javascript/eslint
+  - name: commitlint
+    source: commitlint

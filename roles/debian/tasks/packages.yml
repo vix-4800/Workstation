@@ -1,0 +1,71 @@
+---
+- name: Refresh package indexes when stale
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+  when: not ansible_check_mode
+  tags: [packages, editor, apps, development, shell]
+
+- name: Read package candidates from the host APT configuration
+  ansible.builtin.command:
+    argv: >-
+      {{ ['/usr/bin/python3', '-c', debian_apt_query]
+         + (debian_apt_probe_packages + debian_apt_optional_packages) | unique | list }}
+  vars:
+    debian_apt_query: |
+      import apt, json, sys
+      cache = apt.Cache()
+      print(json.dumps({name: cache[name].candidate.version for name in sys.argv[1:]
+                        if name in cache and cache[name].candidate is not None}))
+  register: debian_apt_probe
+  changed_when: false
+  check_mode: false
+  tags: [always, packages]
+
+- name: Record available Debian-family package candidates
+  ansible.builtin.set_fact:
+    debian_apt_candidates: '{{ debian_apt_probe.stdout | from_json }}'
+  tags: [always, packages]
+
+- name: Install base Debian-family packages
+  ansible.builtin.apt:
+    name: >-
+      {{ debian_apt_packages
+         + (['7zip'] if '7zip' in debian_apt_candidates else ['p7zip-full'])
+         + (debian_apt_optional_packages | intersect(debian_apt_candidates.keys()) | sort) }}
+    state: present
+    fail_on_autoremove: true
+  become: true
+  tags: [packages]
+
+- name: Configure a signed repository for each unavailable package
+  ansible.builtin.include_tasks:
+    file: apt_repository.yml
+    apply:
+      tags: [editor, packages]
+  vars:
+    debian_apt_source: '{{ item }}'
+  loop: '{{ debian_apt_repositories }}'
+  loop_control:
+    label: '{{ item.package }}'
+  when: item.package not in debian_apt_candidates
+  tags: [editor, packages]
+
+- name: Refresh APT metadata after configuring repositories
+  ansible.builtin.apt:
+    update_cache: true
+  become: true
+  when:
+    - not ansible_check_mode
+    - debian_apt_sources_changed | default(false)
+  tags: [editor, packages]
+
+- name: Install GitHub CLI and Visual Studio Code
+  ansible.builtin.apt:
+    name: [gh, code]
+    state: present
+    fail_on_autoremove: true
+  become: true
+  when: not ansible_check_mode
+  tags: [editor, packages]
